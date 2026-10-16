@@ -1,0 +1,1540 @@
+' ==============================================================================
+' TELCOM - DIAGRAMAS DE ANÃLISIS DE CLASES (CU01 AL CU17)
+' Estilo: Enterprise Architect (Actor - Boundary - Control - Entity)
+' PatrÃ³n: Entidad principal conectada al Controlador + Entidades relacionadas con cardinalidades
+' ==============================================================================
+
+@startuml cu01_analisis_iniciar_cerrar_sesion
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU01 Iniciar y cerrar sesiÃ³n" {
+    actor "Usuario / Administrador" as UserActor
+    
+    class UI_Sesion {
+        + iniciarSesion(): void
+        + cerrarSesion(): void
+        + obtenerUsuarioActual(): void
+        + cambiarPassword(): void
+    }
+
+    class AuthController {
+        + login(): void
+        + logout(): void
+        + me(): void
+        + changePassword(): void
+    }
+
+    class Usuario {
+        - idUsuario: int
+        - nombreUsuario: string
+        - passwordHash: string
+        - nombreCompleto: string
+        - telefono: string
+        - correo: string
+        - activo: boolean
+        - fechaCreacion: timestamp
+        - idRol: int
+        --
+        + create(): void
+        + find(): void
+        + update(): void
+        + where(): void
+    }
+
+    class Rol {
+        - idRol: int
+        - nombre: string
+        - slug: string
+        - descripcion: string
+        - activo: boolean
+        --
+        + find(): void
+        + get(): void
+    }
+
+    class UserSession {
+        - id: int
+        - user_id: int
+        - ip_address: string
+        - user_agent: string
+        - login_at: timestamp
+        - logout_at: timestamp
+        - is_active: boolean
+        --
+        + create(): void
+        + where(): void
+    }
+
+    UserActor -right- UI_Sesion
+    UI_Sesion -right- AuthController
+    AuthController -right- Usuario
+
+    Usuario "0..*" -up- "0..1" Rol
+    Usuario "1" -right- "0..*" UserSession
+}
+@enduml
+
+@startuml cu02_analisis_consultar_bitacora
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU02 Consultar bitÃ¡cora de auditorÃ­a" {
+    actor Administrador
+    
+    class UI_Auditoria {
+        + mostrarBitacora(): void
+        + filtrarPorModuloAccion(): void
+        + listarUsuariosAuditoria(): void
+    }
+
+    class AuditoriaController {
+        + index(): void
+        + usuarios(): void
+    }
+
+    class Bitacora {
+        - idBitacora: int
+        - fechaHora: timestamp
+        - accion: string
+        - modulo: string
+        - descripcion: string
+        - idUsuario: int
+        - ipOrigen: string
+        - datosPrevios: json
+        - datosNuevos: json
+        --
+        + distinct(): void
+        + get(): void
+        + paginate(): void
+        + where(): void
+    }
+
+    class Usuario {
+        - idUsuario: int
+        - nombreUsuario: string
+        - nombreCompleto: string
+        - correo: string
+        - activo: boolean
+        - idRol: int
+        --
+        + find(): void
+        + get(): void
+    }
+
+    Administrador -right- UI_Auditoria
+    UI_Auditoria -right- AuditoriaController
+    AuditoriaController -right- Bitacora
+
+    Bitacora "0..*" -right- "0..1" Usuario
+}
+@enduml
+
+@startuml cu03_analisis_gestionar_usuarios_roles
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU03 Gestionar usuarios internos, roles y permisos" {
+    actor Administrador
+    
+    class UI_Usuario {
+        + mostrarUsuarios(): void
+        + crearUsuario(): void
+        + editarUsuario(): void
+        + asignarRol(): void
+    }
+
+    class UsuarioController {
+        + index(): void
+        + store(): void
+        + update(): void
+        + updateRoles(): void
+    }
+
+    class Usuario {
+        - idUsuario: int
+        - nombreUsuario: string
+        - passwordHash: string
+        - nombreCompleto: string
+        - telefono: string
+        - correo: string
+        - activo: boolean
+        - fechaCreacion: timestamp
+        - idRol: int
+        --
+        + create(): void
+        + find(): void
+        + update(): void
+        + with(): void
+    }
+
+    class Rol {
+        - idRol: int
+        - nombre: string
+        - slug: string
+        - descripcion: string
+        - activo: boolean
+        --
+        + find(): void
+        + get(): void
+    }
+
+    class RolPermiso {
+        - idRolPermiso: int
+        - idRol: int
+        - idPermiso: int
+        --
+        + create(): void
+    }
+
+    class Permiso {
+        - idPermiso: int
+        - nombre: string
+        - slug: string
+        - modulo: string
+        - descripcion: string
+        --
+        + get(): void
+    }
+
+    Administrador -right- UI_Usuario
+    UI_Usuario -right- UsuarioController
+    UsuarioController -right- Usuario
+
+    Usuario "0..*" -right- "0..1" Rol
+    Rol "1" -right- "0..*" RolPermiso
+    RolPermiso "0..*" -right- "1" Permiso
+}
+@enduml
+
+@startuml cu04_analisis_gestionar_zonas
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU04 Gestionar zonas de cobertura" {
+    actor Administrador
+    
+    class UI_ZonaCobertura {
+        + mostrarZonas(): void
+        + crearZona(): void
+        + editarZona(): void
+        + cambiarEstado(): void
+    }
+
+    class ZonaCoberturaController {
+        + index(): void
+        + store(): void
+        + update(): void
+    }
+
+    class Zona {
+        - idZona: int
+        - nombreZona: string
+        - descripcion: string
+        - estado: boolean
+        - codigo: string
+        - ciudad: string
+        - tecnologia: string
+        - capacidadNodos: int
+        - barrio: string
+        - estadoCobertura: string
+        - areaMapa: json
+        --
+        + create(): void
+        + find(): void
+        + get(): void
+        + update(): void
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - nombreCompleto: string
+        - idZona: int
+        --
+        + where(): void
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - codigoServicio: string
+        - idZona: int
+        - idEstadoServicio: int
+        --
+        + where(): void
+    }
+
+    Administrador -right- UI_ZonaCobertura
+    UI_ZonaCobertura -right- ZonaCoberturaController
+    ZonaCoberturaController -right- Zona
+
+    Zona "1" -up- "0..*" Cliente
+    Zona "1" -right- "0..*" ServicioInternet
+}
+@enduml
+
+@startuml cu05_analisis_registrar_cliente
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU05 Registrar nuevo cliente" {
+    actor "Administrador / SecretarÃ­a" as Admin
+    
+    class UI_ClienteRegistro {
+        + cargarFormulario(): void
+        + validarDocumento(): void
+        + registrarCliente(): void
+    }
+
+    class ClienteRegistroController {
+        + cargarZonas(): void
+        + store(): void
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - ci: string
+        - nombreCompleto: string
+        - telefonoPrincipal: string
+        - telefonoSecundario: string
+        - correo: string
+        - direccion: string
+        - referenciaUbicacion: string
+        - coordenadasGPS: string
+        - fechaRegistro: timestamp
+        - estadoCliente: string
+        - idZona: int
+        --
+        + create(): void
+        + exists(): void
+        + where(): void
+    }
+
+    class Zona {
+        - idZona: int
+        - nombreZona: string
+        - codigo: string
+        - ciudad: string
+        - estado: boolean
+        --
+        + find(): void
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - codigoServicio: string
+        - idCliente: int
+        - idEstadoServicio: int
+        --
+        + create(): void
+    }
+
+    Admin -right- UI_ClienteRegistro
+    UI_ClienteRegistro -right- ClienteRegistroController
+    ClienteRegistroController -right- Cliente
+
+    Cliente "0..*" -up- "1" Zona
+    Cliente "1" -right- "0..*" ServicioInternet
+}
+@enduml
+
+@startuml cu06_analisis_consultar_buscar_clientes
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU06 Consultar y buscar clientes" {
+    actor "Admin / SecretarÃ­a / TÃ©cnico" as Admin
+    
+    class UI_ClienteConsulta {
+        + mostrarClientes(): void
+        + buscarCliente(): void
+        + verDetalleCliente(): void
+    }
+
+    class ClienteConsultaController {
+        + index(): void
+        + show(): void
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - ci: string
+        - nombreCompleto: string
+        - telefonoPrincipal: string
+        - correo: string
+        - direccion: string
+        - estadoCliente: string
+        - idZona: int
+        --
+        + findOrFail(): void
+        + get(): void
+        + paginate(): void
+        + withTrashed(): void
+    }
+
+    class Zona {
+        - idZona: int
+        - nombreZona: string
+        - ciudad: string
+        --
+        + find(): void
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - codigoServicio: string
+        - idCliente: int
+        - idEstadoServicio: int
+        --
+        + get(): void
+    }
+
+    class Mensualidad {
+        - idMensualidad: int
+        - periodo: string
+        - monto: decimal
+        - estado: string
+        - idCliente: int
+        --
+        + get(): void
+    }
+
+    Admin -right- UI_ClienteConsulta
+    UI_ClienteConsulta -right- ClienteConsultaController
+    ClienteConsultaController -right- Cliente
+
+    Cliente "0..*" -up- "1" Zona
+    Cliente "1" -right- "0..*" ServicioInternet
+    Cliente "1" -down- "0..*" Mensualidad
+}
+@enduml
+
+@startuml cu07_analisis_actualizar_baja_cliente
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU07 Actualizar datos y dar baja lÃ³gica a cliente" {
+    actor "Administrador / SecretarÃ­a" as Admin
+    
+    class UI_ClienteMantenimiento {
+        + mostrar(): void
+        + editar(): void
+        + darBaja(): void
+    }
+
+    class ClienteMantenimientoController {
+        + update(): void
+        + bajaLogica(): void
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - ci: string
+        - nombreCompleto: string
+        - telefonoPrincipal: string
+        - telefonoSecundario: string
+        - correo: string
+        - direccion: string
+        - estadoCliente: string
+        - fechaRegistro: timestamp
+        - idZona: int
+        - fechaBaja: timestamp
+        - motivoBaja: string
+        --
+        + delete(): void
+        + findOrFail(): void
+        + get(): void
+        + update(): void
+    }
+
+    class Zona {
+        - idZona: int
+        - nombreZona: string
+        - codigo: string
+        --
+        + find(): void
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - codigoServicio: string
+        - idCliente: int
+        - idEstadoServicio: int
+        --
+        + update(): void
+    }
+
+    Admin -right- UI_ClienteMantenimiento
+    UI_ClienteMantenimiento -right- ClienteMantenimientoController
+    ClienteMantenimientoController -right- Cliente
+
+    Cliente "0..*" -up- "1" Zona
+    Cliente "1" -right- "0..*" ServicioInternet
+}
+@enduml
+
+@startuml cu08_analisis_registrar_activar_servicio
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU08 Registrar y activar servicio de Internet" {
+    actor "Admin / SecretarÃ­a / TÃ©cnico" as Admin
+    
+    class UI_ServicioInternet {
+        + mostrarServicios(): void
+        + registrarServicio(): void
+        + verDetalleServicio(): void
+        + activarServicio(): void
+    }
+
+    class ServicioInternetController {
+        + index(): void
+        + store(): void
+        + show(): void
+        + activar(): void
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - fechaActivacion: date
+        - fechaCorteBase: date
+        - usuarioWinbox: string
+        - direccion: string
+        - referencia: string
+        - latitud: decimal
+        - longitud: decimal
+        - idCliente: int
+        - idEstadoServicio: int
+        - idZona: int
+        - codigoServicio: string
+        - ipAsignada: string
+        - macRouter: string
+        - diaCorte: int
+        --
+        + create(): void
+        + findOrFail(): void
+        + paginate(): void
+        + update(): void
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - ci: string
+        - nombreCompleto: string
+        - telefonoPrincipal: string
+        --
+        + find(): void
+    }
+
+    class EstadoServicio {
+        - idEstadoServicio: int
+        - nombreEstado: string
+        - descripcion: string
+        --
+        + find(): void
+    }
+
+    class Zona {
+        - idZona: int
+        - nombreZona: string
+        - codigo: string
+        --
+        + find(): void
+    }
+
+    class AsignacionPlan {
+        - idAsignacionPlan: int
+        - fechaInicio: date
+        - fechaFin: date
+        - precioAplicado: decimal
+        - idServicio: int
+        - idPlan: int
+        - idUsuario: int
+        --
+        + create(): void
+    }
+
+    Admin -right- UI_ServicioInternet
+    UI_ServicioInternet -right- ServicioInternetController
+    ServicioInternetController -right- ServicioInternet
+
+    ServicioInternet "0..*" -up- "1" Cliente
+    ServicioInternet "0..*" -down- "1" Zona
+    ServicioInternet "0..*" -right- "1" EstadoServicio
+    ServicioInternet "1" -- "1..*" AsignacionPlan
+}
+@enduml
+
+@startuml cu09_analisis_generar_mensualidades
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU09 Generar mensualidades de servicios" {
+    actor "Administrador / SecretarÃ­a" as Admin
+    
+    class UI_MensualidadGeneracion {
+        + mostrarMensualidades(): void
+        + generarMensualidades(): void
+    }
+
+    class MensualidadGeneracionController {
+        + index(): void
+        + generar(): void
+    }
+
+    class Mensualidad {
+        - idMensualidad: int
+        - periodo: string
+        - fechaVencimiento: date
+        - monto: decimal
+        - estado: string
+        - codigoFactura: string
+        - fechaEmision: date
+        - idServicio: int
+        - idCliente: int
+        --
+        + create(): void
+        + lockForUpdate(): void
+        + where(): void
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - codigoServicio: string
+        - idCliente: int
+        - idEstadoServicio: int
+        --
+        + where(): void
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - nombreCompleto: string
+        --
+        + find(): void
+    }
+
+    class DetallePago {
+        - idDetallePago: int
+        - subtotal: decimal
+        - montoAplicado: decimal
+        - idPago: int
+        - idMensualidad: int
+        --
+        + create(): void
+    }
+
+    Admin -right- UI_MensualidadGeneracion
+    UI_MensualidadGeneracion -right- MensualidadGeneracionController
+    MensualidadGeneracionController -right- Mensualidad
+
+    Mensualidad "0..*" -up- "1" ServicioInternet
+    Mensualidad "0..*" -right- "1" Cliente
+    Mensualidad "1" -down- "0..*" DetallePago
+}
+@enduml
+
+@startuml cu10_analisis_gestionar_pago_mensualidad
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU10 Gestionar pago de mensualidad" {
+    actor "Administrador / Cajero" as Cajero
+    
+    class UI_PagoMensualidad {
+        + mostrarPendientes(): void
+        + registrarPago(): void
+        + consultarPorCI(): void
+        + pagarEnLinea(): void
+    }
+
+    class PagoMensualidadController {
+        + pendientes(): void
+        + store(): void
+        + consultarPorCI(): void
+        + pagarEnLinea(): void
+    }
+
+    class Pago {
+        - idPago: int
+        - fechaHora: timestamp
+        - montoTotal: decimal
+        - numeroComprobante: string
+        - observacion: string
+        - idUsuario: int
+        - idMetodoPago: int
+        --
+        + create(): void
+        + find(): void
+        + get(): void
+        + update(): void
+    }
+
+    class MetodoPago {
+        - idMetodoPago: int
+        - nombreMetodo: string
+        - descripcion: string
+        - estado: boolean
+        --
+        + find(): void
+    }
+
+    class Usuario {
+        - idUsuario: int
+        - nombreCompleto: string
+        - nombreUsuario: string
+        --
+        + find(): void
+    }
+
+    class DetallePago {
+        - idDetallePago: int
+        - subtotal: decimal
+        - montoAplicado: decimal
+        - idPago: int
+        - idMensualidad: int
+        --
+        + create(): void
+    }
+
+    class Mensualidad {
+        - idMensualidad: int
+        - periodo: string
+        - monto: decimal
+        - estado: string
+        --
+        + findOrFail(): void
+        + update(): void
+    }
+
+    Cajero -right- UI_PagoMensualidad
+    UI_PagoMensualidad -right- PagoMensualidadController
+    PagoMensualidadController -right- Pago
+
+    Pago "0..*" -up- "1" MetodoPago
+    Pago "0..*" -down- "1" Usuario
+    Pago "1" -right- "1..*" DetallePago
+    DetallePago "0..*" -right- "1" Mensualidad
+}
+@enduml
+
+@startuml cu11_analisis_consultar_historial_pagos
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU11 Consultar historial de pagos" {
+    actor "Administrador / SecretarÃ­a" as Admin
+    
+    class UI_HistorialPagos {
+        + mostrarHistorial(): void
+        + filtrarPagos(): void
+        + verDetalleRecibo(): void
+        + cargarFiltros(): void
+    }
+
+    class HistorialPagosController {
+        + index(): void
+        + show(): void
+        + filtros(): void
+    }
+
+    class Pago {
+        - idPago: int
+        - fechaHora: timestamp
+        - montoTotal: decimal
+        - numeroComprobante: string
+        - observacion: string
+        - idUsuario: int
+        - idMetodoPago: int
+        --
+        + findOrFail(): void
+        + latest(): void
+        + paginate(): void
+        + where(): void
+    }
+
+    class MetodoPago {
+        - idMetodoPago: int
+        - nombreMetodo: string
+        - descripcion: string
+        --
+        + find(): void
+    }
+
+    class Usuario {
+        - idUsuario: int
+        - nombreCompleto: string
+        --
+        + find(): void
+    }
+
+    class DetallePago {
+        - idDetallePago: int
+        - subtotal: decimal
+        - montoAplicado: decimal
+        - idPago: int
+        - idMensualidad: int
+        --
+        + get(): void
+    }
+
+    class Mensualidad {
+        - idMensualidad: int
+        - periodo: string
+        - monto: decimal
+        - estado: string
+        --
+        + get(): void
+    }
+
+    Admin -right- UI_HistorialPagos
+    UI_HistorialPagos -right- HistorialPagosController
+    HistorialPagosController -right- Pago
+
+    Pago "0..*" -up- "1" MetodoPago
+    Pago "0..*" -down- "1" Usuario
+    Pago "1" -right- "1..*" DetallePago
+    DetallePago "0..*" -right- "1" Mensualidad
+}
+@enduml
+
+@startuml cu12_analisis_visualizar_alertas_vencimiento
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU12 Visualizar alertas de vencimiento" {
+    actor "Administrador / SecretarÃ­a" as Admin
+    
+    class UI_AlertasVencimiento {
+        + mostrarAlertas(): void
+        + filtrarPorSeveridad(): void
+        + consultarDetalleFactura(): void
+        + recargarAlertas(): void
+    }
+
+    class AlertasVencimientoController {
+        + index(): void
+        + show(): void
+    }
+
+    class Mensualidad {
+        - idMensualidad: int
+        - periodo: string
+        - fechaVencimiento: date
+        - monto: decimal
+        - estado: string
+        - codigoFactura: string
+        - fechaEmision: date
+        - idServicio: int
+        - idCliente: int
+        --
+        + find(): void
+        + get(): void
+        + where(): void
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - codigoServicio: string
+        - idCliente: int
+        - idEstadoServicio: int
+        --
+        + find(): void
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - nombreCompleto: string
+        - telefonoPrincipal: string
+        --
+        + find(): void
+    }
+
+    Admin -right- UI_AlertasVencimiento
+    UI_AlertasVencimiento -right- AlertasVencimientoController
+    AlertasVencimientoController -right- Mensualidad
+
+    Mensualidad "0..*" -up- "1" ServicioInternet
+    Mensualidad "0..*" -right- "1" Cliente
+}
+@enduml
+
+@startuml cu13_analisis_servicios_corte
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU13 Consultar listado de servicios para corte" {
+    actor "Administrador / SecretarÃ­a" as Admin
+    
+    class UI_ServiciosCorte {
+        + mostrarServiciosParaCorte(): void
+        + filtrarPorZona(): void
+        + exportarListadoCorte(): void
+    }
+
+    class ServiciosCorteController {
+        + index(): void
+        + exportar(): void
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - codigoServicio: string
+        - fechaActivacion: date
+        - fechaCorteBase: date
+        - direccion: string
+        - idCliente: int
+        - idEstadoServicio: int
+        - idZona: int
+        - diaCorte: int
+        --
+        + get(): void
+        + where(): void
+        + whereHas(): void
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - nombreCompleto: string
+        - ci: string
+        --
+        + find(): void
+    }
+
+    class Zona {
+        - idZona: int
+        - nombreZona: string
+        - codigo: string
+        --
+        + find(): void
+    }
+
+    class EstadoServicio {
+        - idEstadoServicio: int
+        - nombreEstado: string
+        --
+        + find(): void
+    }
+
+    class Mensualidad {
+        - idMensualidad: int
+        - periodo: string
+        - fechaVencimiento: date
+        - monto: decimal
+        - estado: string
+        - idServicio: int
+        --
+        + where(): void
+    }
+
+    Admin -right- UI_ServiciosCorte
+    UI_ServiciosCorte -right- ServiciosCorteController
+    ServiciosCorteController -right- ServicioInternet
+
+    ServicioInternet "0..*" -up- "1" Cliente
+    ServicioInternet "0..*" -down- "1" Zona
+    ServicioInternet "0..*" -right- "1" EstadoServicio
+    ServicioInternet "1" -- "0..*" Mensualidad
+}
+@enduml
+
+@startuml cu14_analisis_registrar_corte_realizado
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU14 Registrar corte realizado" {
+    actor "Administrador / TÃ©cnico" as Admin
+    
+    class UI_CorteRegistro {
+        + seleccionarServicio(): void
+        + registrarCorte(): void
+        + actualizarEstadoServicio(): void
+    }
+
+    class CorteRegistroController {
+        + show(): void
+        + store(): void
+    }
+
+    class AccionServicio {
+        - idAccion: int
+        - tipoAccion: string
+        - fechaSolicitud: timestamp
+        - fechaEjecucion: timestamp
+        - estado: string
+        - motivo: string
+        - observacion: string
+        - idServicio: int
+        - idUsuario: int
+        --
+        + create(): void
+        + findOrFail(): void
+        + update(): void
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - codigoServicio: string
+        - idEstadoServicio: int
+        --
+        + lockForUpdate(): void
+        + update(): void
+    }
+
+    class Usuario {
+        - idUsuario: int
+        - nombreCompleto: string
+        - nombreUsuario: string
+        --
+        + find(): void
+    }
+
+    class EstadoServicio {
+        - idEstadoServicio: int
+        - nombreEstado: string
+        --
+        + find(): void
+    }
+
+    Admin -right- UI_CorteRegistro
+    UI_CorteRegistro -right- CorteRegistroController
+    CorteRegistroController -right- AccionServicio
+
+    AccionServicio "0..*" -up- "1" Usuario
+    AccionServicio "0..*" -right- "1" ServicioInternet
+    ServicioInternet "0..*" -right- "1" EstadoServicio
+}
+@enduml
+
+@startuml cu15_analisis_gestionar_reactivaciones
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU15 Gestionar lista y registro de reactivaciones" {
+    actor "Admin / SecretarÃ­a / TÃ©cnico" as Admin
+    
+    class UI_Reactivaciones {
+        + mostrarServiciosCortados(): void
+        + registrarReactivacion(): void
+        + verificarPagoAlDia(): void
+    }
+
+    class ReactivacionesController {
+        + index(): void
+        + store(): void
+    }
+
+    class AccionServicio {
+        - idAccion: int
+        - tipoAccion: string
+        - fechaSolicitud: timestamp
+        - fechaEjecucion: timestamp
+        - estado: string
+        - motivo: string
+        - observacion: string
+        - idServicio: int
+        - idUsuario: int
+        --
+        + create(): void
+        + get(): void
+        + update(): void
+        + where(): void
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - codigoServicio: string
+        - idEstadoServicio: int
+        --
+        + lockForUpdate(): void
+        + update(): void
+    }
+
+    class Usuario {
+        - idUsuario: int
+        - nombreCompleto: string
+        --
+        + find(): void
+    }
+
+    class Pago {
+        - idPago: int
+        - numeroComprobante: string
+        - montoTotal: decimal
+        --
+        + find(): void
+    }
+
+    Admin -right- UI_Reactivaciones
+    UI_Reactivaciones -right- ReactivacionesController
+    ReactivacionesController -right- AccionServicio
+
+    AccionServicio "0..*" -up- "1" Usuario
+    AccionServicio "0..*" -right- "1" ServicioInternet
+    AccionServicio "0..*" -down- "0..1" Pago
+}
+@enduml
+
+@startuml cu16_analisis_gestionar_catalogo_planes
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU16 Gestionar Planes de Internet" {
+    actor Administrador
+    
+    class UI_PlanInternet {
+        + mostrarPlanes(): void
+        + crearPlan(): void
+        + editarPlan(): void
+        + desactivarPlan(): void
+    }
+
+    class PlanInternetController {
+        + index(): void
+        + store(): void
+        + update(): void
+        + destroy(): void
+    }
+
+    class PlanInternet {
+        - idPlan: int
+        - nombrePlan: string
+        - velocidadMbps: int
+        - precioMensual: decimal
+        - descripcion: string
+        - activo: boolean
+        --
+        + create(): void
+        + find(): void
+        + get(): void
+        + update(): void
+    }
+
+    class AsignacionPlan {
+        - idAsignacionPlan: int
+        - fechaInicio: date
+        - fechaFin: date
+        - precioAplicado: decimal
+        - idServicio: int
+        - idPlan: int
+        --
+        + where(): void
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - codigoServicio: string
+        - idEstadoServicio: int
+        --
+        + find(): void
+    }
+
+    Administrador -right- UI_PlanInternet
+    UI_PlanInternet -right- PlanInternetController
+    PlanInternetController -right- PlanInternet
+
+    PlanInternet "1" -right- "0..*" AsignacionPlan
+    ServicioInternet "1" -up- "0..*" AsignacionPlan
+}
+@enduml
+
+@startuml cu17_analisis_asignar_cambiar_plan_servicio
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de anÃ¡lisis de clases - CU17 Asignar o cambiar el plan de un servicio" {
+    actor "Administrador / SecretarÃ­a" as Admin
+    
+    class UI_AsignacionPlan {
+        + mostrarHistorialPlanes(): void
+        + asignarNuevoPlan(): void
+        + finalizarPlanAnterior(): void
+    }
+
+    class AsignacionPlanController {
+        + index(): void
+        + store(): void
+    }
+
+    class AsignacionPlan {
+        - idAsignacionPlan: int
+        - fechaInicio: date
+        - fechaFin: date
+        - precioAplicado: decimal
+        - motivoCambio: string
+        - idServicio: int
+        - idPlan: int
+        - idUsuario: int
+        --
+        + create(): void
+        + get(): void
+        + update(): void
+        + where(): void
+    }
+
+    class PlanInternet {
+        - idPlan: int
+        - nombrePlan: string
+        - velocidadMbps: int
+        - precioMensual: decimal
+        - activo: boolean
+        --
+        + find(): void
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - codigoServicio: string
+        - idCliente: int
+        - idEstadoServicio: int
+        --
+        + find(): void
+    }
+
+    class Usuario {
+        - idUsuario: int
+        - nombreCompleto: string
+        - nombreUsuario: string
+        --
+        + find(): void
+    }
+
+    Admin -right- UI_AsignacionPlan
+    UI_AsignacionPlan -right- AsignacionPlanController
+    AsignacionPlanController -right- AsignacionPlan
+
+    AsignacionPlan "0..*" -up- "1" PlanInternet
+    AsignacionPlan "0..*" -right- "1" ServicioInternet
+    AsignacionPlan "0..*" -down- "1" Usuario
+}
+@enduml
