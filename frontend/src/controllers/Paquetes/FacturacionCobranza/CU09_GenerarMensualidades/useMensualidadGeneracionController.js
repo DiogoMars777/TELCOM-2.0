@@ -12,7 +12,7 @@ export function useMensualidadGeneracionController() {
   const [error, setError] = useState(null);         // Error de carga del listado
   const [resultMsg, setResultMsg] = useState(null); // Resultado de la facturación
 
-  const loadMensualidades = async () => {
+  const loadMensualidades = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -24,10 +24,26 @@ export function useMensualidadGeneracionController() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [periodo]);
 
   useEffect(() => {
-    loadMensualidades();
+    let ignore = false;
+    (async () => {
+      try {
+        const data = await mensualidadService.fetchMensualidades(periodo);
+        if (!ignore) setMensualidades(data);
+      } catch (e) {
+        if (!ignore) {
+          setMensualidades([]);
+          setError(describeApiError(e));
+        }
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
   }, [periodo]);
 
   const handleGenerar = async () => {

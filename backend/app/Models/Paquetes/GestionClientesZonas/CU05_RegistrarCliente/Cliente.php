@@ -286,7 +286,7 @@ class Cliente extends Model
 
     public function setNombreCompletoAttribute(?string $value): void
     {
-        $this->attributes['nombreCompleto'] = $value;
+        $this->attributes['nombreCompleto'] = $value !== null ? mb_substr(trim($value), 0, 100) : null;
     }
 
     public function getNombresAttribute(): ?string
@@ -299,7 +299,8 @@ class Cliente extends Model
 
     public function setNombresAttribute(?string $value): void
     {
-        $this->attributes['nombreCompleto'] = trim(($value ?? '') . ' ' . ($this->apellidos ?? ''));
+        $full = trim(($value ?? '') . ' ' . ($this->apellidos ?? ''));
+        $this->attributes['nombreCompleto'] = mb_substr($full, 0, 100);
     }
 
     public function getApellidosAttribute(): ?string
@@ -312,7 +313,8 @@ class Cliente extends Model
 
     public function setApellidosAttribute(?string $value): void
     {
-        $this->attributes['nombreCompleto'] = trim(($this->nombres ?? '') . ' ' . ($value ?? ''));
+        $full = trim(($this->nombres ?? '') . ' ' . ($value ?? ''));
+        $this->attributes['nombreCompleto'] = mb_substr($full, 0, 100);
     }
 
     public function getMotivoBajaAttribute(): ?string

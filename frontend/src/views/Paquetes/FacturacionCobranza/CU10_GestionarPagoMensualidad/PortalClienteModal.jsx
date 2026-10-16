@@ -26,6 +26,11 @@ import './PortalClienteModal.css';
  * mediante Simple QR, Transferencia Bancaria y PayPal directamente vinculados a PostgreSQL.
  */
 export default function PortalClienteModal({ isOpen, onClose }) {
+  if (!isOpen) return null;
+  return <PortalClienteModalContent onClose={onClose} />;
+}
+
+function PortalClienteModalContent({ onClose }) {
   // Estado de búsqueda por Cédula de Identidad
   const [ciInput, setCiInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -52,18 +57,6 @@ export default function PortalClienteModal({ isOpen, onClose }) {
   // --- Estado para PAYPAL ---
   const [paypalEstado, setPaypalEstado] = useState('PENDIENTE'); // 'PENDIENTE' | 'CONFIRMADO'
 
-  // Limpiar campos al abrir o cerrar
-  useEffect(() => {
-    if (!isOpen) {
-      setCiInput('');
-      setMensajeAviso(null);
-      setDatosConsulta(null);
-      setReciboFinal(null);
-      setErrorPago(null);
-      setQrEstado('ESPERANDO');
-    }
-  }, [isOpen]);
-
   // Generar código QR dinámico cuando se obtienen datos de factura pendiente
   useEffect(() => {
     if (datosConsulta?.factura && metodoPago === 'QR') {
@@ -87,8 +80,6 @@ export default function PortalClienteModal({ isOpen, onClose }) {
         .catch((err) => console.error('Error generando QR:', err));
     }
   }, [datosConsulta, metodoPago]);
-
-  if (!isOpen) return null;
 
   // [Consultar Estado]: Busca en la base de datos por C.I.
   const handleConsultarCI = async (e) => {

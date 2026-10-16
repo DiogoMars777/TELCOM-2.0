@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAlertasVencimientoController } from '../../../../controllers/Paquetes/FacturacionCobranza/CU12_VisualizarAlertasVencimiento/useAlertasVencimientoController';
-import { AlertTriangle, Bell, ShieldAlert, Clock, UserX, AlertCircle, RefreshCw } from 'lucide-react';
+import { ShieldAlert, Clock, AlertCircle, RefreshCw } from 'lucide-react';
 
 export default function AlertasVencimientoView() {
   const {

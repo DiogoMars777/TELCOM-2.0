@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { planInternetService } from '../../../../models/Paquetes/ServiciosPlanes/CU16_GestionarCatalogoPlanes/planInternetModel';
 import { describeApiError } from '../../../../services/apiClient';
 
@@ -38,7 +38,7 @@ function normalizarPayload(form) {
 
 export function usePlanInternetController() {
   const [planes, setPlanes] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);         // Error de carga del listado
   const [formError, setFormError] = useState(null); // Error al guardar
   const [showModal, setShowModal] = useState(false);
@@ -46,7 +46,7 @@ export function usePlanInternetController() {
   const [formPlan, setFormPlan] = useState(emptyPlan);
   const [savingId, setSavingId] = useState(null);   // fila en proceso (activar/desactivar)
 
-  const loadPlanes = async () => {
+  const loadPlanes = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -58,10 +58,26 @@ export function usePlanInternetController() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    loadPlanes();
+    let ignore = false;
+    (async () => {
+      try {
+        const data = await planInternetService.fetchPlanes();
+        if (!ignore) setPlanes(data);
+      } catch (e) {
+        if (!ignore) {
+          setPlanes([]);
+          setError(describeApiError(e));
+        }
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const openCreate = () => {

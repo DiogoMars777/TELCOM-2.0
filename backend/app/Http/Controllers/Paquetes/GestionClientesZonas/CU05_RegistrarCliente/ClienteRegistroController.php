@@ -22,8 +22,8 @@ class ClienteRegistroController extends Controller
         $validated = $request->validate([
             'documento_identidad' => 'required|string|unique:Cliente,ci',
             'tipo_documento'      => 'required|string|in:CI,NIT,PASAPORTE',
-            'nombres'             => 'required|string|max:150',
-            'apellidos'           => 'required|string|max:150',
+            'nombres'             => 'required|string|max:45',
+            'apellidos'           => 'required|string|max:45',
             'telefono'            => 'required|string|max:30',
             'email'               => 'required|email|unique:Cliente,correo',
             'direccion'           => 'required|string|max:255',

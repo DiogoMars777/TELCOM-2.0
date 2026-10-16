@@ -218,6 +218,7 @@ test('CU10 pagarEnLinea envía POST a /cu10/portal-cliente/pagar con datos corre
   });
   assert.ok(calledUrl.includes('/cu10/portal-cliente/pagar'));
   assert.equal(sentBody.metodo_pago, 'QR');
+  assert.equal(res?.recibo?.codigo_recibo, 'REC-ONL-123');
 });
 
 test('CU16 fetchPlanes lee el catálogo real de /planes', async () => {

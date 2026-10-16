@@ -25,7 +25,7 @@ globalThis.window = { dispatchEvent: () => {} };
 const { planInternetService, mockPlanesCatalogo } =
   await import('../src/models/Paquetes/ServiciosPlanes/CU16_GestionarCatalogoPlanes/planInternetModel.js');
 const { asignacionPlanService } =
-  await import('../src/models/Paquetes/ServiciosPlanes/CU17_AsignarPlanServicio/asignacionPlanModel.js');
+  await import('../src/models/Paquetes/ServiciosPlanes/CU17_AsignarCambiarPlanInternet/asignacionPlanModel.js');
 
 function jsonResponse(status, body) {
   return { ok: status >= 200 && status < 300, status, json: async () => body };

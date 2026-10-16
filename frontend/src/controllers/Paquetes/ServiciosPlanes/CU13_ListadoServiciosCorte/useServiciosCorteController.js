@@ -6,7 +6,7 @@ import { describeApiError } from '../../../../services/apiClient';
 export function useServiciosCorteController() {
   const [servicios, setServicios] = useState([]);
   const [zonas, setZonas] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // Filtros interactivos y paginación
@@ -54,8 +54,35 @@ export function useServiciosCorteController() {
   }, [diasMora, zonaId, buscar, page]);
 
   useEffect(() => {
-    loadServicios();
-  }, [loadServicios]);
+    let ignore = false;
+    (async () => {
+      try {
+        const data = await serviciosCorteService.fetchServiciosCorte({
+          dias_mora: diasMora,
+          zona_id: zonaId,
+          buscar: buscar.trim(),
+          page,
+        });
+        if (!ignore) {
+          setServicios(data);
+          if (data?.meta) {
+            setMeta(data.meta);
+          }
+        }
+      } catch (e) {
+        if (!ignore) {
+          setServicios([]);
+          setMeta({ current_page: 1, last_page: 1, total: 0, per_page: 15 });
+          setError(describeApiError(e));
+        }
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
+  }, [diasMora, zonaId, buscar, page]);
 
   const handleSetDiasMora = (val) => {
     setDiasMora(val);

@@ -37,6 +37,7 @@ export default function ServiciosCorteView({ onIrACorte }) {
   } = useServiciosCorteController();
 
   const hayFiltrosActivos = Boolean(buscar || zonaId || diasMora !== 5);
+  const [fechaEmision] = React.useState(() => new Date().toLocaleDateString('es-BO'));
 
   return (
     <div className="view-panel printable-area">
@@ -162,7 +163,7 @@ export default function ServiciosCorteView({ onIrACorte }) {
       <div className="only-print" style={{ display: 'none', marginBottom: '1rem' }}>
         <h2 style={{ margin: 0 }}>TELCOM - Hoja de Ruta de Cortes Técnicos</h2>
         <p style={{ margin: '0.25rem 0', color: '#64748b' }}>
-          Fecha de emisión: {new Date().toLocaleDateString('es-BO')} | Total de abonados a cortar: {meta?.total ?? servicios.length}
+          Fecha de emisión: {fechaEmision} | Total de abonados a cortar: {meta?.total ?? servicios.length}
         </p>
       </div>
 

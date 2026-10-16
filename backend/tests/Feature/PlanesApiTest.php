@@ -335,12 +335,12 @@ class PlanesApiTest extends TestCase
         // Sí puede consultar (lo necesita para CU17).
         $this->withHeaders($headers)->getJson('/api/planes')->assertStatus(200);
 
-        // También puede gestionar el catálogo con planes.assign.
+        // La creación del catálogo es exclusiva del Administrador (planes.manage).
         $this->withHeaders($headers)->postJson('/api/planes', [
             'nombre_plan'    => 'Plan Secretaria Test',
             'velocidad_mbps' => 40,
             'precio_mensual' => 100,
-        ])->assertStatus(201);
+        ])->assertStatus(403);
     }
 
     public function test_tecnico_no_puede_crear_plan(): void

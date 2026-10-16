@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { asignacionPlanService } from '../../../../models/Paquetes/ServiciosPlanes/CU17_AsignarCambiarPlanInternet/asignacionPlanModel';
 import { describeApiError } from '../../../../services/apiClient';
 
@@ -6,11 +6,11 @@ const emptyForm = { plan_id: '', motivo_cambio: '' };
 
 export function useAsignacionPlanController() {
   const [servicios, setServicios] = useState([]);
-  const [loadingServicios, setLoadingServicios] = useState(false);
+  const [loadingServicios, setLoadingServicios] = useState(true);
   const [serviciosError, setServiciosError] = useState(null);
 
   const [planes, setPlanes] = useState([]);
-  const [loadingPlanes, setLoadingPlanes] = useState(false);
+  const [loadingPlanes, setLoadingPlanes] = useState(true);
   const [planesError, setPlanesError] = useState(null);
 
   const [servicioId, setServicioId] = useState('');
@@ -25,7 +25,7 @@ export function useAsignacionPlanController() {
   const [formError, setFormError] = useState(null);
   const [saving, setSaving] = useState(false);
 
-  const loadServicios = async () => {
+  const loadServicios = useCallback(async () => {
     setLoadingServicios(true);
     setServiciosError(null);
     try {
@@ -36,9 +36,9 @@ export function useAsignacionPlanController() {
     } finally {
       setLoadingServicios(false);
     }
-  };
+  }, []);
 
-  const loadPlanes = async () => {
+  const loadPlanes = useCallback(async () => {
     setLoadingPlanes(true);
     setPlanesError(null);
     try {
@@ -51,9 +51,9 @@ export function useAsignacionPlanController() {
     } finally {
       setLoadingPlanes(false);
     }
-  };
+  }, []);
 
-  const loadHistorial = async (id) => {
+  const loadHistorial = useCallback(async (id) => {
     if (!id) {
       setServicio(null);
       setAsignaciones([]);
@@ -72,11 +72,35 @@ export function useAsignacionPlanController() {
     } finally {
       setLoadingHistorial(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    loadServicios();
-    loadPlanes();
+    let ignore = false;
+    (async () => {
+      try {
+        const [serviciosData, planesData] = await Promise.all([
+          asignacionPlanService.fetchServicios(),
+          asignacionPlanService.fetchPlanes(),
+        ]);
+        if (!ignore) {
+          setServicios(serviciosData);
+          setPlanes((planesData ?? []).filter((p) => p.activo));
+        }
+      } catch (e) {
+        if (!ignore) {
+          setServicios([]);
+          setServiciosError(describeApiError(e));
+        }
+      } finally {
+        if (!ignore) {
+          setLoadingServicios(false);
+          setLoadingPlanes(false);
+        }
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const seleccionarServicio = (value) => {
@@ -144,5 +168,7 @@ export function useAsignacionPlanController() {
     closeModal,
     handleAsignar,
     reload: () => loadHistorial(servicioId),
+    reloadPlanes: loadPlanes,
+    reloadServicios: loadServicios,
   };
 }

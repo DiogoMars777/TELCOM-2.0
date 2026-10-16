@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { zonaService } from '../../../../models/Paquetes/GestionClientesZonas/CU04_ZonasCobertura/zonaCoberturaModel';
 import { describeApiError } from '../../../../services/apiClient';
 
@@ -51,14 +51,14 @@ function normalizarPayload(form) {
 
 export function useZonaCoberturaController() {
   const [zonas, setZonas] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);         // Error de carga del listado
   const [formError, setFormError] = useState(null); // Error al guardar una zona
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null); // null = crear
   const [newZona, setNewZona] = useState(emptyZona);
 
-  const loadZonas = async () => {
+  const loadZonas = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -70,10 +70,26 @@ export function useZonaCoberturaController() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    loadZonas();
+    let ignore = false;
+    (async () => {
+      try {
+        const data = await zonaService.fetchZonas();
+        if (!ignore) setZonas(data);
+      } catch (e) {
+        if (!ignore) {
+          setZonas([]);
+          setError(describeApiError(e));
+        }
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const openCreate = () => {

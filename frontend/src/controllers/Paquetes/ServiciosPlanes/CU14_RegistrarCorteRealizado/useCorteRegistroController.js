@@ -14,11 +14,13 @@ export function useCorteRegistroController(initialServicio = null) {
   const [error, setError] = useState(null);
   const [corteSuccess, setCorteSuccess] = useState(null);
 
-  useEffect(() => {
+  const [prevInitial, setPrevInitial] = useState(initialServicio);
+  if (initialServicio !== prevInitial) {
+    setPrevInitial(initialServicio);
     if (initialServicio) {
       setSelectedServicio(initialServicio);
     }
-  }, [initialServicio]);
+  }
 
   // El listado de servicios proviene del backend (CU13), no de datos inventados.
   useEffect(() => {

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  Users,
   UserPlus,
   Search,
   Filter,
@@ -39,14 +38,14 @@ export default function ClientesView({ user }) {
 
   // Estado del listado y filtros (CU06)
   const [clientes, setClientes] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [busqueda, setBusqueda] = useState('');
   const [estadoFiltro, setEstadoFiltro] = useState('');
 
   // Catálogo de zonas para selección (CU05 / CU07)
   const [zonas, setZonas] = useState([]);
-  const [loadingZonas, setLoadingZonas] = useState(false);
+  const [loadingZonas, setLoadingZonas] = useState(true);
   const [zonasError, setZonasError] = useState(null);
 
   // Mensaje de retroalimentación superior
@@ -118,12 +117,60 @@ export default function ClientesView({ user }) {
   }, [busqueda, estadoFiltro]);
 
   useEffect(() => {
-    loadClientes();
-  }, [loadClientes]);
+    let ignore = false;
+    (async () => {
+      try {
+        const data = await clienteConsultaService.fetchClientes({
+          buscar: busqueda,
+          estado: estadoFiltro,
+        });
+        if (ignore) return;
+        const term = busqueda.toLowerCase().trim();
+        const filtered = (Array.isArray(data) ? data : []).filter((c) => {
+          const matchesTerm =
+            !term ||
+            String(c.nombres ?? '').toLowerCase().includes(term) ||
+            String(c.apellidos ?? '').toLowerCase().includes(term) ||
+            String(c.documento_identidad ?? '').toLowerCase().includes(term) ||
+            String(c.codigo_cliente ?? '').toLowerCase().includes(term) ||
+            String(c.telefono ?? '').includes(term);
+          const matchesEstado = !estadoFiltro || c.estado === estadoFiltro;
+          return matchesTerm && matchesEstado;
+        });
+        setClientes(filtered);
+      } catch (e) {
+        if (!ignore) {
+          setClientes([]);
+          setError(describeApiError(e));
+        }
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
+  }, [busqueda, estadoFiltro]);
 
   useEffect(() => {
-    loadZonas();
-  }, [loadZonas]);
+    let ignore = false;
+    (async () => {
+      try {
+        const data = await clienteRegistroService.fetchZonas();
+        if (!ignore) setZonas(Array.isArray(data) ? data : []);
+      } catch (e) {
+        if (!ignore) {
+          setZonas([]);
+          setZonasError(describeApiError(e));
+        }
+      } finally {
+        if (!ignore) setLoadingZonas(false);
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   // --- Handlers: Modal Registrar Cliente (CU05) ---
   const handleOpenCreate = () => {

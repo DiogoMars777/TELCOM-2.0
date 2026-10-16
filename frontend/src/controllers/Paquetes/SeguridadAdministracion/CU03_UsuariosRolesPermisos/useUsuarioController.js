@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { usuarioService } from '../../../../models/Paquetes/SeguridadAdministracion/CU03_UsuariosRolesPermisos/usuarioModel';
 import { describeApiError } from '../../../../services/apiClient';
 import { isPasswordValid } from '../../../../config/passwordPolicy.js';
@@ -10,7 +10,7 @@ const emptyNewUser = { name: '', email: '', password: '', rol_id: '' };
 export function useUsuarioController() {
   const [usuarios, setUsuarios] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);         // Error de carga del listado
   const [formError, setFormError] = useState(null);  // Error al crear un usuario
   const [actionError, setActionError] = useState(null); // Error al activar/desactivar o cambiar rol
@@ -18,7 +18,7 @@ export function useUsuarioController() {
   const [showModal, setShowModal] = useState(false);
   const [newUser, setNewUser] = useState(emptyNewUser);
 
-  const loadUsuarios = async () => {
+  const loadUsuarios = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -39,10 +39,35 @@ export function useUsuarioController() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    loadUsuarios();
+    let ignore = false;
+    (async () => {
+      try {
+        const { usuarios: data, roles: rolesData } = await usuarioService.fetchUsuariosYRoles();
+        if (!ignore) {
+          setUsuarios(data);
+          setRoles(rolesData);
+          setNewUser((prev) => {
+            if (prev.rol_id) return prev;
+            const porDefecto = rolesData.find((r) => r.slug === 'secretaria') ?? rolesData[0];
+            return porDefecto ? { ...prev, rol_id: String(porDefecto.id) } : prev;
+          });
+        }
+      } catch (e) {
+        if (!ignore) {
+          setUsuarios([]);
+          setRoles([]);
+          setError(describeApiError(e));
+        }
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const handleCreate = async (e) => {

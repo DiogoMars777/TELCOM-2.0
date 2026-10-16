@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { clienteMantenimientoService } from '../../../../models/Paquetes/GestionClientesZonas/CU07_ActualizarBajaCliente/clienteMantenimientoModel';
 import { clienteConsultaService } from '../../../../models/Paquetes/GestionClientesZonas/CU06_ConsultarBuscarClientes/clienteConsultaModel';
 import { describeApiError } from '../../../../services/apiClient';
@@ -6,13 +6,13 @@ import { describeApiError } from '../../../../services/apiClient';
 export function useClienteMantenimientoController() {
   const [clientes, setClientes] = useState([]);
   const [selectedCliente, setSelectedCliente] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
   const [bajaMotivo, setBajaMotivo] = useState('');
   const [showBajaModal, setShowBajaModal] = useState(false);
 
-  const loadClientes = async () => {
+  const loadClientes = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -28,10 +28,32 @@ export function useClienteMantenimientoController() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    loadClientes();
+    let ignore = false;
+    (async () => {
+      try {
+        const data = await clienteConsultaService.fetchClientes({});
+        if (!ignore) {
+          setClientes(data);
+          setSelectedCliente((prev) => {
+            const stillExists = prev && data.find((c) => c.id === prev.id);
+            return stillExists || data[0] || null;
+          });
+        }
+      } catch (e) {
+        if (!ignore) {
+          setClientes([]);
+          setError(describeApiError(e));
+        }
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const handleUpdate = async (e) => {

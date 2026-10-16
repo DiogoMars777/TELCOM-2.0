@@ -1,6 +1,6 @@
 import React from 'react';
 import { useClienteRegistroController } from '../../../../controllers/Paquetes/GestionClientesZonas/CU05_RegistrarCliente/useClienteRegistroController';
-import { UserPlus, CheckCircle2, AlertCircle, Save } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Save } from 'lucide-react';
 // Estilos acotados a esta pantalla (incluye ocultar la barra vertical sin
 // desactivar el desplazamiento). Ver ClienteRegistroView.css.
 import './ClienteRegistroView.css';

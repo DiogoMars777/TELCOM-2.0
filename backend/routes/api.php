@@ -215,19 +215,19 @@ Route::prefix('planes')->group(function () {
         ->middleware(['auth:sanctum', 'permission:planes.view']);
 
     Route::post('/', [PlanInternetController::class, 'store'])
-        ->middleware(['auth:sanctum', 'permission:planes.assign']);
+        ->middleware(['auth:sanctum', 'permission:planes.manage']);
     Route::put('/{id}', [PlanInternetController::class, 'update'])
         ->whereNumber('id')
-        ->middleware(['auth:sanctum', 'permission:planes.assign']);
+        ->middleware(['auth:sanctum', 'permission:planes.manage']);
     Route::delete('/{id}', [PlanInternetController::class, 'destroy'])
         ->whereNumber('id')
-        ->middleware(['auth:sanctum', 'permission:planes.assign']);
+        ->middleware(['auth:sanctum', 'permission:planes.manage']);
     Route::put('/{id}/activar', [PlanInternetController::class, 'activar'])
         ->whereNumber('id')
-        ->middleware(['auth:sanctum', 'permission:planes.assign']);
+        ->middleware(['auth:sanctum', 'permission:planes.manage']);
     Route::put('/{id}/desactivar', [PlanInternetController::class, 'desactivar'])
         ->whereNumber('id')
-        ->middleware(['auth:sanctum', 'permission:planes.assign']);
+        ->middleware(['auth:sanctum', 'permission:planes.manage']);
 });
 
 /*

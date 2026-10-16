@@ -32,7 +32,28 @@ export function useHistorialPagosController() {
     }
   }, [filtrosAplicados]);
 
-  useEffect(() => { cargar(); }, [cargar]);
+  useEffect(() => {
+    let ignore = false;
+    (async () => {
+      try {
+        const resultado = await historialPagosService.fetchHistorial({ ...filtrosAplicados, page: 1 });
+        if (!ignore) {
+          setPagos(resultado.pagos);
+          setMeta(resultado.meta);
+        }
+      } catch (err) {
+        if (!ignore) {
+          setPagos([]);
+          setError(describeApiError(err));
+        }
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
+  }, [filtrosAplicados]);
   useEffect(() => {
     historialPagosService.fetchFiltros().then(setOpciones).catch(() => {});
   }, []);

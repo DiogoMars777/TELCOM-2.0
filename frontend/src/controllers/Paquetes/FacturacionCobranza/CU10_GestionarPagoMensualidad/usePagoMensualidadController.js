@@ -12,7 +12,7 @@ export function usePagoMensualidadController() {
   const [pendientes, setPendientes] = useState([]);
   const [selectedFactura, setSelectedFactura] = useState(null);
   const [busqueda, setBusqueda] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
@@ -68,8 +68,34 @@ export function usePagoMensualidadController() {
   }, [busqueda]);
 
   useEffect(() => {
-    cargarPendientes();
-  }, [cargarPendientes]);
+    let ignore = false;
+    (async () => {
+      try {
+        const data = await pagoMensualidadService.fetchPendientes({ buscar: busqueda });
+        if (!ignore) {
+          const lista = Array.isArray(data) ? data : [];
+          setPendientes(lista);
+
+          setSelectedFactura((prev) => {
+            if (!prev) return lista[0] ?? null;
+            const siguePendiente = lista.find((f) => f.id === prev.id);
+            return siguePendiente ?? (lista[0] ?? null);
+          });
+        }
+      } catch (e) {
+        if (!ignore) {
+          setPendientes([]);
+          setSelectedFactura(null);
+          setError(describeApiError(e));
+        }
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
+  }, [busqueda]);
 
   /**
    * [Seleccionar Factura]: Actualiza la factura a cobrar y los campos de pago.

@@ -23,8 +23,8 @@ class ClienteMantenimientoController extends Controller
         $cliente = ClienteBajaLogica::withTrashed()->findOrFail($id);
 
         $validated = $request->validate([
-            'nombres'   => 'sometimes|string|max:150',
-            'apellidos' => 'sometimes|string|max:150',
+            'nombres'   => 'sometimes|string|max:45',
+            'apellidos' => 'sometimes|string|max:45',
             'telefono'  => 'sometimes|string|max:30',
             'email'     => 'sometimes|email|unique:Cliente,correo,' . ($cliente->idCliente ?? $cliente->id) . ',idCliente',
             'direccion' => 'sometimes|string|max:255',

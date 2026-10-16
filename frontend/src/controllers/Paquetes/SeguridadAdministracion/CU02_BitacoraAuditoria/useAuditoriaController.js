@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { auditoriaService } from '../../../../models/Paquetes/SeguridadAdministracion/CU02_BitacoraAuditoria/auditoriaModel';
 import { describeApiError } from '../../../../services/apiClient';
 
@@ -10,7 +10,7 @@ export function useAuditoriaController() {
   const [usuarioFiltro, setUsuarioFiltro] = useState('');
   const [accionFiltro, setAccionFiltro] = useState('');
 
-  const loadLogs = async () => {
+  const loadLogs = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -25,7 +25,7 @@ export function useAuditoriaController() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [usuarioFiltro, accionFiltro]);
 
   // Lista de usuarios reales de la bitácora (para el primer filtro).
   useEffect(() => {
@@ -45,7 +45,26 @@ export function useAuditoriaController() {
   }, []);
 
   useEffect(() => {
-    loadLogs();
+    let activo = true;
+    (async () => {
+      try {
+        const data = await auditoriaService.fetchLogs({
+          user_id: usuarioFiltro,
+          accion: accionFiltro,
+        });
+        if (activo) setLogs(data);
+      } catch (err) {
+        if (activo) {
+          setLogs([]);
+          setError(describeApiError(err));
+        }
+      } finally {
+        if (activo) setLoading(false);
+      }
+    })();
+    return () => {
+      activo = false;
+    };
   }, [usuarioFiltro, accionFiltro]);
 
   return {

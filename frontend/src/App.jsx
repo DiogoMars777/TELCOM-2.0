@@ -25,7 +25,7 @@ import AsignarPlanView from './views/Paquetes/ServiciosPlanes/CU17_AsignarCambia
 // Iconos de cada módulo del panel
 import {
   Radio, LogOut, History, Users, MapPin,
-  UserPlus, Search, Edit3, Wifi, Calendar,
+  Wifi, Calendar,
   CreditCard, Clock, AlertTriangle, Scissors, RefreshCw, Lock,
   Router, ArrowRightLeft,
 } from 'lucide-react';

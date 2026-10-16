@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { clienteRegistroService, initialCliente } from '../../../../models/Paquetes/GestionClientesZonas/CU05_RegistrarCliente/clienteRegistroModel';
 import { describeApiError } from '../../../../services/apiClient';
 
@@ -9,10 +9,10 @@ export function useClienteRegistroController(onSuccess) {
   const [errorMsg, setErrorMsg] = useState(null);
 
   const [zonas, setZonas] = useState([]);
-  const [loadingZonas, setLoadingZonas] = useState(false);
+  const [loadingZonas, setLoadingZonas] = useState(true);
   const [zonasError, setZonasError] = useState(null);
 
-  const loadZonas = async () => {
+  const loadZonas = useCallback(async () => {
     setLoadingZonas(true);
     setZonasError(null);
     try {
@@ -24,10 +24,26 @@ export function useClienteRegistroController(onSuccess) {
     } finally {
       setLoadingZonas(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    loadZonas();
+    let ignore = false;
+    (async () => {
+      try {
+        const data = await clienteRegistroService.fetchZonas();
+        if (!ignore) setZonas(data);
+      } catch (e) {
+        if (!ignore) {
+          setZonas([]);
+          setZonasError(describeApiError(e));
+        }
+      } finally {
+        if (!ignore) setLoadingZonas(false);
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const handleChange = (e) => {

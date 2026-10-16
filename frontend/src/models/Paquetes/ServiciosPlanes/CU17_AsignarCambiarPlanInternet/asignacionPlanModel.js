@@ -106,6 +106,22 @@ export const asignacionPlanService = {
     return items.map((s) => ({ ...s, cliente_nombre: nombreCliente(s) }));
   },
 
+  async buscarServicios(params = '') {
+    const query = typeof params === 'string' ? { buscar: params } : (params || {});
+    const res = await apiClient.get('/cu08/servicios', query);
+    const lista = res?.data?.data ?? res?.data ?? [];
+    return (Array.isArray(lista) ? lista : []).map((s) => ({
+      ...s,
+      cliente_nombre: nombreCliente(s),
+    }));
+  },
+
+  async fetchPlanesActivos() {
+    if (isDemoMode()) return mockPlanesCu17.filter((p) => p.activo).map(normalizarPlan);
+    const res = await apiClient.get('/planes', { activo: 1 });
+    return (res?.data?.planes ?? []).map(normalizarPlan);
+  },
+
   async fetchPlanes() {
     if (isDemoMode()) return mockPlanesCu17.map(normalizarPlan);
     const res = await apiClient.get('/planes');

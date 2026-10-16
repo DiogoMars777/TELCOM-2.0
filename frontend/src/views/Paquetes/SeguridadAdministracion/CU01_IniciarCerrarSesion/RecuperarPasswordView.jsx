@@ -46,7 +46,6 @@ export default function RecuperarPasswordView({
     error,
     infoMessage,
     cooldown,
-    isEmailValid,
     canRequestCode,
     canReset,
     passwordsMatch,

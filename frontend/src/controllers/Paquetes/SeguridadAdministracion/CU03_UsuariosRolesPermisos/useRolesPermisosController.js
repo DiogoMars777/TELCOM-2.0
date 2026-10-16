@@ -15,7 +15,7 @@ export function useRolesPermisosController({ onPermisosActualizados } = {}) {
   const [permisos, setPermisos] = useState([]);
   const [selectedRolId, setSelectedRolId] = useState('');
   const [draft, setDraft] = useState([]); // slugs seleccionados sin guardar
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -56,17 +56,36 @@ export function useRolesPermisosController({ onPermisosActualizados } = {}) {
   }, []);
 
   useEffect(() => {
-    load();
-  }, [load]);
+    let ignore = false;
+    (async () => {
+      try {
+        const { roles: rolesData, permisos: permisosData } = await usuarioService.fetchRolesPermisos();
+        if (ignore) return;
+        setRoles(rolesData);
+        setPermisos(permisosData);
+        setSelectedRolId((prev) => (
+          permisoRolExiste(rolesData, prev) ? prev : (rolesData[0]?.id ?? '')
+        ));
+      } catch (e) {
+        if (ignore) return;
+        setRoles([]);
+        setPermisos([]);
+        setError(describeApiError(e));
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   // El borrador siempre arranca desde lo que el backend tiene guardado.
-  useEffect(() => {
-    if (selectedRol) {
-      setDraft((selectedRol.permisos ?? []).map((p) => p.slug));
-    } else {
-      setDraft([]);
-    }
-  }, [selectedRol]);
+  const [prevRolId, setPrevRolId] = useState(selectedRol?.id);
+  if (selectedRol?.id !== prevRolId) {
+    setPrevRolId(selectedRol?.id);
+    setDraft(selectedRol ? (selectedRol.permisos ?? []).map((p) => p.slug) : []);
+  }
 
   const toggle = (slug) => {
     setDraft((prev) => (

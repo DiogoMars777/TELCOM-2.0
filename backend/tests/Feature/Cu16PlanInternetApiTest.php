@@ -96,7 +96,7 @@ class Cu16PlanInternetApiTest extends TestCase
         ]);
     }
 
-    public function test_secretaria_puede_crear_plan(): void
+    public function test_secretaria_no_puede_crear_plan(): void
     {
         $secretaria = $this->usuarioConRol('secretaria');
 
@@ -106,7 +106,7 @@ class Cu16PlanInternetApiTest extends TestCase
                 'velocidad_mbps' => 60,
                 'precio_mensual' => 180.00,
             ])
-            ->assertStatus(201);
+            ->assertStatus(403);
     }
 
     public function test_tecnico_no_puede_crear_plan(): void

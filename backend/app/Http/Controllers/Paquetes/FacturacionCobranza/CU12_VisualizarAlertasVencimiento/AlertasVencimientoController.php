@@ -32,10 +32,10 @@ class AlertasVencimientoController extends Controller
                 return [
                     'mensualidad_id'    => $fac->id,
                     'codigo_factura'    => $fac->codigo_factura,
-                    'cliente'           => $fac->cliente->nombres . ' ' . $fac->cliente->apellidos,
-                    'servicio'          => $fac->servicio->plan_nombre,
-                    'monto'             => $fac->monto,
-                    'fecha_vencimiento' => $fac->fecha_vencimiento->format('Y-m-d'),
+                    'cliente'           => $fac->cliente?->nombre_completo ?? ($fac->cliente ? trim("{$fac->cliente->nombres} {$fac->cliente->apellidos}") : 'Cliente no identificado'),
+                    'servicio'          => $fac->servicio?->plan_nombre ?? 'Plan Estándar',
+                    'monto'             => (float) $fac->monto,
+                    'fecha_vencimiento' => $fac->fecha_vencimiento ? Carbon::parse($fac->fecha_vencimiento)->format('Y-m-d') : null,
                     'dias_retraso'      => $dias,
                     'severidad'         => $dias > 15 ? 'CRITICA' : ($dias > 5 ? 'ALTA' : 'MEDIA'),
                 ];

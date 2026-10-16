@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { servicioInternetService } from '../../../../models/Paquetes/ServiciosPlanes/CU08_RegistrarActivarServicio/servicioInternetModel';
 import { describeApiError } from '../../../../services/apiClient';
 
@@ -23,7 +23,7 @@ const FORM_VACIO = {
 export function useServicioInternetController() {
   // ── Estado de datos ──────────────────────────────────────────────────────
   const [servicios,    setServicios]    = useState([]);
-  const [loading,      setLoading]      = useState(false);
+  const [loading,      setLoading]      = useState(true);
   const [error,        setError]        = useState(null);
   const [formError,    setFormError]    = useState(null);
 
@@ -42,7 +42,7 @@ export function useServicioInternetController() {
   const [formServicio, setFormServicio] = useState({ ...FORM_VACIO });
 
   // ── Cargar listado de servicios ──────────────────────────────────────────
-  const loadServicios = async () => {
+  const loadServicios = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -54,10 +54,10 @@ export function useServicioInternetController() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // ── Cargar catálogos (clientes, zonas, planes) ───────────────────────────
-  const loadCatalogos = async () => {
+  const loadCatalogos = useCallback(async () => {
     setCatalogError(null);
     try {
       const [clientesData, zonasData, planesData] = await Promise.all([
@@ -71,11 +71,38 @@ export function useServicioInternetController() {
     } catch (e) {
       setCatalogError(describeApiError(e));
     }
-  };
+  }, []);
 
   useEffect(() => {
-    loadServicios();
-    loadCatalogos();
+    let ignore = false;
+    (async () => {
+      try {
+        const [serviciosData, [clientesData, zonasData, planesData]] = await Promise.all([
+          servicioInternetService.fetchServicios(),
+          Promise.all([
+            servicioInternetService.fetchClientes(),
+            servicioInternetService.fetchZonas(),
+            servicioInternetService.fetchPlanes(),
+          ]),
+        ]);
+        if (!ignore) {
+          setServicios(serviciosData);
+          setClientes(clientesData);
+          setZonas(zonasData);
+          setPlanes(planesData);
+        }
+      } catch (e) {
+        if (!ignore) {
+          setServicios([]);
+          setError(describeApiError(e));
+        }
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   // ── Al elegir un cliente: pre-rellenar dirección ──────────────────────────
@@ -198,5 +225,6 @@ export function useServicioInternetController() {
     handleCrear,
     handleVerDetalle,
     reload: loadServicios,
+    reloadCatalogos: loadCatalogos,
   };
 }

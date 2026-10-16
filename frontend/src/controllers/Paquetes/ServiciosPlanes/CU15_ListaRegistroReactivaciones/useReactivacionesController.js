@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { reactivacionesService } from '../../../../models/Paquetes/ServiciosPlanes/CU15_ListaRegistroReactivaciones/reactivacionesModel';
 import { describeApiError } from '../../../../services/apiClient';
 
 export function useReactivacionesController() {
   const [reactivaciones, setReactivaciones] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);       // Error de carga del listado
   const [formError, setFormError] = useState(null); // Error al registrar
   const [showModal, setShowModal] = useState(false);
 
   // Servicios reales para el selector (solo los CORTADOS pueden reactivarse).
   const [serviciosCortados, setServiciosCortados] = useState([]);
-  const [loadingServicios, setLoadingServicios] = useState(false);
+  const [loadingServicios, setLoadingServicios] = useState(true);
   const [serviciosError, setServiciosError] = useState(null);
 
   const [formReactivacion, setFormReactivacion] = useState({
@@ -20,7 +20,7 @@ export function useReactivacionesController() {
     observaciones: '',
   });
 
-  const loadReactivaciones = async () => {
+  const loadReactivaciones = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -32,9 +32,9 @@ export function useReactivacionesController() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const loadServicios = async () => {
+  const loadServicios = useCallback(async () => {
     setLoadingServicios(true);
     setServiciosError(null);
     try {
@@ -46,11 +46,35 @@ export function useReactivacionesController() {
     } finally {
       setLoadingServicios(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    loadReactivaciones();
-    loadServicios();
+    let ignore = false;
+    (async () => {
+      try {
+        const [reactivacionesData, serviciosData] = await Promise.all([
+          reactivacionesService.fetchReactivaciones(),
+          reactivacionesService.fetchServicios(),
+        ]);
+        if (!ignore) {
+          setReactivaciones(reactivacionesData);
+          setServiciosCortados((serviciosData ?? []).filter((s) => s.estado_servicio === 'CORTADO'));
+        }
+      } catch (e) {
+        if (!ignore) {
+          setReactivaciones([]);
+          setError(describeApiError(e));
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+          setLoadingServicios(false);
+        }
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const handleCrear = async (e) => {
@@ -89,5 +113,6 @@ export function useReactivacionesController() {
     setFormReactivacion,
     handleCrear,
     reload: loadReactivaciones,
+    reloadServicios: loadServicios,
   };
 }
