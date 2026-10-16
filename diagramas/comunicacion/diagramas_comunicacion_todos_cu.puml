@@ -1,6 +1,7 @@
 ' ==============================================================================
-' TELCOM - DIAGRAMAS DE COMUNICACIÃ“N (CU01 AL CU17)
-' Estilo: Enterprise Architect (BCE: Boundary - Control - Entity)
+' TELCOM - DIAGRAMAS DE COMUNICACIÓN (CU01 AL CU17)
+' Estilo: Enterprise Architect (Actor - Boundary - Control - Entity)
+' Modelos de Entidad actualizados con las tablas canónicas de la base de datos
 ' ==============================================================================
 
 @startuml cu01_iniciar_cerrar_sesion
@@ -18,20 +19,23 @@ skinparam controlBorderColor #0088CC
 skinparam entityBackgroundColor #CCEEFF
 skinparam entityBorderColor #0088CC
 
-frame "sd CU01 Iniciar y cerrar sesiÃ³n" {
+frame "sd CU01 Iniciar y cerrar sesión" {
     () " " as spacer
-    actor "Usuario / Administrador" as Usuario
+    actor "Usuario / Administrador" as UsuarioActor
     boundary UI_Sesion
     control AuthController
-    entity User
+    entity Usuario
+    entity UserSession
 
-    spacer -[hidden]down- Usuario
+    spacer -[hidden]down- UsuarioActor
 
-    Usuario -right- UI_Sesion : <font color=#000000>1: iniciarSesion(credenciales) â†’</font>\n<font color=#800000>2: cerrarSesion() â†’</font>\n<font color=#008000>3: obtenerUsuarioActual() â†’</font>\n<font color=#000080>4: cambiarPassword(datos) â†’</font>
+    UsuarioActor -right- UI_Sesion : <font color=#000000>1: iniciarSesion(credenciales) →</font>\n<font color=#800000>2: cerrarSesion() →</font>\n<font color=#008000>3: obtenerUsuarioActual() →</font>\n<font color=#000080>4: cambiarPassword(datos) →</font>
 
-    UI_Sesion -right- AuthController : <font color=#000000>1.1: login(Request) â†’</font>\n<font color=#800000>2.1: logout(Request) â†’</font>\n<font color=#008000>3.1: me(Request) â†’</font>\n<font color=#000080>4.1: changePassword(Request) â†’</font>
+    UI_Sesion -right- AuthController : <font color=#000000>1.1: login(Request) →</font>\n<font color=#800000>2.1: logout(Request) →</font>\n<font color=#008000>3.1: me(Request) →</font>\n<font color=#000080>4.1: changePassword(Request) →</font>
 
-    AuthController -right- User : <font color=#000000>1.2: where('email')->first() â†’</font>\n<font color=#800000>2.2: currentAccessToken()->delete() â†’</font>\n<font color=#008000>3.2: find($id) â†’</font>\n<font color=#000080>4.2: update(['password' => Hash::make()]) â†’</font>
+    AuthController -right- Usuario : <font color=#000000>1.2: where('email', email)->first() →</font>\n<font color=#008000>3.2: find(id) →</font>\n<font color=#000080>4.2: update(['password' => hash]) →</font>
+
+    AuthController -down- UserSession : <font color=#000000>1.3: create(login_at, is_active) →</font>\n<font color=#800000>2.2: where('user_id', id)->update(['is_active' => false]) →</font>
 }
 @enduml
 
@@ -50,20 +54,23 @@ skinparam controlBorderColor #0088CC
 skinparam entityBackgroundColor #CCEEFF
 skinparam entityBorderColor #0088CC
 
-frame "sd CU02 Consultar bitÃ¡cora de auditorÃ­a" {
+frame "sd CU02 Consultar bitácora de auditoría" {
     () " " as spacer
-    actor Administrador
+    actor "Administrador" as Administrador
     boundary UI_Auditoria
     control AuditoriaController
-    entity BitacoraAuditoria
+    entity Bitacora
+    entity Usuario
 
     spacer -[hidden]down- Administrador
 
-    Administrador -right- UI_Auditoria : <font color=#000000>1: mostrarBitacora() â†’</font>\n<font color=#800000>2: filtrarPorModuloAccion(filtros) â†’</font>\n<font color=#008000>3: listarUsuariosAuditoria() â†’</font>
+    Administrador -right- UI_Auditoria : <font color=#000000>1: mostrarBitacora() →</font>\n<font color=#800000>2: filtrarPorModuloAccion(filtros) →</font>\n<font color=#008000>3: listarUsuariosAuditoria() →</font>
 
-    UI_Auditoria -right- AuditoriaController : <font color=#000000>1.1: index(Request) â†’</font>\n<font color=#800000>2.1: index(Request) â†’</font>\n<font color=#008000>3.1: usuarios() â†’</font>
+    UI_Auditoria -right- AuditoriaController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: index(Request) →</font>\n<font color=#008000>3.1: usuarios() →</font>
 
-    AuditoriaController -right- BitacoraAuditoria : <font color=#000000>1.2: with('usuario')->paginate(20) â†’</font>\n<font color=#800000>2.2: where(filtros)->paginate(20) â†’</font>\n<font color=#008000>3.2: select('idUsuario')->distinct()->get() â†’</font>
+    AuditoriaController -right- Bitacora : <font color=#000000>1.2: with('user')->latest()->paginate() →</font>\n<font color=#800000>2.2: where(filtros)->paginate() →</font>\n<font color=#008000>3.2: distinct()->pluck('user_id') →</font>
+
+    AuditoriaController -down- Usuario : <font color=#008000>3.3: whereIn('idUsuario', ids)->get() →</font>
 }
 @enduml
 
@@ -82,20 +89,23 @@ skinparam controlBorderColor #0088CC
 skinparam entityBackgroundColor #CCEEFF
 skinparam entityBorderColor #0088CC
 
-frame "sd CU03 Gestionar usuarios internos, roles y permisos" {
+frame "sd CU03 Gestionar usuarios, roles y permisos" {
     () " " as spacer
-    actor Administrador
+    actor "Administrador" as Administrador
     boundary UI_Usuario
     control UsuarioController
-    entity User
+    entity Usuario
+    entity Rol
 
     spacer -[hidden]down- Administrador
 
-    Administrador -right- UI_Usuario : <font color=#000000>1: mostrarUsuarios() â†’</font>\n<font color=#800000>2: crearUsuario(datos) â†’</font>\n<font color=#008000>3: editarUsuario(id, datos) â†’</font>\n<font color=#000080>4: asignarRol(id, idRol) â†’</font>
+    Administrador -right- UI_Usuario : <font color=#000000>1: mostrarUsuarios() →</font>\n<font color=#800000>2: crearUsuario(datos) →</font>\n<font color=#008000>3: editarUsuario(id, datos) →</font>\n<font color=#000080>4: asignarRol(id, idRol) →</font>
 
-    UI_Usuario -right- UsuarioController : <font color=#000000>1.1: index() â†’</font>\n<font color=#800000>2.1: store(Request) â†’</font>\n<font color=#008000>3.1: update(Request, id) â†’</font>\n<font color=#000080>4.1: updateRoles(Request, id) â†’</font>
+    UI_Usuario -right- UsuarioController : <font color=#000000>1.1: index() →</font>\n<font color=#800000>2.1: store(Request) →</font>\n<font color=#008000>3.1: update(Request, id) →</font>\n<font color=#000080>4.1: updateRoles(Request, id) →</font>
 
-    UsuarioController -right- User : <font color=#000000>1.2: with('rol')->get() â†’</font>\n<font color=#800000>2.2: create(validated) â†’</font>\n<font color=#008000>3.2: update(validated) â†’</font>\n<font color=#000080>4.2: update(['idRol' => idRol]) â†’</font>
+    UsuarioController -right- Usuario : <font color=#000000>1.2: with('rol')->paginate() →</font>\n<font color=#800000>2.3: create(validated) →</font>\n<font color=#008000>3.2: findOrFail(id)->update(validated) →</font>\n<font color=#000080>4.3: update(['rol_id' => idRol]) →</font>
+
+    UsuarioController -down- Rol : <font color=#000000>1.3: with('permisos')->get() →</font>\n<font color=#800000>2.2: find(rol_id) →</font>\n<font color=#000080>4.2: find(idRol) →</font>
 }
 @enduml
 
@@ -116,18 +126,18 @@ skinparam entityBorderColor #0088CC
 
 frame "sd CU04 Gestionar zonas de cobertura" {
     () " " as spacer
-    actor Administrador
+    actor "Administrador" as Administrador
     boundary UI_ZonaCobertura
     control ZonaCoberturaController
-    entity ZonaCobertura
+    entity Zona
 
     spacer -[hidden]down- Administrador
 
-    Administrador -right- UI_ZonaCobertura : <font color=#000000>1: mostrarZonas() â†’</font>\n<font color=#800000>2: crearZona(datos) â†’</font>\n<font color=#008000>3: editarZona(id, datos) â†’</font>\n<font color=#000080>4: cambiarEstado(id, estado) â†’</font>
+    Administrador -right- UI_ZonaCobertura : <font color=#000000>1: mostrarZonas() →</font>\n<font color=#800000>2: crearZona(datos) →</font>\n<font color=#008000>3: editarZona(id, datos) →</font>\n<font color=#000080>4: cambiarEstado(id, estado) →</font>
 
-    UI_ZonaCobertura -right- ZonaCoberturaController : <font color=#000000>1.1: index() â†’</font>\n<font color=#800000>2.1: store(Request) â†’</font>\n<font color=#008000>3.1: update(Request, id) â†’</font>\n<font color=#000080>4.1: update(Request, id) â†’</font>
+    UI_ZonaCobertura -right- ZonaCoberturaController : <font color=#000000>1.1: index() →</font>\n<font color=#800000>2.1: store(Request) →</font>\n<font color=#008000>3.1: update(Request, id) →</font>\n<font color=#000080>4.1: update(Request, id) →</font>
 
-    ZonaCoberturaController -right- ZonaCobertura : <font color=#000000>1.2: get() â†’</font>\n<font color=#800000>2.2: create(validated) â†’</font>\n<font color=#008000>3.2: update(validated) â†’</font>\n<font color=#000080>4.2: update(['estado' => estado]) â†’</font>
+    ZonaCoberturaController -right- Zona : <font color=#000000>1.2: orderBy('nombre')->get() →</font>\n<font color=#800000>2.2: create(validated) →</font>\n<font color=#008000>3.2: findOrFail(id)->update(validated) →</font>\n<font color=#000080>4.2: update(['activo' => estado]) →</font>
 }
 @enduml
 
@@ -148,18 +158,21 @@ skinparam entityBorderColor #0088CC
 
 frame "sd CU05 Registrar nuevo cliente" {
     () " " as spacer
-    actor "Administrador / SecretarÃ­a" as Admin
+    actor "Administrador / Secretaría" as Admin
     boundary UI_ClienteRegistro
     control ClienteRegistroController
     entity Cliente
+    entity Zona
 
     spacer -[hidden]down- Admin
 
-    Admin -right- UI_ClienteRegistro : <font color=#000000>1: cargarFormulario() â†’</font>\n<font color=#800000>2: validarDocumento(ci) â†’</font>\n<font color=#008000>3: registrarCliente(datos) â†’</font>
+    Admin -right- UI_ClienteRegistro : <font color=#000000>1: cargarFormulario() →</font>\n<font color=#800000>2: validarDocumento(ci) →</font>\n<font color=#008000>3: registrarCliente(datos) →</font>
 
-    UI_ClienteRegistro -right- ClienteRegistroController : <font color=#000000>1.1: cargarZonas() â†’</font>\n<font color=#800000>2.1: store(Request) â†’</font>\n<font color=#008000>3.1: store(Request) â†’</font>
+    UI_ClienteRegistro -right- ClienteRegistroController : <font color=#000000>1.1: create() →</font>\n<font color=#800000>2.1: validar(ci) →</font>\n<font color=#008000>3.1: store(Request) →</font>
 
-    ClienteRegistroController -right- Cliente : <font color=#000000>1.2: get() [Zona] â†’</font>\n<font color=#800000>2.2: where('ci', ci)->exists() â†’</font>\n<font color=#008000>3.2: create(validated) â†’</font>
+    ClienteRegistroController -right- Cliente : <font color=#800000>2.2: where('ci', ci)->exists() →</font>\n<font color=#008000>3.3: create(validated) →</font>
+
+    ClienteRegistroController -down- Zona : <font color=#000000>1.2: all() →</font>\n<font color=#008000>3.2: exists:Zona,idZona →</font>
 }
 @enduml
 
@@ -180,18 +193,18 @@ skinparam entityBorderColor #0088CC
 
 frame "sd CU06 Consultar y buscar clientes" {
     () " " as spacer
-    actor "Admin / SecretarÃ­a / TÃ©cnico" as Admin
+    actor "Administrador / Secretaría" as Admin
     boundary UI_ClienteConsulta
     control ClienteConsultaController
-    entity ClienteConsulta
+    entity Cliente
 
     spacer -[hidden]down- Admin
 
-    Admin -right- UI_ClienteConsulta : <font color=#000000>1: mostrarClientes() â†’</font>\n<font color=#800000>2: buscarCliente(termino) â†’</font>\n<font color=#008000>3: verDetalleCliente(id) â†’</font>
+    Admin -right- UI_ClienteConsulta : <font color=#000000>1: mostrarClientes() →</font>\n<font color=#800000>2: buscarCliente(termino) →</font>\n<font color=#008000>3: verDetalleCliente(id) →</font>
 
-    UI_ClienteConsulta -right- ClienteConsultaController : <font color=#000000>1.1: index(Request) â†’</font>\n<font color=#800000>2.1: index(Request) â†’</font>\n<font color=#008000>3.1: show(id) â†’</font>
+    UI_ClienteConsulta -right- ClienteConsultaController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: index(Request) →</font>\n<font color=#008000>3.1: show(id) →</font>
 
-    ClienteConsultaController -right- ClienteConsulta : <font color=#000000>1.2: withTrashed()->paginate(15) â†’</font>\n<font color=#800000>2.2: scopeBuscar($termino)->get() â†’</font>\n<font color=#008000>3.2: withTrashed()->findOrFail(id) â†’</font>
+    ClienteConsultaController -right- Cliente : <font color=#000000>1.2: withTrashed()->latest()->paginate() →</font>\n<font color=#800000>2.2: withTrashed()->buscar(termino)->paginate() →</font>\n<font color=#008000>3.2: withTrashed()->findOrFail(id) →</font>
 }
 @enduml
 
@@ -210,20 +223,20 @@ skinparam controlBorderColor #0088CC
 skinparam entityBackgroundColor #CCEEFF
 skinparam entityBorderColor #0088CC
 
-frame "sd CU07 Actualizar datos y dar baja lÃ³gica a cliente" {
+frame "sd CU07 Actualizar datos y dar de baja lógica a cliente" {
     () " " as spacer
-    actor "Administrador / SecretarÃ­a" as Admin
+    actor "Administrador / Secretaría" as Admin
     boundary UI_ClienteMantenimiento
     control ClienteMantenimientoController
-    entity ClienteBajaLogica
+    entity Cliente
 
     spacer -[hidden]down- Admin
 
-    Admin -right- UI_ClienteMantenimiento : <font color=#008000>1: editar(id, datos) â†’</font>\n<font color=#000080>2: darBaja(id, motivo) â†’</font>
+    Admin -right- UI_ClienteMantenimiento : <font color=#008000>1: editar(id, datos) →</font>\n<font color=#000080>2: darBaja(id, motivo) →</font>
 
-    UI_ClienteMantenimiento -right- ClienteMantenimientoController : <font color=#008000>1.1: update(Request, id) â†’</font>\n<font color=#000080>2.1: bajaLogica(Request, id) â†’</font>
+    UI_ClienteMantenimiento -right- ClienteMantenimientoController : <font color=#008000>1.1: update(Request, id) →</font>\n<font color=#000080>2.1: bajaLogica(Request, id) →</font>
 
-    ClienteMantenimientoController -right- ClienteBajaLogica : <font color=#008000>1.2: findOrFail() / update(validated) â†’</font>\n<font color=#000080>2.2: update(estado=INACTIVO) / delete() â†’</font>
+    ClienteMantenimientoController -right- Cliente : <font color=#008000>1.2: withTrashed()->findOrFail(id)->update(validated) →</font>\n<font color=#000080>2.2: withTrashed()->findOrFail(id)->update(['estado' => 'INACTIVO'])->delete() →</font>
 }
 @enduml
 
@@ -244,18 +257,27 @@ skinparam entityBorderColor #0088CC
 
 frame "sd CU08 Registrar y activar servicio de Internet" {
     () " " as spacer
-    actor "Admin / SecretarÃ­a / TÃ©cnico" as Admin
+    actor "Administrador / Secretaría" as Admin
     boundary UI_ServicioInternet
     control ServicioInternetController
     entity ServicioInternet
+    entity Cliente
+    entity PlanInternet
+    entity AsignacionPlan
 
     spacer -[hidden]down- Admin
 
-    Admin -right- UI_ServicioInternet : <font color=#000000>1: mostrarServicios() â†’</font>\n<font color=#800000>2: registrarServicio(datos) â†’</font>\n<font color=#008000>3: verDetalleServicio(id) â†’</font>\n<font color=#000080>4: activarServicio(id) â†’</font>
+    Admin -right- UI_ServicioInternet : <font color=#000000>1: mostrarServicios() →</font>\n<font color=#800000>2: registrarServicio(datos) →</font>\n<font color=#008000>3: verDetalleServicio(id) →</font>\n<font color=#000080>4: activarServicio(id) →</font>
 
-    UI_ServicioInternet -right- ServicioInternetController : <font color=#000000>1.1: index(Request) â†’</font>\n<font color=#800000>2.1: store(Request) â†’</font>\n<font color=#008000>3.1: show(id) â†’</font>\n<font color=#000080>4.1: activar(Request, id) â†’</font>
+    UI_ServicioInternet -right- ServicioInternetController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: store(Request) →</font>\n<font color=#008000>3.1: show(id) →</font>\n<font color=#000080>4.1: activar(Request, id) →</font>
 
-    ServicioInternetController -right- ServicioInternet : <font color=#000000>1.2: with(['cliente','zona'])->paginate() â†’</font>\n<font color=#800000>2.2: create(validated) â†’</font>\n<font color=#008000>3.2: findOrFail(id) â†’</font>\n<font color=#000080>4.2: update(['idEstadoServicio' => ACTIVO]) â†’</font>
+    ServicioInternetController -right- ServicioInternet : <font color=#000000>1.2: with(['cliente','zona','estado'])->paginate() →</font>\n<font color=#800000>2.4: create(validated) →</font>\n<font color=#008000>3.2: with(['cliente','zona','estado','asignacionesPlan'])->findOrFail(id) →</font>\n<font color=#000080>4.2: update(['estado_servicio' => 'ACTIVO']) →</font>
+
+    ServicioInternetController -up- Cliente : <font color=#800000>2.2: find(clienteId) →</font>
+
+    ServicioInternetController -down- PlanInternet : <font color=#800000>2.3: find(planId) →</font>
+
+    ServicioInternetController -down- AsignacionPlan : <font color=#800000>2.5: create(asignacion) →</font>
 }
 @enduml
 
@@ -276,18 +298,21 @@ skinparam entityBorderColor #0088CC
 
 frame "sd CU09 Generar mensualidades de servicios" {
     () " " as spacer
-    actor "Administrador / SecretarÃ­a" as Admin
+    actor "Administrador / Secretaría" as Admin
     boundary UI_MensualidadGeneracion
     control MensualidadGeneracionController
-    entity MensualidadFacturacion
+    entity Mensualidad
+    entity ServicioInternet
 
     spacer -[hidden]down- Admin
 
-    Admin -right- UI_MensualidadGeneracion : <font color=#000000>1: mostrarMensualidades(periodo) â†’</font>\n<font color=#800000>2: generarMensualidades(periodo) â†’</font>
+    Admin -right- UI_MensualidadGeneracion : <font color=#000000>1: mostrarMensualidades(periodo) →</font>\n<font color=#800000>2: generarMensualidades(periodo) →</font>
 
-    UI_MensualidadGeneracion -right- MensualidadGeneracionController : <font color=#000000>1.1: index(Request) â†’</font>\n<font color=#800000>2.1: generar(Request) â†’</font>
+    UI_MensualidadGeneracion -right- MensualidadGeneracionController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: generar(Request) →</font>
 
-    MensualidadGeneracionController -right- MensualidadFacturacion : <font color=#000000>1.2: where('periodo', periodo)->get() â†’</font>\n<font color=#800000>2.2: lockForUpdate() / create() â†’</font>
+    MensualidadGeneracionController -right- Mensualidad : <font color=#000000>1.2: with(['cliente','servicio'])->where('periodo', periodo)->paginate() →</font>\n<font color=#800000>2.3: lockForUpdate() / create() →</font>
+
+    MensualidadGeneracionController -down- ServicioInternet : <font color=#800000>2.2: where('estado_servicio', 'ACTIVO')->get() →</font>
 }
 @enduml
 
@@ -349,18 +374,24 @@ skinparam entityBorderColor #0088CC
 
 frame "sd CU11 Consultar historial de pagos" {
     () " " as spacer
-    actor "Administrador / SecretarÃ­a" as Admin
+    actor "Administrador / Secretaría" as Admin
     boundary UI_HistorialPagos
     control HistorialPagosController
-    entity HistorialPago
+    entity Pago
+    entity PlanInternet
+    entity MetodoPago
 
     spacer -[hidden]down- Admin
 
-    Admin -right- UI_HistorialPagos : <font color=#000000>1: mostrarHistorial() â†’</font>\n<font color=#800000>2: filtrarPagos(cliente, fecha) â†’</font>\n<font color=#008000>3: verDetalleRecibo(id) â†’</font>\n<font color=#000080>4: cargarFiltros() â†’</font>
+    Admin -right- UI_HistorialPagos : <font color=#000000>1: mostrarHistorial() →</font>\n<font color=#800000>2: filtrarPagos(cliente, fecha) →</font>\n<font color=#008000>3: verDetalleRecibo(id) →</font>\n<font color=#000080>4: cargarFiltros() →</font>
 
-    UI_HistorialPagos -right- HistorialPagosController : <font color=#000000>1.1: index(Request) â†’</font>\n<font color=#800000>2.1: index(Request) â†’</font>\n<font color=#008000>3.1: show(id) â†’</font>\n<font color=#000080>4.1: filtros() â†’</font>
+    UI_HistorialPagos -right- HistorialPagosController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: index(Request) →</font>\n<font color=#008000>3.1: show(id) →</font>\n<font color=#000080>4.1: filtros() →</font>
 
-    HistorialPagosController -right- HistorialPago : <font color=#000000>1.2: latest('fecha_pago')->paginate(20) â†’</font>\n<font color=#800000>2.2: porCliente()->get() â†’</font>\n<font color=#008000>3.2: findOrFail(id) â†’</font>\n<font color=#000080>4.2: get() â†’</font>
+    HistorialPagosController -right- Pago : <font color=#000000>1.2: with(relaciones)->orderByDesc('fechaHora')->paginate() →</font>\n<font color=#800000>2.2: where(filtros)->paginate() →</font>\n<font color=#008000>3.2: with(relaciones)->findOrFail(id) →</font>
+
+    HistorialPagosController -down- PlanInternet : <font color=#000080>4.2: where('activo', true)->get() →</font>
+
+    HistorialPagosController -down- MetodoPago : <font color=#000080>4.3: where('estado', true)->pluck('nombreMetodo') →</font>
 }
 @enduml
 
@@ -381,18 +412,18 @@ skinparam entityBorderColor #0088CC
 
 frame "sd CU12 Visualizar alertas de vencimiento" {
     () " " as spacer
-    actor "Administrador / SecretarÃ­a" as Admin
+    actor "Administrador / Secretaría" as Admin
     boundary UI_AlertasVencimiento
     control AlertasVencimientoController
-    entity AlertaVencimiento
+    entity Mensualidad
 
     spacer -[hidden]down- Admin
 
-    Admin -right- UI_AlertasVencimiento : <font color=#000000>1: mostrarAlertas() â†’</font>\n<font color=#800000>2: filtrarPorSeveridad(severidad) â†’</font>\n<font color=#008000>3: consultarDetalleFactura(id) â†’</font>\n<font color=#000080>4: recargarAlertas() â†’</font>
+    Admin -right- UI_AlertasVencimiento : <font color=#000000>1: mostrarAlertas() →</font>\n<font color=#800000>2: filtrarPorSeveridad(severidad) →</font>\n<font color=#008000>3: consultarDetalleFactura(id) →</font>\n<font color=#000080>4: recargarAlertas() →</font>
 
-    UI_AlertasVencimiento -right- AlertasVencimientoController : <font color=#000000>1.1: index(Request) â†’</font>\n<font color=#800000>2.1: index(Request) â†’</font>\n<font color=#008000>3.1: show(id) â†’</font>\n<font color=#000080>4.1: index(Request) â†’</font>
+    UI_AlertasVencimiento -right- AlertasVencimientoController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: index(Request) →</font>\n<font color=#008000>3.1: show(id) →</font>\n<font color=#000080>4.1: index(Request) →</font>
 
-    AlertasVencimientoController -right- AlertaVencimiento : <font color=#000000>1.2: get() â†’</font>\n<font color=#800000>2.2: where('fecha_vencimiento', '<=', hoy)->get() â†’</font>\n<font color=#008000>3.2: find(id) â†’</font>\n<font color=#000080>4.2: get() â†’</font>
+    AlertasVencimientoController -right- Mensualidad : <font color=#000000>1.2: with(['cliente','servicio'])->where('estado_pago','!=','PAGADO')->where('fecha_vencimiento','<=',hoy)->get() →</font>\n<font color=#800000>2.2: where('fecha_vencimiento','<=',hoy)->get() →</font>\n<font color=#008000>3.2: with(['cliente','servicio'])->findOrFail(id) →</font>\n<font color=#000080>4.2: get() →</font>
 }
 @enduml
 
@@ -411,20 +442,23 @@ skinparam controlBorderColor #0088CC
 skinparam entityBackgroundColor #CCEEFF
 skinparam entityBorderColor #0088CC
 
-frame "sd CU13 Consultar listado de servicios para corte" {
+frame "sd CU13 Consultar servicios para corte" {
     () " " as spacer
-    actor "Administrador / SecretarÃ­a" as Admin
+    actor "Administrador / Secretaría" as Admin
     boundary UI_ServiciosCorte
     control ServiciosCorteController
-    entity ServicioCorte
+    entity ServicioInternet
+    entity Zona
 
     spacer -[hidden]down- Admin
 
-    Admin -right- UI_ServiciosCorte : <font color=#000000>1: mostrarServiciosParaCorte() â†’</font>\n<font color=#800000>2: filtrarPorZona(zona_id) â†’</font>\n<font color=#008000>3: exportarListadoCorte() â†’</font>
+    Admin -right- UI_ServiciosCorte : <font color=#000000>1: mostrarServiciosParaCorte() →</font>\n<font color=#800000>2: filtrarPorZona(zona_id) →</font>\n<font color=#008000>3: exportarListadoCorte() →</font>
 
-    UI_ServiciosCorte -right- ServiciosCorteController : <font color=#000000>1.1: index(Request) â†’</font>\n<font color=#800000>2.1: index(Request) â†’</font>\n<font color=#008000>3.1: exportar() â†’</font>
+    UI_ServiciosCorte -right- ServiciosCorteController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: index(Request) →</font>\n<font color=#008000>3.1: index(Request) →</font>
 
-    ServiciosCorteController -right- ServicioCorte : <font color=#000000>1.2: where('idEstadoServicio', ACTIVO)->get() â†’</font>\n<font color=#800000>2.2: where('idZona', zona_id)->get() â†’</font>\n<font color=#008000>3.2: get() â†’</font>
+    ServiciosCorteController -right- ServicioInternet : <font color=#000000>1.2: with(['cliente','zona','mensualidades'])->elegiblesParaCorte()->paginate() →</font>\n<font color=#800000>2.3: where('idZona', zona_id)->paginate() →</font>\n<font color=#008000>3.2: elegiblesParaCorte()->get() →</font>
+
+    ServiciosCorteController -down- Zona : <font color=#800000>2.2: find(zona_id) →</font>
 }
 @enduml
 
@@ -445,18 +479,24 @@ skinparam entityBorderColor #0088CC
 
 frame "sd CU14 Registrar corte realizado" {
     () " " as spacer
-    actor "Administrador / TÃ©cnico" as Admin
+    actor "Administrador / Técnico" as Admin
     boundary UI_CorteRegistro
     control CorteRegistroController
-    entity RegistroCorte
+    entity ServicioInternet
+    entity AccionServicio
+    entity EstadoServicio
 
     spacer -[hidden]down- Admin
 
-    Admin -right- UI_CorteRegistro : <font color=#000000>1: seleccionarServicio(id) â†’</font>\n<font color=#800000>2: registrarCorte(datos) â†’</font>\n<font color=#008000>3: actualizarEstadoServicio(id) â†’</font>
+    Admin -right- UI_CorteRegistro : <font color=#000000>1: seleccionarServicio(id) →</font>\n<font color=#800000>2: registrarCorte(datos) →</font>\n<font color=#008000>3: actualizarEstadoServicio(id) →</font>
 
-    UI_CorteRegistro -right- CorteRegistroController : <font color=#000000>1.1: show(id) â†’</font>\n<font color=#800000>2.1: store(Request) â†’</font>\n<font color=#008000>3.1: store(Request) â†’</font>
+    UI_CorteRegistro -right- CorteRegistroController : <font color=#000000>1.1: show(id) →</font>\n<font color=#800000>2.1: store(Request) →</font>\n<font color=#008000>3.1: updateEstado(id) →</font>
 
-    CorteRegistroController -right- RegistroCorte : <font color=#000000>1.2: findOrFail(id) â†’</font>\n<font color=#800000>2.2: create(['tipoAccion' => 'CORTE']) â†’</font>\n<font color=#008000>3.2: update(['idEstadoServicio' => CORTADO]) â†’</font>
+    CorteRegistroController -right- ServicioInternet : <font color=#000000>1.2: findOrFail(id) →</font>\n<font color=#800000>2.2: lockForUpdate()->findOrFail(id) →</font>\n<font color=#800000>2.4: update(['estado_servicio' => 'CORTADO']) →</font>
+
+    CorteRegistroController -up- AccionServicio : <font color=#800000>2.3: create(validated) →</font>
+
+    CorteRegistroController -down- EstadoServicio : <font color=#008000>3.2: where('nombre_estado', 'CORTADO')->value('id') →</font>
 }
 @enduml
 
@@ -475,20 +515,29 @@ skinparam controlBorderColor #0088CC
 skinparam entityBackgroundColor #CCEEFF
 skinparam entityBorderColor #0088CC
 
-frame "sd CU15 Gestionar lista y registro de reactivaciones" {
+frame "sd CU15 Gestionar reactivaciones de servicio" {
     () " " as spacer
-    actor "Admin / SecretarÃ­a / TÃ©cnico" as Admin
+    actor "Administrador / Secretaría" as Admin
     boundary UI_Reactivaciones
     control ReactivacionesController
-    entity ReactivacionServicio
+    entity AccionServicio
+    entity ServicioInternet
+    entity Pago
+    entity EstadoServicio
 
     spacer -[hidden]down- Admin
 
-    Admin -right- UI_Reactivaciones : <font color=#000000>1: mostrarServiciosCortados() â†’</font>\n<font color=#800000>2: registrarReactivacion(datos) â†’</font>\n<font color=#008000>3: verificarPagoAlDia(servicio_id) â†’</font>
+    Admin -right- UI_Reactivaciones : <font color=#000000>1: mostrarServiciosCortados() →</font>\n<font color=#800000>2: registrarReactivacion(datos) →</font>\n<font color=#008000>3: verificarPagoAlDia(servicio_id) →</font>
 
-    UI_Reactivaciones -right- ReactivacionesController : <font color=#000000>1.1: index() â†’</font>\n<font color=#800000>2.1: store(Request) â†’</font>\n<font color=#008000>3.1: store(Request) â†’</font>
+    UI_Reactivaciones -right- ReactivacionesController : <font color=#000000>1.1: index() →</font>\n<font color=#800000>2.1: store(Request) →</font>\n<font color=#008000>3.1: verificarPago(id) →</font>
 
-    ReactivacionesController -right- ReactivacionServicio : <font color=#000000>1.2: where('idEstadoServicio', CORTADO)->get() â†’</font>\n<font color=#800000>2.2: create(['tipoAccion' => 'REACTIVACION']) â†’</font>\n<font color=#008000>3.2: update(['idEstadoServicio' => ACTIVO]) â†’</font>
+    ReactivacionesController -right- AccionServicio : <font color=#000000>1.2: with(['servicio.cliente','pago','operador'])->paginate() →</font>\n<font color=#800000>2.4: create(validated) →</font>
+
+    ReactivacionesController -up- ServicioInternet : <font color=#800000>2.2: lockForUpdate()->findOrFail(id) →</font>\n<font color=#800000>2.5: update(['estado_servicio' => 'ACTIVO']) →</font>
+
+    ReactivacionesController -down- Pago : <font color=#800000>2.3: exists:Pago,idPago →</font>\n<font color=#008000>3.2: find(pago_id) →</font>
+
+    ReactivacionesController -down- EstadoServicio : <font color=#800000>2.6: where('nombre_estado', 'ACTIVO')->value('id') →</font>
 }
 @enduml
 
@@ -507,20 +556,20 @@ skinparam controlBorderColor #0088CC
 skinparam entityBackgroundColor #CCEEFF
 skinparam entityBorderColor #0088CC
 
-frame "sd CU16 Gestionar Planes de Internet" {
+frame "sd CU16 Gestionar catálogo de planes de Internet" {
     () " " as spacer
-    actor Administrador
+    actor "Administrador" as Administrador
     boundary UI_PlanInternet
     control PlanInternetController
     entity PlanInternet
 
     spacer -[hidden]down- Administrador
 
-    Administrador -right- UI_PlanInternet : <font color=#000000>1: mostrarPlanes() â†’</font>\n<font color=#800000>2: crearPlan(datos) â†’</font>\n<font color=#008000>3: editarPlan(id, datos) â†’</font>\n<font color=#000080>4: desactivarPlan(id) â†’</font>
+    Administrador -right- UI_PlanInternet : <font color=#000000>1: mostrarPlanes() →</font>\n<font color=#800000>2: crearPlan(datos) →</font>\n<font color=#008000>3: editarPlan(id, datos) →</font>\n<font color=#000080>4: desactivarPlan(id) →</font>
 
-    UI_PlanInternet -right- PlanInternetController : <font color=#000000>1.1: index() â†’</font>\n<font color=#800000>2.1: store(Request) â†’</font>\n<font color=#008000>3.1: update(Request, id) â†’</font>\n<font color=#000080>4.1: destroy(id) â†’</font>
+    UI_PlanInternet -right- PlanInternetController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: store(Request) →</font>\n<font color=#008000>3.1: update(Request, id) →</font>\n<font color=#000080>4.1: destroy(id) →</font>
 
-    PlanInternetController -right- PlanInternet : <font color=#000000>1.2: get() â†’</font>\n<font color=#800000>2.2: create(validated) â†’</font>\n<font color=#008000>3.2: update(validated) â†’</font>\n<font color=#000080>4.2: update(['activo' => false]) â†’</font>
+    PlanInternetController -right- PlanInternet : <font color=#000000>1.2: orderBy('velocidad_mbps')->get() →</font>\n<font color=#800000>2.2: create(validated) →</font>\n<font color=#008000>3.2: findOrFail(id)->update(validated) →</font>\n<font color=#000080>4.2: findOrFail(id)->update(['activo' => false]) →</font>
 }
 @enduml
 
@@ -539,19 +588,25 @@ skinparam controlBorderColor #0088CC
 skinparam entityBackgroundColor #CCEEFF
 skinparam entityBorderColor #0088CC
 
-frame "sd CU17 Asignar o cambiar el plan de un servicio" {
+frame "sd CU17 Asignar o cambiar plan de Internet" {
     () " " as spacer
-    actor "Administrador / SecretarÃ­a" as Admin
+    actor "Administrador / Secretaría" as Admin
     boundary UI_AsignacionPlan
     control AsignacionPlanController
     entity AsignacionPlan
+    entity ServicioInternet
+    entity PlanInternet
 
     spacer -[hidden]down- Admin
 
-    Admin -right- UI_AsignacionPlan : <font color=#000000>1: mostrarHistorialPlanes(idServicio) â†’</font>\n<font color=#800000>2: asignarNuevoPlan(datos) â†’</font>\n<font color=#008000>3: finalizarPlanAnterior(idAsignacion) â†’</font>
+    Admin -right- UI_AsignacionPlan : <font color=#000000>1: mostrarHistorialPlanes(idServicio) →</font>\n<font color=#800000>2: asignarNuevoPlan(datos) →</font>\n<font color=#008000>3: finalizarPlanAnterior(idAsignacion) →</font>
 
-    UI_AsignacionPlan -right- AsignacionPlanController : <font color=#000000>1.1: index(servicio) â†’</font>\n<font color=#800000>2.1: store(Request, servicio) â†’</font>\n<font color=#008000>3.1: store(Request, servicio) â†’</font>
+    UI_AsignacionPlan -right- AsignacionPlanController : <font color=#000000>1.1: index(servicio) →</font>\n<font color=#800000>2.1: store(Request, servicio) →</font>\n<font color=#008000>3.1: finalizar(id) →</font>
 
-    AsignacionPlanController -right- AsignacionPlan : <font color=#000000>1.2: where('idServicio', id)->with('plan')->get() â†’</font>\n<font color=#800000>2.2: create(validated) â†’</font>\n<font color=#008000>3.2: update(['fechaFin' => now()]) â†’</font>
+    AsignacionPlanController -right- AsignacionPlan : <font color=#000000>1.3: with(['plan','usuario'])->where('servicio_id', id)->get() →</font>\n<font color=#800000>2.3: where('servicio_id', id)->whereNull('fecha_fin')->update(['fecha_fin' => now()]) →</font>\n<font color=#800000>2.4: create(validated) →</font>\n<font color=#008000>3.2: update(['fecha_fin' => now()]) →</font>
+
+    AsignacionPlanController -up- ServicioInternet : <font color=#000000>1.2: findOrFail(id) →</font>\n<font color=#800000>2.5: update(['plan_nombre' => ..., 'precio_mensual' => ...]) →</font>
+
+    AsignacionPlanController -down- PlanInternet : <font color=#800000>2.2: findOrFail(planId) →</font>
 }
 @enduml
