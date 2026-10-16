@@ -11,7 +11,9 @@
  *   defecto; en ese modo son los servicios quienes devuelven datos locales.
  */
 
-const BASE_URL = import.meta.env?.VITE_API_URL || 'http://localhost:8000/api';
+const rawBaseUrl = import.meta.env?.VITE_API_URL || 'http://localhost:8000/api';
+const cleanBaseUrl = String(rawBaseUrl).trim().replace(/\/+$/, '');
+const BASE_URL = cleanBaseUrl.endsWith('/api') ? cleanBaseUrl : `${cleanBaseUrl}/api`;
 
 // Clave del token en localStorage (debe coincidir con authModel).
 const TOKEN_KEY = 'telcom_token';

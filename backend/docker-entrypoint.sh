@@ -21,5 +21,11 @@ if [ "$RUN_MIGRATIONS" = "true" ]; then
     php artisan migrate --force || echo "Aviso: Migraciones omitidas o pendientes de configuración."
 fi
 
+# Poblar datos automáticamente si la bandera está activa
+if [ "$RUN_SEEDER" = "true" ]; then
+    echo "Poblando base de datos oficial (Senior DatabaseSeeder)..."
+    php artisan db:seed --force || echo "Aviso: Seeder omitido o ya ejecutado."
+fi
+
 echo "=== Servidor listo en puerto $PORT ==="
 exec php -S 0.0.0.0:$PORT -t public public/index.php
