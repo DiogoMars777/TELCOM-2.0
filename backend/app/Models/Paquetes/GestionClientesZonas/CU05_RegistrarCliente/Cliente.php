@@ -2,7 +2,7 @@
 
 namespace App\Models\Paquetes\GestionClientesZonas\CU05_RegistrarCliente;
 
-use App\Models\Paquetes\GestionClientesZonas\CU04_ZonasCobertura\ZonaCobertura;
+use App\Models\Paquetes\GestionClientesZonas\CU04_ZonasCobertura\Zona;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -195,7 +195,7 @@ class Cliente extends Model
 
     public function zona()
     {
-        return $this->belongsTo(ZonaCobertura::class, 'idZona', 'idZona');
+        return $this->belongsTo(Zona::class, 'idZona', 'idZona');
     }
 
     public function getEmailAttribute(): ?string

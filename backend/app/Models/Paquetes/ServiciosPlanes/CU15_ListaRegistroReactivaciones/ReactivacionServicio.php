@@ -2,13 +2,12 @@
 
 namespace App\Models\Paquetes\ServiciosPlanes\CU15_ListaRegistroReactivaciones;
 
-use App\Models\Paquetes\FacturacionCobranza\CU10_GestionarPagoMensualidad\PagoMensualidad;
+use App\Models\Paquetes\FacturacionCobranza\CU10_GestionarPagoMensualidad\Pago;
 use App\Models\Paquetes\ServiciosPlanes\CU08_RegistrarActivarServicio\ServicioInternet;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
-class ReactivacionServicio extends Model
+class ReactivacionServicio extends AccionServicio
 {
     protected $table = 'AccionServicio';
     protected $primaryKey = 'idAccion';
@@ -129,7 +128,7 @@ class ReactivacionServicio extends Model
 
     public function pago()
     {
-        return $this->belongsTo(PagoMensualidad::class, 'idPago', 'idPago');
+        return $this->belongsTo(Pago::class, 'idPago', 'idPago');
     }
 
     public function getIdAttribute(): ?int

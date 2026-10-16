@@ -2,7 +2,7 @@
 
 namespace App\Services\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades;
 
-use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\MensualidadFacturacion;
+use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\Mensualidad;
 use App\Models\Paquetes\ServiciosPlanes\CU08_RegistrarActivarServicio\ServicioInternet;
 use App\Support\AuditLogger;
 use Carbon\Carbon;
@@ -36,7 +36,7 @@ class MensualidadGeneracionService
                     continue;
                 }
 
-                $existente = MensualidadFacturacion::where('servicio_id', $servicio->id)
+                $existente = Mensualidad::where('servicio_id', $servicio->id)
                     ->where('periodo', $periodo)
                     ->lockForUpdate()
                     ->first();
@@ -65,7 +65,7 @@ class MensualidadGeneracionService
                     $fechaVencimiento->setDay(min($servicio->dia_corte, $fechaVencimiento->daysInMonth));
                 }
 
-                MensualidadFacturacion::create([
+                Mensualidad::create([
                     'codigo_factura'    => 'FAC-' . $periodo . '-' . strtoupper(Str::random(4)),
                     'cliente_id'        => $servicio->cliente_id,
                     'servicio_id'       => $servicio->id,

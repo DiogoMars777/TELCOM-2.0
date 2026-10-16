@@ -2,7 +2,7 @@
 
 namespace App\Support;
 
-use App\Models\Paquetes\SeguridadAdministracion\CU02_BitacoraAuditoria\BitacoraAuditoria;
+use App\Models\Paquetes\SeguridadAdministracion\CU02_BitacoraAuditoria\Bitacora;
 use Throwable;
 
 /**
@@ -24,7 +24,7 @@ class AuditLogger
     ): void {
         try {
             $uid = $userId ?? auth()->id();
-            BitacoraAuditoria::create([
+            Bitacora::create([
                 'idUsuario'    => $uid,
                 'modulo'       => $modulo,
                 'accion'       => $accion,

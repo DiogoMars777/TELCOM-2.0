@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades;
 
 use App\Http\Controllers\Controller;
-use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\MensualidadFacturacion;
+use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\Mensualidad;
 use App\Services\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\MensualidadGeneracionService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -20,7 +20,7 @@ class MensualidadGeneracionController extends Controller
     {
         $periodo = $request->input('periodo', now()->format('Y-m'));
 
-        $mensualidades = MensualidadFacturacion::with(['cliente', 'servicio.asignacionPlanActual.plan'])
+        $mensualidades = Mensualidad::with(['cliente', 'servicio.asignacionPlanActual.plan'])
             ->where('periodo', $periodo)
             ->latest('idMensualidad')
             ->paginate(20);

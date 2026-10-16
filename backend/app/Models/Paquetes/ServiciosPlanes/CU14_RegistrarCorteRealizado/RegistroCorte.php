@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class RegistroCorte extends Model
+class RegistroCorte extends AccionServicio
 {
     protected $table = 'AccionServicio';
     protected $primaryKey = 'idAccion';

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Paquetes\FacturacionCobranza\CU10_GestionarPagoMensualidad;
 
 use App\Http\Controllers\Controller;
-use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\MensualidadFacturacion;
-use App\Models\Paquetes\FacturacionCobranza\CU10_GestionarPagoMensualidad\PagoMensualidad;
+use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\Mensualidad;
+use App\Models\Paquetes\FacturacionCobranza\CU10_GestionarPagoMensualidad\Pago;
 use App\Models\Paquetes\GestionClientesZonas\CU05_RegistrarCliente\Cliente;
 use App\Models\Paquetes\ServiciosPlanes\CU08_RegistrarActivarServicio\ServicioInternet;
 use App\Support\AuditLogger;
@@ -27,7 +27,7 @@ class PagoMensualidadController extends Controller
         $buscar = trim((string) $request->input('buscar', ''));
         $periodo = $request->input('periodo');
 
-        $query = MensualidadFacturacion::with([
+        $query = Mensualidad::with([
             'cliente',
             'servicio',
         ])
@@ -73,7 +73,7 @@ class PagoMensualidadController extends Controller
         ]);
 
         return DB::transaction(function () use ($validated, $request) {
-            $mensualidad = MensualidadFacturacion::lockForUpdate()->findOrFail($validated['mensualidad_id']);
+            $mensualidad = Mensualidad::lockForUpdate()->findOrFail($validated['mensualidad_id']);
 
             if ($mensualidad->estado_pago === 'PAGADO') {
                 return $this->error('Esta mensualidad ya se encuentra pagada.', 422);
@@ -95,7 +95,7 @@ class PagoMensualidadController extends Controller
                 );
             }
 
-            $pago = PagoMensualidad::create([
+            $pago = Pago::create([
                 'codigo_recibo'      => 'REC-' . date('Ymd') . '-' . strtoupper(Str::random(4)),
                 'mensualidad_id'     => $mensualidad->id,
                 'monto_pagado'       => $esperado,
@@ -155,7 +155,7 @@ class PagoMensualidadController extends Controller
             ->first();
 
         // Buscar facturas pendientes de pago
-        $pendientes = MensualidadFacturacion::with(['servicio'])
+        $pendientes = Mensualidad::with(['servicio'])
             ->where('idCliente', $cliente->id)
             ->where('estado_pago', 'PENDIENTE')
             ->orderBy('fecha_vencimiento', 'asc')
@@ -245,7 +245,7 @@ class PagoMensualidadController extends Controller
         ]);
 
         return DB::transaction(function () use ($validated) {
-            $mensualidad = MensualidadFacturacion::with('cliente')->lockForUpdate()->findOrFail($validated['mensualidad_id']);
+            $mensualidad = Mensualidad::with('cliente')->lockForUpdate()->findOrFail($validated['mensualidad_id']);
 
             if ($mensualidad->estado_pago === 'PAGADO') {
                 return $this->error('Esta factura ya se encuentra pagada.', 422);
@@ -270,7 +270,7 @@ class PagoMensualidadController extends Controller
             $codigoRecibo = 'REC-ONL-' . date('Ymd') . '-' . strtoupper(Str::random(4));
 
             // Registrar el pago en la base de datos
-            $pago = PagoMensualidad::create([
+            $pago = Pago::create([
                 'codigo_recibo'      => $codigoRecibo,
                 'mensualidad_id'     => $mensualidad->id,
                 'monto_pagado'       => $esperado,

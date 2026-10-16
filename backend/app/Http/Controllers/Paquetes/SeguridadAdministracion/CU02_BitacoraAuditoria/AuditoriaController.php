@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Paquetes\SeguridadAdministracion\CU02_BitacoraAuditoria;
 
 use App\Http\Controllers\Controller;
-use App\Models\Paquetes\SeguridadAdministracion\CU02_BitacoraAuditoria\BitacoraAuditoria;
+use App\Models\Paquetes\SeguridadAdministracion\CU02_BitacoraAuditoria\Bitacora;
 use App\Models\User;
 use App\Support\AuditLogger;
 use App\Traits\ApiResponse;
@@ -19,7 +19,7 @@ class AuditoriaController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = BitacoraAuditoria::with('user:id,name,email');
+        $query = Bitacora::with('user:id,name,email');
 
         // Filtro por usuario: permite consultar la bitácora de un usuario
         // concreto usando su id real (los ofrecidos por `usuarios()`).
@@ -57,7 +57,7 @@ class AuditoriaController extends Controller
      */
     public function usuarios(): JsonResponse
     {
-        $ids = BitacoraAuditoria::query()
+        $ids = Bitacora::query()
             ->whereNotNull('user_id')
             ->distinct()
             ->pluck('user_id');

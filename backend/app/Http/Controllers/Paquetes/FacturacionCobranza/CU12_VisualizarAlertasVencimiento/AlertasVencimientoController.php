@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Paquetes\FacturacionCobranza\CU12_VisualizarAlertasVencimiento;
 
 use App\Http\Controllers\Controller;
-use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\MensualidadFacturacion;
+use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\Mensualidad;
 use App\Models\Paquetes\FacturacionCobranza\CU12_VisualizarAlertasVencimiento\AlertaVencimiento;
 use App\Traits\ApiResponse;
 use Carbon\Carbon;
@@ -22,7 +22,7 @@ class AlertasVencimientoController extends Controller
         $hoy = Carbon::today();
 
         // Facturas vencidas no pagadas
-        $vencidas = MensualidadFacturacion::with(['cliente', 'servicio'])
+        $vencidas = Mensualidad::with(['cliente', 'servicio'])
             ->where('estado_pago', '!=', 'PAGADO')
             ->where('fecha_vencimiento', '<=', $hoy)
             ->orderBy('fecha_vencimiento', 'asc')

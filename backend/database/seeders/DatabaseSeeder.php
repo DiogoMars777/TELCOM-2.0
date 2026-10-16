@@ -4,13 +4,13 @@ namespace Database\Seeders;
 
 use App\Models\Paquetes\SeguridadAdministracion\CU03_UsuariosRolesPermisos\Permiso;
 use App\Models\Paquetes\SeguridadAdministracion\CU03_UsuariosRolesPermisos\Rol;
-use App\Models\Paquetes\GestionClientesZonas\CU04_ZonasCobertura\ZonaCobertura;
+use App\Models\Paquetes\GestionClientesZonas\CU04_ZonasCobertura\Zona;
 use App\Models\Paquetes\GestionClientesZonas\CU05_RegistrarCliente\Cliente;
 use App\Models\Paquetes\ServiciosPlanes\CU08_RegistrarActivarServicio\EstadoServicio;
 use App\Models\Paquetes\ServiciosPlanes\CU08_RegistrarActivarServicio\ServicioInternet;
 use App\Models\Paquetes\ServiciosPlanes\CU16_GestionarCatalogoPlanes\PlanInternet;
 use App\Models\Paquetes\ServiciosPlanes\CU17_AsignarCambiarPlanInternet\AsignacionPlan;
-use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\MensualidadFacturacion;
+use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\Mensualidad;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -153,7 +153,7 @@ class DatabaseSeeder extends Seeder
         );
 
         // 5. Zonas de Cobertura iniciales (CU04)
-        $zonaNorte = ZonaCobertura::firstOrCreate(
+        $zonaNorte = Zona::firstOrCreate(
             ['codigo' => 'ZON-NORTE'],
             [
                 'nombre'          => 'Zona Norte - Fibra Óptica Troncal',
@@ -163,7 +163,7 @@ class DatabaseSeeder extends Seeder
                 'activo'          => true,
             ]
         );
-        ZonaCobertura::firstOrCreate(
+        Zona::firstOrCreate(
             ['codigo' => 'ZON-SUR'],
             [
                 'nombre'          => 'Zona Sur - Anillo Metropolitano',
@@ -264,7 +264,7 @@ class DatabaseSeeder extends Seeder
                     'telefonoPrincipal' => '+591 71234567',
                     'correo'            => 'juanpablo.camacho@email.com',
                     'direccion'         => 'Av. Cristo Redentor #450, Edif. Torre Duo',
-                    'idZona'            => ZonaCobertura::where('codigo', 'ZON-SUR')->value('idZona'),
+                    'idZona'            => Zona::where('codigo', 'ZON-SUR')->value('idZona'),
                     'estadoCliente'     => 'ACTIVO',
                 ]
             );
@@ -295,8 +295,8 @@ class DatabaseSeeder extends Seeder
             }
 
             // Mensualidades en mora para SRV-88204 (elegible para CU13)
-            if (MensualidadFacturacion::where('idServicio', $servicioCorte1->idServicio)->doesntExist()) {
-                MensualidadFacturacion::create([
+            if (Mensualidad::where('idServicio', $servicioCorte1->idServicio)->doesntExist()) {
+                Mensualidad::create([
                     'idServicio'       => $servicioCorte1->idServicio,
                     'idCliente'        => $cliente2->idCliente,
                     'periodo'          => now()->subMonths(1)->format('Y-m'),

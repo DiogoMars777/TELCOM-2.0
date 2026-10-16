@@ -3,7 +3,7 @@
 namespace App\Models\Paquetes\FacturacionCobranza\CU12_VisualizarAlertasVencimiento;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\MensualidadFacturacion;
+use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\Mensualidad;
 
 class AlertaVencimiento extends Model
 {
@@ -25,6 +25,6 @@ class AlertaVencimiento extends Model
 
     public function mensualidad()
     {
-        return $this->belongsTo(MensualidadFacturacion::class, 'mensualidad_id');
+        return $this->belongsTo(Mensualidad::class, 'mensualidad_id');
     }
 }

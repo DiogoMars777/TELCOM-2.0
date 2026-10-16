@@ -2,9 +2,9 @@
 
 namespace App\Models\Paquetes\ServiciosPlanes\CU08_RegistrarActivarServicio;
 
-use App\Models\Paquetes\GestionClientesZonas\CU04_ZonasCobertura\ZonaCobertura;
+use App\Models\Paquetes\GestionClientesZonas\CU04_ZonasCobertura\Zona;
 use App\Models\Paquetes\GestionClientesZonas\CU05_RegistrarCliente\Cliente;
-use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\MensualidadFacturacion;
+use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\Mensualidad;
 use App\Models\Paquetes\ServiciosPlanes\CU17_AsignarCambiarPlanInternet\AsignacionPlan;
 use Illuminate\Database\Eloquent\Model;
 
@@ -145,12 +145,12 @@ class ServicioInternet extends Model
 
     public function zona()
     {
-        return $this->belongsTo(ZonaCobertura::class, 'idZona', 'idZona');
+        return $this->belongsTo(Zona::class, 'idZona', 'idZona');
     }
 
     public function mensualidades()
     {
-        return $this->hasMany(MensualidadFacturacion::class, 'idServicio', 'idServicio');
+        return $this->hasMany(Mensualidad::class, 'idServicio', 'idServicio');
     }
 
     public function asignacionesPlan()

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Paquetes\GestionClientesZonas\CU04_ZonasCobertura;
 
 use App\Http\Controllers\Controller;
-use App\Models\Paquetes\GestionClientesZonas\CU04_ZonasCobertura\ZonaCobertura;
+use App\Models\Paquetes\GestionClientesZonas\CU04_ZonasCobertura\Zona;
 use App\Support\AuditLogger;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -19,7 +19,7 @@ class ZonaCoberturaController extends Controller
      */
     public function index(): JsonResponse
     {
-        $zonas = ZonaCobertura::orderBy('nombre')->get();
+        $zonas = Zona::orderBy('nombre')->get();
         return $this->success($zonas, 'Zonas de cobertura obtenidas exitosamente.');
     }
 
@@ -30,7 +30,7 @@ class ZonaCoberturaController extends Controller
     {
         $validated = $this->validarZona($request);
 
-        $zona = ZonaCobertura::create($validated);
+        $zona = Zona::create($validated);
 
         AuditLogger::log('CU04', 'CREAR_ZONA', "Zona {$zona->codigo} registrada.", null, [
             'id' => $zona->id, 'codigo' => $zona->codigo, 'nombre' => $zona->nombre,
@@ -44,7 +44,7 @@ class ZonaCoberturaController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $zona = ZonaCobertura::findOrFail($id);
+        $zona = Zona::findOrFail($id);
 
         $validated = $this->validarZona($request, $zona);
 
@@ -72,7 +72,7 @@ class ZonaCoberturaController extends Controller
      * En creación los campos base son obligatorios; en actualización son
      * opcionales (`sometimes`) para poder completar datos de zonas antiguas.
      */
-    private function validarZona(Request $request, ?ZonaCobertura $zona = null): array
+    private function validarZona(Request $request, ?Zona $zona = null): array
     {
         $esCreacion = $zona === null;
         $req = $esCreacion ? 'required' : 'sometimes';
@@ -81,7 +81,7 @@ class ZonaCoberturaController extends Controller
         // contrato existente (los registros antiguos no tienen estado). Si se
         // envía, SIEMPRE se valida contra los cuatro valores permitidos.
         $estado = $esCreacion ? [] : ['sometimes'];
-        array_push($estado, 'nullable', 'string', Rule::in(ZonaCobertura::ESTADOS_COBERTURA));
+        array_push($estado, 'nullable', 'string', Rule::in(Zona::ESTADOS_COBERTURA));
 
         return $request->validate([
             'codigo' => $esCreacion

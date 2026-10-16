@@ -2,11 +2,11 @@
 
 namespace App\Models\Paquetes\FacturacionCobranza\CU11_ConsultarHistorialPagos;
 
-use App\Models\Paquetes\FacturacionCobranza\CU10_GestionarPagoMensualidad\PagoMensualidad;
+use App\Models\Paquetes\FacturacionCobranza\CU10_GestionarPagoMensualidad\Pago;
 use Illuminate\Database\Eloquent\Builder;
 
-/** Proyección de solo lectura para el historial generado por CU10. */
-class HistorialPago extends PagoMensualidad
+/** Proyección de solo lectura para el historial generado por CU10 (tabla Pago). */
+class HistorialPago extends Pago
 {
     public function scopePorCliente(Builder $query, int $clienteId): Builder
     {

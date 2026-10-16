@@ -2,7 +2,7 @@
 
 namespace App\Models\Paquetes\FacturacionCobranza\CU10_GestionarPagoMensualidad;
 
-use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\MensualidadFacturacion;
+use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\Mensualidad;
 use Illuminate\Database\Eloquent\Model;
 
 class DetallePago extends Model
@@ -27,12 +27,12 @@ class DetallePago extends Model
 
     public function pago()
     {
-        return $this->belongsTo(PagoMensualidad::class, 'idPago', 'idPago');
+        return $this->belongsTo(Pago::class, 'idPago', 'idPago');
     }
 
     public function mensualidad()
     {
-        return $this->belongsTo(MensualidadFacturacion::class, 'idMensualidad', 'idMensualidad');
+        return $this->belongsTo(Mensualidad::class, 'idMensualidad', 'idMensualidad');
     }
 
     public function getIdAttribute(): ?int
@@ -62,19 +62,14 @@ class DetallePago extends Model
 
     public function getMontoPagadoAttribute(): ?string
     {
-        $val = $this->attributes['subtotal'] ?? $this->attributes['montoAplicado'] ?? null;
-        return $val !== null ? (string) $val : null;
+        return isset($this->attributes['montoAplicado']) ? (string) $this->attributes['montoAplicado'] : null;
     }
 
     public function setMontoPagadoAttribute($value): void
     {
-        $this->attributes['subtotal'] = $value;
         $this->attributes['montoAplicado'] = $value;
-    }
-
-    public function setSubtotalAttribute($value): void
-    {
-        $this->attributes['subtotal'] = $value;
-        $this->attributes['montoAplicado'] = $value;
+        if (!isset($this->attributes['subtotal'])) {
+            $this->attributes['subtotal'] = $value;
+        }
     }
 }
