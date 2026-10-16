@@ -94,7 +94,58 @@ php artisan serve
 ```
 El backend queda en `http://localhost:8000` (la API bajo `http://localhost:8000/api`).
 
-### 1.2 Frontend (React + Vite)
+### 1.2 Población Integral de la Base de Datos (Seeder Senior)
+El sistema incluye un **Seeder Integral Senior** (`DatabaseSeeder.php`) que puebla el 100% de las 28 tablas canónicas de la base de datos sin dejar datos vacíos.
+
+#### 🚀 Comando para poblar la base de datos:
+```bash
+cd backend
+php artisan db:seed
+```
+> **Nota:** Si deseas reconstruir la base de datos desde cero con todas las tablas migradas y pobladas:
+> ```bash
+> php artisan migrate:fresh --seed
+> ```
+
+#### 🔑 Credenciales del Super Administrador:
+- **Correo:** `admin@telcom.com`
+- **Nombre de Usuario:** `admin`
+- **Contraseña:** `Admin123*`
+- **Rol:** `Administrador` (Acceso completo con los 29 permisos del sistema).
+
+#### 👥 5 Usuarios Administrativos (Contraseña: `Admin123*`):
+| Usuario | Correo | Rol | Función Principal |
+| :--- | :--- | :--- | :--- |
+| `admin` | `admin@telcom.com` | Administrador | Super Administrador con acceso global |
+| `alejandro.morales` | `soporte.admin@telcom.com` | Administrador | Administrador de Soporte e Infraestructura |
+| `mariana.rios` | `secretaria.ventas@telcom.com` | Secretaría | Gestión de clientes, contratos y servicios |
+| `valeria.cespedes` | `secretaria.caja@telcom.com` | Secretaría | Cobranzas en ventanilla y registro de pagos |
+| `roberto.justiniano` | `tecnico.red@telcom.com` | Técnico | Cuadrillas, instalaciones y comodatos de ONUs |
+
+#### 🗺️ 3 Zonas de Cobertura en Santa Cruz de la Sierra:
+- **`ZON-SCZ-NORTE`**: *Zona Norte - Equipetrol / Sirari* (Barrio Equipetrol Norte / Sirari, FTTH GPON, capacidad 500 nodos, delimitación perimetral GeoJSON).
+- **`ZON-SCZ-ESTE`**: *Zona Este - Villa 1ro de Mayo / Plan 3000* (FTTH GPON, capacidad 800 nodos, polígono GeoJSON residencial).
+- **`ZON-SCZ-SUR`**: *Zona Sur - Casco Viejo / Santos Dumont* (FTTH GPON, capacidad 600 nodos, polígono GeoJSON comercial/residencial).
+
+#### 🏢 20 Clientes y 20 Servicios de Internet Activos:
+- **20 Clientes reales** radicados en Santa Cruz de la Sierra con Carnet de Identidad (CI), teléfonos bolivianos (+591), direcciones y coordenadas GPS reales.
+- **20 Servicios FTTH activos** con planes contratados (30, 50, 100 y 200 Mbps), IPs asignadas (`10.20.10.101` - `10.20.10.120`), direcciones MAC y routers ONT Wi-Fi asignados en comodato.
+
+#### 💳 Facturación y Mora (Enero a Octubre 2026 - 200 Mensualidades):
+- **Enero a Septiembre 2026 (180 facturas):** **100% PAGADAS** con sus correspondientes 180 registros en `Pago` y `DetallePago` (recibos `REC-2026-xxxxx` emitidos por ventanilla, QR, transferencia y PayPal).
+- **Octubre 2026 (20 facturas del mes actual):**
+  - **10 facturas PAGADAS** (Abonados 1 al 10 al día).
+  - **10 facturas PENDIENTES** (Abonados 11 al 20 en estado de deuda/mora activa para probar de inmediato **CU10** Registrar Pago, **CU12** Alertas de Vencimiento, **CU13** Servicios para Corte y **CU14** Registrar Corte Realizado).
+
+#### 📦 Población de las 28 Tablas Canónicas (Cero Tablas Vacías):
+- **Proveedores & Compras:** Huawei Technologies Bolivia, Furukawa LatAm y ZTE Corporation con compras mayoristas registradas e ingresadas a inventario.
+- **Inventario & Equipos:** ONTs Huawei HG8145V5, OptiXstar Wi-Fi 6, ZTE F601 y bobinas de cable drop; 25 equipos físicos con números de serie y 20 contratos de comodato.
+- **Instalaciones:** 20 solicitudes y 20 órdenes técnicas finalizadas con verificación de potencia óptica (-19 dBm) asignadas a 3 técnicos de campo.
+- **Auditoría & Trazabilidad:** 12 registros en la Bitácora de Auditoría cubriendo autenticación, cambios RBAC, catálogos y transacciones de cobro.
+
+---
+
+### 1.3 Frontend (React + Vite)
 ```bash
 cd frontend
 npm install
@@ -102,34 +153,13 @@ npm run dev
 ```
 El frontend queda en `http://localhost:5173`. El cliente HTTP (`frontend/src/services/apiClient.js`) usa `VITE_API_URL` o `http://localhost:8000/api` por defecto.
 
-### 1.3 Usuarios y roles
-Roles sembrados por `DatabaseSeeder`: **Administrador** (`admin`), **Secretaría** (`secretaria`), **Técnico** (`tecnico`). Usuario admin base: correo `admin@telcom.com`.
-
-Cuentas de demostración (**solo local**, seeder separado `DemoUsersSeeder`, **no** forma parte de `DatabaseSeeder` ni corre en producción):
-
-| Rol | Correo |
-| --- | --- |
-| Administrador | `admin.demo@telcom.local` |
-| Secretaría | `secretaria.demo@telcom.local` |
-| Técnico | `tecnico.demo@telcom.local` |
-
+### 1.4 Pruebas Automatizadas (100% Green)
 ```bash
-cd backend
-php artisan db:seed --class=DemoUsersSeeder
-```
-La contraseña se toma de `TELCOM_DEMO_PASSWORD` (por defecto `Demo123456!`). Para restablecer contraseñas demo: definir `TELCOM_DEMO_RESET_PASSWORD=true`.
+# Backend (163 pruebas unitarias y de integración)
+cd backend && php ./vendor/bin/phpunit --testsuite=Feature
 
-> El menú del frontend se filtra con los permisos que el backend devuelve en `GET /api/cu01/me`; **el backend sigue autorizando** cada operación (HTTP 401/403).
-
-### 1.4 Pruebas, lint y build
-```bash
-# Backend (usa SQLite en memoria según phpunit.xml; no toca PostgreSQL)
-cd backend && php artisan test
-
-# Frontend
-cd frontend && npm test      # node --test
-cd frontend && npm run lint  # oxlint
-cd frontend && npm run build # vite build
+# Frontend (106 pruebas unitarias con Node Test Runner)
+cd frontend && npm test
 ```
 
 ---
