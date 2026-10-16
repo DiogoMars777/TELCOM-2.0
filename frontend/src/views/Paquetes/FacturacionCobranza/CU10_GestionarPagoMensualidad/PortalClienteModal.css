@@ -750,4 +750,42 @@
   .cu10-form-row {
     grid-template-columns: 1fr;
   }
+  .cu10-receipt-details {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .cu10-portal-overlay {
+    padding: 0.5rem;
+  }
+  .cu10-portal-modal {
+    border-radius: 14px;
+    max-height: 96vh;
+  }
+  .cu10-portal-header {
+    padding: 1rem;
+  }
+  .cu10-portal-body {
+    padding: 1rem;
+    gap: 1.15rem;
+  }
+  .cu10-portal-search-input-group {
+    flex-direction: column;
+  }
+  .cu10-portal-btn-search {
+    justify-content: center;
+    padding: 0.75rem;
+  }
+  .cu10-card-number-display {
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+  }
+  .cu10-receipt-actions {
+    flex-direction: column-reverse;
+  }
+  .cu10-receipt-actions button {
+    width: 100%;
+    justify-content: center;
+  }
 }

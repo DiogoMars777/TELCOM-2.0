@@ -809,6 +809,37 @@
   }
 }
 
+@media (max-width: 480px) {
+  .cu10-metodos-grid {
+    grid-template-columns: 1fr;
+  }
+  .cu10-cobranza-panel,
+  .cu10-pendientes-panel {
+    padding: 1rem;
+  }
+  .cu10-detalle-factura-box {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+  .cu10-recibo-card {
+    padding: 1.25rem;
+  }
+  .cu10-recibo-actions {
+    flex-direction: column;
+  }
+  .cu10-recibo-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .cu10-card-preview {
+    padding: 1.15rem;
+  }
+  .cu10-card-number {
+    font-size: 1.05rem;
+    letter-spacing: 1px;
+  }
+}
+
 /* Reglas de Impresión (@media print) */
 @media print {
   body * {

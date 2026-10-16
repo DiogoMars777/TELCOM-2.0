@@ -222,6 +222,13 @@ body {
 }
 
 /* Perfil del usuario en la barra superior (diseño compartido) */
+.top-bar-landing-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
 .top-bar-right {
   display: flex;
   align-items: center;
@@ -300,11 +307,28 @@ body {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   box-shadow: var(--shadow-sm);
+  width: 100%;
+  max-width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 189, 248, 0.35) transparent;
+}
+
+.table-responsive::-webkit-scrollbar {
+  height: 6px;
+}
+.table-responsive::-webkit-scrollbar-track {
+  background: rgba(11, 17, 32, 0.4);
+}
+.table-responsive::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.35);
+  border-radius: 4px;
 }
 
 .data-table {
   width: 100%;
+  min-width: 660px;
   border-collapse: collapse;
   text-align: left;
   font-size: 0.85rem;
@@ -562,6 +586,7 @@ input:focus, select:focus, textarea:focus {
   padding: 0.85rem 1.25rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
+  flex-wrap: wrap;
 }
 
 .search-box {
@@ -569,6 +594,7 @@ input:focus, select:focus, textarea:focus {
   align-items: center;
   gap: 0.5rem;
   flex: 1;
+  min-width: 220px;
 }
 
 .search-box input {
@@ -581,10 +607,38 @@ input:focus, select:focus, textarea:focus {
   gap: 0.5rem;
 }
 
+/* Process bar (Facturación masiva y procesos en lote - CU09) */
+.process-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background-color: var(--bg-card);
+  padding: 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.process-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.process-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
 /* Grid Cards */
 .grid-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(290px, 100%), 1fr));
   gap: 1.25rem;
 }
 
@@ -636,6 +690,8 @@ input:focus, select:focus, textarea:focus {
   align-items: center;
   justify-content: center;
   z-index: 999;
+  padding: 1rem;
+  overflow-y: auto;
 }
 
 .modal-card {
@@ -649,6 +705,8 @@ input:focus, select:focus, textarea:focus {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
 }
 
 .modal-actions {
@@ -893,6 +951,8 @@ input:focus, select:focus, textarea:focus {
 .receipt-row {
   display: flex;
   justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 /* Login Card View */
@@ -1123,9 +1183,44 @@ input:focus, select:focus, textarea:focus {
   .form-group.full-width {
     grid-column: span 1;
   }
-  .view-header,
-  .filters-bar {
+  .view-header {
     flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .filters-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  .search-box {
+    width: 100%;
+    min-width: 0;
+  }
+  .filter-item {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .filter-item select,
+  .filter-item input {
+    flex: 1;
+    min-width: 0;
+  }
+  .process-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+  }
+  .process-group {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+  .process-group input {
+    width: 100%;
+  }
+  .process-bar .btn {
+    width: 100%;
+    justify-content: center;
   }
   .top-bar {
     padding: 0 1rem;
@@ -1144,50 +1239,6 @@ input:focus, select:focus, textarea:focus {
   }
   .permissions-matrix {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .view-header h2 {
-    font-size: 1.2rem;
-  }
-  .grid-cards {
-    grid-template-columns: 1fr;
-  }
-  .form-card,
-  .receipt-card {
-    padding: 1.25rem;
-  }
-  .modal-card {
-    padding: 1.25rem;
-    max-width: calc(100vw - 1.5rem);
-  }
-  .form-actions-split {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-  .filters-bar {
-    padding: 0.75rem;
-  }
-  .top-bar {
-    padding: 0 0.75rem;
-  }
-  .content-body {
-    padding: 0.85rem;
-  }
-
-  /* Guardar / Cancelar siempre visibles y sin desbordar */
-  .permissions-actions {
-    flex-direction: column-reverse;
-  }
-  .permissions-actions .btn {
-    width: 100%;
-    justify-content: center;
-  }
-  .tab-btn {
-    flex: 1;
-    text-align: center;
-    padding: 0.6rem 0.5rem;
   }
 }
 
@@ -1211,6 +1262,76 @@ input:focus, select:focus, textarea:focus {
   }
   .top-bar-user-email {
     display: none;
+  }
+  .top-bar-landing-text {
+    display: none;
+  }
+  .top-bar-landing-btn {
+    padding: 0.35rem 0.55rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .view-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  .view-header .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .view-header h2 {
+    font-size: 1.2rem;
+  }
+  .grid-cards {
+    grid-template-columns: 1fr;
+  }
+  .form-card,
+  .receipt-card {
+    padding: 1.15rem;
+  }
+  .modal-backdrop {
+    padding: 0.5rem;
+  }
+  .modal-card {
+    padding: 1.15rem;
+    max-width: 100%;
+    max-height: calc(100vh - 1rem);
+  }
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+  .modal-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .form-actions-split {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .filters-bar {
+    padding: 0.75rem;
+  }
+  .top-bar {
+    padding: 0.5rem 0.6rem;
+  }
+  .content-body {
+    padding: 0.75rem;
+  }
+
+  /* Guardar / Cancelar siempre visibles y sin desbordar */
+  .permissions-actions {
+    flex-direction: column-reverse;
+  }
+  .permissions-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .tab-btn {
+    flex: 1;
+    text-align: center;
+    padding: 0.6rem 0.5rem;
   }
 }
 

@@ -724,3 +724,56 @@ img.emp-left-visual {
   cursor: not-allowed;
 }
 
+/* =====================================================================
+   Adaptación Móvil y Tablets (CU01 Login / Recuperar Contraseña)
+   ===================================================================== */
+@media (max-width: 900px) {
+  .emp-card {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+    min-height: auto;
+    border-radius: 20px;
+  }
+
+  .emp-left {
+    display: none;
+  }
+
+  .emp-right {
+    padding: 2.25rem 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .emp-root {
+    padding: 0.75rem;
+    align-items: center;
+  }
+
+  .emp-card {
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  }
+
+  .emp-right {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .emp-form-head h1 {
+    font-size: 1.35rem;
+  }
+
+  .emp-code-input input {
+    font-size: 1.15rem !important;
+    letter-spacing: 0.2rem;
+  }
+
+  .emp-steps-indicator {
+    gap: 0.4rem;
+  }
+
+  .emp-step-dot span {
+    display: none;
+  }
+}
+

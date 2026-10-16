@@ -404,13 +404,12 @@ export default function App() {
           <div className="top-bar-right">
             <button
               type="button"
-              className="btn btn-sm btn-secondary"
+              className="btn btn-sm btn-secondary top-bar-landing-btn"
               onClick={() => setView('landing')}
               title="Ver Landing Page pública"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', marginRight: '0.75rem' }}
             >
               <Radio size={14} />
-              <span>Ver Sitio Web</span>
+              <span className="top-bar-landing-text">Ver Sitio Web</span>
             </button>
             <div className="top-bar-user">
               <div className="user-avatar" aria-hidden="true">
