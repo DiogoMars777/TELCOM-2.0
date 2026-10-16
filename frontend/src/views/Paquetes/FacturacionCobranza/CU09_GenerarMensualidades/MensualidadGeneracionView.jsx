@@ -74,28 +74,40 @@ export default function MensualidadGeneracionView({ user }) {
             </tr>
           </thead>
           <tbody>
-            {mensualidades.map((m) => (
-              <tr key={m.id}>
-                <td><strong>{m.codigo_factura}</strong></td>
-                <td>{m.cliente_nombre}</td>
-                <td><span className="badge badge-info">{m.servicio_codigo}</span></td>
-                <td>{m.periodo}</td>
-                <td>
-                  <strong>
-                    Bs. {m.monto !== null && m.monto !== undefined && m.monto !== ''
-                      ? Number(m.monto).toFixed(2)
-                      : (m.servicio?.precio_mensual ? Number(m.servicio.precio_mensual).toFixed(2) : '0.00')}
-                  </strong>
-                </td>
-                <td>{m.fecha_emision ? String(m.fecha_emision).slice(0, 10) : '—'}</td>
-                <td>{m.fecha_vencimiento ? String(m.fecha_vencimiento).slice(0, 10) : '—'}</td>
-                <td>
-                  <span className={`badge badge-${m.estado_pago === 'PAGADO' ? 'success' : 'danger'}`}>
-                    {m.estado_pago}
-                  </span>
+            {mensualidades.length === 0 ? (
+              <tr>
+                <td colSpan={8} style={{ textAlign: 'center', padding: '2.5rem', color: '#94a3b8' }}>
+                  {loading ? (
+                    'Cargando mensualidades del período...'
+                  ) : (
+                    <>No existen mensualidades generadas para el período <strong>{periodo}</strong>. Puedes presionar <em>«Ejecutar Facturación Masiva»</em> para emitir las facturas de todos los servicios activos.</>
+                  )}
                 </td>
               </tr>
-            ))}
+            ) : (
+              mensualidades.map((m) => (
+                <tr key={m.id || m.idMensualidad}>
+                  <td><strong>{m.codigo_factura || m.codigoFactura}</strong></td>
+                  <td>{m.cliente_nombre}</td>
+                  <td><span className="badge badge-info">{m.servicio_codigo}</span></td>
+                  <td>{m.periodo}</td>
+                  <td>
+                    <strong>
+                      Bs. {m.monto !== null && m.monto !== undefined && m.monto !== ''
+                        ? Number(m.monto).toFixed(2)
+                        : (m.servicio?.precio_mensual ? Number(m.servicio.precio_mensual).toFixed(2) : '0.00')}
+                    </strong>
+                  </td>
+                  <td>{m.fecha_emision ? String(m.fecha_emision).slice(0, 10) : '—'}</td>
+                  <td>{m.fecha_vencimiento ? String(m.fecha_vencimiento).slice(0, 10) : '—'}</td>
+                  <td>
+                    <span className={`badge badge-${(m.estado_pago || m.estado) === 'PAGADO' ? 'success' : 'danger'}`}>
+                      {m.estado_pago || m.estado}
+                    </span>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

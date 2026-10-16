@@ -30,11 +30,12 @@ export const mockMensualidades = [
 // La API devuelve las relaciones `cliente` y `servicio`; se aplanan para la vista.
 function normalizeMensualidad(m) {
   const cliente = m.cliente;
+  const nombreCliente = cliente?.nombreCompleto || cliente?.nombre_completo
+    || (`${cliente?.nombres ?? ''} ${cliente?.apellidos ?? ''}`.trim() || null);
   return {
     ...m,
-    cliente_nombre: m.cliente_nombre
-      || (cliente ? `${cliente.nombres ?? ''} ${cliente.apellidos ?? ''}`.trim() : null),
-    servicio_codigo: m.servicio_codigo || m.servicio?.codigo_servicio || null,
+    cliente_nombre: m.cliente_nombre || nombreCliente || 'Cliente General',
+    servicio_codigo: m.servicio_codigo || m.servicio?.codigo_servicio || m.servicio?.codigoServicio || 'SRV',
   };
 }
 
