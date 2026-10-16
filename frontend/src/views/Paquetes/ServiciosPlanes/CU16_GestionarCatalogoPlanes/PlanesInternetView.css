@@ -1,0 +1,124 @@
+/* CU16 - Gestionar Planes de Internet */
+
+.cu16-plan-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.cu16-desc {
+  max-width: 320px;
+  color: var(--text-secondary);
+}
+
+.cu16-muted {
+  color: #94a3b8;
+}
+
+.cu16-empty {
+  text-align: center;
+  color: #94a3b8;
+}
+
+.cu16-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* Dos columnas que se apilan en pantallas pequeñas (sin desbordar). */
+.cu16-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.cu16-check label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.cu16-check input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  accent-color: var(--primary);
+}
+
+/* Tarjetas para celular (ocultas por defecto; se muestran ≤640px). */
+.cu16-cards {
+  display: none;
+}
+
+.cu16-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.cu16-card + .cu16-card {
+  margin-top: 0.75rem;
+}
+
+.cu16-card-fields {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.cu16-card-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.cu16-card-field dt {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.cu16-card-field dd {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  overflow-wrap: break-word;
+}
+
+.cu16-card-actions {
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Tablet: si las columnas no caben, la tabla se desplaza DENTRO de su
+   contenedor (no arrastra a toda la página). */
+@media (max-width: 1024px) {
+  .cu16-table {
+    min-width: 720px;
+  }
+}
+
+/* Celular: tarjetas en lugar de tabla. */
+@media (max-width: 640px) {
+  .cu16-table-wrap {
+    display: none;
+  }
+
+  .cu16-cards {
+    display: block;
+  }
+
+  .cu16-form-row {
+    grid-template-columns: 1fr;
+  }
+}

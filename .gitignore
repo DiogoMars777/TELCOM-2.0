@@ -1,0 +1,63 @@
+# ==========================================
+# TELCOM - ROOT GITIGNORE (SENIOR STANDARD)
+# ==========================================
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+
+# IDE / Editor
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# ------------------------------------------
+# Backend (Laravel)
+# ------------------------------------------
+backend/vendor/
+backend/node_modules/
+backend/npm-debug.log
+backend/yarn-error.log
+backend/.env
+backend/.env.backup
+backend/.env.production
+backend/.phpunit.result.cache
+backend/storage/*.key
+backend/storage/app/*
+!backend/storage/app/.gitignore
+backend/storage/framework/cache/*
+!backend/storage/framework/cache/.gitignore
+backend/storage/framework/sessions/*
+!backend/storage/framework/sessions/.gitignore
+backend/storage/framework/testing/*
+!backend/storage/framework/testing/.gitignore
+backend/storage/framework/views/*
+!backend/storage/framework/views/.gitignore
+backend/storage/logs/*
+!backend/storage/logs/.gitignore
+backend/database/*.sqlite
+backend/database/*.sqlite-journal
+backend/public/hot
+backend/public/storage
+
+# ------------------------------------------
+# Frontend (React + Vite)
+# ------------------------------------------
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/*.local
+frontend/.env.local
+frontend/.env.*.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+
+# Logs & Temporary files
+*.log
+scratch/

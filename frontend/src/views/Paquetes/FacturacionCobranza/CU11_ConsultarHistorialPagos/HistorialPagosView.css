@@ -1,0 +1,792 @@
+/**
+ * CU11 - Consultar Historial de Pagos
+ * Tema oscuro coordinado con CU10 (Cobranza TELCOM)
+ */
+
+.cu11-page {
+  color: var(--text-primary, #f8fafc);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.cu11-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.cu11-heading h2 {
+  margin: 0 0 4px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
+}
+
+.cu11-heading p {
+  margin: 0;
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.cu11-heading-icon {
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3);
+  flex: 0 0 auto;
+}
+
+/* Panel de Filtros */
+.cu11-filters {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 14px;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 16px;
+  background: #141f36;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35);
+}
+
+.cu11-filter-title {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #38bdf8;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.cu11-field {
+  grid-column: span 3;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.cu11-field > span {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.cu11-field input,
+.cu11-field select {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  background: #0b1120;
+  color: #f8fafc;
+  padding: 9px 12px;
+  font: inherit;
+  font-size: 0.88rem;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.cu11-field select option {
+  background: #0b1120;
+  color: #f8fafc;
+}
+
+.cu11-field input:focus,
+.cu11-field select:focus {
+  outline: 2px solid rgba(56, 189, 248, 0.25);
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px #38bdf8;
+}
+
+.cu11-search {
+  grid-column: span 6;
+}
+
+.cu11-search > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 12px;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  background: #0b1120;
+  color: #64748b;
+  transition: all 0.2s ease;
+}
+
+.cu11-search > div:focus-within {
+  outline: 2px solid rgba(56, 189, 248, 0.25);
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px #38bdf8;
+}
+
+.cu11-search input {
+  border: 0;
+  padding-left: 0;
+  background: transparent;
+  color: #f8fafc;
+  outline: 0 !important;
+}
+
+.cu11-search input::placeholder {
+  color: #64748b;
+}
+
+.cu11-filter-actions {
+  grid-column: span 3;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.cu11-filter-actions .btn {
+  min-height: 42px;
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+/* Panel de Resultados */
+.cu11-results {
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 16px;
+  background: #141f36;
+  color: #f8fafc;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35);
+}
+
+.cu11-results-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background: rgba(15, 23, 42, 0.6);
+  border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+}
+
+.cu11-results-head strong {
+  color: #f8fafc;
+}
+
+.cu11-results-head span {
+  color: #94a3b8;
+}
+
+.cu11-results-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cu11-results-head .cu11-results-title {
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.cu11-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.cu11-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.cu11-table th {
+  padding: 14px 18px;
+  background: rgba(15, 23, 42, 0.85);
+  color: #94a3b8;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.45);
+}
+
+.cu11-table td {
+  padding: 14px 18px;
+  border-top: 1px solid rgba(51, 65, 85, 0.35);
+  vertical-align: middle;
+  color: #e2e8f0;
+}
+
+.cu11-table td > strong {
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.cu11-table tbody tr {
+  transition: background 0.15s ease;
+}
+
+.cu11-table tbody tr:hover {
+  background: rgba(30, 41, 59, 0.55);
+}
+
+.cu11-table td small {
+  display: block;
+  margin-top: 4px;
+  color: #94a3b8;
+  font-size: 0.78rem;
+}
+
+.cu11-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  color: #cbd5e1;
+}
+
+/* Badge de Método de Pago */
+.cu11-method {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #60a5fa;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Monto Verde Neón */
+.cu11-amount {
+  color: #34d399 !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+/* Botón Ver Comprobante */
+.cu11-view {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  background: rgba(56, 189, 248, 0.08);
+  color: #38bdf8;
+  font-weight: 600;
+  font-size: 0.82rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.cu11-view:hover:not(:disabled) {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+  transform: translateY(-1px);
+}
+
+.cu11-view:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Estados Vacío / Cargando */
+.cu11-state {
+  min-height: 230px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  color: #94a3b8;
+  text-align: center;
+  padding: 24px;
+}
+
+.cu11-state strong {
+  color: #f8fafc;
+  font-size: 1rem;
+}
+
+/* Paginación */
+.cu11-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 14px 20px;
+  border-top: 1px solid rgba(51, 65, 85, 0.4);
+  background: rgba(15, 23, 42, 0.6);
+  color: #94a3b8;
+}
+
+.cu11-pagination button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  background: #0b1120;
+  color: #f8fafc;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cu11-pagination button:hover:not(:disabled) {
+  border-color: #38bdf8;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.cu11-pagination button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Modal de Comprobante */
+.cu11-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.cu11-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(9, 13, 22, 0.85);
+  backdrop-filter: blur(6px);
+}
+
+.cu11-receipt {
+  position: relative;
+  width: min(760px, 100%);
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  border-radius: 18px;
+  background: #0f172a;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85);
+}
+
+.cu11-receipt-actions {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 18px;
+  background: #141f36;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.cu11-receipt-actions > div {
+  display: flex;
+  gap: 8px;
+}
+
+.cu11-receipt-paper {
+  margin: 20px;
+  padding: 32px;
+  background: #141f36;
+  color: #f8fafc;
+  border-radius: 14px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+}
+
+.cu11-receipt-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.cu11-receipt-logo {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+}
+
+.cu11-receipt-brand strong {
+  display: block;
+  font-size: 1.35rem;
+  color: #f8fafc;
+  letter-spacing: 0.5px;
+}
+
+.cu11-receipt-brand span {
+  display: block;
+  color: #94a3b8;
+  font-size: 0.82rem;
+}
+
+.cu11-receipt-number {
+  margin-left: auto;
+  text-align: right;
+}
+
+.cu11-receipt-number small,
+.cu11-receipt-number b {
+  display: block;
+}
+
+.cu11-receipt-number small {
+  color: #94a3b8;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+}
+
+.cu11-receipt-number b {
+  color: #38bdf8;
+  margin-top: 4px;
+  font-size: 1.05rem;
+}
+
+.cu11-receipt-paper h2 {
+  margin: 24px 0 4px;
+  color: #f8fafc;
+  font-size: 1.3rem;
+}
+
+.cu11-receipt-date {
+  margin: 0 0 20px;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.cu11-receipt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 16px 18px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(51, 65, 85, 0.45);
+  border-radius: 12px;
+}
+
+.cu11-receipt-grid div,
+.cu11-receipt-summary div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cu11-receipt-grid span,
+.cu11-receipt-summary span {
+  color: #94a3b8;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.cu11-receipt-grid strong,
+.cu11-receipt-summary strong {
+  color: #f8fafc;
+  font-size: 0.92rem;
+}
+
+.cu11-receipt-table-wrap {
+  overflow-x: auto;
+  margin: 22px 0;
+}
+
+.cu11-receipt-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cu11-receipt-table th,
+.cu11-receipt-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+  text-align: left;
+}
+
+.cu11-receipt-table th {
+  background: rgba(15, 23, 42, 0.85);
+  color: #94a3b8;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.cu11-receipt-table td {
+  color: #e2e8f0;
+}
+
+.cu11-receipt-table th:last-child,
+.cu11-receipt-table td:last-child {
+  text-align: right;
+}
+
+.cu11-receipt-summary {
+  margin-left: auto;
+  width: min(340px, 100%);
+  display: grid;
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(51, 65, 85, 0.45);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.cu11-receipt-total {
+  border-top: 1px solid rgba(59, 130, 246, 0.35);
+  padding-top: 10px;
+}
+
+.cu11-receipt-total strong {
+  font-size: 1.45rem !important;
+  color: #34d399 !important;
+  font-weight: 700;
+}
+
+.cu11-receipt-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(51, 65, 85, 0.45);
+  color: #94a3b8;
+  font-size: 0.75rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Responsividad */
+@media (max-width: 900px) {
+  .cu11-field,
+  .cu11-filter-actions {
+    grid-column: span 6;
+  }
+  .cu11-search {
+    grid-column: 1 / -1;
+  }
+  .cu11-filter-actions {
+    justify-content: flex-start;
+  }
+  .cu11-table thead {
+    display: none;
+  }
+  .cu11-table,
+  .cu11-table tbody,
+  .cu11-table tr,
+  .cu11-table td {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .cu11-table tr {
+    padding: 12px 16px;
+    border-top: 1px solid rgba(51, 65, 85, 0.5);
+  }
+  .cu11-table td {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 8px 0;
+    border: 0;
+    text-align: right;
+  }
+  .cu11-table td[data-label]::before {
+    content: attr(data-label);
+    color: #94a3b8;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: left;
+  }
+  .cu11-table td strong,
+  .cu11-table td small {
+    text-align: right;
+  }
+  .cu11-table td:last-child {
+    justify-content: flex-end;
+    padding-top: 12px;
+  }
+}
+
+@media (max-width: 560px) {
+  .cu11-heading {
+    align-items: flex-start;
+  }
+  .cu11-heading h2 {
+    font-size: 1.3rem;
+  }
+  .cu11-filters {
+    padding: 14px;
+  }
+  .cu11-field,
+  .cu11-filter-actions {
+    grid-column: 1 / -1;
+  }
+  .cu11-filter-actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+  .cu11-results-head {
+    align-items: flex-start;
+  }
+  .cu11-results-head .btn {
+    padding: 8px;
+  }
+  .cu11-pagination {
+    gap: 8px;
+    font-size: 0.8rem;
+  }
+  .cu11-pagination button {
+    padding: 7px;
+    font-size: 0;
+  }
+  .cu11-pagination button svg {
+    margin: 0;
+  }
+  .cu11-modal {
+    padding: 0;
+  }
+  .cu11-receipt {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    border-radius: 0;
+  }
+  .cu11-receipt-actions {
+    flex-wrap: wrap;
+  }
+  .cu11-receipt-actions > div {
+    flex: 1;
+    justify-content: flex-end;
+  }
+  .cu11-receipt-paper {
+    margin: 10px;
+    padding: 20px 14px;
+  }
+  .cu11-receipt-brand {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .cu11-receipt-number {
+    width: 100%;
+    margin: 6px 0 0;
+    text-align: left;
+  }
+  .cu11-receipt-grid {
+    grid-template-columns: 1fr;
+  }
+  .cu11-receipt-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* Modo Impresión: Factura clara en papel */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  .cu11-receipt,
+  .cu11-receipt * {
+    visibility: visible !important;
+  }
+  .cu11-receipt {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+    background: #fff !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .cu11-receipt-paper {
+    margin: 0;
+    padding: 18mm;
+    background: #fff !important;
+    color: #172033 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .cu11-receipt-brand strong,
+  .cu11-receipt-paper h2,
+  .cu11-receipt-grid strong,
+  .cu11-receipt-summary strong {
+    color: #13264a !important;
+  }
+  .cu11-receipt-brand span,
+  .cu11-receipt-date,
+  .cu11-receipt-number small,
+  .cu11-receipt-grid span,
+  .cu11-receipt-summary span,
+  .cu11-receipt-footer {
+    color: #64748b !important;
+  }
+  .cu11-receipt-grid,
+  .cu11-receipt-summary {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+  .cu11-receipt-table th {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+  }
+  .cu11-receipt-table td {
+    color: #1f2937 !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+  }
+  .cu11-receipt-total strong {
+    color: #087b50 !important;
+  }
+  .cu11-receipt-number b {
+    color: #1363df !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

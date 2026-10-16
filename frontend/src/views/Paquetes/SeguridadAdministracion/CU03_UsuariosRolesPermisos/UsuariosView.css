@@ -1,0 +1,176 @@
+/*
+ * CU03 - Usuarios (pestaña "Usuarios").
+ * -------------------------------------------------------------------
+ * Estilos propios del listado de usuarios. Se apoyan en las variables y
+ * clases globales (index.css) para conservar el aspecto oscuro de TELCOM
+ * y NO afectan a la pestaña "Roles y Permisos" (selectores propios).
+ *
+ * - Computadoras: tabla completa, sin cortar columnas.
+ * - Tablets: la tabla se desplaza dentro de su contenedor (.table-responsive);
+ *   la página no se desplaza hacia los lados.
+ * - Celulares: cada usuario se muestra como tarjeta con etiquetas claras.
+ */
+
+/* ------------------------------------------------------------------ */
+/* Tabla                                                               */
+/* ------------------------------------------------------------------ */
+.users-table-wrap {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.users-table {
+  table-layout: fixed;
+  width: 100%;
+  min-width: 760px;
+}
+
+.users-table th,
+.users-table td {
+  padding: 0.75rem 0.85rem;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+/* Anchos proporcionados: legibles sin cortarse ni superponerse. */
+.users-table .col-id { width: 6%; }
+.users-table .col-name { width: 20%; }
+.users-table .col-email { width: 22%; }
+.users-table .col-role { width: 18%; }
+.users-table .col-status { width: 12%; }
+.users-table .col-actions { width: 22%; }
+
+/* El selector de rol nunca debe sobresalir de su celda. */
+.users-table .col-role select {
+  width: 100%;
+  min-width: 0;
+}
+
+/* En tablets el botón de acción es un objetivo táctil: se agranda sin
+   alterar el diseño de computadoras. */
+@media (max-width: 1024px) {
+  .users-table .col-actions .btn {
+    min-height: 40px;
+    padding: 0.5rem 0.8rem;
+  }
+}
+
+.users-table .col-actions .btn {
+  white-space: nowrap;
+}
+
+/* Ocultar barra vertical solo en esta pantalla (sin overflow:hidden) */
+.content-body:has(.cu03-view) {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.content-body:has(.cu03-view)::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Estado (cargando / sin registros) visible solo en celulares         */
+/* ------------------------------------------------------------------ */
+.users-mobile-status {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1rem;
+  color: var(--text-secondary);
+  background-color: var(--bg-card);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tarjetas (celulares)                                                */
+/* ------------------------------------------------------------------ */
+.users-cards {
+  display: none;
+}
+
+.user-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.user-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.user-card-id {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--info);
+}
+
+.user-card-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.user-card-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.user-card-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.user-card-value {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.user-card-field select {
+  width: 100%;
+  min-width: 0;
+}
+
+.user-card-actions .btn {
+  width: 100%;
+  justify-content: center;
+  min-height: 42px;
+  font-size: 0.82rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Celulares: se oculta la tabla y se muestran las tarjetas.          */
+/* ------------------------------------------------------------------ */
+@media (max-width: 640px) {
+  .users-table-wrap {
+    display: none;
+  }
+
+  .users-mobile-status {
+    display: flex;
+  }
+
+  .users-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+}

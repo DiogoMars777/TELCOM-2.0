@@ -1,0 +1,52 @@
+/**
+ * CU05 - Registrar Nuevo Cliente (estilos ACOTADOS a esta pantalla).
+ * -------------------------------------------------------------------
+ * Todas las reglas están bajo el contenedor `.cu05-view` (o el propio
+ * `.content-body` cuando contiene dicha vista), de modo que NO afectan a
+ * ninguna otra pantalla del panel. Se conserva el aspecto oscuro de TELCOM
+ * y el comportamiento responsive global (form-grid y media queries de
+ * `index.css`).
+ */
+
+/* -------------------------------------------------------------------------
+   Barra vertical (PROBLEMA 2)
+   Se OCULTA visualmente SOLO en el registro de clientes, sin desactivar el
+   desplazamiento: la rueda, el teclado, la barra del scroll y los gestos
+   táctiles siguen funcionando. El desplazamiento ocurre en `.content-body`
+   (que ya tiene `overflow-y: auto`), por lo que NO se usa `overflow: hidden`
+   ni se fija una altura que pudiera recortar los campos inferiores o el
+   botón «Registrar Cliente».
+   ------------------------------------------------------------------------- */
+.content-body:has(.cu05-view) {
+  scrollbar-width: none;      /* Firefox */
+  -ms-overflow-style: none;   /* Edge antiguo */
+}
+
+.content-body:has(.cu05-view)::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;              /* Chrome, Edge y Safari */
+}
+
+/* Texto de ayuda del selector de zona (carga / lista vacía / nº disponible) */
+.cu05-hint {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+}
+
+/* Botón «Reintentar» del estado de error: alineado a la derecha del aviso. */
+.cu05-retry {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* En pantallas estrechas el aviso con el botón se apila sin romper el layout. */
+@media (max-width: 480px) {
+  .content-body:has(.cu05-view) .alert {
+    flex-wrap: wrap;
+  }
+  .cu05-retry {
+    margin-left: 0;
+  }
+}

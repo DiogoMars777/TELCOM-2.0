@@ -1,0 +1,29 @@
+/**
+ * CU07 - Actualizar / Baja Cliente (estilos ACOTADOS a esta pantalla).
+ * -------------------------------------------------------------------
+ * Todas las reglas están bajo el contenedor `.cu07-view` (o el propio
+ * `.content-body` cuando contiene dicha vista), de modo que NO afectan a
+ * ninguna otra pantalla del panel. Se conserva el tema oscuro de TELCOM y
+ * el comportamiento responsive global (form-grid y media queries de
+ * `index.css`).
+ */
+
+/* -------------------------------------------------------------------------
+   Barra vertical
+   Se OCULTA visualmente SOLO en esta pantalla, sin desactivar el desplazamiento:
+   la rueda, el teclado, el trackpad y los gestos táctiles siguen funcionando.
+   El desplazamiento ocurre en `.content-body` (que ya tiene `overflow-y: auto`),
+   por lo que NO se usa `overflow: hidden` ni se fija una altura que pudiera
+   recortar el formulario, el selector de cliente o los botones inferiores
+   («Guardar Cambios» y «Dar Baja Lógica»).
+   ------------------------------------------------------------------------- */
+.content-body:has(.cu07-view) {
+  scrollbar-width: none;      /* Firefox */
+  -ms-overflow-style: none;   /* Edge antiguo */
+}
+
+.content-body:has(.cu07-view)::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;              /* Chrome, Edge y Safari */
+}

@@ -1,0 +1,141 @@
+/**
+ * CU06 - Consultar / Buscar Clientes (estilos ACOTADOS a esta pantalla).
+ * -------------------------------------------------------------------
+ * Todas las reglas están bajo `.cu06-view`, por lo que no afectan a otras
+ * pantallas. Se conserva el tema oscuro de TELCOM.
+ *
+ * - Escritorio y tablet: se mantiene la tabla actual; si no cabe, se desplaza
+ *   DENTRO de `.table-responsive` (nunca toda la página).
+ * - Móvil (<= 768px): cada fila de la tabla se muestra como una tarjeta con
+ *   los mismos datos (etiqueta + valor). No se usa `overflow: hidden` para
+ *   cortar contenido.
+ */
+
+/* -------------------------------------------------------------------------
+   Barra vertical
+   Se OCULTA visualmente SOLO en esta pantalla, sin desactivar el desplazamiento:
+   la rueda, el teclado, el trackpad y los gestos táctiles siguen funcionando.
+   El desplazamiento ocurre en `.content-body` (que ya tiene `overflow-y: auto`),
+   por lo que NO se usa `overflow: hidden` ni se fija una altura que pudiera
+   recortar la tabla o la última fila. El desplazamiento horizontal interno de
+   `.table-responsive` (si la tabla no cabe) se conserva intacto.
+   ------------------------------------------------------------------------- */
+.content-body:has(.cu06-view) {
+  scrollbar-width: none;      /* Firefox */
+  -ms-overflow-style: none;   /* Edge antiguo */
+}
+
+.content-body:has(.cu06-view)::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;              /* Chrome, Edge y Safari */
+}
+
+/* Celdas con varias líneas (contacto, dirección/zona). */
+.cu06-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.cu06-line {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cu06-muted {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+@media (max-width: 768px) {
+  /* --- Filtros: se apilan en una columna y ocupan todo el ancho --- */
+  .cu06-view .filters-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cu06-view .search-box,
+  .cu06-view .filter-item {
+    width: 100%;
+  }
+
+  .cu06-view .filter-item select {
+    flex: 1;
+  }
+
+  /* --- Tabla -> tarjetas legibles --- */
+  .cu06-view .table-responsive {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    overflow-x: visible;
+  }
+
+  .cu06-view .data-table,
+  .cu06-view .data-table tbody,
+  .cu06-view .data-table tr,
+  .cu06-view .data-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .cu06-view .data-table thead {
+    display: none;
+  }
+
+  .cu06-view .data-table tr {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 0.5rem 0.25rem;
+    margin-bottom: 0.85rem;
+  }
+
+  /* Se anula el hover de fila de la tabla compartida en formato tarjeta. */
+  .cu06-view .data-table tbody tr:hover {
+    background-color: var(--bg-card);
+  }
+
+  .cu06-view .data-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 0;
+    padding: 0.5rem 0.85rem;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  /* Etiqueta de cada dato, tomada del atributo `data-label` de la celda. */
+  .cu06-view .data-table td::before {
+    content: attr(data-label);
+    flex: 0 0 auto;
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-align: left;
+  }
+
+  .cu06-view .cu06-cell {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  /* Celdas del sistema (cargando / sin registros): centradas y sin etiqueta. */
+  .cu06-view .data-table td.cu06-status {
+    justify-content: center;
+    text-align: center;
+    color: #94a3b8;
+  }
+
+  .cu06-view .data-table td.cu06-status::before {
+    content: none;
+  }
+}

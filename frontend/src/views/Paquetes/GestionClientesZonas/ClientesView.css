@@ -1,0 +1,294 @@
+/**
+ * Módulo Unificado de Gestión de Clientes (CU05 + CU06 + CU07)
+ * Tema Oscuro TELCOM - Estilos Profesionales
+ */
+
+.clientes-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+/* Header con acciones */
+.clientes-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Celdas multilínea */
+.clientes-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.clientes-line {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.clientes-muted {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+/* Badge de zona */
+.clientes-zona-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  background: rgba(51, 65, 85, 0.4);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
+  max-width: fit-content;
+}
+
+/* Grupo de botones de acción en tabla */
+.clientes-actions-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-action-edit {
+  background: rgba(37, 99, 235, 0.15);
+  border-color: rgba(37, 99, 235, 0.3);
+  color: #60a5fa;
+}
+
+.btn-action-edit:hover:not(:disabled) {
+  background: rgba(37, 99, 235, 0.3);
+  color: #93c5fd;
+  border-color: rgba(37, 99, 235, 0.5);
+}
+
+.btn-action-baja {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #f87171;
+}
+
+.btn-action-baja:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.25);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.45);
+}
+
+.btn-action:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Modales para Clientes */
+.clientes-modal-card {
+  max-width: 640px;
+  width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.clientes-modal-card.modal-danger {
+  max-width: 480px;
+}
+
+.clientes-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.clientes-modal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.clientes-modal-icon-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: rgba(37, 99, 235, 0.15);
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.clientes-modal-icon-badge.danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger);
+}
+
+.clientes-modal-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.clientes-modal-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin: 0.15rem 0 0 0;
+}
+
+.clientes-modal-close {
+  background: transparent;
+  border: 0;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.35rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.clientes-modal-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+/* Resumen del cliente en modal de baja */
+.clientes-baja-summary {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+}
+
+.clientes-baja-summary strong {
+  color: var(--text-primary);
+}
+
+/* Contador de resultados */
+.clientes-counter {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-left: auto;
+  align-self: center;
+}
+
+/* Adaptación móvil (<= 768px) */
+@media (max-width: 768px) {
+  .clientes-view .filters-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .clientes-view .search-box,
+  .clientes-view .filter-item {
+    width: 100%;
+  }
+
+  .clientes-counter {
+    margin-left: 0;
+    text-align: center;
+    padding: 0.25rem 0;
+  }
+
+  .clientes-view .table-responsive {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    overflow-x: visible;
+  }
+
+  .clientes-view .data-table,
+  .clientes-view .data-table tbody,
+  .clientes-view .data-table tr,
+  .clientes-view .data-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .clientes-view .data-table thead {
+    display: none;
+  }
+
+  .clientes-view .data-table tr {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 0.65rem 0.4rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .clientes-view .data-table tbody tr:hover {
+    background-color: var(--bg-card);
+  }
+
+  .clientes-view .data-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 0;
+    padding: 0.45rem 0.85rem;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  .clientes-view .data-table td::before {
+    content: attr(data-label);
+    flex: 0 0 auto;
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-align: left;
+  }
+
+  .clientes-view .clientes-cell {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .clientes-view .clientes-actions-cell {
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .clientes-view .data-table td.clientes-status-cell {
+    justify-content: center;
+    text-align: center;
+    color: #94a3b8;
+  }
+
+  .clientes-view .data-table td.clientes-status-cell::before {
+    content: none;
+  }
+}

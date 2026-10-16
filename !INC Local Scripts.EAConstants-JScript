@@ -1,0 +1,73 @@
+!INC Local Scripts.EAConstants-JScript
+
+function Main()
+{
+    var currentPackage as EA.Package;
+    currentPackage = Repository.GetTreeSelectedPackage();
+    
+    if (currentPackage != null)
+    {
+        Session.Output("Iniciando la creación del modelo para el CU13...");
+        
+        // 1. Crear los Actores (Administrador y Secretaría)
+        var actAdmin = currentPackage.Elements.AddNew("Administrador", "Actor");
+        actAdmin.Update();
+        
+        var actSec = currentPackage.Elements.AddNew("Secretaria", "Actor");
+        actSec.Update();
+        
+        // 2. Crear el Caso de Uso Principal (CU13)
+        var cu13 = currentPackage.Elements.AddNew("CU13: Consultar listado de servicios para corte", "UseCase");
+        cu13.Update();
+        
+        // 3. Conectar Actores al Caso de Uso Principal
+        var connAdmin = actAdmin.Connectors.AddNew("", "Association");
+        connAdmin.SupplierID = cu13.ElementID;
+        connAdmin.Update();
+        
+        var connSec = actSec.Connectors.AddNew("", "Association");
+        connSec.SupplierID = cu13.ElementID;
+        connSec.Update();
+        
+        // 4. Crear los Casos de Uso con relaciones <<include>>
+        var inc1 = currentPackage.Elements.AddNew("Verificar estado de mora", "UseCase");
+        inc1.Update();
+        var connInc1 = cu13.Connectors.AddNew("", "Include");
+        connInc1.SupplierID = inc1.ElementID;
+        connInc1.Update();
+        
+        var inc2 = currentPackage.Elements.AddNew("Filtrar por zona de cobertura", "UseCase");
+        inc2.Update();
+        var connInc2 = cu13.Connectors.AddNew("", "Include");
+        connInc2.SupplierID = inc2.ElementID;
+        connInc2.Update();
+        
+        // 5. Crear los Casos de Uso con relaciones <<extend>>
+        var ext1 = currentPackage.Elements.AddNew("Exportar listado a PDF", "UseCase");
+        ext1.Update();
+        var connExt1 = ext1.Connectors.AddNew("", "Extend");
+        connExt1.SupplierID = cu13.ElementID;
+        connExt1.Update();
+        
+        var ext2 = currentPackage.Elements.AddNew("Exportar listado a Excel", "UseCase");
+        ext2.Update();
+        var connExt2 = ext2.Connectors.AddNew("", "Extend");
+        connExt2.SupplierID = cu13.ElementID;
+        connExt2.Update();
+        
+        var ext3 = currentPackage.Elements.AddNew("Ver detalle de cliente e IP", "UseCase");
+        ext3.Update();
+        var connExt3 = ext3.Connectors.AddNew("", "Extend");
+        connExt3.SupplierID = cu13.ElementID;
+        connExt3.Update();
+        
+        currentPackage.Elements.Refresh();
+        Session.Output("¡El diagrama del CU13 ha sido generado con éxito siguiendo el estándar de tu ejemplo!");
+    }
+    else
+    {
+        Session.Output("Por favor, selecciona un paquete en el Project Browser antes de ejecutar el script.");
+    }
+}
+
+Main();

@@ -1,0 +1,242 @@
+/* CU17 - Asignar o cambiar el plan de un servicio */
+
+/* -------------------------------------------------------------------------
+   Barra vertical (se OCULTA visualmente SOLO en esta pantalla, CU17).
+   El desplazamiento real ocurre en `.content-body` (que ya tiene
+   `overflow-y: auto`), por lo que la rueda, el teclado (flechas/AvPág) y los
+   gestos táctiles siguen funcionando. NO se usa `overflow: hidden` ni una
+   altura fija que pudiera recortar el historial ni el modal.
+   El desplazamiento HORIZONTAL interno de la tabla (`.table-responsive`)
+   se conserva: el selector solo aplica al propio `.content-body`, no a sus
+   descendientes. Mismo patrón ya usado por CU05.
+   ------------------------------------------------------------------------- */
+.content-body:has(.cu17-view) {
+  scrollbar-width: none;      /* Firefox */
+  -ms-overflow-style: none;   /* Edge antiguo */
+}
+
+.content-body:has(.cu17-view)::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;              /* Chrome, Edge y Safari */
+}
+
+.cu17-selector {
+  max-width: 520px;
+}
+
+/* -------------------------------------------------------------------------
+   Selector de servicio con búsqueda (combobox). Mantiene el tema oscuro de
+   TELCOM y funciona con mouse, teclado y pantalla táctil.
+   ------------------------------------------------------------------------- */
+.cu17-combobox {
+  position: relative;
+}
+
+.cu17-combobox-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cu17-combobox-icon {
+  position: absolute;
+  left: 0.7rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.cu17-combobox-input {
+  width: 100%;
+  padding-left: 2.15rem;
+}
+
+.cu17-combobox-list {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 0.35rem);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0.3rem;
+  list-style: none;
+  max-height: 320px;
+  overflow-y: auto;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.cu17-combobox-option {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15rem 0.6rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.cu17-combobox-option.is-active,
+.cu17-combobox-option:hover {
+  background-color: var(--bg-card-hover);
+}
+
+.cu17-combobox-option[aria-selected='true'] {
+  box-shadow: inset 2px 0 0 var(--info);
+}
+
+.cu17-combobox-code {
+  font-weight: 700;
+  color: var(--info);
+}
+
+.cu17-combobox-name {
+  color: var(--text-primary);
+}
+
+.cu17-combobox-doc {
+  flex-basis: 100%;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+.cu17-combobox-check {
+  margin-left: auto;
+  color: var(--success);
+  align-self: center;
+}
+
+.cu17-combobox-status {
+  padding: 0.7rem 0.65rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.cu17-hint {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+}
+
+.cu17-muted {
+  color: #94a3b8;
+}
+
+.cu17-current {
+  max-width: 520px;
+}
+
+.cu17-current-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cu17-price {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.cu17-history-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0.6rem 0;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.cu17-motivo {
+  max-width: 260px;
+  color: var(--text-secondary);
+}
+
+.cu17-empty {
+  text-align: center;
+  color: #94a3b8;
+}
+
+.cu17-modal-sub {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-top: -0.5rem;
+}
+
+.cu17-optional {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+/* Tarjetas para celular (ocultas por defecto; se muestran ≤640px). */
+.cu17-cards {
+  display: none;
+}
+
+.cu17-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.cu17-card + .cu17-card {
+  margin-top: 0.75rem;
+}
+
+.cu17-card-fields {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.cu17-card-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.cu17-card-field dt {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.cu17-card-field dd {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  overflow-wrap: break-word;
+}
+
+/* Tablet: si las columnas no caben, la tabla se desplaza DENTRO de su
+   contenedor (no arrastra a toda la página). */
+@media (max-width: 1024px) {
+  .cu17-table {
+    min-width: 720px;
+  }
+}
+
+/* Celular: tarjetas en lugar de tabla. */
+@media (max-width: 640px) {
+  .cu17-table-wrap {
+    display: none;
+  }
+
+  .cu17-cards {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .cu17-current,
+  .cu17-selector {
+    max-width: 100%;
+  }
+}

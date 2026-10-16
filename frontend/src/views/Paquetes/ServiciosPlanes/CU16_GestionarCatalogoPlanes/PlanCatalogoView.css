@@ -1,0 +1,137 @@
+/**
+ * CU16 - Catálogo de planes (estilos ACOTADOS bajo `.cu16-view`).
+ * Tema oscuro TELCOM. Escritorio/tablet: tabla desplazable dentro de su
+ * contenedor. Móvil (<= 768px): cada fila se convierte en tarjeta legible.
+ */
+
+.cu16-view .cu16-status {
+  text-align: center;
+  color: #94a3b8;
+}
+
+.cu16-view .cu16-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.cu16-view .cu16-desc {
+  max-width: 320px;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.cu16-view .modal-card input,
+.cu16-view .modal-card select,
+.cu16-view .modal-card textarea {
+  width: 100%;
+}
+
+.cu16-view .cu16-check label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.cu16-view .cu16-check input[type='checkbox'] {
+  width: auto;
+}
+
+.cu16-view .cu16-alert-close {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .cu16-view .filters-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cu16-view .search-box,
+  .cu16-view .filter-item {
+    width: 100%;
+  }
+
+  .cu16-view .filter-item select {
+    flex: 1;
+  }
+
+  .cu16-view .table-responsive {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    overflow-x: visible;
+  }
+
+  .cu16-view .data-table,
+  .cu16-view .data-table tbody,
+  .cu16-view .data-table tr,
+  .cu16-view .data-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .cu16-view .data-table thead {
+    display: none;
+  }
+
+  .cu16-view .data-table tr {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 0.5rem 0.25rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .cu16-view .data-table tbody tr:hover {
+    background-color: var(--bg-card);
+  }
+
+  .cu16-view .data-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 0;
+    padding: 0.5rem 0.85rem;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  .cu16-view .data-table td::before {
+    content: attr(data-label);
+    flex: 0 0 auto;
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-align: left;
+  }
+
+  .cu16-view .data-table td.cu16-status {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .cu16-view .data-table td.cu16-status::before {
+    content: none;
+  }
+
+  .cu16-view .cu16-actions {
+    justify-content: flex-end;
+  }
+
+  .cu16-view .cu16-desc {
+    max-width: none;
+  }
+}

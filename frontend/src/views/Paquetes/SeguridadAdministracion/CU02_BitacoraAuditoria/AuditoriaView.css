@@ -1,0 +1,229 @@
+/*
+ * CU02 - Bitácora de Auditoría.
+ * -------------------------------------------------------------------
+ * Estilos propios de la pantalla. Se apoyan en las variables y clases
+ * globales (index.css) para conservar el aspecto oscuro de TELCOM.
+ *
+ * - Filtros: usuario (primero) y acción (segundo), adaptativos.
+ * - Tabla: layout fijo con columnas proporcionadas y texto que se ajusta
+ *   (nunca se corta ni se monta una columna sobre otra).
+ * - En tablets, si la tabla no cabe, se desplaza dentro de su contenedor
+ *   (`.table-responsive`), nunca toda la página.
+ * - En celulares, cada registro se muestra como tarjeta.
+ */
+
+/* Ocultar barra vertical solo en esta pantalla (sin overflow:hidden) */
+.content-body:has(.cu02-view) {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.content-body:has(.cu02-view)::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Filtros                                                             */
+/* ------------------------------------------------------------------ */
+.audit-filters .filter-item {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
+.audit-filters .filter-item select {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Celda de usuario (nombre + correo apilados)                        */
+/* ------------------------------------------------------------------ */
+.user-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  line-height: 1.25;
+}
+
+.user-cell strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.user-cell small {
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tabla                                                               */
+/* ------------------------------------------------------------------ */
+.audit-table-wrap {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.audit-table {
+  table-layout: fixed;
+  width: 100%;
+  min-width: 780px;
+}
+
+.audit-table th,
+.audit-table td {
+  padding: 0.75rem 0.85rem;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+/* Anchos proporcionados: se mantienen legibles sin cortarse. */
+.audit-table .audit-col-id { width: 8%; }
+.audit-table .audit-col-user { width: 20%; }
+.audit-table .audit-col-module { display: none; }
+.audit-table .audit-col-action { width: 14%; }
+.audit-table .audit-col-details { width: 30%; }
+.audit-table .audit-col-ip { width: 12%; }
+.audit-table .audit-col-date { width: 16%; }
+
+/* Los badges con nombres largos (p. ej. módulos) deben poder partirse. */
+.audit-table .badge {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.25;
+}
+
+.audit-table code {
+  overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------------ */
+/* Estado vacío                                                        */
+/* ------------------------------------------------------------------ */
+.audit-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem 1rem;
+  color: var(--text-secondary);
+  background-color: var(--bg-card);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tarjetas (celulares)                                                */
+/* ------------------------------------------------------------------ */
+.audit-cards {
+  display: none;
+}
+
+.audit-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.audit-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.audit-card-id {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--info);
+}
+
+.audit-card-date {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+.audit-card-user {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.audit-card-user strong {
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.audit-card-user small {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.audit-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.audit-card-badges .badge {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.audit-card-details {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.audit-card-ip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.audit-card-ip span {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.audit-card-ip code {
+  font-size: 0.78rem;
+  color: var(--info);
+  overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------------ */
+/* Celulares: se oculta la tabla y se muestran las tarjetas.          */
+/* ------------------------------------------------------------------ */
+@media (max-width: 640px) {
+  .audit-table-wrap {
+    display: none;
+  }
+
+  .audit-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+}

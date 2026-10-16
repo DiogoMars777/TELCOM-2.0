@@ -1,0 +1,190 @@
+/**
+ * CU04 - Zonas de Cobertura (estilos ACOTADOS a esta pantalla).
+ * -------------------------------------------------------------------
+ * No modifica los modales ni los estilos de otras pantallas: todas las
+ * reglas están bajo un contenedor propio (`.cu04-modal`, `.cu04-*`).
+ */
+
+/* Modal más ancho SOLO para CU04 (el mapa necesita espacio).
+   Se usa `.modal-card.cu04-modal` para superar la especificidad del
+   `.modal-card` compartido. En pantallas pequeñas se ajusta en los
+   media queries de abajo. */
+.modal-card.cu04-modal {
+  max-width: 880px;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+}
+
+/* Barrio o sector en las tarjetas */
+.cu04-barrio {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.cu04-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.cu04-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.25rem;
+}
+
+.cu04-optional {
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Vista previa del área dibujada (SVG, sin teselas) */
+.cu04-area-preview {
+  display: block;
+  width: 100%;
+  height: 110px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+.cu04-area-preview polygon {
+  fill: rgba(56, 189, 248, 0.25);
+  stroke: #38bdf8;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Mapa de dibujo */
+.cu04-map-group {
+  gap: 0.5rem;
+}
+
+.cu04-map-wrap {
+  position: relative;
+}
+
+.cu04-map {
+  width: 100%;
+  height: 340px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #0f172a;
+  /* El gesto sobre el mapa dibuja/desplaza el mapa, no la página. */
+  touch-action: none;
+}
+
+.cu04-map.leaflet-container {
+  background: #0f172a;
+}
+
+/* Atribución legible sobre el fondo oscuro de TELCOM */
+.cu04-map .leaflet-control-attribution {
+  background: rgba(15, 23, 42, 0.75);
+  color: #cbd5e1;
+}
+
+.cu04-map .leaflet-control-attribution a {
+  color: #38bdf8;
+}
+
+.cu04-map-note {
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.cu04-map-warning {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: #fbbf24;
+}
+
+.cu04-map-fallback {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 96px;
+  padding: 1rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+@media (max-width: 1024px) {
+  .modal-card.cu04-modal {
+    max-width: calc(100vw - 2rem);
+  }
+  .cu04-map {
+    height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-card.cu04-modal {
+    max-width: calc(100vw - 1.5rem);
+  }
+  .cu04-map {
+    height: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-card.cu04-modal {
+    max-width: calc(100vw - 1.5rem);
+    padding: 1.25rem;
+  }
+  .cu04-map {
+    height: 240px;
+  }
+  /* Botones apilados y a lo ancho para uso táctil */
+  .cu04-modal .modal-actions {
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+  }
+  .cu04-modal .modal-actions .btn {
+    width: 100%;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Responsive acotado (tema oscuro TELCOM). No se usa `overflow: hidden`
+   para cortar contenido: el modal ya se desplaza dentro de sí mismo
+   (`.cu04-modal { overflow-y: auto }`), por lo que ningún campo, botón ni
+   el mapa quedan fuera de alcance.
+   ------------------------------------------------------------------ */
+
+/* En pantallas estrechas la tarjeta mínima se adapta al ancho disponible y
+   el listado de zonas no provoca desborde horizontal de la página. */
+.cu04-view .grid-cards {
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+}
+
+@media (max-width: 768px) {
+  /* Controles del mapa (zoom de Leaflet y barra de Geoman) con un área
+     táctil cómoda, siempre visibles dentro del mapa. */
+  .cu04-view .cu04-map .leaflet-touch .leaflet-bar a,
+  .cu04-view .cu04-map .leaflet-pm-toolbar .leaflet-buttons-control-button {
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+
+/* Ocultar barra vertical solo en esta pantalla (sin overflow:hidden) */
+.content-body:has(.cu04-view) {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.content-body:has(.cu04-view)::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}

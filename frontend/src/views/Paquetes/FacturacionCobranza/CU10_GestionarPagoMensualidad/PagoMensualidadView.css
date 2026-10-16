@@ -1,0 +1,840 @@
+/**
+ * CU10 - Gestionar Pago de Mensualidad (Cobranza TELCOM)
+ * Diseño Moderno, Oscuro y 100% Responsivo
+ */
+
+.cu10-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+/* Disposición principal a dos columnas en escritorio */
+.cu10-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+/* Columna Izquierda: Facturas Pendientes */
+.cu10-pendientes-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: calc(100vh - 160px);
+  position: sticky;
+  top: 1rem;
+}
+
+.cu10-pendientes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cu10-pendientes-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.cu10-pendientes-counter {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary);
+  background: rgba(37, 99, 235, 0.15);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.cu10-pendientes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+/* Tarjeta individual de factura pendiente */
+.cu10-factura-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: left;
+}
+
+.cu10-factura-card:hover {
+  border-color: rgba(37, 99, 235, 0.5);
+  background: rgba(30, 41, 59, 0.7);
+  transform: translateY(-1px);
+}
+
+.cu10-factura-card.is-selected {
+  border-color: var(--primary);
+  background: rgba(37, 99, 235, 0.12);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.cu10-factura-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cu10-factura-code {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.cu10-factura-monto {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #34d399;
+}
+
+.cu10-factura-cliente {
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.cu10-factura-row-sub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Columna Derecha: Panel de Cobranza */
+.cu10-cobranza-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Resumen superior de la factura seleccionada */
+.cu10-detalle-factura-box {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.cu10-detalle-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.cu10-detalle-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.cu10-detalle-val {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.cu10-detalle-val.destacado {
+  font-size: 1.25rem;
+  color: #34d399;
+}
+
+/* Selector de Métodos de Pago (Pestañas visuales) */
+.cu10-metodos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+}
+
+.cu10-metodo-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.85rem 0.5rem;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.cu10-metodo-btn:hover {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text-primary);
+}
+
+.cu10-metodo-btn.active {
+  background: rgba(37, 99, 235, 0.15);
+  border-color: var(--primary);
+  color: #60a5fa;
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.25);
+}
+
+/* Tarjeta interactiva del método de pago activo */
+.cu10-metodo-content {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* --- Panel EFECTIVO --- */
+.cu10-efectivo-calc {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.cu10-vuelto-card {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cu10-vuelto-card.faltante {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.cu10-vuelto-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.cu10-vuelto-monto {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #34d399;
+}
+
+.cu10-vuelto-card.faltante .cu10-vuelto-monto {
+  color: #f87171;
+}
+
+.cu10-quick-cash {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.cu10-cash-chip {
+  background: rgba(51, 65, 85, 0.4);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cu10-cash-chip:hover {
+  background: rgba(37, 99, 235, 0.25);
+  border-color: var(--primary);
+}
+
+/* --- Panel QR Oficial (Simple QR / Red Interbancaria ASOBAN) --- */
+.cu10-qr-card-container {
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  max-width: 360px;
+  width: 100%;
+  margin: 0 auto;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.45), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.9rem;
+  border: 1px solid #cbd5e1;
+}
+
+.cu10-qr-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.cu10-qr-brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #004b87;
+  color: #ffffff;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+}
+
+.cu10-qr-brand-text {
+  font-weight: 900;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+}
+
+.cu10-qr-brand-sub {
+  background: #0284c7;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.cu10-qr-interbank-text {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cu10-qr-display-frame {
+  background: #f8fafc;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  border: 1px dashed #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 240px;
+  height: 240px;
+}
+
+.cu10-qr-image-wrapper {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cu10-qr-img {
+  width: 220px;
+  height: 220px;
+  object-fit: contain;
+  border-radius: 6px;
+  display: block;
+}
+
+.cu10-qr-center-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 38px;
+  height: 38px;
+  background: #004b87;
+  color: #ffffff;
+  border: 3px solid #ffffff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.cu10-qr-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #64748b;
+  height: 100%;
+}
+
+.cu10-qr-amount-banner {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cu10-qr-amount-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.cu10-qr-amount-val {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #059669;
+}
+
+.cu10-qr-instruction {
+  font-size: 0.74rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.cu10-qr-action-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.cu10-qr-buttons {
+  width: 100%;
+}
+
+.cu10-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.cu10-status-pill.esperando {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.cu10-status-pill.detectado {
+  background: rgba(37, 99, 235, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(37, 99, 235, 0.3);
+}
+
+.cu10-status-pill.confirmado {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* --- Panel TRANSFERENCIA BANCARIA (Tarjeta de Débito / Cuenta en Línea) --- */
+.cu10-card-preview {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  max-width: 380px;
+  width: 100%;
+  margin: 0 auto 1rem auto;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.cu10-card-preview::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.25) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.cu10-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cu10-card-chip {
+  width: 38px;
+  height: 28px;
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+  border-radius: 4px;
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.4);
+}
+
+.cu10-card-bank {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.cu10-card-number {
+  font-family: 'Courier New', monospace;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #ffffff;
+  margin: 0.5rem 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.cu10-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.cu10-card-holder-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.cu10-card-holder-label {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cu10-card-holder-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cu10-card-expires-group {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.cu10-card-expires-label {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.cu10-card-expires-val {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.cu10-banco-cuenta-card {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(37, 99, 235, 0.3);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+/* --- Panel PAYPAL --- */
+.cu10-paypal-box {
+  background: linear-gradient(135deg, rgba(0, 48, 135, 0.25) 0%, rgba(0, 121, 193, 0.15) 100%);
+  border: 1px solid rgba(0, 121, 193, 0.4);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cu10-paypal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cu10-paypal-logo {
+  font-size: 1.25rem;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: -0.5px;
+  color: #0079c1;
+}
+
+.cu10-paypal-logo span {
+  color: #00457c;
+}
+
+.btn-paypal-checkout {
+  background: #ffc439;
+  color: #111827;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 9999px;
+  border: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(255, 196, 57, 0.25);
+}
+
+.btn-paypal-checkout:hover {
+  background: #f4b400;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(255, 196, 57, 0.35);
+}
+
+/* --- RECIBO OFICIAL (Imprimible) --- */
+.cu10-recibo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 650px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.cu10-recibo-card {
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: var(--radius-lg);
+  padding: 2.25rem;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  border: 1px solid #cbd5e1;
+}
+
+.cu10-recibo-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 2px dashed #94a3b8;
+  padding-bottom: 1.25rem;
+}
+
+.cu10-recibo-empresa h2 {
+  color: #0f172a;
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.cu10-recibo-empresa p {
+  color: #64748b;
+  font-size: 0.8rem;
+  margin: 0.2rem 0 0 0;
+}
+
+.cu10-recibo-nro {
+  text-align: right;
+}
+
+.cu10-recibo-nro .badge-recibo {
+  background: #2563eb;
+  color: #ffffff;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.cu10-recibo-nro p {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0.35rem 0 0 0;
+}
+
+.cu10-recibo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1.5rem;
+  font-size: 0.85rem;
+}
+
+.cu10-recibo-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.cu10-recibo-item span:first-child {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.cu10-recibo-item span:last-child {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.cu10-recibo-total-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cu10-recibo-total-box span:first-child {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #334155;
+  text-transform: uppercase;
+}
+
+.cu10-recibo-total-box .monto-grande {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #059669;
+}
+
+.cu10-recibo-footer {
+  border-top: 1px dashed #cbd5e1;
+  padding-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.cu10-recibo-actions {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  justify-content: center;
+}
+
+/* Adaptación a dispositivos móviles y tablets */
+@media (max-width: 992px) {
+  .cu10-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .cu10-pendientes-panel {
+    position: static;
+    max-height: 380px;
+  }
+}
+
+@media (max-width: 640px) {
+  .cu10-metodos-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cu10-efectivo-calc {
+    grid-template-columns: 1fr;
+  }
+
+  .cu10-qr-wrapper {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .cu10-recibo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cu10-recibo-header {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .cu10-recibo-nro {
+    text-align: left;
+  }
+}
+
+/* Reglas de Impresión (@media print) */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .cu10-recibo-card,
+  .cu10-recibo-card * {
+    visibility: visible;
+  }
+
+  .cu10-recibo-card {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 1.5rem;
+    box-shadow: none;
+    border: 0;
+  }
+
+  .cu10-recibo-actions,
+  .app-sidebar,
+  .app-header,
+  .view-header {
+    display: none !important;
+  }
+}

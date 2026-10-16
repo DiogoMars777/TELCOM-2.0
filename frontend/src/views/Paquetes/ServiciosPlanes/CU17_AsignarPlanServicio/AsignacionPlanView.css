@@ -1,0 +1,279 @@
+/**
+ * CU17 - Asignar plan a un servicio (estilos ACOTADOS bajo `.cu17-view`).
+ * Tema oscuro TELCOM. Dos columnas en escritorio; una columna en tablet/móvil.
+ * El historial se desplaza dentro de `.table-responsive` y en móvil pasa a
+ * tarjetas para no provocar desbordamiento horizontal.
+ */
+
+.cu17-view .cu17-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.cu17-view .cu17-alert-close {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.25rem;
+}
+
+/* Lista de servicios */
+.cu17-view .cu17-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.cu17-view .cu17-servicio {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  align-items: stretch;
+  text-align: left;
+  width: 100%;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.8rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.cu17-view .cu17-servicio:hover {
+  border-color: var(--border-focus);
+}
+
+.cu17-view .cu17-servicio.is-selected {
+  border-color: var(--primary);
+  background-color: var(--bg-card-hover);
+}
+
+.cu17-view .cu17-servicio-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.cu17-view .cu17-servicio-cliente {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.cu17-view .cu17-servicio-plan {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+}
+
+/* Panel de detalle */
+.cu17-view .cu17-detail {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.cu17-view .cu17-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cu17-view .cu17-detail-header h3 {
+  color: #fff;
+  font-size: 1.15rem;
+}
+
+.cu17-view .cu17-resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+  padding: 0.85rem;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+.cu17-view .cu17-resumen > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.cu17-view .cu17-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+.cu17-view .cu17-resumen strong {
+  color: #fff;
+  overflow-wrap: anywhere;
+}
+
+.cu17-view .cu17-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.cu17-view .cu17-form h4,
+.cu17-view .cu17-historial h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.cu17-view .cu17-form input,
+.cu17-view .cu17-form select {
+  width: 100%;
+}
+
+.cu17-view .cu17-form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cu17-view .cu17-historial {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.cu17-view .cu17-vigente {
+  background-color: rgba(16, 185, 129, 0.06);
+}
+
+.cu17-view .cu17-motivo {
+  max-width: 240px;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.cu17-view .cu17-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 3rem 1rem;
+}
+
+.cu17-view .cu17-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  text-align: center;
+  color: #94a3b8;
+  padding: 0.5rem;
+}
+
+/* Tablet: lista arriba, detalle abajo */
+@media (max-width: 1024px) {
+  .cu17-view .cu17-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .cu17-view .cu17-list {
+    max-height: 320px;
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .cu17-view .table-responsive {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    overflow-x: visible;
+  }
+
+  .cu17-view .data-table,
+  .cu17-view .data-table tbody,
+  .cu17-view .data-table tr,
+  .cu17-view .data-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .cu17-view .data-table thead {
+    display: none;
+  }
+
+  .cu17-view .data-table tr {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 0.25rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .cu17-view .data-table tbody tr:hover {
+    background-color: var(--bg-card);
+  }
+
+  .cu17-view .data-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 0;
+    padding: 0.5rem 0.85rem;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  .cu17-view .data-table td::before {
+    content: attr(data-label);
+    flex: 0 0 auto;
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-align: left;
+  }
+
+  .cu17-view .data-table td.cu17-status {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .cu17-view .data-table td.cu17-status::before {
+    content: none;
+  }
+
+  .cu17-view .cu17-motivo {
+    max-width: none;
+  }
+}
