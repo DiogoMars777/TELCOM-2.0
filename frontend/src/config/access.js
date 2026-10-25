@@ -36,6 +36,7 @@ export const CU_PERMISSIONS = {
   CU15: 'reactivaciones.manage',
   CU16: 'planes.manage',
   CU17: 'planes.view',
+  CU20: 'equipos.view',
 };
 
 /**
@@ -43,7 +44,7 @@ export const CU_PERMISSIONS = {
  * El primero permitido para el usuario será el que se muestre.
  */
 export const CU_ORDER = [
-  'CU06', 'CU05', 'CU07', 'CU08', 'CU16', 'CU17', 'CU09', 'CU10', 'CU11',
+  'CU06', 'CU05', 'CU07', 'CU08', 'CU16', 'CU17', 'CU20', 'CU09', 'CU10', 'CU11',
   'CU12', 'CU13', 'CU14', 'CU15', 'CU02', 'CU03', 'CU04', 'CU01',
 ];
 

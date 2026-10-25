@@ -6,7 +6,7 @@ import LoginView from './views/Paquetes/SeguridadAdministracion/CU01_IniciarCerr
 import SesionView from './views/Paquetes/SeguridadAdministracion/CU01_IniciarCerrarSesion/SesionView';
 import CambiarPasswordView from './views/Paquetes/SeguridadAdministracion/CU01_IniciarCerrarSesion/CambiarPasswordView';
 
-// Vistas de los Casos de Uso (módulos administrativos, CU02-CU17)
+// Vistas de los Casos de Uso (módulos administrativos)
 import AuditoriaView from './views/Paquetes/SeguridadAdministracion/CU02_BitacoraAuditoria/AuditoriaView';
 import UsuariosView from './views/Paquetes/SeguridadAdministracion/CU03_UsuariosRolesPermisos/UsuariosView';
 import ZonasCoberturaView from './views/Paquetes/GestionClientesZonas/CU04_ZonasCobertura/ZonasCoberturaView';
@@ -21,6 +21,7 @@ import CorteRegistroView from './views/Paquetes/ServiciosPlanes/CU14_RegistrarCo
 import ReactivacionesView from './views/Paquetes/ServiciosPlanes/CU15_ListaRegistroReactivaciones/ReactivacionesView';
 import PlanesInternetView from './views/Paquetes/ServiciosPlanes/CU16_GestionarCatalogoPlanes/PlanesInternetView';
 import AsignarPlanView from './views/Paquetes/ServiciosPlanes/CU17_AsignarCambiarPlanInternet/AsignarPlanView';
+import EquipoReemplazoRetiroView from './views/Paquetes/EquiposProveedoresInventario/CU20_ReemplazarRetirarEquipo/EquipoReemplazoRetiroView';
 
 // Iconos de cada módulo del panel
 import {
@@ -221,6 +222,12 @@ export default function App() {
       ],
     },
     {
+      title: 'Equipos e Inventario',
+      items: [
+        { id: 'CU20', label: 'Reemplazar / Retirar Equipo', icon: Router },
+      ],
+    },
+    {
       title: 'Mensualidades & Pagos',
       items: [
         { id: 'CU09', label: 'Generar Mensualidades', icon: Calendar },
@@ -303,6 +310,8 @@ export default function App() {
         return <PlanesInternetView user={currentUser} />;
       case 'CU17':
         return <AsignarPlanView user={currentUser} />;
+      case 'CU20':
+        return <EquipoReemplazoRetiroView user={currentUser} />;
       default:
         return <ClientesView user={currentUser} />;
     }
