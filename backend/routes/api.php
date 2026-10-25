@@ -38,11 +38,13 @@ use App\Http\Controllers\Paquetes\ServiciosPlanes\CU15_ListaRegistroReactivacion
 use App\Http\Controllers\Paquetes\ServiciosPlanes\CU16_GestionarCatalogoPlanes\PlanInternetController;
 // CU17: Asignar o cambiar el plan de un servicio (entidad UML AsignacionPlan)
 use App\Http\Controllers\Paquetes\ServiciosPlanes\CU17_AsignarCambiarPlanInternet\AsignacionPlanController;
+// CU20: Reemplazar o retirar equipo de un servicio
+use App\Http\Controllers\Paquetes\EquiposProveedoresInventario\CU20_ReemplazarRetirarEquipo\EquipoReemplazoRetiroController;
 
 /*
 |--------------------------------------------------------------------------
 | RUTAS API - TELCOM SISTEMA DE TELECOMUNICACIONES
-| Estructura MVC orientada a Casos de Uso (CU01 - CU17)
+| Estructura MVC orientada a Casos de Uso (CU01 - CU17, CU20)
 |--------------------------------------------------------------------------
 | - CU01 /login es la ÚNICA ruta pública (permite obtener el token).
 | - CU01 /logout y /me, y TODAS las rutas CU02-CU15 exigen auth:sanctum.
@@ -245,4 +247,16 @@ Route::prefix('cu08/servicios/{servicio}/planes')->group(function () {
         ->middleware(['auth:sanctum', 'permission:planes.view']);
     Route::post('/', [AsignacionPlanController::class, 'store'])
         ->middleware(['auth:sanctum', 'permission:planes.assign']);
+});
+
+// CU20: Reemplazar o retirar equipo conservando el historial (admin, secretaría y técnico).
+Route::prefix('cu20')->middleware('auth:sanctum')->group(function () {
+    Route::get('/servicios/{servicio}/equipo', [EquipoReemplazoRetiroController::class, 'consultar'])
+        ->middleware('permission:equipos.view');
+    Route::get('/equipos/disponibles', [EquipoReemplazoRetiroController::class, 'disponibles'])
+        ->middleware('permission:equipos.view');
+    Route::post('/servicios/{servicio}/equipo/reemplazar', [EquipoReemplazoRetiroController::class, 'reemplazar'])
+        ->middleware('permission:equipos.assign');
+    Route::post('/servicios/{servicio}/equipo/retirar', [EquipoReemplazoRetiroController::class, 'retirar'])
+        ->middleware('permission:equipos.assign');
 });
