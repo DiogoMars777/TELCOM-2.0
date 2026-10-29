@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
-    "test": "node --test tests/apiClient.test.js tests/models.test.js tests/access.test.js tests/auth.test.js tests/authBootstrap.test.js tests/rolesPermisos.test.js tests/passwordPolicy.test.js tests/cambiarPassword.test.js tests/recuperarPassword.test.js tests/zonasCobertura.test.js tests/clienteRegistro.test.js tests/planes.test.js tests/servicioBuscador.test.js",
+    "test": "node --test tests/apiClient.test.js tests/models.test.js tests/access.test.js tests/auth.test.js tests/authBootstrap.test.js tests/rolesPermisos.test.js tests/passwordPolicy.test.js tests/cambiarPassword.test.js tests/recuperarPassword.test.js tests/zonasCobertura.test.js tests/clienteRegistro.test.js tests/planes.test.js tests/servicioBuscador.test.js tests/cu19AsignacionEquipo.test.js",
     "preview": "vite preview"
   },
   "dependencies": {

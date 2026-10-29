@@ -1,0 +1,651 @@
+/* CU19 - Asignar Equipo en Comodato Styles (Dark Theme - TELCOM) */
+
+.cu19-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cu19-grid-main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 992px) {
+  .cu19-grid-main {
+    grid-template-columns: 380px 1fr;
+  }
+}
+
+/* Panel de selección y detalle del servicio */
+.cu19-service-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cu19-search-box {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.cu19-service-list {
+  max-height: 280px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+}
+
+.cu19-service-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cu19-service-item:last-child {
+  border-bottom: none;
+}
+
+.cu19-service-item:hover {
+  background-color: var(--bg-card-hover);
+}
+
+.cu19-service-item.selected {
+  background-color: rgba(2, 132, 199, 0.18);
+  border-left: 4px solid var(--info);
+}
+
+.cu19-service-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cu19-service-code {
+  font-weight: 600;
+  color: var(--info);
+  font-size: 0.9rem;
+}
+
+.cu19-service-client {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Tarjeta del servicio activo seleccionado */
+.cu19-selected-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.cu19-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.cu19-card-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.cu19-meta-label {
+  color: var(--text-muted);
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.cu19-meta-value {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Equipo en comodato actual */
+.cu19-current-comodato {
+  margin-top: 1rem;
+  padding: 0.85rem;
+  border-radius: var(--radius-sm);
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: var(--text-primary);
+}
+
+.cu19-current-comodato-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--success);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cu19-current-comodato-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #a7f3d0;
+  margin-top: 0.2rem;
+}
+
+.cu19-current-comodato-meta {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 0.2rem;
+}
+
+.cu19-current-comodato-date {
+  font-size: 0.75rem;
+  color: #6ee7b7;
+  margin-top: 0.2rem;
+}
+
+.cu19-current-empty {
+  margin-top: 1rem;
+  padding: 0.85rem;
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  border: 1px dashed var(--border-color);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Panel de equipos disponibles en stock */
+.cu19-equipos-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cu19-filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.cu19-type-tabs {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.cu19-tab-btn {
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-weight: 500;
+}
+
+.cu19-tab-btn:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.cu19-tab-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--info);
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+/* Controles de vista (Plegar/Desplegar y Modos de Visualización) */
+.cu19-controls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-bottom: 0.25rem;
+}
+
+.cu19-view-modes {
+  display: flex;
+  gap: 0.25rem;
+  background: var(--bg-input);
+  padding: 0.2rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.cu19-view-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 0.3rem 0.65rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cu19-view-btn:hover {
+  color: var(--text-primary);
+}
+
+.cu19-view-btn.active {
+  background: var(--bg-card);
+  color: var(--info);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+.cu19-toggle-all-btn {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cu19-toggle-all-btn:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  border-color: var(--border-focus);
+}
+
+/* Envoltorio con Scroll Máximo para mantener la pantalla compacta */
+.cu19-equipos-scroll-wrap {
+  max-height: 560px;
+  overflow-y: auto;
+  padding-right: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+.cu19-equipos-scroll-wrap::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cu19-equipos-scroll-wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cu19-equipos-scroll-wrap::-webkit-scrollbar-thumb {
+  background-color: var(--border-color);
+  border-radius: 4px;
+}
+
+/* Acordeón Plegable por Modelo de Equipo */
+.cu19-accordion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.cu19-accordion-item {
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cu19-accordion-item:hover {
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.cu19-accordion-item.open {
+  border-color: var(--border-focus);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.cu19-accordion-header {
+  padding: 0.9rem 1.15rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  background: var(--bg-sidebar);
+  transition: background-color 0.15s ease;
+  user-select: none;
+}
+
+.cu19-accordion-header:hover {
+  background: var(--bg-card-hover);
+}
+
+.cu19-accordion-title-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.cu19-accordion-badges {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.cu19-accordion-model {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cu19-accordion-desc {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.cu19-accordion-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.cu19-accordion-toggle-btn {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.15s ease;
+}
+
+.cu19-accordion-toggle-btn:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-focus);
+}
+
+.cu19-accordion-body {
+  padding: 1rem 1.15rem;
+  background: rgba(11, 17, 32, 0.5);
+  border-top: 1px solid var(--border-color);
+}
+
+/* Lista/Grid de equipos */
+.cu19-equipos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.cu19-equipo-card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  background: var(--bg-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.cu19-equipo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-focus);
+}
+
+.cu19-equipo-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.cu19-equipo-model {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.cu19-equipo-name {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.cu19-equipo-tech {
+  font-family: monospace;
+  font-size: 0.8rem;
+  background: var(--bg-input);
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.cu19-equipo-tech-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.2rem;
+}
+
+.cu19-equipo-tech-row:last-child {
+  margin-bottom: 0;
+}
+
+.cu19-equipo-tech-row strong {
+  color: var(--text-primary);
+}
+
+/* Modal de Asignación / Retiro (Tema Oscuro TELCOM) */
+.cu19-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(9, 13, 22, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  padding: 1rem;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.cu19-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 560px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  color: var(--text-primary);
+  animation: cu19ModalFadeIn 0.2s ease-out;
+}
+
+@keyframes cu19ModalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.cu19-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.cu19-modal-header h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cu19-modal-close {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cu19-modal-close:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+}
+
+.cu19-modal-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  max-height: 75vh;
+  overflow-y: auto;
+  color: var(--text-primary);
+}
+
+.cu19-modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Cajas de resumen dentro del modal */
+.cu19-summary-box {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  font-size: 0.85rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  color: var(--text-primary);
+}
+
+.cu19-summary-box strong {
+  color: var(--text-secondary);
+  margin-right: 0.35rem;
+}
+
+.cu19-summary-box span {
+  color: var(--text-primary);
+}
+
+.cu19-summary-highlight {
+  background: rgba(2, 132, 199, 0.12);
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.cu19-summary-highlight strong {
+  color: var(--info);
+}
+
+.cu19-mono-val {
+  font-family: monospace;
+  font-size: 0.82rem;
+  color: var(--text-primary);
+}
+
+.cu19-replace-box {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+}
+
+/* Historial de comodatos */
+.cu19-history-section {
+  margin-top: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+}
+
+.cu19-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+}
+
+.cu19-history-table th {
+  text-align: left;
+  padding: 0.65rem 0.75rem;
+  background: var(--bg-input);
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.cu19-history-table td {
+  padding: 0.7rem 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}

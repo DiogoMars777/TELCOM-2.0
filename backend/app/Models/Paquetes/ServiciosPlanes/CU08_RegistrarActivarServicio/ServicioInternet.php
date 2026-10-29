@@ -163,6 +163,16 @@ class ServicioInternet extends Model
         return $this->hasOne(AsignacionPlan::class, 'idServicio', 'idServicio')->whereNull('fechaFin');
     }
 
+    public function asignacionesEquipo()
+    {
+        return $this->hasMany(\App\Models\Paquetes\EquiposInventario\CU19_AsignarEquipoComodato\AsignacionEquipo::class, 'idServicio', 'idServicio');
+    }
+
+    public function equipoComodatoActual()
+    {
+        return $this->hasOne(\App\Models\Paquetes\EquiposInventario\CU19_AsignarEquipoComodato\AsignacionEquipo::class, 'idServicio', 'idServicio')->whereNull('fechaRetiro');
+    }
+
     public function getIdAttribute(): ?int
     {
         return isset($this->attributes['idServicio']) ? (int) $this->attributes['idServicio'] : null;
