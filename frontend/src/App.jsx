@@ -21,13 +21,15 @@ import CorteRegistroView from './views/Paquetes/ServiciosPlanes/CU14_RegistrarCo
 import ReactivacionesView from './views/Paquetes/ServiciosPlanes/CU15_ListaRegistroReactivaciones/ReactivacionesView';
 import PlanesInternetView from './views/Paquetes/ServiciosPlanes/CU16_GestionarCatalogoPlanes/PlanesInternetView';
 import AsignarPlanView from './views/Paquetes/ServiciosPlanes/CU17_AsignarCambiarPlanInternet/AsignarPlanView';
+import EquiposView from './views/Paquetes/EquiposInventario/CU18_RegistrarCatalogoEquipos/EquiposView';
+import InstalacionesView from './views/Paquetes/InstalacionesTecnicas/CU23_RegistrarInstalacion/InstalacionesView';
 
 // Iconos de cada módulo del panel
 import {
   Radio, LogOut, History, Users, MapPin,
   Wifi, Calendar,
   CreditCard, Clock, AlertTriangle, Scissors, RefreshCw, Lock,
-  Router, ArrowRightLeft,
+  Router, ArrowRightLeft, Package, Wrench,
 } from 'lucide-react';
 
 import { authService } from './models/Paquetes/SeguridadAdministracion/CU01_IniciarCerrarSesion/authModel';
@@ -221,6 +223,12 @@ export default function App() {
       ],
     },
     {
+      title: 'Equipos & Almacén',
+      items: [
+        { id: 'CU18', label: 'Catálogo de Equipos e Inventario', icon: Package },
+      ],
+    },
+    {
       title: 'Mensualidades & Pagos',
       items: [
         { id: 'CU09', label: 'Generar Mensualidades', icon: Calendar },
@@ -235,6 +243,7 @@ export default function App() {
         { id: 'CU13', label: 'Servicios para Corte', icon: Scissors },
         { id: 'CU14', label: 'Registrar Corte Realizado', icon: Scissors },
         { id: 'CU15', label: 'Reactivaciones de Servicio', icon: RefreshCw },
+        { id: 'CU23', label: 'Órdenes de Instalación', icon: Wrench },
       ],
     },
     {
@@ -303,6 +312,10 @@ export default function App() {
         return <PlanesInternetView user={currentUser} />;
       case 'CU17':
         return <AsignarPlanView user={currentUser} />;
+      case 'CU18':
+        return <EquiposView user={currentUser} />;
+      case 'CU23':
+        return <InstalacionesView user={currentUser} />;
       default:
         return <ClientesView user={currentUser} />;
     }
