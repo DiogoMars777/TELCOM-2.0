@@ -649,3 +649,42 @@ frame "sd CU18 Registrar y gestionar catálogo de equipos e inventario" {
 }
 @enduml
 
+@startuml cu23_registrar_instalacion
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam interfaceBackgroundColor transparent
+skinparam interfaceBorderColor transparent
+skinparam actorBackgroundColor #FEFECE
+skinparam actorBorderColor #A80036
+skinparam boundaryBackgroundColor #CCEEFF
+skinparam boundaryBorderColor #0088CC
+skinparam controlBackgroundColor #CCEEFF
+skinparam controlBorderColor #0088CC
+skinparam entityBackgroundColor #CCEEFF
+skinparam entityBorderColor #0088CC
+
+frame "sd CU23 Registrar y gestionar órdenes de instalación técnica" {
+    () " " as spacer
+    actor "Administrador / Soporte Técnico" as AdminActor
+    boundary UI_Instalacion
+    control InstalacionRegistroController
+    entity Instalacion
+    entity SolicitudInstalacion
+    entity Tecnico
+
+    spacer -[hidden]down- AdminActor
+
+    AdminActor -right- UI_Instalacion : <font color=#000000>1: listarInstalaciones(filtros) →</font>\n<font color=#800000>2: programarInstalacion(datos) →</font>\n<font color=#008000>3: asignarTecnico(id, idTecnico) →</font>\n<font color=#000080>4: finalizarInstalacion(id, fechaReal, obs) →</font>
+
+    UI_Instalacion -right- InstalacionRegistroController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: store(Request) →</font>\n<font color=#008000>3.1: asignarTecnico(Request, id) →</font>\n<font color=#000080>4.1: finalizar(Request, id) →</font>
+
+    InstalacionRegistroController -right- Instalacion : <font color=#000000>1.2: with(['solicitud.cliente', 'tecnico'])->get() →</font>\n<font color=#800000>2.3: create(validatedInstalacion) →</font>\n<font color=#008000>3.3: update(['idTecnico' => idTecnico, 'estado' => 'ASIGNADA']) →</font>\n<font color=#000080>4.2: update(['fechaRealizada' => fecha, 'estado' => 'FINALIZADA']) →</font>
+
+    InstalacionRegistroController -up- SolicitudInstalacion : <font color=#800000>2.2: create(validatedSolicitud) →</font>\n<font color=#000080>4.3: update(['estadoSolicitud' => 'COMPLETADA']) →</font>
+
+    InstalacionRegistroController -down- Tecnico : <font color=#008000>3.2: exists:Tecnico,idTecnico →</font>
+}
+@enduml
+
+
