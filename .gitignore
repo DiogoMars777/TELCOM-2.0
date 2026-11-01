@@ -19,6 +19,10 @@ desktop.ini
 *.sublime-project
 *.sublime-workspace
 
+# Carpeta de Contexto y Memoria de Agentes (NUNCA se sube a git)
+agentes/
+agentes/*
+
 # ------------------------------------------
 # Backend (Laravel)
 # ------------------------------------------
