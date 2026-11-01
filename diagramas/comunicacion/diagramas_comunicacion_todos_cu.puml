@@ -610,3 +610,42 @@ frame "sd CU17 Asignar o cambiar plan de Internet" {
     AsignacionPlanController -down- PlanInternet : <font color=#800000>2.2: findOrFail(planId) →</font>
 }
 @enduml
+
+@startuml cu18_gestionar_catalogo_equipos
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam interfaceBackgroundColor transparent
+skinparam interfaceBorderColor transparent
+skinparam actorBackgroundColor #FEFECE
+skinparam actorBorderColor #A80036
+skinparam boundaryBackgroundColor #CCEEFF
+skinparam boundaryBorderColor #0088CC
+skinparam controlBackgroundColor #CCEEFF
+skinparam controlBorderColor #0088CC
+skinparam entityBackgroundColor #CCEEFF
+skinparam entityBorderColor #0088CC
+
+frame "sd CU18 Registrar y gestionar catálogo de equipos e inventario" {
+    () " " as spacer
+    actor "Administrador / Almacén" as AdminActor
+    boundary UI_CatalogoEquipos
+    control CatalogoEquiposController
+    entity ProductoEquipo
+    entity Inventario
+    entity Equipo
+
+    spacer -[hidden]down- AdminActor
+
+    AdminActor -right- UI_CatalogoEquipos : <font color=#000000>1: listarCatalogoEquipos(filtros) →</font>\n<font color=#800000>2: registrarNuevoProducto(datos) →</font>\n<font color=#008000>3: verDetalleProducto(id) →</font>\n<font color=#000080>4: registrarUnidadSerializada(id, serial, mac, prop) →</font>
+
+    UI_CatalogoEquipos -right- CatalogoEquiposController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: store(Request) →</font>\n<font color=#008000>3.1: show(id) →</font>\n<font color=#000080>4.1: registrarUnidadFisica(Request, id) →</font>
+
+    CatalogoEquiposController -right- ProductoEquipo : <font color=#000000>1.2: with('inventario')->get() →</font>\n<font color=#800000>2.2: create(validated) →</font>\n<font color=#008000>3.2: with(['inventario', 'equipos'])->find(id) →</font>
+
+    CatalogoEquiposController -up- Inventario : <font color=#800000>2.3: create(idProducto, stock: 0) →</font>\n<font color=#000080>4.3: increment('stockActual', 1) →</font>
+
+    CatalogoEquiposController -down- Equipo : <font color=#000080>4.2: create(validatedSerial) →</font>
+}
+@enduml
+
