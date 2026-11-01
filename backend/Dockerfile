@@ -34,8 +34,8 @@ RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache \
 
 # Configurar script de inicio
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN sed -i 's/\r$//' /usr/local/bin/docker-entrypoint.sh && chmod +x /usr/local/bin/docker-entrypoint.sh
 
-EXPOSE 8080
+EXPOSE 8000 8080
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

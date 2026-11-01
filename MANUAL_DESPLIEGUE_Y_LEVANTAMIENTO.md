@@ -3,6 +3,9 @@
 
 Este documento detalla paso a paso cómo clonar, configurar y levantar el proyecto completo (Backend Laravel + Frontend React + Base de Datos PostgreSQL) desde una máquina limpia.
 
+> 💡 **¿Prefieres levantar todo con Docker en un solo comando?**  
+> Ejecuta `docker compose up -d --build` y consulta la guía rápida en [DOCKER.md](file:///c:/Users/MSI/Desktop/TELCOM-2.0-main/DOCKER.md).
+
 ---
 
 ## 🛠️ 1. Requisitos Previos del Sistema

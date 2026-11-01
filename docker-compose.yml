@@ -1,0 +1,85 @@
+services:
+  # =========================================================================
+  # 1. BASE DE DATOS: PostgreSQL 16
+  # =========================================================================
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-telcom_db}
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_DATABASE:-telcom_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - telcom-network
+
+  # =========================================================================
+  # 2. BACKEND: Laravel 11/13 + PHP 8.3
+  # =========================================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_NAME: "TELCOM 2.0"
+      APP_ENV: ${APP_ENV:-local}
+      APP_DEBUG: "true"
+      APP_KEY: ${APP_KEY:-base64:xY2F2lF4smNPRzcrUPktNIoAHrOuFOrP/dxj07jO+uE=}
+      APP_URL: http://localhost:8000
+      PORT: 8000
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: ${DB_DATABASE:-telcom_db}
+      DB_USERNAME: ${DB_USERNAME:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      RUN_MIGRATIONS: "true"
+      RUN_SEEDERS: "true"
+    ports:
+      - "8000:8000"
+    volumes:
+      - backend_storage:/app/storage
+    networks:
+      - telcom-network
+
+  # =========================================================================
+  # 3. FRONTEND: React + Vite (Servido con Nginx)
+  # =========================================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:8000/api
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
+    networks:
+      - telcom-network
+
+volumes:
+  postgres_data:
+    driver: local
+  backend_storage:
+    driver: local
+
+networks:
+  telcom-network:
+    driver: bridge

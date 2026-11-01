@@ -38,6 +38,10 @@ use App\Http\Controllers\Paquetes\ServiciosPlanes\CU15_ListaRegistroReactivacion
 use App\Http\Controllers\Paquetes\ServiciosPlanes\CU16_GestionarCatalogoPlanes\PlanInternetController;
 // CU17: Asignar o cambiar el plan de un servicio (entidad UML AsignacionPlan)
 use App\Http\Controllers\Paquetes\ServiciosPlanes\CU17_AsignarCambiarPlanInternet\AsignacionPlanController;
+// CU18: Registrar y Gestionar Catálogo de Equipos e Inventario
+use App\Http\Controllers\Paquetes\EquiposInventario\CU18_RegistrarCatalogoEquipos\CatalogoEquiposController;
+// CU23: Registrar y Gestionar Órdenes de Instalación Técnica
+use App\Http\Controllers\Paquetes\InstalacionesTecnicas\CU23_RegistrarInstalacion\InstalacionRegistroController;
 
 /*
 |--------------------------------------------------------------------------
@@ -246,3 +250,55 @@ Route::prefix('cu08/servicios/{servicio}/planes')->group(function () {
     Route::post('/', [AsignacionPlanController::class, 'store'])
         ->middleware(['auth:sanctum', 'permission:planes.assign']);
 });
+
+/*
+|--------------------------------------------------------------------------
+| CU18 - REGISTRAR Y GESTIONAR CATÁLOGO DE EQUIPOS (EquiposInventario)
+|--------------------------------------------------------------------------
+| Permisos RBAC:
+|   - equipos.view   -> consultar catálogo e inventario.
+|   - equipos.manage -> registrar modelos y dar de alta unidades físicas.
+*/
+Route::prefix('cu18/equipos')->group(function () {
+    Route::get('/', [CatalogoEquiposController::class, 'index'])
+        ->middleware(['auth:sanctum', 'permission:equipos.view']);
+    Route::post('/', [CatalogoEquiposController::class, 'store'])
+        ->middleware(['auth:sanctum', 'permission:equipos.manage']);
+    Route::get('/{id}', [CatalogoEquiposController::class, 'show'])
+        ->whereNumber('id')
+        ->middleware(['auth:sanctum', 'permission:equipos.view']);
+    Route::put('/{id}', [CatalogoEquiposController::class, 'update'])
+        ->whereNumber('id')
+        ->middleware(['auth:sanctum', 'permission:equipos.manage']);
+    Route::post('/{id}/unidades', [CatalogoEquiposController::class, 'registrarUnidadFisica'])
+        ->whereNumber('id')
+        ->middleware(['auth:sanctum', 'permission:equipos.manage']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| CU23 - REGISTRAR ÓRDENES DE INSTALACIÓN TÉCNICA (InstalacionesTecnicas)
+|--------------------------------------------------------------------------
+| Permisos RBAC:
+|   - instalaciones.view     -> consultar órdenes técnicas e historial.
+|   - instalaciones.schedule -> crear orden y asignar técnico responsable.
+|   - instalaciones.execute  -> registrar cierre y finalización técnica.
+*/
+Route::prefix('cu23/instalaciones')->group(function () {
+    Route::get('/', [InstalacionRegistroController::class, 'index'])
+        ->middleware(['auth:sanctum', 'permission:instalaciones.view']);
+    Route::post('/', [InstalacionRegistroController::class, 'store'])
+        ->middleware(['auth:sanctum', 'permission:instalaciones.schedule']);
+    Route::get('/tecnicos', [InstalacionRegistroController::class, 'tecnicos'])
+        ->middleware(['auth:sanctum', 'permission:instalaciones.view']);
+    Route::get('/{id}', [InstalacionRegistroController::class, 'show'])
+        ->whereNumber('id')
+        ->middleware(['auth:sanctum', 'permission:instalaciones.view']);
+    Route::put('/{id}/tecnico', [InstalacionRegistroController::class, 'asignarTecnico'])
+        ->whereNumber('id')
+        ->middleware(['auth:sanctum', 'permission:instalaciones.schedule']);
+    Route::put('/{id}/finalizar', [InstalacionRegistroController::class, 'finalizar'])
+        ->whereNumber('id')
+        ->middleware(['auth:sanctum', 'permission:instalaciones.execute']);
+});
+
