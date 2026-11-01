@@ -1634,3 +1634,127 @@ frame "sd Diagrama de análisis de clases - CU18 Registrar y gestionar catálogo
 }
 @enduml
 
+@startuml cu23_analisis_registrar_instalacion
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de análisis de clases - CU23 Registrar y gestionar órdenes de instalación técnica" {
+    actor "Administrador / Soporte Técnico" as AdminActor
+
+    class UI_Instalacion {
+        + mostrarFormularioInstalacion(): void
+        + registrarOrdenInstalacion(): void
+        + listarInstalaciones(): void
+        + asignarTecnicoCuadrilla(): void
+        + registrarFinalizacionTecnica(): void
+        + listarTecnicosDisponibles(): void
+    }
+
+    class InstalacionRegistroController {
+        + index(): void
+        + store(): void
+        + show(): void
+        + asignarTecnico(): void
+        + finalizar(): void
+        + tecnicos(): void
+    }
+
+    class Instalacion {
+        - idInstalacion: int
+        - fechaProgramada: date
+        - fechaRealizada: date
+        - costoInstalacion: decimal
+        - estadoInstalacion: string
+        - observacion: string
+        - idSolicitud: int
+        - idServicio: int
+        - idTecnico: int
+        --
+        + create(): void
+        + find(): void
+        + update(): void
+        + with(): void
+    }
+
+    class SolicitudInstalacion {
+        - idSolicitud: int
+        - numeroOrden: string
+        - fechaSolicitud: date
+        - direccion: text
+        - referencia: text
+        - latitud: decimal
+        - longitud: decimal
+        - estadoSolicitud: string
+        - observacion: text
+        - idCliente: int
+        --
+        + count(): void
+        + create(): void
+        + find(): void
+        + update(): void
+    }
+
+    class Tecnico {
+        - idTecnico: int
+        - nombreCompleto: string
+        - telefono: string
+        - especialidad: string
+        - activo: boolean
+        --
+        + find(): void
+        + get(): void
+        + where(): void
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - codigoServicio: string
+        - ipAsignada: string
+        - macRouter: string
+        - idEstadoServicio: int
+        --
+        + find(): void
+        + update(): void
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - nombreCompleto: string
+        - telefono: string
+        - direccion: string
+        --
+        + find(): void
+    }
+
+    AdminActor -right- UI_Instalacion
+    UI_Instalacion -right- InstalacionRegistroController
+    InstalacionRegistroController -right- Instalacion
+
+    Instalacion "0..1" -up- "1" SolicitudInstalacion
+    SolicitudInstalacion "0..*" -right- "1" Cliente
+    Instalacion "0..*" -right- "0..1" ServicioInternet
+    Instalacion "0..*" -down- "0..1" Tecnico
+}
+@enduml
+
+
