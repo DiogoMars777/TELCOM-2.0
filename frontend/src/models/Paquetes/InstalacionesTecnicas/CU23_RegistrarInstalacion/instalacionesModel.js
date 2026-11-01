@@ -48,3 +48,4 @@ export const instalacionesService = {
     return res.data?.instalacion;
   },
 };
+

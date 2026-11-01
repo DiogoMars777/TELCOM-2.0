@@ -38,3 +38,4 @@ export const equiposService = {
     return res.data?.equipo;
   },
 };
+
