@@ -1538,3 +1538,99 @@ frame "sd Diagrama de anÃ¡lisis de clases - CU17 Asignar o cambiar el plan de 
     AsignacionPlan "0..*" -down- "1" Usuario
 }
 @enduml
+
+@startuml cu18_analisis_gestionar_catalogo_equipos
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de análisis de clases - CU18 Registrar y gestionar catálogo de equipos e inventario" {
+    actor "Administrador / Almacén" as AdminActor
+
+    class UI_CatalogoEquipos {
+        + listarProductos(): void
+        + registrarProducto(): void
+        + obtenerDetalleProducto(): void
+        + actualizarProducto(): void
+        + registrarUnidadFisica(): void
+        + filtrarPorTipo(): void
+    }
+
+    class CatalogoEquiposController {
+        + index(): void
+        + store(): void
+        + show(): void
+        + update(): void
+        + registrarUnidadFisica(): void
+    }
+
+    class ProductoEquipo {
+        - idProducto: int
+        - nombre: string
+        - tipoEquipo: string
+        - marca: string
+        - modelo: string
+        - descripcion: string
+        - estado: string
+        --
+        + create(): void
+        + find(): void
+        + get(): void
+        + update(): void
+        + with(): void
+    }
+
+    class Inventario {
+        - idInventario: int
+        - stockActual: int
+        - fechaActualizacion: timestamp
+        - idProducto: int
+        --
+        + create(): void
+        + increment(): void
+        + update(): void
+        + where(): void
+    }
+
+    class Equipo {
+        - idEquipo: int
+        - numeroSerie: string
+        - mac: string
+        - ip: string
+        - asignada: boolean
+        - propiedad: string
+        - estadoEquipo: string
+        - idProducto: int
+        --
+        + create(): void
+        + find(): void
+        + where(): void
+    }
+
+    AdminActor -right- UI_CatalogoEquipos
+    UI_CatalogoEquipos -right- CatalogoEquiposController
+    CatalogoEquiposController -right- ProductoEquipo
+
+    ProductoEquipo "1" -up- "1" Inventario
+    ProductoEquipo "1" -right- "0..*" Equipo
+}
+@enduml
+
