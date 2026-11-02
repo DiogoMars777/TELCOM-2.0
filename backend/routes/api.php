@@ -38,6 +38,8 @@ use App\Http\Controllers\Paquetes\ServiciosPlanes\CU15_ListaRegistroReactivacion
 use App\Http\Controllers\Paquetes\ServiciosPlanes\CU16_GestionarCatalogoPlanes\PlanInternetController;
 // CU17: Asignar o cambiar el plan de un servicio (entidad UML AsignacionPlan)
 use App\Http\Controllers\Paquetes\ServiciosPlanes\CU17_AsignarCambiarPlanInternet\AsignacionPlanController;
+// CU22: Programar instalación y asignar técnico
+use App\Http\Controllers\Paquetes\ServiciosPlanes\CU22_ProgramacionInstalaciones\InstalacionesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -192,7 +194,16 @@ Route::prefix('cu14')->middleware(['auth:sanctum', 'permission:cortes.register']
 // CU15: Gestionar lista y registro de reactivaciones (admin, secretaría)
 Route::prefix('cu15')->middleware(['auth:sanctum', 'permission:reactivaciones.manage'])->group(function () {
     Route::get('/reactivaciones', [ReactivacionesController::class, 'index']);
+    Route::get('/servicios-cortados', [ReactivacionesController::class, 'serviciosCortados']);
     Route::post('/reactivaciones', [ReactivacionesController::class, 'store']);
+});
+
+// CU22: Programar instalación y asignar cuadrilla técnica
+Route::prefix('cu22')->middleware(['auth:sanctum'])->group(function () {
+    Route::get('/instalaciones', [InstalacionesController::class, 'index'])
+        ->middleware('permission:instalaciones.view');
+    Route::post('/instalaciones', [InstalacionesController::class, 'store'])
+        ->middleware('permission:instalaciones.schedule');
 });
 
 /*

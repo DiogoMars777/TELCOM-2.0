@@ -21,6 +21,7 @@ import CorteRegistroView from './views/Paquetes/ServiciosPlanes/CU14_RegistrarCo
 import ReactivacionesView from './views/Paquetes/ServiciosPlanes/CU15_ListaRegistroReactivaciones/ReactivacionesView';
 import PlanesInternetView from './views/Paquetes/ServiciosPlanes/CU16_GestionarCatalogoPlanes/PlanesInternetView';
 import AsignarPlanView from './views/Paquetes/ServiciosPlanes/CU17_AsignarCambiarPlanInternet/AsignarPlanView';
+import InstalacionesView from './views/Paquetes/ServiciosPlanes/CU22_ProgramacionInstalaciones/InstalacionesView';
 
 // Iconos de cada módulo del panel
 import {
@@ -235,6 +236,7 @@ export default function App() {
         { id: 'CU13', label: 'Servicios para Corte', icon: Scissors },
         { id: 'CU14', label: 'Registrar Corte Realizado', icon: Scissors },
         { id: 'CU15', label: 'Reactivaciones de Servicio', icon: RefreshCw },
+        { id: 'CU22', label: 'Programar Instalaciones', icon: Calendar },
       ],
     },
     {
@@ -303,6 +305,8 @@ export default function App() {
         return <PlanesInternetView user={currentUser} />;
       case 'CU17':
         return <AsignarPlanView user={currentUser} />;
+      case 'CU22':
+        return <InstalacionesView user={currentUser} />;
       default:
         return <ClientesView user={currentUser} />;
     }

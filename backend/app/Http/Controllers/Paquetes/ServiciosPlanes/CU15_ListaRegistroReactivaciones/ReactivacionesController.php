@@ -18,15 +18,33 @@ class ReactivacionesController extends Controller
     use ApiResponse;
 
     /**
-     * CU15 - Gestionar lista de reactivaciones
+     * CU15 - Gestionar lista de reactivaciones o servicios cortados
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        if ($request->query('estado') === 'CORTADO' || $request->boolean('cortados')) {
+            return $this->serviciosCortados();
+        }
+
         $reactivaciones = ReactivacionServicio::with(['servicio.cliente', 'pago', 'operador:id,name'])
             ->latest()
             ->paginate(15);
 
         return $this->success($reactivaciones, 'Lista de reactivaciones obtenida exitosamente.');
+    }
+
+    /**
+     * CU15 - Listar servicios de internet cuyo estado actual sea CORTADO
+     * para alimentar el selector de reactivaciones elegibles.
+     */
+    public function serviciosCortados(): JsonResponse
+    {
+        $cortados = ServicioInternet::with(['cliente', 'estado'])
+            ->where('estado_servicio', 'CORTADO')
+            ->orderBy('idServicio', 'desc')
+            ->get();
+
+        return $this->success($cortados, 'Servicios cortados obtenidos exitosamente.');
     }
 
     /**

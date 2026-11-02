@@ -2,23 +2,27 @@ import { useState, useEffect, useCallback } from 'react';
 import { reactivacionesService } from '../../../../models/Paquetes/ServiciosPlanes/CU15_ListaRegistroReactivaciones/reactivacionesModel';
 import { describeApiError } from '../../../../services/apiClient';
 
+/**
+ * Hook Controlador para el Caso de Uso 15 (Gestionar Reactivaciones).
+ * Controla el ciclo de vida, estado de carga, listado de reactivaciones,
+ * catálogo de servicios cortados y la invocación del servicio de reactivación.
+ */
 export function useReactivacionesController() {
   const [reactivaciones, setReactivaciones] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);       // Error de carga del listado
-  const [formError, setFormError] = useState(null); // Error al registrar
-  const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Servicios reales para el selector (solo los CORTADOS pueden reactivarse).
+  // Estado del modal y formulario
+  const [showModal, setShowModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
+
+  // Servicios en estado CORTADO disponibles para reactivación
   const [serviciosCortados, setServiciosCortados] = useState([]);
   const [loadingServicios, setLoadingServicios] = useState(true);
   const [serviciosError, setServiciosError] = useState(null);
-
-  const [formReactivacion, setFormReactivacion] = useState({
-    servicio_id: '',
-    costo_reactivacion: 50.00,
-    observaciones: '',
-  });
 
   const loadReactivaciones = useCallback(async () => {
     setLoading(true);
@@ -38,8 +42,8 @@ export function useReactivacionesController() {
     setLoadingServicios(true);
     setServiciosError(null);
     try {
-      const data = await reactivacionesService.fetchServicios();
-      setServiciosCortados((data ?? []).filter((s) => s.estado_servicio === 'CORTADO'));
+      const data = await reactivacionesService.fetchServiciosCortados();
+      setServiciosCortados(data ?? []);
     } catch (e) {
       setServiciosCortados([]);
       setServiciosError(describeApiError(e));
@@ -54,11 +58,11 @@ export function useReactivacionesController() {
       try {
         const [reactivacionesData, serviciosData] = await Promise.all([
           reactivacionesService.fetchReactivaciones(),
-          reactivacionesService.fetchServicios(),
+          reactivacionesService.fetchServiciosCortados(),
         ]);
         if (!ignore) {
           setReactivaciones(reactivacionesData);
-          setServiciosCortados((serviciosData ?? []).filter((s) => s.estado_servicio === 'CORTADO'));
+          setServiciosCortados(serviciosData ?? []);
         }
       } catch (e) {
         if (!ignore) {
@@ -77,25 +81,47 @@ export function useReactivacionesController() {
     };
   }, []);
 
-  const handleCrear = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const openModal = (servicio = null) => {
+    setServicioSeleccionado(servicio);
+    setFormError(null);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    if (isSubmitting) return;
+    setShowModal(false);
+    setServicioSeleccionado(null);
+    setFormError(null);
+  };
+
+  /**
+   * Ejecuta la reactivación enviando el payload al backend vía apiClient (POST /api/cu15/reactivaciones).
+   * @param {{ servicio_id: number, pago_id?: number|null, costo_reactivacion?: number, observaciones?: string|null }} payload
+   */
+  const handleReactivar = async (payload) => {
+    setIsSubmitting(true);
     setFormError(null);
     try {
-      await reactivacionesService.registrarReactivacion({
-        servicio_id: formReactivacion.servicio_id,
-        costo_reactivacion: Number(formReactivacion.costo_reactivacion),
-        observaciones: formReactivacion.observaciones,
-      });
-      // Solo se cierra el modal cuando el backend confirmó. Se recarga el
-      // listado real en lugar de inventar el registro localmente.
+      const response = await reactivacionesService.registrarReactivacion(payload);
       setShowModal(false);
-      setFormReactivacion({ servicio_id: '', costo_reactivacion: 50.00, observaciones: '' });
+      setServicioSeleccionado(null);
+      setSuccessMessage('Servicio reactivado exitosamente.');
+
+      // Recargar listados desde la base de datos real
       await Promise.all([loadReactivaciones(), loadServicios()]);
+
+      // Limpiar mensaje de éxito después de 5 segundos
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
+
+      return response;
     } catch (err) {
-      setFormError(describeApiError(err));
+      const msg = describeApiError(err);
+      setFormError(msg);
+      throw err;
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -103,15 +129,18 @@ export function useReactivacionesController() {
     reactivaciones,
     loading,
     error,
-    formError,
     showModal,
-    setShowModal,
+    openModal,
+    closeModal,
+    isSubmitting,
+    formError,
+    successMessage,
+    setSuccessMessage,
+    servicioSeleccionado,
     serviciosCortados,
     loadingServicios,
     serviciosError,
-    formReactivacion,
-    setFormReactivacion,
-    handleCrear,
+    handleReactivar,
     reload: loadReactivaciones,
     reloadServicios: loadServicios,
   };

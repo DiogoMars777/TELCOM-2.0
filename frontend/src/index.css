@@ -658,6 +658,141 @@ input:focus, select:focus, textarea:focus {
   margin-top: 1rem;
 }
 
+.modal-card-scrollable {
+  max-height: 90vh;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-card);
+  flex-shrink: 0;
+}
+
+.modal-body {
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-card);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Responsive Table-to-Cards Pattern (Mobile First)                   */
+/* ------------------------------------------------------------------ */
+.users-table-wrap {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.users-mobile-status {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1rem;
+  color: var(--text-secondary);
+  background-color: var(--bg-card);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.users-cards {
+  display: none;
+}
+
+.user-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.user-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.user-card-id {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--info);
+}
+
+.user-card-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.user-card-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.user-card-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.user-card-value {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.user-card-actions .btn {
+  width: 100%;
+  justify-content: center;
+  min-height: 42px;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 640px) {
+  .users-table-wrap {
+    display: none !important;
+  }
+
+  .users-mobile-status {
+    display: flex !important;
+  }
+
+  .users-cards {
+    display: flex !important;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+}
+
 /* Alerts */
 .alert {
   display: flex;
