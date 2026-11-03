@@ -1,0 +1,38 @@
+@startuml cu21_diagrama_caso_de_uso
+left to right direction
+
+skinparam backgroundColor white
+skinparam shadowing true
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+
+skinparam actor {
+    BackgroundColor #FDF0CD
+    BorderColor #404040
+    FontName "Segoe UI"
+    FontStyle bold
+    FontSize 11
+}
+
+skinparam usecase {
+    BackgroundColor #BFE0FF
+    BorderColor #336699
+    FontSize 11
+    FontStyle bold
+    ArrowColor #555555
+    ArrowThickness 1
+}
+
+package "Actors" as PkgActors #transparent;line:transparent {
+    actor "Administrador\n<size:9><i>(from Actors)</i></size>" as Admin
+    actor "Secretaría\n<size:9><i>(from Actors)</i></size>" as Sec
+    actor "Cliente\n<size:9><i>(from Actors)</i></size>" as Cli
+}
+
+usecase "CU21: Registrar solicitud de\ninstalación" as CU21
+
+Admin -- CU21
+Sec -- CU21
+Cli -- CU21
+
+@enduml
