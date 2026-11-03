@@ -1,0 +1,36 @@
+@startuml cu21_diagrama_comunicacion
+left to right direction
+skinparam defaultTextAlignment center
+skinparam roundCorner 10
+skinparam Shadowing false
+skinparam ArrowThickness 1.2
+
+skinparam boundaryBackgroundColor #D0EBF5
+skinparam boundaryBorderColor #0088CC
+skinparam controlBackgroundColor #D0EBF5
+skinparam controlBorderColor #0088CC
+skinparam entityBackgroundColor #D0EBF5
+skinparam entityBorderColor #0088CC
+
+frame "sd CU21 Registrar solicitud de instalación" {
+    () " " as spacer
+    actor "Administrador / Secretaría" as Admin
+    boundary UI_SolicitudInstalacion
+    control SolicitudInstalacionController
+    entity SolicitudInstalacion
+    entity Cliente
+    entity Zona
+
+    spacer -[hidden]down- Admin
+
+    Admin -right- UI_SolicitudInstalacion : <font color=#000000>1: listarSolicitudes(filtros) →</font>\n<font color=#800000>2: registrarSolicitud(datos) →</font>\n<font color=#008000>3: cancelarSolicitud(id, motivo) →</font>
+
+    UI_SolicitudInstalacion -right- SolicitudInstalacionController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: store(Request) →</font>\n<font color=#008000>3.1: cancelar(Request, id) →</font>
+
+    SolicitudInstalacionController -up- Cliente : <font color=#800000>2.2: findOrFail(cliente_id) →</font>
+
+    SolicitudInstalacionController -down- Zona : <font color=#800000>2.3: find(zonaId) [valida cobertura != 'Saturada'] →</font>
+
+    SolicitudInstalacionController -right- SolicitudInstalacion : <font color=#000000>1.2: with('cliente')->orderBy('idSolicitud','desc')->paginate() →</font>\n<font color=#800000>2.4: create(numeroOrden, fecha, dir, gps, 'PENDIENTE', idCliente) →</font>\n<font color=#008000>3.2: findOrFail(id) →</font>\n<font color=#008000>3.3: update(['estadoSolicitud' => 'CANCELADA', 'observacion' => motivo]) →</font>
+}
+@enduml

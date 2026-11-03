@@ -195,3 +195,4 @@ function addDiagramObject(diag, element, left, top, right, bottom)
 }
 
 Main();
+

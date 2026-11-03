@@ -628,23 +628,23 @@ skinparam entityBorderColor #0088CC
 
 frame "sd CU21 Registrar solicitud de instalación" {
     () " " as spacer
-    actor "Administrador / Secretaría / Cliente" as ActorCU21
+    actor "Administrador / Secretaría" as Admin
     boundary UI_SolicitudInstalacion
     control SolicitudInstalacionController
     entity SolicitudInstalacion
     entity Cliente
     entity Zona
-    entity Bitacora
 
-    spacer -[hidden]down- ActorCU21
+    spacer -[hidden]down- Admin
 
-    ActorCU21 -right- UI_SolicitudInstalacion : <font color=#000000>1: listarSolicitudes(filtros) →</font>\n<font color=#800000>2: registrarSolicitud(datos, gps) →</font>\n<font color=#008000>3: consultarDetalleSolicitud(id) →</font>\n<font color=#000080>4: cancelarSolicitud(id, motivo) →</font>
+    Admin -right- UI_SolicitudInstalacion : <font color=#000000>1: listarSolicitudes(filtros) →</font>\n<font color=#800000>2: registrarSolicitud(datos) →</font>\n<font color=#008000>3: cancelarSolicitud(id, motivo) →</font>
 
-    UI_SolicitudInstalacion -right- SolicitudInstalacionController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: store(Request) →</font>\n<font color=#008000>3.1: show(id) →</font>\n<font color=#000080>4.1: cancelar(Request, id) →</font>
+    UI_SolicitudInstalacion -right- SolicitudInstalacionController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: store(Request) →</font>\n<font color=#008000>3.1: cancelar(Request, id) →</font>
 
-    SolicitudInstalacionController -down- Cliente : <font color=#800000>2.2: findOrFail(idCliente) →</font>
-    SolicitudInstalacionController -down- Zona : <font color=#800000>2.3: verificarCobertura(idZona) →</font>
-    SolicitudInstalacionController -right- SolicitudInstalacion : <font color=#000000>1.2: with('cliente')->paginate() →</font>\n<font color=#800000>2.4: create(numeroOrden, 'PENDIENTE') →</font>\n<font color=#008000>3.2: with('cliente')->findOrFail(id) →</font>\n<font color=#000080>4.2: update(['estadoSolicitud' => 'CANCELADA']) →</font>
-    SolicitudInstalacionController -up- Bitacora : <font color=#800000>2.5: log('CU21', 'REGISTRAR_SOLICITUD', ...) →</font>
+    SolicitudInstalacionController -up- Cliente : <font color=#800000>2.2: findOrFail(cliente_id) →</font>
+
+    SolicitudInstalacionController -down- Zona : <font color=#800000>2.3: find(zonaId) [valida cobertura != 'Saturada'] →</font>
+
+    SolicitudInstalacionController -right- SolicitudInstalacion : <font color=#000000>1.2: with('cliente')->orderBy('idSolicitud','desc')->paginate() →</font>\n<font color=#800000>2.4: create(numeroOrden, fecha, dir, gps, 'PENDIENTE', idCliente) →</font>\n<font color=#008000>3.2: findOrFail(id) →</font>\n<font color=#008000>3.3: update(['estadoSolicitud' => 'CANCELADA', 'observacion' => motivo]) →</font>
 }
 @enduml
