@@ -16,7 +16,7 @@ export function useClienteMantenimientoController() {
     setLoading(true);
     setError(null);
     try {
-      const data = await clienteConsultaService.fetchClientes({});
+      const data = await clienteConsultaService.fetchClientes({ per_page: 100 });
       setClientes(data);
       setSelectedCliente((prev) => {
         const stillExists = prev && data.find((c) => c.id === prev.id);
@@ -34,7 +34,7 @@ export function useClienteMantenimientoController() {
     let ignore = false;
     (async () => {
       try {
-        const data = await clienteConsultaService.fetchClientes({});
+        const data = await clienteConsultaService.fetchClientes({ per_page: 100 });
         if (!ignore) {
           setClientes(data);
           setSelectedCliente((prev) => {

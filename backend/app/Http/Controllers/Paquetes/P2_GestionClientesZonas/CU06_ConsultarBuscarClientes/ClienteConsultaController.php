@@ -20,6 +20,7 @@ class ClienteConsultaController extends Controller
         $busqueda = $request->input('buscar');
         $estado   = $request->input('estado');
         $zonaId   = $request->input('zona_id');
+        $perPage  = max(1, min(1000, $request->integer('per_page', 50)));
 
         // `withTrashed()` incluye a los clientes dados de baja lógica: al
         // darlos de baja se marca estado=INACTIVO y se guarda `deleted_at`
@@ -35,7 +36,7 @@ class ClienteConsultaController extends Controller
             $query->where('zona_id', $zonaId);
         }
 
-        $clientes = $query->latest()->paginate(15);
+        $clientes = $query->latest('idCliente')->paginate($perPage);
 
         return $this->success($clientes, 'Clientes consultados exitosamente.');
     }

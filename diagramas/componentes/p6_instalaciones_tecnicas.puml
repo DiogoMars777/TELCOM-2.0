@@ -1,0 +1,70 @@
+@startuml
+title P6: Instalaciones Técnicas - Diagrama de componentes
+left to right direction
+skinparam backgroundColor white
+skinparam defaultFontName Segoe UI
+skinparam componentStyle uml2
+skinparam component {
+  BackgroundColor #FFFFFF
+  BorderColor #334155
+  FontColor #0F172A
+}
+skinparam database {
+  BackgroundColor #EFF6FF
+  BorderColor #2563EB
+  FontColor #0F172A
+}
+skinparam package {
+  BackgroundColor #F8FAFC
+  BorderColor #64748B
+}
+
+package "P6: Instalaciones Técnicas" {
+  package "CU21 - Registrar solicitud de instalación" as G1 {
+    component "<<vista>>\nSolicitudInstalacionView.jsx\nRegistrarSolicitudModal.jsx\nDetalleSolicitudModal.jsx\nCancelarSolicitudModal.jsx\nPortalSolicitudModal.jsx" as V1
+    component "<<controlador>>\nSolicitudInstalacionController.php" as C1
+    V1 --> C1 : API REST
+    database "<<tabla>>\nSolicitudInstalacion" as T1_1
+    C1 ..> T1_1
+    database "<<tabla>>\nCliente" as T1_2
+    C1 ..> T1_2
+    database "<<tabla>>\nZona" as T1_3
+    C1 ..> T1_3
+    database "<<tabla>>\nBitacora" as T1_4
+    C1 ..> T1_4
+  }
+
+  package "CU22 - Programar instalación y asignar técnico" as G2 {
+    component "<<vista>>\nInstalacionesView.jsx\nProgramarInstalacionModal.jsx" as V2
+    component "<<controlador>>\nInstalacionesController.php" as C2
+    V2 --> C2 : API REST
+    database "<<tabla>>\nSolicitudInstalacion" as T2_1
+    C2 ..> T2_1
+    database "<<tabla>>\nTecnico" as T2_2
+    C2 ..> T2_2
+    database "<<tabla>>\nInstalacion" as T2_3
+    C2 ..> T2_3
+    database "<<tabla>>\nBitacora" as T2_4
+    C2 ..> T2_4
+  }
+
+  package "CU23 - Registrar instalación realizada" as G3 {
+    component "<<vista>>\nInstalacionesView.jsx" as V3
+    component "<<controlador>>\nInstalacionRegistroController.php" as C3
+    V3 --> C3 : API REST
+    database "<<tabla>>\nInstalacion" as T3_1
+    C3 ..> T3_1
+    database "<<tabla>>\nSolicitudInstalacion" as T3_2
+    C3 ..> T3_2
+    database "<<tabla>>\nTecnico" as T3_3
+    C3 ..> T3_3
+    database "<<tabla>>\nServicioInternet" as T3_4
+    C3 ..> T3_4
+    database "<<tabla>>\nCliente" as T3_5
+    C3 ..> T3_5
+    database "<<tabla>>\nBitacora" as T3_6
+    C3 ..> T3_6
+  }
+
+}
+@enduml

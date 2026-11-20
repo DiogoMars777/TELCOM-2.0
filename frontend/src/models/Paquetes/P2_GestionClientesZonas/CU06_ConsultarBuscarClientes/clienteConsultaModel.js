@@ -39,17 +39,53 @@ export const mockClientesList = [
     estado: 'SUSPENDIDO',
     zona_nombre: 'Zona Central',
   },
+  {
+    id: 4,
+    codigo_cliente: 'CLI-10004',
+    documento_identidad: '7192834',
+    nombres: 'Mariana',
+    apellidos: 'Vargas Méndez',
+    telefono: '+591 75512344',
+    email: 'mariana.vargas@email.com',
+    direccion: 'Calle Independencia #410',
+    estado: 'INACTIVO',
+    zona_nombre: 'Zona Este',
+  },
 ];
 
 export const clienteConsultaService = {
   async fetchClientes(params = {}) {
-    if (isDemoMode()) return mockClientesList;
+    if (isDemoMode()) {
+      const list = [...mockClientesList];
+      list.meta = {
+        current_page: 1,
+        last_page: 1,
+        per_page: list.length,
+        total: list.length,
+      };
+      return list;
+    }
     const res = await apiClient.get('/cu06/clientes', params);
     // La API responde { success, message, data: <paginator> }: el arreglo de
     // clientes viene en `data.data` (paginación de Laravel). Se admite además
     // `data` como arreglo directo por si el endpoint no estuviera paginado.
     const payload = res?.data;
-    if (Array.isArray(payload)) return payload;
-    return payload?.data ?? [];
+    const list = Array.isArray(payload) ? [...payload] : [...(payload?.data ?? [])];
+    if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+      list.meta = {
+        current_page: payload.current_page ?? 1,
+        last_page: payload.last_page ?? 1,
+        per_page: payload.per_page ?? list.length,
+        total: payload.total ?? list.length,
+      };
+    } else {
+      list.meta = {
+        current_page: 1,
+        last_page: 1,
+        per_page: list.length,
+        total: list.length,
+      };
+    }
+    return list;
   }
 };

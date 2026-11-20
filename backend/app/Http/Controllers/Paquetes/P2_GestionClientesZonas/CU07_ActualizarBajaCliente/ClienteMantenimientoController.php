@@ -47,7 +47,7 @@ class ClienteMantenimientoController extends Controller
     }
 
     /**
-     * CU07 - Dar de baja lógica al cliente (Soft Delete / Inactivación)
+     * CU07 - Dar de baja lógica al cliente 
      */
     public function bajaLogica(Request $request, int $id): JsonResponse
     {

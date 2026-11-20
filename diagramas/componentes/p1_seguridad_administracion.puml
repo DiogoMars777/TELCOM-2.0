@@ -1,0 +1,100 @@
+@startuml
+title P1: Seguridad y Administración - Diagrama de componentes
+left to right direction
+skinparam backgroundColor white
+skinparam defaultFontName Segoe UI
+skinparam componentStyle uml2
+skinparam component {
+  BackgroundColor #FFFFFF
+  BorderColor #334155
+  FontColor #0F172A
+}
+skinparam database {
+  BackgroundColor #EFF6FF
+  BorderColor #2563EB
+  FontColor #0F172A
+}
+skinparam package {
+  BackgroundColor #F8FAFC
+  BorderColor #64748B
+}
+
+package "P1: Seguridad y Administración" {
+  package "CU01 - Iniciar y cerrar sesión" as G1 {
+    component "<<vista>>\nLoginView.jsx\nSesionView.jsx" as V1
+    component "<<controlador>>\nAuthController.php" as C1
+    V1 --> C1 : API REST
+    database "<<tabla>>\nUsuario" as T1_1
+    C1 ..> T1_1
+    database "<<tabla>>\nRol" as T1_2
+    C1 ..> T1_2
+    database "<<tabla>>\nuser_sessions" as T1_3
+    C1 ..> T1_3
+    database "<<tabla>>\npersonal_access_tokens" as T1_4
+    C1 ..> T1_4
+    database "<<tabla>>\nBitacora" as T1_5
+    C1 ..> T1_5
+  }
+
+  package "CU01 - Recuperar contraseña" as G2 {
+    component "<<vista>>\nRecuperarPasswordView.jsx" as V2
+    component "<<controlador>>\nRecuperarPasswordController.php" as C2
+    V2 --> C2 : API REST
+    database "<<tabla>>\nUsuario" as T2_1
+    C2 ..> T2_1
+    database "<<tabla>>\npassword_reset_tokens" as T2_2
+    C2 ..> T2_2
+    database "<<tabla>>\nBitacora" as T2_3
+    C2 ..> T2_3
+  }
+
+  package "CU01 - Cambiar contraseña" as G3 {
+    component "<<vista>>\nCambiarPasswordView.jsx" as V3
+    component "<<controlador>>\nAuthController.php" as C3
+    V3 --> C3 : API REST
+    database "<<tabla>>\nUsuario" as T3_1
+    C3 ..> T3_1
+    database "<<tabla>>\npassword_verification_codes" as T3_2
+    C3 ..> T3_2
+    database "<<tabla>>\nBitacora" as T3_3
+    C3 ..> T3_3
+  }
+
+  package "CU02 - Consultar bitácora de auditoría" as G4 {
+    component "<<vista>>\nAuditoriaView.jsx" as V4
+    component "<<controlador>>\nAuditoriaController.php" as C4
+    V4 --> C4 : API REST
+    database "<<tabla>>\nBitacora" as T4_1
+    C4 ..> T4_1
+    database "<<tabla>>\nUsuario" as T4_2
+    C4 ..> T4_2
+  }
+
+  package "CU03 - Gestionar usuarios internos" as G5 {
+    component "<<vista>>\nUsuariosView.jsx" as V5
+    component "<<controlador>>\nUsuarioController.php" as C5
+    V5 --> C5 : API REST
+    database "<<tabla>>\nUsuario" as T5_1
+    C5 ..> T5_1
+    database "<<tabla>>\nRol" as T5_2
+    C5 ..> T5_2
+    database "<<tabla>>\nBitacora" as T5_3
+    C5 ..> T5_3
+  }
+
+  package "CU03 - Gestionar roles y permisos" as G6 {
+    component "<<vista>>\nRolesPermisosPanel.jsx" as V6
+    component "<<controlador>>\nRolController.php" as C6
+    V6 --> C6 : API REST
+    database "<<tabla>>\nRol" as T6_1
+    C6 ..> T6_1
+    database "<<tabla>>\nPermiso" as T6_2
+    C6 ..> T6_2
+    database "<<tabla>>\nRolPermiso" as T6_3
+    C6 ..> T6_3
+    database "<<tabla>>\nBitacora" as T6_4
+    C6 ..> T6_4
+  }
+
+}
+@enduml

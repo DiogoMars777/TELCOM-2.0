@@ -42,6 +42,8 @@ export default function ClientesView({ user }) {
   const [error, setError] = useState(null);
   const [busqueda, setBusqueda] = useState('');
   const [estadoFiltro, setEstadoFiltro] = useState('');
+  const [page, setPage] = useState(1);
+  const [meta, setMeta] = useState(null);
 
   // Catálogo de zonas para selección (CU05 / CU07)
   const [zonas, setZonas] = useState([]);
@@ -86,14 +88,17 @@ export default function ClientesView({ user }) {
   }, []);
 
   // Cargar listado de clientes (CU06)
-  const loadClientes = useCallback(async () => {
+  const loadClientes = useCallback(async (targetPage = page) => {
     setLoading(true);
     setError(null);
     try {
       const data = await clienteConsultaService.fetchClientes({
         buscar: busqueda,
         estado: estadoFiltro,
+        page: targetPage,
+        per_page: 50,
       });
+      setMeta(data?.meta || null);
       // Filtrado local de respaldo (útil en modo demostración)
       const term = busqueda.toLowerCase().trim();
       const filtered = (Array.isArray(data) ? data : []).filter((c) => {
@@ -114,17 +119,22 @@ export default function ClientesView({ user }) {
     } finally {
       setLoading(false);
     }
-  }, [busqueda, estadoFiltro]);
+  }, [busqueda, estadoFiltro, page]);
 
   useEffect(() => {
     let ignore = false;
     (async () => {
+      setLoading(true);
+      setError(null);
       try {
         const data = await clienteConsultaService.fetchClientes({
           buscar: busqueda,
           estado: estadoFiltro,
+          page,
+          per_page: 50,
         });
         if (ignore) return;
+        setMeta(data?.meta || null);
         const term = busqueda.toLowerCase().trim();
         const filtered = (Array.isArray(data) ? data : []).filter((c) => {
           const matchesTerm =
@@ -150,7 +160,7 @@ export default function ClientesView({ user }) {
     return () => {
       ignore = true;
     };
-  }, [busqueda, estadoFiltro]);
+  }, [busqueda, estadoFiltro, page]);
 
   useEffect(() => {
     let ignore = false;
@@ -385,7 +395,10 @@ export default function ClientesView({ user }) {
             type="text"
             placeholder="Buscar por Nombre, CI, Teléfono o Código..."
             value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
+            onChange={(e) => {
+              setBusqueda(e.target.value);
+              setPage(1);
+            }}
             aria-label="Buscar clientes"
           />
         </div>
@@ -394,7 +407,10 @@ export default function ClientesView({ user }) {
           <Filter size={16} />
           <select
             value={estadoFiltro}
-            onChange={(e) => setEstadoFiltro(e.target.value)}
+            onChange={(e) => {
+              setEstadoFiltro(e.target.value);
+              setPage(1);
+            }}
             aria-label="Filtrar por estado"
           >
             <option value="">Todos los Estados</option>
@@ -407,7 +423,7 @@ export default function ClientesView({ user }) {
         <button
           type="button"
           className="btn btn-secondary"
-          onClick={loadClientes}
+          onClick={() => loadClientes(page)}
           disabled={loading}
           title="Actualizar listado"
           aria-label="Actualizar listado"
@@ -417,7 +433,7 @@ export default function ClientesView({ user }) {
         </button>
 
         <span className="clientes-counter">
-          {loading ? 'Buscando...' : `${clientes.length} abonados encontrados`}
+          {loading ? 'Buscando...' : `${meta?.total ?? clientes.length} abonados encontrados`}
         </span>
       </div>
 
@@ -554,6 +570,45 @@ export default function ClientesView({ user }) {
           </tbody>
         </table>
       </div>
+
+      {/* Barra de Paginación */}
+      {!loading && meta && meta.last_page > 1 && (
+        <div
+          className="pagination-bar no-print"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: '1rem',
+            padding: '0.75rem 0.5rem',
+            borderTop: '1px solid var(--border-color)',
+            flexWrap: 'wrap',
+            gap: '0.5rem',
+          }}
+        >
+          <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+            Página <strong>{meta.current_page}</strong> de <strong>{meta.last_page}</strong> (Mostrando {clientes.length} de {meta.total} registros)
+          </span>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <button
+              type="button"
+              className="btn btn-sm btn-secondary"
+              disabled={page <= 1 || loading}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+            >
+              ◀ Anterior
+            </button>
+            <button
+              type="button"
+              className="btn btn-sm btn-secondary"
+              disabled={page >= meta.last_page || loading}
+              onClick={() => setPage((p) => p + 1)}
+            >
+              Siguiente ▶
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* ============================================================== */}
       {/* MODAL 1: REGISTRAR NUEVO CLIENTE (CU05)                        */}

@@ -1,0 +1,49 @@
+@startuml cu14_caso_uso_detalle
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam roundcorner 10
+skinparam shadowing false
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #333333
+    FontName "Segoe UI"
+    FontSize 11
+}
+
+skinparam usecase {
+    BackgroundColor #D0E3FE
+    BorderColor #385D8A
+    FontName "Segoe UI"
+    FontSize 11
+    ArrowColor #333333
+    ArrowThickness 1.1
+}
+
+skinparam frame {
+    BorderColor #333333
+    BackgroundColor white
+    FontSize 12
+    FontStyle bold
+}
+
+left to right direction
+
+frame "uc CU14: Registrar corte realizado" {
+    actor "Administrador" as Admin
+    actor "Secretaría" as Secretaria
+    actor "Técnico" as Tecnico
+
+    usecase "CU14: Registrar corte\nrealizado" as CU14
+    usecase "CU13: Consultar listado\nde servicios para corte" as CU13
+    usecase "CU06: Consultar y\nbuscar clientes" as CU06
+
+    Admin -- CU14
+    Secretaria -- CU14
+    Tecnico -- CU14
+
+    CU14 .up.> CU13 : «include»
+    CU14 <.down. CU06 : «extend»
+}
+@enduml
