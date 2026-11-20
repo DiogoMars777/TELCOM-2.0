@@ -27,13 +27,14 @@ import EquipoReemplazoRetiroView from './views/Paquetes/P5_EquiposProveedoresInv
 import SolicitudInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/SolicitudInstalacionView';
 import ProgramarInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/CU22_ProgramarInstalacion/InstalacionesView';
 import InstalacionesView from './views/Paquetes/P6_InstalacionesTecnicas/CU23_RegistrarInstalacion/InstalacionesView';
+import CopiasSeguridadView from './views/Paquetes/P1_SeguridadAdministracion/CU28_GenerarRestaurarCopiasSeguridad/CopiasSeguridadView';
 
 // Iconos de cada módulo del panel
 import {
   Radio, LogOut, History, Users, MapPin,
   Wifi, Calendar,
   CreditCard, Clock, AlertTriangle, Scissors, RefreshCw, Lock,
-  Router, ArrowRightLeft, Package, Wrench, HardDrive, ClipboardList,
+  Router, ArrowRightLeft, Package, Wrench, HardDrive, ClipboardList, Database,
 } from 'lucide-react';
 
 import { authService } from './models/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/authModel';
@@ -206,6 +207,7 @@ export default function App() {
       items: [
         { id: 'CU02', label: 'Bitácora de Auditoría', icon: History },
         { id: 'CU03', label: 'Usuarios, Roles y Permisos', icon: Users },
+        { id: 'CU28', label: 'Copias de Seguridad (Backup)', icon: Database },
       ],
     },
     {
@@ -291,6 +293,8 @@ export default function App() {
         return <AuditoriaView />;
       case 'CU03':
         return <UsuariosView user={currentUser} onPermissionsUpdated={refreshCurrentUser} />;
+      case 'CU28':
+        return <CopiasSeguridadView user={currentUser} />;
       case 'CU04':
         return <ZonasCoberturaView user={currentUser} />;
       case 'CU05':

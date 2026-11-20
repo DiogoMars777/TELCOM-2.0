@@ -107,6 +107,7 @@ class DatabaseSeeder extends Seeder
             ['slug' => 'proveedores.manage', 'nombre' => 'Gestionar Proveedores', 'modulo' => 'PROVEEDORES', 'descripcion' => 'Gestión de proveedores.'],
             ['slug' => 'compras.manage', 'nombre' => 'Gestionar Compras', 'modulo' => 'COMPRAS', 'descripcion' => 'Gestión de compras.'],
             ['slug' => 'reportes.view', 'nombre' => 'Ver Reportes Gerenciales', 'modulo' => 'REPORTES', 'descripcion' => 'Reportes e indicadores.'],
+            ['slug' => 'backups.manage', 'nombre' => 'Gestionar Copias de Seguridad', 'modulo' => 'CU28', 'descripcion' => 'Generar, descargar y restaurar copias de seguridad de la base de datos.'],
         ];
 
         $permisosIds = [];
