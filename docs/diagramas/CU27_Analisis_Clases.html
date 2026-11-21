@@ -2,68 +2,26 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CU27: Análisis de Clases - Generar y Exportar Reportes Tradicionales</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background-color: #f8fafc;
+      background-color: #ffffff;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 20px 14px;
-      font-family: Arial, Helvetica, sans-serif;
+      padding: 10px;
     }
-    .header-bar {
+    svg {
       width: 100%;
-      max-width: 1680px;
-      margin-bottom: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #ffffff;
-      padding: 12px 20px;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      border: 1px solid #e2e8f0;
+      height: auto;
+      max-width: 1920px;
     }
-    .header-bar h1 {
-      font-size: 15px;
-      color: #0f172a;
-      font-weight: 700;
-    }
-    .btn-action {
-      background: #0284c7;
-      color: #ffffff;
-      border: none;
-      padding: 7px 14px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .btn-action:hover { background: #0369a1; }
-    .card {
-      background: #ffffff;
-      border-radius: 6px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-      width: 100%;
-      max-width: 1680px;
-      overflow-x: auto;
-      border: 1px solid #cbd5e1;
-    }
-    svg { width: 100%; height: auto; display: block; }
   </style>
 </head>
 <body>
-  <div class="header-bar">
-    <h1>CU27: Análisis de Clases - Generar y Exportar Reportes Tradicionales &mdash; Estándar Enterprise Architect 17.2</h1>
-    <button class="btn-action" onclick="window.print()">Imprimir / Exportar a PDF</button>
-  </div>
-  <div class="card">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1780 980" width="1780" height="980" style="background:#ffffff; font-family: Arial, Helvetica, sans-serif;">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1780 980" width="1780" height="980" style="background:#ffffff; font-family: Arial, Helvetica, sans-serif;">
   <defs>
     <style>
       .tab-title { font-size: 10px; font-weight: bold; fill: #1e293b; }
@@ -373,6 +331,5 @@
   </g>
 
 </svg>
-  </div>
 </body>
 </html>

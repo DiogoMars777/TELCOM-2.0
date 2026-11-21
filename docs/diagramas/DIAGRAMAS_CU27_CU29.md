@@ -2,21 +2,21 @@
 
 Documento técnico de análisis y diseño con **Diagramas de Comunicación**, **Análisis de Clases (Boundary-Control-Entity)** y **Diagramas de Secuencia** para los Casos de Uso **CU27** y **CU29**, modelados bajo la metodología y estándares de Enterprise Architect (EA) conforme al esquema de base de datos y código fuente del sistema **TELCOM**.
 
-Archivos vectoriales interactivos generados en `docs/diagramas/`:
+Archivos generados en `docs/diagramas/`:
 - **CU27:**
-  - [CU27_Diagrama_Comunicacion.html](file:///c:/Users/Daniel/Downloads/TELCOM%20ULTIMO/docs/diagramas/CU27_Diagrama_Comunicacion.html) / [CU27_Diagrama_Comunicacion.svg](file:///c:/Users/Daniel/Downloads/TELCOM%20ULTIMO/docs/diagramas/CU27_Diagrama_Comunicacion.svg)
-  - [CU27_Analisis_Clases.html](file:///c:/Users/Daniel/Downloads/TELCOM%20ULTIMO/docs/diagramas/CU27_Analisis_Clases.html) / [CU27_Analisis_Clases.svg](file:///c:/Users/Daniel/Downloads/TELCOM%20ULTIMO/docs/diagramas/CU27_Analisis_Clases.svg)
-  - [CU27_Diagrama_Secuencia.html](file:///c:/Users/Daniel/Downloads/TELCOM%20ULTIMO/docs/diagramas/CU27_Diagrama_Secuencia.html) / [CU27_Diagrama_Secuencia.svg](file:///c:/Users/Daniel/Downloads/TELCOM%20ULTIMO/docs/diagramas/CU27_Diagrama_Secuencia.svg)
+  - **Imágenes PNG:** [CU27_Diagrama_Comunicacion.png](CU27_Diagrama_Comunicacion.png) | [CU27_Analisis_Clases.png](CU27_Analisis_Clases.png) | [CU27_Diagrama_Secuencia.png](CU27_Diagrama_Secuencia.png)
+  - **Vectores / HTML:** [CU27_Diagrama_Comunicacion.html](CU27_Diagrama_Comunicacion.html) | [CU27_Analisis_Clases.html](CU27_Analisis_Clases.html) | [CU27_Diagrama_Secuencia.html](CU27_Diagrama_Secuencia.html)
 - **CU29:**
-  - [CU29_Diagrama_Comunicacion.html](file:///c:/Users/Daniel/Downloads/TELCOM%20ULTIMO/docs/diagramas/CU29_Diagrama_Comunicacion.html) / [CU29_Diagrama_Comunicacion.svg](file:///c:/Users/Daniel/Downloads/TELCOM%20ULTIMO/docs/diagramas/CU29_Diagrama_Comunicacion.svg)
-  - [CU29_Analisis_Clases.html](file:///c:/Users/Daniel/Downloads/TELCOM%20ULTIMO/docs/diagramas/CU29_Analisis_Clases.html) / [CU29_Analisis_Clases.svg](file:///c:/Users/Daniel/Downloads/TELCOM%20ULTIMO/docs/diagramas/CU29_Analisis_Clases.svg)
-  - [CU29_Diagrama_Secuencia.html](file:///c:/Users/Daniel/Downloads/TELCOM%20ULTIMO/docs/diagramas/CU29_Diagrama_Secuencia.html) / [CU29_Diagrama_Secuencia.svg](file:///c:/Users/Daniel/Downloads/TELCOM%20ULTIMO/docs/diagramas/CU29_Diagrama_Secuencia.svg)
+  - **Imágenes PNG:** [CU29_Diagrama_Comunicacion.png](CU29_Diagrama_Comunicacion.png) | [CU29_Analisis_Clases.png](CU29_Analisis_Clases.png) | [CU29_Diagrama_Secuencia.png](CU29_Diagrama_Secuencia.png)
+  - **Vectores / HTML:** [CU29_Diagrama_Comunicacion.html](CU29_Diagrama_Comunicacion.html) | [CU29_Analisis_Clases.html](CU29_Analisis_Clases.html) | [CU29_Diagrama_Secuencia.html](CU29_Diagrama_Secuencia.html)
 
 ---
 
 # PARTE 1: CU27 &mdash; GENERAR Y EXPORTAR REPORTES TRADICIONALES
 
 ## 1.1 Diagrama de Comunicación &mdash; CU27
+
+![Diagrama de Comunicación CU27](CU27_Diagrama_Comunicacion.png)
 
 En este diagrama se observan las instancias participantes y la secuencia de mensajes numerados por flujo, reflejando estrictamente los métodos existentes en el código:
 
@@ -72,6 +72,8 @@ flowchart LR
 ---
 
 ## 1.2 Diagrama de Análisis de Clases &mdash; CU27
+
+![Análisis de Clases CU27](CU27_Analisis_Clases.png)
 
 Estructura de clases con estereotipos BCE (Boundary, Control, Entity), tipos de datos según el modelo de datos de TELCOM y métodos extraídos del código:
 
@@ -208,6 +210,8 @@ classDiagram
 
 ## 1.3 Diagrama Secuencial &mdash; CU27
 
+![Diagrama Secuencial CU27](CU27_Diagrama_Secuencia.png)
+
 ```mermaid
 sequenceDiagram
     autonumber
@@ -278,6 +282,8 @@ sequenceDiagram
 
 ## 2.1 Diagrama de Comunicación &mdash; CU29
 
+![Diagrama de Comunicación CU29](CU29_Diagrama_Comunicacion.png)
+
 ### Flujos y Mensajes:
 1. **Flujo 1: Captura de voz, Speech-to-Text y procesamiento NLP**
    - `1: activarMicrofonoYDictar() ->` (Administrador &rarr; `UI_ComandoVoz`)
@@ -325,6 +331,8 @@ flowchart LR
 ---
 
 ## 2.2 Diagrama de Análisis de Clases &mdash; CU29
+
+![Análisis de Clases CU29](CU29_Analisis_Clases.png)
 
 ```mermaid
 classDiagram
@@ -416,6 +424,8 @@ classDiagram
 ---
 
 ## 2.3 Diagrama Secuencial &mdash; CU29
+
+![Diagrama Secuencial CU29](CU29_Diagrama_Secuencia.png)
 
 ```mermaid
 sequenceDiagram

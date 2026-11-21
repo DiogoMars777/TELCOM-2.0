@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 
 const outputDir = path.resolve(__dirname);
 
@@ -46,69 +47,26 @@ function wrapHtml(title, svgContent) {
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title}</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background-color: #f8fafc;
+      background-color: #ffffff;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 20px 14px;
-      font-family: Arial, Helvetica, sans-serif;
+      padding: 10px;
     }
-    .header-bar {
+    svg {
       width: 100%;
-      max-width: 1680px;
-      margin-bottom: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #ffffff;
-      padding: 12px 20px;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      border: 1px solid #e2e8f0;
+      height: auto;
+      max-width: 1920px;
     }
-    .header-bar h1 {
-      font-size: 15px;
-      color: #0f172a;
-      font-weight: 700;
-    }
-    .btn-action {
-      background: #0284c7;
-      color: #ffffff;
-      border: none;
-      padding: 7px 14px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .btn-action:hover { background: #0369a1; }
-    .card {
-      background: #ffffff;
-      border-radius: 6px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-      width: 100%;
-      max-width: 1680px;
-      overflow-x: auto;
-      border: 1px solid #cbd5e1;
-    }
-    svg { width: 100%; height: auto; display: block; }
   </style>
 </head>
 <body>
-  <div class="header-bar">
-    <h1>${title} &mdash; Estándar Enterprise Architect 17.2</h1>
-    <button class="btn-action" onclick="window.print()">Imprimir / Exportar a PDF</button>
-  </div>
-  <div class="card">
-    ${svgContent}
-  </div>
+  ${svgContent}
 </body>
 </html>`;
 }
@@ -1418,38 +1376,57 @@ function buildCU29Sequence() {
 }
 
 // =========================================================================
-// EJECUCIÓN Y GENERACIÓN DE LOS 6 DIAGRAMAS
+// EJECUCIÓN Y GENERACIÓN DE LOS 6 DIAGRAMAS (SVG, HTML, PNG)
 // =========================================================================
+
+const edgePaths = [
+  'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+  'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
+  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+];
+const browserExe = edgePaths.find((p) => fs.existsSync(p));
 
 const diagrams = [
   {
     name: 'CU27_Diagrama_Comunicacion',
     title: 'CU27: Diagrama de Comunicación - Generar y Exportar Reportes Tradicionales',
+    width: 1720,
+    height: 980,
     content: buildCU27Communication().trim(),
   },
   {
     name: 'CU27_Analisis_Clases',
     title: 'CU27: Análisis de Clases - Generar y Exportar Reportes Tradicionales',
+    width: 1840,
+    height: 1040,
     content: buildCU27ClassAnalysis().trim(),
   },
   {
     name: 'CU27_Diagrama_Secuencia',
     title: 'CU27: Diagrama Secuencial - Generar y Exportar Reportes Tradicionales',
+    width: 1740,
+    height: 1240,
     content: buildCU27Sequence().trim(),
   },
   {
     name: 'CU29_Diagrama_Comunicacion',
     title: 'CU29: Diagrama de Comunicación - Capturar y Transcribir Comandos de Voz',
+    width: 1720,
+    height: 960,
     content: buildCU29Communication().trim(),
   },
   {
     name: 'CU29_Analisis_Clases',
     title: 'CU29: Análisis de Clases - Capturar y Transcribir Comandos de Voz',
+    width: 1740,
+    height: 1000,
     content: buildCU29ClassAnalysis().trim(),
   },
   {
     name: 'CU29_Diagrama_Secuencia',
     title: 'CU29: Diagrama Secuencial - Capturar y Transcribir Comandos de Voz',
+    width: 1740,
+    height: 1180,
     content: buildCU29Sequence().trim(),
   },
 ];
@@ -1457,10 +1434,27 @@ const diagrams = [
 diagrams.forEach((d) => {
   const svgPath = path.join(outputDir, `${d.name}.svg`);
   const htmlPath = path.join(outputDir, `${d.name}.html`);
+  const pngPath = path.join(outputDir, `${d.name}.png`);
 
   fs.writeFileSync(svgPath, d.content, 'utf8');
   fs.writeFileSync(htmlPath, wrapHtml(d.title, d.content), 'utf8');
-  console.log(`[OK] Generado: ${d.name}.svg y ${d.name}.html`);
+  console.log(`[OK] Guardado: ${d.name}.svg y ${d.name}.html`);
+
+  if (browserExe) {
+    try {
+      execFileSync(browserExe, [
+        '--headless=new',
+        '--disable-gpu',
+        '--hide-scrollbars',
+        `--screenshot=${pngPath}`,
+        `--window-size=${d.width},${d.height}`,
+        `file:///${htmlPath.replace(/\\/g, '/')}`,
+      ], { stdio: 'ignore' });
+      console.log(`[OK] Renderizado PNG: ${d.name}.png`);
+    } catch (err) {
+      console.error(`[WARN] Error generando PNG para ${d.name}:`, err.message);
+    }
+  }
 });
 
-console.log('\\nTodos los diagramas para CU27 y CU29 han sido generados exitosamente en:', outputDir);
+console.log('\\nTodos los diagramas (SVG, HTML, PNG) para CU27 y CU29 han sido generados exitosamente en:', outputDir);
