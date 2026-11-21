@@ -76,7 +76,7 @@ class AuthorizationRbacTest extends TestCase
         $secretaria = Rol::where('slug', 'secretaria')->firstOrFail();
         $tecnico = Rol::where('slug', 'tecnico')->firstOrFail();
 
-        $this->assertSame(29, $admin->permisos()->count(), 'El administrador debe tener todos los permisos.');
+        $this->assertSame(30, $admin->permisos()->count(), 'El administrador debe tener todos los permisos.');
         $this->assertSame(20, $secretaria->permisos()->count());
         $this->assertSame(8, $tecnico->permisos()->count());
 

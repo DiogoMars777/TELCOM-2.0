@@ -31,6 +31,7 @@ const PERMISOS_ADMIN = [
   'equipos.view', 'equipos.manage', 'equipos.assign',
   'instalaciones.view', 'instalaciones.schedule', 'instalaciones.execute',
   'proveedores.manage', 'compras.manage', 'reportes.view',
+  'voz.nlp',
 ];
 
 const PERMISOS_SECRETARIA = [

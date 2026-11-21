@@ -27,6 +27,7 @@ import EquipoReemplazoRetiroView from './views/Paquetes/P5_EquiposProveedoresInv
 import SolicitudInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/SolicitudInstalacionView';
 import ProgramarInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/CU22_ProgramarInstalacion/InstalacionesView';
 import InstalacionesView from './views/Paquetes/P6_InstalacionesTecnicas/CU23_RegistrarInstalacion/InstalacionesView';
+import IntencionVozView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU30_ProcesarIntencionVozIA/IntencionVozView';
 
 // Iconos de cada módulo del panel
 import {
@@ -34,6 +35,7 @@ import {
   Wifi, Calendar,
   CreditCard, Clock, AlertTriangle, Scissors, RefreshCw, Lock,
   Router, ArrowRightLeft, Package, Wrench, HardDrive, ClipboardList,
+  Sparkles, Brain,
 } from 'lucide-react';
 
 import { authService } from './models/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/authModel';
@@ -252,6 +254,12 @@ export default function App() {
       ],
     },
     {
+      title: 'P7: Inteligencia de Voz y NLP',
+      items: [
+        { id: 'CU30', label: 'Asistente de Voz con IA (NLP)', icon: Sparkles },
+      ],
+    },
+    {
       title: 'Mi Cuenta',
       items: [
         { id: 'CU01_PASSWORD', label: 'Cambiar contraseña', icon: Lock },
@@ -329,6 +337,8 @@ export default function App() {
         return <ProgramarInstalacionView user={currentUser} />;
       case 'CU23':
         return <InstalacionesView user={currentUser} />;
+      case 'CU30':
+        return <IntencionVozView onNavigate={(targetCu) => setActiveCU(targetCu)} />;
       default:
         return <ClientesView user={currentUser} />;
     }

@@ -50,6 +50,8 @@ use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU21_RegistrarSolicit
 use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU22_ProgramarInstalacion\InstalacionesController;
 // CU23: Registrar y Gestionar Órdenes de Instalación Técnica
 use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU23_RegistrarInstalacion\InstalacionRegistroController;
+// CU30: Procesar intención de voz con IA (NLP)
+use App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU30_ProcesarIntencionVozIA\IntencionVozController;
 
 /*
 |--------------------------------------------------------------------------
@@ -398,3 +400,18 @@ Route::prefix('cu23/instalaciones')->group(function () {
         ->whereNumber('id')
         ->middleware(['auth:sanctum', 'permission:instalaciones.execute']);
 });
+
+/*
+|--------------------------------------------------------------------------
+| CU30 - PROCESAR INTENCIÓN DE VOZ CON IA (NLP)
+|--------------------------------------------------------------------------
+| Permiso RBAC: voz.nlp (disponible para admin, secretaría, soporte técnico)
+*/
+Route::prefix('cu30')->middleware(['auth:sanctum', 'permission:voz.nlp'])->group(function () {
+    Route::post('/procesar', [IntencionVozController::class, 'procesar']);
+    Route::get('/historial', [IntencionVozController::class, 'historial']);
+    Route::get('/catalogo', [IntencionVozController::class, 'catalogo']);
+    Route::post('/feedback', [IntencionVozController::class, 'feedback']);
+    Route::post('/ejecutar', [IntencionVozController::class, 'ejecutar']);
+});
+
