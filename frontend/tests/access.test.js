@@ -154,6 +154,17 @@ test('hasPermission exige el permiso exacto', () => {
   assert.equal(hasPermission(null, 'clientes.view'), false);
 });
 
+test('CU24 exige proveedores.manage y solo está disponible al Administrador de la matriz real', () => {
+  assert.equal(CU_PERMISSIONS.CU24, 'proveedores.manage');
+  assert.ok(CU_ORDER.includes('CU24'));
+  assert.equal(canAccessCu(admin, 'CU24'), true);
+  for (const user of [secretaria, tecnico, sinPermisos, null, { permisos: ['compras.manage', 'equipos.manage'] }]) {
+    assert.equal(canAccessCu(user, 'CU24'), false);
+    assert.equal(filterCuIds(user, ['CU24']).length, 0);
+  }
+  assert.equal(firstAllowedCu({ permisos: ['proveedores.manage'] }), 'CU24');
+});
+
 test('El módulo inicial es el primero permitido del orden preferido', () => {
   assert.equal(firstAllowedCu(admin), 'CU06');
   assert.equal(firstAllowedCu(secretaria), 'CU06');

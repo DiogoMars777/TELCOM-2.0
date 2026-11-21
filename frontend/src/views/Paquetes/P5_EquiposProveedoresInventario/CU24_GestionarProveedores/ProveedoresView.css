@@ -1,0 +1,119 @@
+.cu24-view .cu24-status {
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.cu24-view .cu24-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.cu24-view .cu24-text {
+  max-width: 260px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.cu24-view .modal-card input,
+.cu24-view .modal-card textarea {
+  width: 100%;
+}
+
+.cu24-view .cu24-form-fields {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.cu24-view .cu24-alert-close {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.cu24-view .cu24-detalle > div {
+  margin-bottom: 1rem;
+}
+
+.cu24-view .cu24-detalle dt {
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.cu24-view .cu24-detalle dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 768px) {
+  .cu24-view .filters-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cu24-view .search-box,
+  .cu24-view .filter-item {
+    width: 100%;
+  }
+
+  .cu24-view .table-responsive {
+    overflow-x: visible;
+    background: transparent;
+    border: 0;
+  }
+
+  .cu24-view .data-table,
+  .cu24-view .data-table tbody,
+  .cu24-view .data-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .cu24-view .data-table thead {
+    display: none;
+  }
+
+  .cu24-view .data-table tr {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.5rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .cu24-view .data-table td {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: none;
+    border: 0;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  .cu24-view .data-table td::before {
+    content: attr(data-label);
+    flex: 0 0 auto;
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-align: left;
+  }
+
+  .cu24-view .data-table td.cu24-status {
+    justify-content: center;
+  }
+
+  .cu24-view .data-table td.cu24-status::before {
+    content: none;
+  }
+
+  .cu24-view .cu24-actions {
+    justify-content: flex-end;
+  }
+}

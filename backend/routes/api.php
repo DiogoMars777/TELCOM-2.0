@@ -50,6 +50,8 @@ use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU21_RegistrarSolicit
 use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU22_ProgramarInstalacion\InstalacionesController;
 // CU23: Registrar y Gestionar Órdenes de Instalación Técnica
 use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU23_RegistrarInstalacion\InstalacionRegistroController;
+// CU24: Gestionar proveedores (Administrador)
+use App\Http\Controllers\Paquetes\P5_EquiposProveedoresInventario\CU24_GestionarProveedores\ProveedorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -156,6 +158,16 @@ Route::prefix('cu08')->group(function () {
         ->middleware(['auth:sanctum', 'permission:servicios.manage']);
     Route::put('/servicios/{id}/activar', [ServicioInternetController::class, 'activar'])
         ->middleware(['auth:sanctum', 'permission:servicios.manage']);
+});
+
+// CU24: Gestionar proveedores. Baja lógica mediante estado; sin ruta DELETE.
+Route::prefix('cu24/proveedores')->middleware(['auth:sanctum', 'permission:proveedores.manage'])->group(function () {
+    Route::get('/', [ProveedorController::class, 'index']);
+    Route::post('/', [ProveedorController::class, 'store']);
+    Route::get('/{proveedor}', [ProveedorController::class, 'show'])->whereNumber('proveedor');
+    Route::put('/{proveedor}', [ProveedorController::class, 'update'])->whereNumber('proveedor');
+    Route::put('/{proveedor}/activar', [ProveedorController::class, 'activar'])->whereNumber('proveedor');
+    Route::put('/{proveedor}/desactivar', [ProveedorController::class, 'desactivar'])->whereNumber('proveedor');
 });
 
 // CU09: Generar mensualidades de servicios (admin, secretaría)

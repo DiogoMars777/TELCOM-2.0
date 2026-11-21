@@ -24,6 +24,7 @@ import AsignarPlanView from './views/Paquetes/P3_ServiciosPlanes/CU17_AsignarCam
 import EquiposView from './views/Paquetes/P5_EquiposProveedoresInventario/CU18_RegistrarCatalogoEquipos/EquiposView';
 import AsignarEquipoComodatoView from './views/Paquetes/P5_EquiposProveedoresInventario/CU19_AsignarEquipoComodato/AsignarEquipoComodatoView';
 import EquipoReemplazoRetiroView from './views/Paquetes/P5_EquiposProveedoresInventario/CU20_ReemplazarRetirarEquipo/EquipoReemplazoRetiroView';
+import ProveedoresView from './views/Paquetes/P5_EquiposProveedoresInventario/CU24_GestionarProveedores/ProveedoresView';
 import SolicitudInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/SolicitudInstalacionView';
 import ProgramarInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/CU22_ProgramarInstalacion/InstalacionesView';
 import InstalacionesView from './views/Paquetes/P6_InstalacionesTecnicas/CU23_RegistrarInstalacion/InstalacionesView';
@@ -241,6 +242,7 @@ export default function App() {
         { id: 'CU18', label: 'Catálogo de Equipos e Inventario', icon: Package },
         { id: 'CU19', label: 'Asignar Equipo en Comodato', icon: HardDrive },
         { id: 'CU20', label: 'Reemplazar / Retirar Equipo', icon: Router },
+        { id: 'CU24', label: 'Proveedores', icon: Users },
       ],
     },
     {
@@ -323,6 +325,8 @@ export default function App() {
         return <AsignarEquipoComodatoView user={currentUser} />;
       case 'CU20':
         return <EquipoReemplazoRetiroView user={currentUser} />;
+      case 'CU24':
+        return <ProveedoresView user={currentUser} />;
       case 'CU21':
         return <SolicitudInstalacionView user={currentUser} />;
       case 'CU22':
