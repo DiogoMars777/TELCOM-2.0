@@ -28,13 +28,14 @@ import ProveedoresView from './views/Paquetes/P5_EquiposProveedoresInventario/CU
 import SolicitudInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/SolicitudInstalacionView';
 import ProgramarInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/CU22_ProgramarInstalacion/InstalacionesView';
 import InstalacionesView from './views/Paquetes/P6_InstalacionesTecnicas/CU23_RegistrarInstalacion/InstalacionesView';
+import ReporteInteligenteView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU31_GenerarReporteInteligenteVoz/ReporteInteligenteView';
 
 // Iconos de cada módulo del panel
 import {
   Radio, LogOut, History, Users, MapPin,
   Wifi, Calendar,
   CreditCard, Clock, AlertTriangle, Scissors, RefreshCw, Lock,
-  Router, ArrowRightLeft, Package, Wrench, HardDrive, ClipboardList,
+  Router, ArrowRightLeft, Package, Wrench, HardDrive, ClipboardList, FileBarChart,
 } from 'lucide-react';
 
 import { authService } from './models/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/authModel';
@@ -254,6 +255,12 @@ export default function App() {
       ],
     },
     {
+      title: 'P7: Dashboard, Reportes e Inteligencia de Voz',
+      items: [
+        { id: 'CU31', label: 'Reporte inteligente', icon: FileBarChart },
+      ],
+    },
+    {
       title: 'Mi Cuenta',
       items: [
         { id: 'CU01_PASSWORD', label: 'Cambiar contraseña', icon: Lock },
@@ -333,6 +340,8 @@ export default function App() {
         return <ProgramarInstalacionView user={currentUser} />;
       case 'CU23':
         return <InstalacionesView user={currentUser} />;
+      case 'CU31':
+        return <ReporteInteligenteView user={currentUser} />;
       default:
         return <ClientesView user={currentUser} />;
     }

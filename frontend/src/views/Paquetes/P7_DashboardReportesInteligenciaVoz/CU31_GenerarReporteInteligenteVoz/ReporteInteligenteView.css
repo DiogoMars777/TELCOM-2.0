@@ -1,0 +1,35 @@
+.cu31-view { max-width: 1200px; margin: 0 auto; }
+.cu31-view h2 { display: flex; align-items: center; gap: .65rem; }
+.cu31-solicitud, .cu31-resultado { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.4rem; margin-bottom: 1.2rem; }
+.cu31-solicitud label { display: block; font-weight: 600; margin-bottom: .65rem; }
+.cu31-solicitud textarea { width: 100%; resize: vertical; min-height: 105px; padding: .8rem; color: var(--text-primary); background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-sm); font: inherit; }
+.cu31-solicitud textarea:focus-visible, .cu31-ejemplo:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+.cu31-acciones { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: .8rem; }
+.cu31-acciones p, .cu31-pie { color: var(--text-secondary); font-size: .85rem; }
+.cu31-ejemplos { margin-bottom: 1.4rem; }
+.cu31-ejemplos summary { cursor: pointer; font-weight: 600; margin-bottom: .8rem; }
+.cu31-ejemplos > div { display: flex; flex-wrap: wrap; gap: .5rem; }
+.cu31-ejemplo { background: var(--bg-input); color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: .55rem .7rem; font: inherit; font-size: .85rem; cursor: pointer; text-align: left; }
+.cu31-ejemplo:hover:not(:disabled) { color: var(--text-primary); border-color: var(--info); }
+.cu31-view button:disabled { opacity: .6; cursor: not-allowed; }
+.cu31-estado { padding: 1rem 0; color: var(--info); }
+.cu31-interpretacion { background: var(--bg-input); border-left: 3px solid var(--info); padding: 1rem; margin-bottom: 1.2rem; font-size: .9rem; overflow-wrap: anywhere; }
+.cu31-interpretacion > span { display: block; color: var(--text-secondary); margin-top: .3rem; }
+.cu31-interpretacion dl { display: flex; flex-wrap: wrap; gap: .6rem 1.4rem; margin-top: .7rem; }
+.cu31-interpretacion dt { color: var(--text-secondary); font-size: .8rem; }
+.cu31-resumen { margin: .6rem 0 1.1rem; color: var(--text-secondary); }
+.cu31-totales { display: flex; flex-wrap: wrap; gap: .8rem; margin-bottom: 1.3rem; }
+.cu31-totales > div { border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: .8rem 1rem; min-width: 155px; }
+.cu31-totales span { display: block; color: var(--text-secondary); font-size: .85rem; }
+.cu31-totales strong { display: block; font-size: 1.4rem; margin-top: .2rem; }
+.cu31-tabla { width: 100%; overflow-x: auto; border: 1px solid var(--border-color); border-radius: var(--radius-sm); }
+.cu31-tabla table { border-collapse: collapse; width: 100%; text-align: left; }
+.cu31-tabla caption { text-align: left; padding: .7rem; font-weight: 600; }
+.cu31-tabla th, .cu31-tabla td { padding: .8rem; border-top: 1px solid var(--border-color); }
+.cu31-tabla th { color: var(--text-secondary); background: var(--bg-input); font-size: .85rem; }
+.cu31-pie { margin-top: .8rem; }
+@media (max-width: 640px) {
+  .cu31-solicitud, .cu31-resultado { padding: 1rem; }
+  .cu31-acciones { align-items: stretch; flex-direction: column; }
+  .cu31-totales > div { min-width: 0; flex: 1 1 130px; }
+}

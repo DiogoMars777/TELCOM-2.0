@@ -52,6 +52,7 @@ use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU22_ProgramarInstala
 use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU23_RegistrarInstalacion\InstalacionRegistroController;
 // CU24: Gestionar proveedores (Administrador)
 use App\Http\Controllers\Paquetes\P5_EquiposProveedoresInventario\CU24_GestionarProveedores\ProveedorController;
+use App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU31_GenerarReporteInteligenteVoz\ReporteInteligenteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +66,10 @@ use App\Http\Controllers\Paquetes\P5_EquiposProveedoresInventario\CU24_Gestionar
 |   y `rol_permiso`. Sin permiso -> HTTP 403.
 |--------------------------------------------------------------------------
 */
+
+// CU31: generar reportes mediante texto transcrito o intención estructurada (CU30).
+Route::post('cu31/reportes/generar', [ReporteInteligenteController::class, 'generar'])
+    ->middleware(['auth:sanctum', 'permission:reportes.view']);
 
 // CU01: Iniciar y cerrar sesión
 Route::prefix('cu01')->group(function () {
