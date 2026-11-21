@@ -40,6 +40,10 @@ use App\Http\Controllers\Paquetes\ServiciosPlanes\CU16_GestionarCatalogoPlanes\P
 use App\Http\Controllers\Paquetes\ServiciosPlanes\CU17_AsignarCambiarPlanInternet\AsignacionPlanController;
 // CU19: Asignar equipo en comodato a un servicio (entidad UML Equipo, AsignacionEquipo, Inventario)
 use App\Http\Controllers\Paquetes\EquiposInventario\CU19_AsignarEquipoComodato\AsignacionEquipoComodatoController;
+// CU27: Generar y exportar reportes tradicionales
+use App\Http\Controllers\Paquetes\DashboardReportesInteligenciaVoz\CU27_GenerarExportarReportesTradicionales\ReporteTradicionalController;
+// CU29: Capturar y transcribir comandos de voz
+use App\Http\Controllers\Paquetes\DashboardReportesInteligenciaVoz\CU29_CapturarTranscribirComandosVoz\ComandoVozController;
 
 /*
 |--------------------------------------------------------------------------
@@ -278,4 +282,38 @@ Route::prefix('cu19')->middleware('auth:sanctum')->group(function () {
         ->whereNumber('id')
         ->middleware('permission:equipos.assign');
 });
+
+/*
+|--------------------------------------------------------------------------
+| CU27 - GENERAR Y EXPORTAR REPORTES TRADICIONALES
+|--------------------------------------------------------------------------
+| Permite al Administrador consultar, consolidar y exportar la información
+| administrativa, financiera y operativa de TELCOM en formatos PDF y Excel.
+| Actores: Administrador.
+| Permisos RBAC: reportes.view
+*/
+Route::prefix('cu27')->middleware(['auth:sanctum', 'permission:reportes.view'])->group(function () {
+    Route::get('/catalogo', [ReporteTradicionalController::class, 'catalogo']);
+    Route::get('/parametros', [ReporteTradicionalController::class, 'parametros']);
+    Route::get('/generar', [ReporteTradicionalController::class, 'generar']);
+    Route::get('/exportar-excel', [ReporteTradicionalController::class, 'exportarExcel']);
+    Route::get('/exportar-pdf', [ReporteTradicionalController::class, 'exportarPdf']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| CU29 - CAPTURAR Y TRANSCRIBIR COMANDOS DE VOZ
+|--------------------------------------------------------------------------
+| Permite al Administrador dictar solicitudes y consultas mediante el micrófono
+| para convertirlas automáticamente en texto estructurado en tiempo real.
+| Actores: Administrador.
+| Permisos RBAC: reportes.view
+*/
+Route::prefix('cu29')->middleware(['auth:sanctum', 'permission:reportes.view'])->group(function () {
+    Route::post('/transcribir', [ComandoVozController::class, 'transcribir']);
+    Route::get('/historial', [ComandoVozController::class, 'historial']);
+    Route::post('/confirmar', [ComandoVozController::class, 'confirmar']);
+    Route::get('/ejemplos', [ComandoVozController::class, 'ejemplos']);
+});
+
 

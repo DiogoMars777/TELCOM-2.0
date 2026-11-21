@@ -37,6 +37,8 @@ export const CU_PERMISSIONS = {
   CU16: 'planes.manage',
   CU17: 'planes.view',
   CU19: 'equipos.assign',
+  CU27: 'reportes.view',
+  CU29: 'reportes.view',
 };
 
 /**
@@ -45,7 +47,7 @@ export const CU_PERMISSIONS = {
  */
 export const CU_ORDER = [
   'CU06', 'CU05', 'CU07', 'CU08', 'CU16', 'CU17', 'CU19', 'CU09', 'CU10', 'CU11',
-  'CU12', 'CU13', 'CU14', 'CU15', 'CU02', 'CU03', 'CU04', 'CU01',
+  'CU12', 'CU13', 'CU14', 'CU15', 'CU27', 'CU29', 'CU02', 'CU03', 'CU04', 'CU01',
 ];
 
 /**

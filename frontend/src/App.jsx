@@ -22,13 +22,15 @@ import ReactivacionesView from './views/Paquetes/ServiciosPlanes/CU15_ListaRegis
 import PlanesInternetView from './views/Paquetes/ServiciosPlanes/CU16_GestionarCatalogoPlanes/PlanesInternetView';
 import AsignarPlanView from './views/Paquetes/ServiciosPlanes/CU17_AsignarCambiarPlanInternet/AsignarPlanView';
 import AsignarEquipoComodatoView from './views/Paquetes/EquiposInventario/CU19_AsignarEquipoComodato/AsignarEquipoComodatoView';
+import ReporteTradicionalView from './views/Paquetes/DashboardReportesInteligenciaVoz/CU27_GenerarExportarReportesTradicionales/ReporteTradicionalView';
+import ComandoVozView from './views/Paquetes/DashboardReportesInteligenciaVoz/CU29_CapturarTranscribirComandosVoz/ComandoVozView';
 
 // Iconos de cada módulo del panel
 import {
   Radio, LogOut, History, Users, MapPin,
   Wifi, Calendar,
   CreditCard, Clock, AlertTriangle, Scissors, RefreshCw, Lock,
-  Router, ArrowRightLeft, HardDrive,
+  Router, ArrowRightLeft, HardDrive, BarChart3, Mic,
 } from 'lucide-react';
 
 import { authService } from './models/Paquetes/SeguridadAdministracion/CU01_IniciarCerrarSesion/authModel';
@@ -115,6 +117,7 @@ export default function App() {
   const [booting, setBooting] = useState(true);
   const [activeCU, setActiveCU] = useState('CU06');
   const [corteServicioSelected, setCorteServicioSelected] = useState(null);
+  const [reporteVoiceFilter, setReporteVoiceFilter] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isAuthenticated = Boolean(currentUser);
@@ -240,6 +243,13 @@ export default function App() {
       ],
     },
     {
+      title: 'Reportes & Asistente Voz',
+      items: [
+        { id: 'CU27', label: 'Reportes Tradicionales', icon: BarChart3 },
+        { id: 'CU29', label: 'Asistente por Voz', icon: Mic },
+      ],
+    },
+    {
       title: 'Mi Cuenta',
       items: [
         { id: 'CU01_PASSWORD', label: 'Cambiar contraseña', icon: Lock },
@@ -307,6 +317,22 @@ export default function App() {
         return <AsignarPlanView user={currentUser} />;
       case 'CU19':
         return <AsignarEquipoComodatoView user={currentUser} />;
+      case 'CU27':
+        return (
+          <ReporteTradicionalView
+            initialTipo={reporteVoiceFilter?.tipo || 'clientes_zona'}
+            initialFilters={reporteVoiceFilter?.filtros || {}}
+          />
+        );
+      case 'CU29':
+        return (
+          <ComandoVozView
+            onIrAReporteTradicional={(tipo, params) => {
+              setReporteVoiceFilter({ tipo, filtros: params });
+              setActiveCU('CU27');
+            }}
+          />
+        );
       default:
         return <ClientesView user={currentUser} />;
     }
