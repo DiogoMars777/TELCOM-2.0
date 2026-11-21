@@ -28,6 +28,7 @@ import SolicitudInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/
 import ProgramarInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/CU22_ProgramarInstalacion/InstalacionesView';
 import InstalacionesView from './views/Paquetes/P6_InstalacionesTecnicas/CU23_RegistrarInstalacion/InstalacionesView';
 import IntencionVozView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU30_ProcesarIntencionVozIA/IntencionVozView';
+import DashboardAdminFinancieroView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU26_VisualizarDashboardAdminFinanciero/DashboardAdminFinancieroView';
 
 // Iconos de cada módulo del panel
 import {
@@ -35,7 +36,7 @@ import {
   Wifi, Calendar,
   CreditCard, Clock, AlertTriangle, Scissors, RefreshCw, Lock,
   Router, ArrowRightLeft, Package, Wrench, HardDrive, ClipboardList,
-  Sparkles, Brain,
+  Sparkles, Brain, LayoutDashboard,
 } from 'lucide-react';
 
 import { authService } from './models/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/authModel';
@@ -254,8 +255,9 @@ export default function App() {
       ],
     },
     {
-      title: 'P7: Inteligencia de Voz y NLP',
+      title: 'P7: Dashboard, Reportes e Inteligencia por Voz',
       items: [
+        { id: 'CU26', label: 'Dashboard General / Financiero', icon: LayoutDashboard },
         { id: 'CU30', label: 'Asistente de Voz con IA (NLP)', icon: Sparkles },
       ],
     },
@@ -337,6 +339,8 @@ export default function App() {
         return <ProgramarInstalacionView user={currentUser} />;
       case 'CU23':
         return <InstalacionesView user={currentUser} />;
+      case 'CU26':
+        return <DashboardAdminFinancieroView user={currentUser} onNavigate={(cu) => setActiveCU(cu)} />;
       case 'CU30':
         return <IntencionVozView onNavigate={(targetCu) => setActiveCU(targetCu)} />;
       default:

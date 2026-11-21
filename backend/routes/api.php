@@ -50,6 +50,8 @@ use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU21_RegistrarSolicit
 use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU22_ProgramarInstalacion\InstalacionesController;
 // CU23: Registrar y Gestionar Órdenes de Instalación Técnica
 use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU23_RegistrarInstalacion\InstalacionRegistroController;
+// CU26: Visualizar Dashboard administrativo y financiero
+use App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU26_VisualizarDashboardAdminFinanciero\DashboardAdminFinancieroController;
 // CU30: Procesar intención de voz con IA (NLP)
 use App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU30_ProcesarIntencionVozIA\IntencionVozController;
 
@@ -399,6 +401,23 @@ Route::prefix('cu23/instalaciones')->group(function () {
     Route::put('/{id}/finalizar', [InstalacionRegistroController::class, 'finalizar'])
         ->whereNumber('id')
         ->middleware(['auth:sanctum', 'permission:instalaciones.execute']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| CU26 - VISUALIZAR DASHBOARD ADMINISTRATIVO Y FINANCIERO
+|--------------------------------------------------------------------------
+| Permiso RBAC: reportes.view (Administrador y Secretaría)
+*/
+Route::prefix('cu26/dashboard')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [DashboardAdminFinancieroController::class, 'index'])
+        ->middleware('permission:reportes.view');
+    Route::get('/financiero', [DashboardAdminFinancieroController::class, 'financiero'])
+        ->middleware('permission:reportes.view');
+    Route::get('/operativo', [DashboardAdminFinancieroController::class, 'operativo'])
+        ->middleware('permission:reportes.view');
+    Route::get('/alertas', [DashboardAdminFinancieroController::class, 'alertas'])
+        ->middleware('permission:reportes.view');
 });
 
 /*
