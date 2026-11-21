@@ -94,14 +94,14 @@ class AsignacionEquipoComodatoController extends Controller
             $term = '%' . trim($request->query('buscar')) . '%';
             $query->where(function ($q) use ($term) {
                 $q->where('codigoServicio', 'like', $term)
-                  ->orWhere('direccion', 'like', $term)
-                  ->orWhere('ipAsignada', 'like', $term)
-                  ->orWhere('macRouter', 'like', $term)
-                  ->orWhereHas('cliente', function ($c) use ($term) {
-                      $c->where('nombreCompleto', 'like', $term)
-                        ->orWhere('ci', 'like', $term)
-                        ->orWhere('codigoCliente', 'like', $term);
-                  });
+                    ->orWhere('direccion', 'like', $term)
+                    ->orWhere('ipAsignada', 'like', $term)
+                    ->orWhere('macRouter', 'like', $term)
+                    ->orWhereHas('cliente', function ($c) use ($term) {
+                        $c->where('nombreCompleto', 'like', $term)
+                            ->orWhere('ci', 'like', $term)
+                            ->orWhere('codigoCliente', 'like', $term);
+                    });
             });
         }
 
@@ -142,8 +142,8 @@ class AsignacionEquipoComodatoController extends Controller
             $term = '%' . trim($request->query('buscar')) . '%';
             $query->where(function ($q) use ($term) {
                 $q->where('numeroSerie', 'like', $term)
-                  ->orWhere('mac', 'like', $term)
-                  ->orWhere('ip', 'like', $term);
+                    ->orWhere('mac', 'like', $term)
+                    ->orWhere('ip', 'like', $term);
             });
         }
 
