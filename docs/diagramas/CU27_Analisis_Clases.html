@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CU27: Análisis de Clases - Generar y Exportar Reportes Tradicionales</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px 14px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .header-bar {
+      width: 100%;
+      max-width: 1680px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border: 1px solid #e2e8f0;
+    }
+    .header-bar h1 {
+      font-size: 15px;
+      color: #0f172a;
+      font-weight: 700;
+    }
+    .btn-action {
+      background: #0284c7;
+      color: #ffffff;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-action:hover { background: #0369a1; }
+    .card {
+      background: #ffffff;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      width: 100%;
+      max-width: 1680px;
+      overflow-x: auto;
+      border: 1px solid #cbd5e1;
+    }
+    svg { width: 100%; height: auto; display: block; }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <h1>CU27: Análisis de Clases - Generar y Exportar Reportes Tradicionales &mdash; Estándar Enterprise Architect 17.2</h1>
+    <button class="btn-action" onclick="window.print()">Imprimir / Exportar a PDF</button>
+  </div>
+  <div class="card">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1780 980" width="1780" height="980" style="background:#ffffff; font-family: Arial, Helvetica, sans-serif;">
+  <defs>
+    <style>
+      .tab-title { font-size: 10px; font-weight: bold; fill: #1e293b; }
+      .class-box { fill: #ffffea; stroke: #606060; stroke-width: 1; }
+      .class-title { font-size: 12px; font-weight: bold; fill: #000000; text-anchor: middle; }
+      .attr-text { font-size: 10.5px; fill: #000000; font-family: monospace, Arial; }
+      .method-text { font-size: 10.5px; fill: #000000; font-family: monospace, Arial; }
+      .assoc-text { font-size: 10.5px; fill: #334155; font-style: italic; }
+      .mult-text { font-size: 11px; fill: #000000; font-weight: bold; }
+      .ea-line { stroke: #505050; stroke-width: 1; fill: none; }
+      .divider { stroke: #707070; stroke-width: 0.8; }
+    </style>
+  </defs>
+
+  <!-- Pestaña de Diagrama EA -->
+  <path d="M 20,45 L 20,24 L 440,24 L 456,45 Z" fill="#ffffff" stroke="#606060" stroke-width="1" />
+  <text x="30" y="38" class="tab-title">class CU27 Generar y exportar reportes tradicionales</text>
+
+  <!-- Marco Exterior -->
+  <rect x="20" y="45" width="1740" height="915" fill="#ffffff" stroke="#606060" stroke-width="1" />
+
+  <!-- Marcas de agua -->
+  <g opacity="0.45">
+    
+    <text x="30" y="95" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="140" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="185" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="230" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="275" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="320" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="365" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="410" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="455" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="500" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="545" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="590" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="635" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="680" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="725" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="770" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="815" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="860" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="905" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+  </g>
+
+  <!-- LÍNEAS DE ASOCIACIÓN -->
+
+  <!-- Actor a UI -->
+  <line x1="85" y1="280" x2="130" y2="280" class="ea-line" />
+
+  <!-- UI a Controller -->
+  <line x1="360" y1="280" x2="420" y2="280" class="ea-line" />
+  <text x="375" y="272" class="assoc-text">invoca</text>
+
+  <!-- Controller a ReporteTradicional -->
+  <line x1="680" y1="280" x2="740" y2="280" class="ea-line" />
+  <text x="690" y="272" class="assoc-text">genera</text>
+
+  <!-- Controller a Bitacora (Vertical hacia abajo) -->
+  <line x1="550" y1="390" x2="550" y2="600" class="ea-line" />
+  <text x="560" y="500" class="assoc-text">registra auditoría</text>
+  <text x="560" y="415" class="mult-text">1</text>
+  <text x="560" y="585" class="mult-text">0..*</text>
+
+  <!-- ReporteTradicional a Cliente (Hacia la derecha superior) -->
+  <line x1="1020" y1="230" x2="1110" y2="230" class="ea-line" />
+  <text x="1035" y="222" class="assoc-text">consulta</text>
+  <text x="1030" y="245" class="mult-text">1</text>
+  <text x="1085" y="245" class="mult-text">0..*</text>
+
+  <!-- Cliente a Zona (Vertical hacia arriba) -->
+  <line x1="1230" y1="130" x2="1230" y2="90" class="ea-line" />
+  <line x1="1230" y1="90" x2="880" y2="90" class="ea-line" />
+  <line x1="880" y1="90" x2="880" y2="130" class="ea-line" />
+  <text x="1040" y="82" class="assoc-text">pertenece a</text>
+  <text x="1210" y="115" class="mult-text">0..*</text>
+  <text x="895" y="115" class="mult-text">1</text>
+
+  <!-- ReporteTradicional a Pago (Hacia la derecha inferior) -->
+  <line x1="1020" y1="360" x2="1110" y2="480" class="ea-line" />
+  <text x="1040" y="410" class="assoc-text">consolida</text>
+  <text x="1030" y="380" class="mult-text">1</text>
+  <text x="1090" y="470" class="mult-text">0..*</text>
+
+  <!-- Pago a MetodoPago (Hacia la derecha) -->
+  <line x1="1340" y1="520" x2="1420" y2="520" class="ea-line" />
+  <text x="1355" y="512" class="assoc-text">utiliza</text>
+  <text x="1350" y="535" class="mult-text">0..*</text>
+  <text x="1400" y="535" class="mult-text">1</text>
+
+  <!-- ReporteTradicional a Mensualidad -->
+  <line x1="950" y1="410" x2="950" y2="600" class="ea-line" />
+  <text x="960" y="510" class="assoc-text">evalúa mora</text>
+  <text x="960" y="430" class="mult-text">1</text>
+  <text x="960" y="585" class="mult-text">0..*</text>
+
+  <!-- ReporteTradicional a Equipo -->
+  <line x1="830" y1="410" x2="830" y2="720" class="ea-line" />
+  <line x1="830" y1="720" x2="1110" y2="720" class="ea-line" />
+  <text x="950" y="712" class="assoc-text">audita comodatos</text>
+  <text x="840" y="430" class="mult-text">1</text>
+  <text x="1080" y="712" class="mult-text">0..*</text>
+
+  <!-- CLASES / CAJAS EA -->
+
+  <!-- Actor: Administrador -->
+  <g transform="translate(60, 280)">
+    
+  <circle cx="0" cy="-26" r="8.5" fill="#ffffea" stroke="#1e293b" stroke-width="1.8" />
+  <line x1="0" y1="-17.5" x2="0" y2="5" stroke="#1e293b" stroke-width="2" />
+  <line x1="-15" y1="-8" x2="15" y2="-8" stroke="#1e293b" stroke-width="2" />
+  <line x1="0" y1="5" x2="-12" y2="25" stroke="#1e293b" stroke-width="2" />
+  <line x1="0" y1="5" x2="12" y2="25" stroke="#1e293b" stroke-width="2" />
+
+    <text x="0" y="45" class="class-title">Administrador</text>
+  </g>
+
+  <!-- Boundary: UI_ReporteTradicional -->
+  <g transform="translate(130, 160)">
+    <rect x="0" y="0" width="230" height="240" class="class-box" />
+    <text x="115" y="20" class="class-title">UI_ReporteTradicional</text>
+    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
+    <!-- Métodos -->
+    <text x="10" y="48" class="method-text">+ consultarCatalogo(): void</text>
+    <text x="10" y="70" class="method-text">+ seleccionarTipoReporte(): void</text>
+    <text x="10" y="92" class="method-text">+ cambiarFiltro(): void</text>
+    <text x="10" y="114" class="method-text">+ limpiarFiltros(): void</text>
+    <text x="10" y="136" class="method-text">+ handleGenerarReporte(): void</text>
+    <text x="10" y="158" class="method-text">+ handleExportarExcel(): void</text>
+    <text x="10" y="180" class="method-text">+ handleExportarPdf(): void</text>
+    <text x="10" y="202" class="method-text">+ previsualizarImpresion(): void</text>
+    <text x="10" y="224" class="method-text">+ dispararImpresion(): void</text>
+  </g>
+
+  <!-- Control: ReporteTradicionalController -->
+  <g transform="translate(420, 180)">
+    <rect x="0" y="0" width="260" height="200" class="class-box" />
+    <text x="130" y="20" class="class-title">ReporteTradicionalController</text>
+    <line x1="0" y1="28" x2="260" y2="28" class="divider" />
+    <!-- Métodos -->
+    <text x="10" y="55" class="method-text">+ catalogo(): JsonResponse</text>
+    <text x="10" y="85" class="method-text">+ parametros(): JsonResponse</text>
+    <text x="10" y="115" class="method-text">+ generar(Request): JsonResponse</text>
+    <text x="10" y="145" class="method-text">+ exportarExcel(Request): Streamed</text>
+    <text x="10" y="175" class="method-text">+ exportarPdf(Request): JsonResponse</text>
+  </g>
+
+  <!-- Dominio: ReporteTradicional -->
+  <g transform="translate(740, 160)">
+    <rect x="0" y="0" width="280" height="240" class="class-box" />
+    <text x="140" y="20" class="class-title">ReporteTradicional</text>
+    <line x1="0" y1="28" x2="280" y2="28" class="divider" />
+    <!-- Atributos constantes -->
+    <text x="10" y="46" class="attr-text">+ TIPO_CLIENTES_ZONA: string</text>
+    <text x="10" y="64" class="attr-text">+ TIPO_INGRESOS_PAGOS: string</text>
+    <text x="10" y="82" class="attr-text">+ TIPO_MOROSIDAD_CORTES: string</text>
+    <text x="10" y="100" class="attr-text">+ TIPO_EQUIPOS_INSTAL: string</text>
+    <line x1="0" y1="108" x2="280" y2="108" class="divider" />
+    <!-- Métodos -->
+    <text x="10" y="126" class="method-text">+ catalogo(): array</text>
+    <text x="10" y="146" class="method-text">+ generar(tipo, filtros): array</text>
+    <text x="10" y="166" class="method-text">- generarClientesZona(filtros): array</text>
+    <text x="10" y="186" class="method-text">- generarIngresosPagos(filtros): array</text>
+    <text x="10" y="206" class="method-text">- generarMorosidadCortes(f): array</text>
+    <text x="10" y="226" class="method-text">- generarEquiposInstalaciones(f): array</text>
+  </g>
+
+  <!-- Entity: Zona -->
+  <g transform="translate(760, 20)">
+    <rect x="0" y="0" width="230" height="110" class="class-box" />
+    <text x="115" y="18" class="class-title">Zona</text>
+    <line x1="0" y1="24" x2="230" y2="24" class="divider" />
+    <text x="10" y="40" class="attr-text">- idZona: int</text>
+    <text x="10" y="56" class="attr-text">- nombreZona: string</text>
+    <text x="10" y="72" class="attr-text">- codigo: string</text>
+    <line x1="0" y1="78" x2="230" y2="78" class="divider" />
+    <text x="10" y="96" class="method-text">+ select(): void  + get(): void</text>
+  </g>
+
+  <!-- Entity: Cliente -->
+  <g transform="translate(1110, 130)">
+    <rect x="0" y="0" width="240" height="200" class="class-box" />
+    <text x="120" y="18" class="class-title">Cliente</text>
+    <line x1="0" y1="24" x2="240" y2="24" class="divider" />
+    <text x="10" y="42" class="attr-text">- idCliente: int</text>
+    <text x="10" y="58" class="attr-text">- codigoCliente: string</text>
+    <text x="10" y="74" class="attr-text">- ci: string</text>
+    <text x="10" y="90" class="attr-text">- nombreCompleto: string</text>
+    <text x="10" y="106" class="attr-text">- telefonoPrincipal: string</text>
+    <text x="10" y="122" class="attr-text">- email: string</text>
+    <text x="10" y="138" class="attr-text">- estadoCliente: string</text>
+    <text x="10" y="154" class="attr-text">- idZona: int</text>
+    <line x1="0" y1="162" x2="240" y2="162" class="divider" />
+    <text x="10" y="182" class="method-text">+ leftJoin(): void  + where(): void</text>
+  </g>
+
+  <!-- Entity: Pago -->
+  <g transform="translate(1110, 420)">
+    <rect x="0" y="0" width="230" height="190" class="class-box" />
+    <text x="115" y="18" class="class-title">Pago</text>
+    <line x1="0" y1="24" x2="230" y2="24" class="divider" />
+    <text x="10" y="40" class="attr-text">- idPago: int</text>
+    <text x="10" y="56" class="attr-text">- fechaHora: timestamp</text>
+    <text x="10" y="72" class="attr-text">- montoTotal: decimal</text>
+    <text x="10" y="88" class="attr-text">- numeroComprobante: string</text>
+    <text x="10" y="104" class="attr-text">- observacion: string</text>
+    <text x="10" y="120" class="attr-text">- idMetodoPago: int</text>
+    <text x="10" y="136" class="attr-text">- idUsuario: int</text>
+    <line x1="0" y1="144" x2="230" y2="144" class="divider" />
+    <text x="10" y="164" class="method-text">+ join(): void  + whereBetween(): void</text>
+  </g>
+
+  <!-- Entity: MetodoPago -->
+  <g transform="translate(1420, 460)">
+    <rect x="0" y="0" width="210" height="120" class="class-box" />
+    <text x="105" y="18" class="class-title">MetodoPago</text>
+    <line x1="0" y1="24" x2="210" y2="24" class="divider" />
+    <text x="10" y="40" class="attr-text">- idMetodoPago: int</text>
+    <text x="10" y="56" class="attr-text">- nombreMetodo: string</text>
+    <text x="10" y="72" class="attr-text">- estado: string</text>
+    <line x1="0" y1="80" x2="210" y2="80" class="divider" />
+    <text x="10" y="100" class="method-text">+ select(): void  + get(): void</text>
+  </g>
+
+  <!-- Entity: Mensualidad -->
+  <g transform="translate(850, 600)">
+    <rect x="0" y="0" width="220" height="170" class="class-box" />
+    <text x="110" y="18" class="class-title">Mensualidad</text>
+    <line x1="0" y1="24" x2="220" y2="24" class="divider" />
+    <text x="10" y="40" class="attr-text">- idMensualidad: int</text>
+    <text x="10" y="56" class="attr-text">- periodo: string</text>
+    <text x="10" y="72" class="attr-text">- fechaVencimiento: date</text>
+    <text x="10" y="88" class="attr-text">- monto: decimal</text>
+    <text x="10" y="104" class="attr-text">- estado: string</text>
+    <text x="10" y="120" class="attr-text">- idServicio: int</text>
+    <line x1="0" y1="128" x2="220" y2="128" class="divider" />
+    <text x="10" y="148" class="method-text">+ whereIn(): void  + get(): void</text>
+  </g>
+
+  <!-- Entity: Equipo -->
+  <g transform="translate(1110, 660)">
+    <rect x="0" y="0" width="230" height="170" class="class-box" />
+    <text x="115" y="18" class="class-title">Equipo</text>
+    <line x1="0" y1="24" x2="230" y2="24" class="divider" />
+    <text x="10" y="40" class="attr-text">- idEquipo: int</text>
+    <text x="10" y="56" class="attr-text">- numeroSerie: string</text>
+    <text x="10" y="72" class="attr-text">- mac: string</text>
+    <text x="10" y="88" class="attr-text">- ipAsignada: string</text>
+    <text x="10" y="104" class="attr-text">- estadoEquipo: string</text>
+    <text x="10" y="120" class="attr-text">- idProducto: int</text>
+    <line x1="0" y1="128" x2="230" y2="128" class="divider" />
+    <text x="10" y="148" class="method-text">+ join(): void  + get(): void</text>
+  </g>
+
+  <!-- Entity: Bitacora -->
+  <g transform="translate(440, 600)">
+    <rect x="0" y="0" width="220" height="180" class="class-box" />
+    <text x="110" y="18" class="class-title">Bitacora</text>
+    <line x1="0" y1="24" x2="220" y2="24" class="divider" />
+    <text x="10" y="40" class="attr-text">- idBitacora: int</text>
+    <text x="10" y="56" class="attr-text">- fechaHora: timestamp</text>
+    <text x="10" y="72" class="attr-text">- accion: string</text>
+    <text x="10" y="88" class="attr-text">- modulo: string</text>
+    <text x="10" y="104" class="attr-text">- descripcion: string</text>
+    <text x="10" y="120" class="attr-text">- idUsuario: int</text>
+    <line x1="0" y1="128" x2="220" y2="128" class="divider" />
+    <text x="10" y="148" class="method-text">+ create(): void</text>
+    <text x="10" y="166" class="method-text">+ log(): void</text>
+  </g>
+
+</svg>
+  </div>
+</body>
+</html>
