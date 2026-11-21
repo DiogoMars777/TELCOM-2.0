@@ -13,7 +13,7 @@ import {
 import {
   solicitudInstalacionService,
   initialSolicitudPublica,
-} from '../../models/Paquetes/InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/solicitudInstalacionModel';
+} from '../../models/Paquetes/P6_InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/solicitudInstalacionModel';
 
 export default function PortalSolicitudModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState(initialSolicitudPublica);

@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Models\Paquetes\SeguridadAdministracion\CU03_UsuariosRolesPermisos\Rol;
-use App\Models\Paquetes\GestionClientesZonas\CU04_ZonasCobertura\ZonaCobertura;
-use App\Models\Paquetes\GestionClientesZonas\CU05_RegistrarCliente\Cliente;
-use App\Models\Paquetes\ServiciosPlanes\CU08_RegistrarActivarServicio\EstadoServicio;
-use App\Models\Paquetes\ServiciosPlanes\CU08_RegistrarActivarServicio\ServicioInternet;
-use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\MensualidadFacturacion;
-use App\Models\Paquetes\ServiciosPlanes\CU15_ListaRegistroReactivaciones\ReactivacionServicio;
+use App\Models\Paquetes\P1_SeguridadAdministracion\CU03_UsuariosRolesPermisos\Rol;
+use App\Models\Paquetes\P2_GestionClientesZonas\CU04_ZonasCobertura\ZonaCobertura;
+use App\Models\Paquetes\P2_GestionClientesZonas\CU05_RegistrarCliente\Cliente;
+use App\Models\Paquetes\P3_ServiciosPlanes\CU08_RegistrarActivarServicio\EstadoServicio;
+use App\Models\Paquetes\P3_ServiciosPlanes\CU08_RegistrarActivarServicio\ServicioInternet;
+use App\Models\Paquetes\P4_FacturacionCobranza\CU09_GenerarMensualidades\MensualidadFacturacion;
+use App\Models\Paquetes\P3_ServiciosPlanes\CU15_GestionarReactivaciones\ReactivacionServicio;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -377,7 +377,7 @@ class CiclosUnoDosTest extends TestCase
         $secretaria = $this->usuarioConRol('secretaria');
         $headers = $this->bearer($secretaria);
         $servicio = $this->servicioSembrado();
-        $plan = $servicio->asignacionPlanActual?->plan ?? \App\Models\Paquetes\ServiciosPlanes\Planes\PlanInternet::first();
+        $plan = $servicio->asignacionPlanActual?->plan ?? \App\Models\Paquetes\P3_ServiciosPlanes\Planes\PlanInternet::first();
         $mensualidad = $this->crearMensualidad($servicio, ['monto' => 250.00]);
 
         $this->withHeaders($headers)->postJson('/api/cu10/pagos', [

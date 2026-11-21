@@ -16,7 +16,7 @@ globalThis.Event = class Event { constructor(type) { this.type = type; } };
 globalThis.window = { dispatchEvent: () => {} };
 
 const { authService } = await import(
-  '../src/models/Paquetes/SeguridadAdministracion/CU01_IniciarCerrarSesion/authModel.js'
+  '../src/models/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/authModel.js'
 );
 const { isPasswordValid } = await import('../src/config/passwordPolicy.js');
 

@@ -15,7 +15,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { runAuthBootstrap } from '../src/models/Paquetes/SeguridadAdministracion/CU01_IniciarCerrarSesion/authBootstrap.js';
+import { runAuthBootstrap } from '../src/models/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/authBootstrap.js';
 
 /** Crea un authService simulado cuyas promesas se resuelven a mano. */
 function makeAuthService(initialToken = 'tok-1') {

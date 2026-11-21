@@ -289,7 +289,7 @@ Relaciones clave verificadas:
 | Elemento | Nombre exacto | Archivo |
 | :--- | :--- | :--- |
 | Actor | Usuario interno / Visitante | — |
-| Vista/Frontera | `LoginView`, `SesionView`, `CambiarPasswordView`, `RecuperarPasswordView` | `frontend/src/views/Paquetes/SeguridadAdministracion/CU01_IniciarCerrarSesion/*` |
+| Vista/Frontera | `LoginView`, `SesionView`, `CambiarPasswordView`, `RecuperarPasswordView` | `frontend/src/views/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/*` |
 | Controlador frontend | `useAuthController`, `useCambiarPasswordController`, `useRecuperarPasswordController`, `authBootstrap.runAuthBootstrap` | `frontend/src/controllers/.../CU01_IniciarCerrarSesion/*` |
 | Servicio/Modelo API | `authService` (y `authToken`) | `frontend/src/models/.../CU01_IniciarCerrarSesion/authModel.js` |
 | Ruta HTTP | `/api/cu01/login`, `/logout`, `/me`, `/cambiar-password`, `/recuperar-password/*` | `backend/routes/api.php` |
@@ -492,7 +492,7 @@ Relaciones clave verificadas:
 | Elemento | Nombre exacto | Archivo |
 | :--- | :--- | :--- |
 | Actor | Administrador / Secretaría | — |
-| Vista/Frontera | `ClientesView` (registro embebido) · `ClienteRegistroView` (standalone) | `frontend/src/views/Paquetes/GestionClientesZonas/` |
+| Vista/Frontera | `ClientesView` (registro embebido) · `ClienteRegistroView` (standalone) | `frontend/src/views/Paquetes/P2_GestionClientesZonas/` |
 | Controlador frontend | `useClienteRegistroController` (standalone) | `frontend/src/controllers/.../CU05.../` |
 | Servicio/Modelo API | `clienteRegistroService` | `frontend/src/models/.../CU05.../clienteRegistroModel.js` |
 | Ruta HTTP | `/api/cu05/zonas`, `/api/cu05/clientes` | `backend/routes/api.php` |
@@ -542,7 +542,7 @@ Relaciones clave verificadas:
 | Elemento | Nombre exacto | Archivo |
 | :--- | :--- | :--- |
 | Actor | Admin / Secretaría / Técnico | — |
-| Vista/Frontera | `ClientesView` · `ClienteConsultaView` (standalone) | `frontend/src/views/Paquetes/GestionClientesZonas/` |
+| Vista/Frontera | `ClientesView` · `ClienteConsultaView` (standalone) | `frontend/src/views/Paquetes/P2_GestionClientesZonas/` |
 | Controlador frontend | `useClienteConsultaController` (standalone) | `frontend/src/controllers/.../CU06.../` |
 | Servicio/Modelo API | `clienteConsultaService` | `frontend/src/models/.../CU06.../clienteConsultaModel.js` |
 | Ruta HTTP | `/api/cu06/clientes`, `/api/cu06/clientes/{id}` | `backend/routes/api.php` |
@@ -591,7 +591,7 @@ Relaciones clave verificadas:
 | Elemento | Nombre exacto | Archivo |
 | :--- | :--- | :--- |
 | Actor | Admin / Secretaría | — |
-| Vista/Frontera | `ClientesView` · `ClienteMantenimientoView` (standalone) | `frontend/src/views/Paquetes/GestionClientesZonas/` |
+| Vista/Frontera | `ClientesView` · `ClienteMantenimientoView` (standalone) | `frontend/src/views/Paquetes/P2_GestionClientesZonas/` |
 | Controlador frontend | `useClienteMantenimientoController` (standalone) | `frontend/src/controllers/.../CU07.../` |
 | Servicio/Modelo API | `clienteMantenimientoService` | `frontend/src/models/.../CU07.../clienteMantenimientoModel.js` |
 | Ruta HTTP | `/api/cu07/clientes/{id}`, `/api/cu07/clientes/{id}/baja` | `backend/routes/api.php` |
@@ -1156,11 +1156,11 @@ Para comprobar cualquier dato: `backend/routes/api.php`, `backend/app/Http/Contr
 | Elemento | Nombre exacto | Archivo |
 | :--- | :--- | :--- |
 | Actor | Administrador / Secretaría / Cliente | — |
-| Vista/Frontera | `SolicitudInstalacionView`, `RegistrarSolicitudModal`, `DetalleSolicitudModal`, `PortalSolicitudModal` | `frontend/src/views/Paquetes/InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/*` y `frontend/src/views/Public/PortalSolicitudModal.jsx` |
-| Controlador frontend | `useSolicitudInstalacionController` | `frontend/src/controllers/Paquetes/InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/useSolicitudInstalacionController.js` |
-| Servicio/Modelo API | `solicitudInstalacionService` | `frontend/src/models/Paquetes/InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/solicitudInstalacionModel.js` |
+| Vista/Frontera | `SolicitudInstalacionView`, `RegistrarSolicitudModal`, `DetalleSolicitudModal`, `PortalSolicitudModal` | `frontend/src/views/Paquetes/P6_InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/*` y `frontend/src/views/Public/PortalSolicitudModal.jsx` |
+| Controlador frontend | `useSolicitudInstalacionController` | `frontend/src/controllers/Paquetes/P6_InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/useSolicitudInstalacionController.js` |
+| Servicio/Modelo API | `solicitudInstalacionService` | `frontend/src/models/Paquetes/P6_InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/solicitudInstalacionModel.js` |
 | Ruta HTTP | `/api/cu21/solicitudes`, `/api/cu21/solicitudes/publica`, `/api/cu21/zonas-cobertura`, `/api/cu21/clientes-disponibles` | `backend/routes/api.php` |
-| Controlador backend | `SolicitudInstalacionController` | `backend/app/Http/Controllers/Paquetes/InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/SolicitudInstalacionController.php` |
+| Controlador backend | `SolicitudInstalacionController` | `backend/app/Http/Controllers/Paquetes/P6_InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/SolicitudInstalacionController.php` |
 | Modelos | `SolicitudInstalacion`, `Cliente`, `Zona`, `Bitacora` | `backend/app/Models/...` |
 | Tablas | `SolicitudInstalacion`, `Cliente`, `Zona`, `Bitacora` | Migraciones / PostgreSQL |
 

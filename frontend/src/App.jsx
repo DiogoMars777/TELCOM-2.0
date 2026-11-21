@@ -2,37 +2,44 @@ import React, { useEffect, useState } from 'react';
 
 // Vistas públicas
 import LandingView from './views/Public/LandingView';
-import LoginView from './views/Paquetes/SeguridadAdministracion/CU01_IniciarCerrarSesion/LoginView';
-import SesionView from './views/Paquetes/SeguridadAdministracion/CU01_IniciarCerrarSesion/SesionView';
-import CambiarPasswordView from './views/Paquetes/SeguridadAdministracion/CU01_IniciarCerrarSesion/CambiarPasswordView';
+import LoginView from './views/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/LoginView';
+import SesionView from './views/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/SesionView';
+import CambiarPasswordView from './views/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/CambiarPasswordView';
 
-// Vistas de los Casos de Uso (módulos administrativos, CU02-CU17)
-import AuditoriaView from './views/Paquetes/SeguridadAdministracion/CU02_BitacoraAuditoria/AuditoriaView';
-import UsuariosView from './views/Paquetes/SeguridadAdministracion/CU03_UsuariosRolesPermisos/UsuariosView';
-import ZonasCoberturaView from './views/Paquetes/GestionClientesZonas/CU04_ZonasCobertura/ZonasCoberturaView';
-import ClientesView from './views/Paquetes/GestionClientesZonas/ClientesView';
-import ServicioInternetView from './views/Paquetes/ServiciosPlanes/CU08_RegistrarActivarServicio/ServicioInternetView';
-import MensualidadGeneracionView from './views/Paquetes/FacturacionCobranza/CU09_GenerarMensualidades/MensualidadGeneracionView';
-import PagoMensualidadView from './views/Paquetes/FacturacionCobranza/CU10_GestionarPagoMensualidad/PagoMensualidadView';
-import HistorialPagosView from './views/Paquetes/FacturacionCobranza/CU11_ConsultarHistorialPagos/HistorialPagosView';
-import AlertasVencimientoView from './views/Paquetes/FacturacionCobranza/CU12_VisualizarAlertasVencimiento/AlertasVencimientoView';
-import ServiciosCorteView from './views/Paquetes/ServiciosPlanes/CU13_ListadoServiciosCorte/ServiciosCorteView';
-import CorteRegistroView from './views/Paquetes/ServiciosPlanes/CU14_RegistrarCorteRealizado/CorteRegistroView';
-import ReactivacionesView from './views/Paquetes/ServiciosPlanes/CU15_ListaRegistroReactivaciones/ReactivacionesView';
-import PlanesInternetView from './views/Paquetes/ServiciosPlanes/CU16_GestionarCatalogoPlanes/PlanesInternetView';
-import AsignarPlanView from './views/Paquetes/ServiciosPlanes/CU17_AsignarCambiarPlanInternet/AsignarPlanView';
-import SolicitudInstalacionView from './views/Paquetes/InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/SolicitudInstalacionView';
+// Vistas de los Casos de Uso (módulos administrativos)
+import AuditoriaView from './views/Paquetes/P1_SeguridadAdministracion/CU02_BitacoraAuditoria/AuditoriaView';
+import UsuariosView from './views/Paquetes/P1_SeguridadAdministracion/CU03_UsuariosRolesPermisos/UsuariosView';
+import ZonasCoberturaView from './views/Paquetes/P2_GestionClientesZonas/CU04_ZonasCobertura/ZonasCoberturaView';
+import ClientesView from './views/Paquetes/P2_GestionClientesZonas/ClientesView';
+import ServicioInternetView from './views/Paquetes/P3_ServiciosPlanes/CU08_RegistrarActivarServicio/ServicioInternetView';
+import MensualidadGeneracionView from './views/Paquetes/P4_FacturacionCobranza/CU09_GenerarMensualidades/MensualidadGeneracionView';
+import PagoMensualidadView from './views/Paquetes/P4_FacturacionCobranza/CU10_GestionarPagoMensualidad/PagoMensualidadView';
+import HistorialPagosView from './views/Paquetes/P4_FacturacionCobranza/CU11_ConsultarHistorialPagos/HistorialPagosView';
+import AlertasVencimientoView from './views/Paquetes/P4_FacturacionCobranza/CU12_VisualizarAlertasVencimiento/AlertasVencimientoView';
+import ServiciosCorteView from './views/Paquetes/P3_ServiciosPlanes/CU13_ListadoServiciosCorte/ServiciosCorteView';
+import CorteRegistroView from './views/Paquetes/P3_ServiciosPlanes/CU14_RegistrarCorteRealizado/CorteRegistroView';
+import ReactivacionesView from './views/Paquetes/P3_ServiciosPlanes/CU15_ListaRegistroReactivaciones/ReactivacionesView';
+import PlanesInternetView from './views/Paquetes/P3_ServiciosPlanes/CU16_GestionarCatalogoPlanes/PlanesInternetView';
+import AsignarPlanView from './views/Paquetes/P3_ServiciosPlanes/CU17_AsignarCambiarPlanInternet/AsignarPlanView';
+import EquiposView from './views/Paquetes/P5_EquiposProveedoresInventario/CU18_RegistrarCatalogoEquipos/EquiposView';
+import AsignarEquipoComodatoView from './views/Paquetes/P5_EquiposProveedoresInventario/CU19_AsignarEquipoComodato/AsignarEquipoComodatoView';
+import EquipoReemplazoRetiroView from './views/Paquetes/P5_EquiposProveedoresInventario/CU20_ReemplazarRetirarEquipo/EquipoReemplazoRetiroView';
+import SolicitudInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/SolicitudInstalacionView';
+import ProgramarInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/CU22_ProgramarInstalacion/InstalacionesView';
+import InstalacionesView from './views/Paquetes/P6_InstalacionesTecnicas/CU23_RegistrarInstalacion/InstalacionesView';
+import IntencionVozView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU30_ProcesarIntencionVozIA/IntencionVozView';
 
 // Iconos de cada módulo del panel
 import {
   Radio, LogOut, History, Users, MapPin,
   Wifi, Calendar,
   CreditCard, Clock, AlertTriangle, Scissors, RefreshCw, Lock,
-  Router, ArrowRightLeft, ClipboardList,
+  Router, ArrowRightLeft, Package, Wrench, HardDrive, ClipboardList,
+  Sparkles, Brain,
 } from 'lucide-react';
 
-import { authService } from './models/Paquetes/SeguridadAdministracion/CU01_IniciarCerrarSesion/authModel';
-import { runAuthBootstrap } from './models/Paquetes/SeguridadAdministracion/CU01_IniciarCerrarSesion/authBootstrap';
+import { authService } from './models/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/authModel';
+import { runAuthBootstrap } from './models/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/authBootstrap';
 import { canAccessCu, firstAllowedCu } from './config/access';
 
 /**
@@ -197,46 +204,59 @@ export default function App() {
 
   const menuSections = [
     {
-      title: 'Seguridad & Auditoría',
+      title: 'P1: Seguridad y Administración del Sistema',
       items: [
         { id: 'CU02', label: 'Bitácora de Auditoría', icon: History },
         { id: 'CU03', label: 'Usuarios, Roles y Permisos', icon: Users },
       ],
     },
     {
-      title: 'Infraestructura',
-      items: [{ id: 'CU04', label: 'Zonas de Cobertura', icon: MapPin }],
-    },
-    {
-      title: 'Abonados & Clientes',
+      title: 'P2: Gestión de Clientes y Cobertura',
       items: [
-        { id: 'CU06', label: 'Clientes', icon: Users },
+        { id: 'CU04', label: 'Zonas de Cobertura', icon: MapPin },
+        { id: 'CU06', label: 'Gestión de Clientes', icon: Users },
       ],
     },
     {
-      title: 'Servicios y Planes',
+      title: 'P3: Servicios y Planes de Internet',
       items: [
         { id: 'CU08', label: 'Registrar / Activar Servicio', icon: Wifi },
         { id: 'CU16', label: 'Gestionar Planes de Internet', icon: Router },
         { id: 'CU17', label: 'Asignar / Cambiar Plan de Servicio', icon: ArrowRightLeft },
+        { id: 'CU13', label: 'Servicios para Corte', icon: Scissors },
+        { id: 'CU14', label: 'Registrar Corte Realizado', icon: Scissors },
+        { id: 'CU15', label: 'Reactivaciones de Servicio', icon: RefreshCw },
       ],
     },
     {
-      title: 'Mensualidades & Pagos',
+      title: 'P4: Facturación, Cobranza y Vencimientos',
       items: [
         { id: 'CU09', label: 'Generar Mensualidades', icon: Calendar },
         { id: 'CU10', label: 'Gestionar Pago de Mensualidad', icon: CreditCard },
         { id: 'CU11', label: 'Historial de Pagos', icon: Clock },
+        { id: 'CU12', label: 'Alertas de Vencimiento', icon: AlertTriangle },
       ],
     },
     {
-      title: 'Operaciones Técnicas',
+      title: 'P5: Equipos, Proveedores e Inventario',
       items: [
-        { id: 'CU12', label: 'Alertas de Vencimiento', icon: AlertTriangle },
-        { id: 'CU13', label: 'Servicios para Corte', icon: Scissors },
-        { id: 'CU14', label: 'Registrar Corte Realizado', icon: Scissors },
-        { id: 'CU15', label: 'Reactivaciones de Servicio', icon: RefreshCw },
+        { id: 'CU18', label: 'Catálogo de Equipos e Inventario', icon: Package },
+        { id: 'CU19', label: 'Asignar Equipo en Comodato', icon: HardDrive },
+        { id: 'CU20', label: 'Reemplazar / Retirar Equipo', icon: Router },
+      ],
+    },
+    {
+      title: 'P6: Instalaciones Técnicas',
+      items: [
         { id: 'CU21', label: 'Solicitudes de Instalación', icon: ClipboardList },
+        { id: 'CU22', label: 'Programar Instalaciones', icon: Calendar },
+        { id: 'CU23', label: 'Órdenes de Instalación', icon: Wrench },
+      ],
+    },
+    {
+      title: 'P7: Inteligencia de Voz y NLP',
+      items: [
+        { id: 'CU30', label: 'Asistente de Voz con IA (NLP)', icon: Sparkles },
       ],
     },
     {
@@ -305,8 +325,20 @@ export default function App() {
         return <PlanesInternetView user={currentUser} />;
       case 'CU17':
         return <AsignarPlanView user={currentUser} />;
+      case 'CU18':
+        return <EquiposView user={currentUser} />;
+      case 'CU19':
+        return <AsignarEquipoComodatoView user={currentUser} />;
+      case 'CU20':
+        return <EquipoReemplazoRetiroView user={currentUser} />;
       case 'CU21':
         return <SolicitudInstalacionView user={currentUser} />;
+      case 'CU22':
+        return <ProgramarInstalacionView user={currentUser} />;
+      case 'CU23':
+        return <InstalacionesView user={currentUser} />;
+      case 'CU30':
+        return <IntencionVozView onNavigate={(targetCu) => setActiveCU(targetCu)} />;
       default:
         return <ClientesView user={currentUser} />;
     }

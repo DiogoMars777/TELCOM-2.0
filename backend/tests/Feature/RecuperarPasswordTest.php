@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use App\Mail\RecuperarPasswordMail;
-use App\Models\Paquetes\SeguridadAdministracion\CU02_BitacoraAuditoria\BitacoraAuditoria;
-use App\Models\Paquetes\SeguridadAdministracion\CU03_UsuariosRolesPermisos\Rol;
+use App\Models\Paquetes\P1_SeguridadAdministracion\CU02_BitacoraAuditoria\BitacoraAuditoria;
+use App\Models\Paquetes\P1_SeguridadAdministracion\CU03_UsuariosRolesPermisos\Rol;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;

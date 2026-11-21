@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Paquetes\SeguridadAdministracion\CU03_UsuariosRolesPermisos\Rol;
+use App\Models\Paquetes\P1_SeguridadAdministracion\CU03_UsuariosRolesPermisos\Rol;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -248,7 +248,7 @@ class CambiarPasswordTest extends TestCase
             'accion'  => 'CAMBIAR_PASSWORD',
         ]);
 
-        $detalles = (string) \App\Models\Paquetes\SeguridadAdministracion\CU02_BitacoraAuditoria\BitacoraAuditoria::query()
+        $detalles = (string) \App\Models\Paquetes\P1_SeguridadAdministracion\CU02_BitacoraAuditoria\BitacoraAuditoria::query()
             ->where('user_id', $user->id)
             ->where('accion', 'CAMBIAR_PASSWORD')
             ->value('detalles');

@@ -22,7 +22,7 @@ globalThis.Event = class Event { constructor(type) { this.type = type; } };
 globalThis.window = { dispatchEvent: () => {} };
 
 const { usuarioService } = await import(
-  '../src/models/Paquetes/SeguridadAdministracion/CU03_UsuariosRolesPermisos/usuarioModel.js'
+  '../src/models/Paquetes/P1_SeguridadAdministracion/CU03_UsuariosRolesPermisos/usuarioModel.js'
 );
 
 function jsonResponse(status, body) {

@@ -23,10 +23,10 @@ globalThis.Event = class Event { constructor(type) { this.type = type; } };
 globalThis.window = { dispatchEvent: () => {} };
 
 const { asignacionPlanService } = await import(
-  '../src/models/Paquetes/ServiciosPlanes/CU17_AsignarCambiarPlanInternet/asignacionPlanModel.js'
+  '../src/models/Paquetes/P3_ServiciosPlanes/CU17_AsignarCambiarPlanInternet/asignacionPlanModel.js'
 );
 const { filtrarServicios, etiquetaServicio, documentoDe } = await import(
-  '../src/views/Paquetes/ServiciosPlanes/CU17_AsignarCambiarPlanInternet/servicioBuscadorUtils.js'
+  '../src/views/Paquetes/P3_ServiciosPlanes/CU17_AsignarCambiarPlanInternet/servicioBuscadorUtils.js'
 );
 
 function jsonResponse(status, body) {

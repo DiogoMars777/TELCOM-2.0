@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { siteConfig } from '../../config/siteConfig';
 import { plans } from '../../config/plans';
-import PortalClienteModal from '../Paquetes/FacturacionCobranza/CU10_GestionarPagoMensualidad/PortalClienteModal';
+import PortalClienteModal from '../Paquetes/P4_FacturacionCobranza/CU10_GestionarPagoMensualidad/PortalClienteModal';
 import PortalSolicitudModal from './PortalSolicitudModal';
 import './public.css';
 

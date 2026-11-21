@@ -2,7 +2,7 @@
 
 namespace App\Support;
 
-use App\Models\Paquetes\SeguridadAdministracion\CU02_BitacoraAuditoria\Bitacora;
+use App\Models\Paquetes\P1_SeguridadAdministracion\CU02_BitacoraAuditoria\Bitacora;
 use Throwable;
 
 /**

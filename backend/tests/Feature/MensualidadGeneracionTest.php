@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\MensualidadFacturacion;
-use App\Models\Paquetes\SeguridadAdministracion\CU02_BitacoraAuditoria\BitacoraAuditoria;
-use App\Models\Paquetes\SeguridadAdministracion\CU03_UsuariosRolesPermisos\Rol;
-use App\Models\Paquetes\ServiciosPlanes\CU08_RegistrarActivarServicio\EstadoServicio;
-use App\Models\Paquetes\ServiciosPlanes\CU08_RegistrarActivarServicio\ServicioInternet;
+use App\Models\Paquetes\P4_FacturacionCobranza\CU09_GenerarMensualidades\MensualidadFacturacion;
+use App\Models\Paquetes\P1_SeguridadAdministracion\CU02_BitacoraAuditoria\BitacoraAuditoria;
+use App\Models\Paquetes\P1_SeguridadAdministracion\CU03_UsuariosRolesPermisos\Rol;
+use App\Models\Paquetes\P3_ServiciosPlanes\CU08_RegistrarActivarServicio\EstadoServicio;
+use App\Models\Paquetes\P3_ServiciosPlanes\CU08_RegistrarActivarServicio\ServicioInternet;
 use App\Models\User;
-use App\Services\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\MensualidadGeneracionService;
+use App\Services\Paquetes\P4_FacturacionCobranza\CU09_GenerarMensualidades\MensualidadGeneracionService;
 use Carbon\Carbon;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Console\Scheduling\Schedule;

@@ -1,6 +1,6 @@
 <?php
 
-use App\Console\Commands\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\GenerarMensualidadesCommand;
+use App\Console\Commands\Paquetes\P4_FacturacionCobranza\CU09_GenerarMensualidades\GenerarMensualidadesCommand;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;

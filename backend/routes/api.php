@@ -3,48 +3,60 @@
 use Illuminate\Support\Facades\Route;
 
 // CU01: Iniciar y cerrar sesión
-use App\Http\Controllers\Paquetes\SeguridadAdministracion\CU01_IniciarCerrarSesion\AuthController;
-use App\Http\Controllers\Paquetes\SeguridadAdministracion\CU01_IniciarCerrarSesion\RecuperarPasswordController;
+use App\Http\Controllers\Paquetes\P1_SeguridadAdministracion\CU01_IniciarCerrarSesion\AuthController;
+use App\Http\Controllers\Paquetes\P1_SeguridadAdministracion\CU01_IniciarCerrarSesion\RecuperarPasswordController;
 // CU02: Consultar bitácora de auditoría
-use App\Http\Controllers\Paquetes\SeguridadAdministracion\CU02_BitacoraAuditoria\AuditoriaController;
+use App\Http\Controllers\Paquetes\P1_SeguridadAdministracion\CU02_BitacoraAuditoria\AuditoriaController;
 // CU03: Gestionar usuarios internos, roles y permisos
-use App\Http\Controllers\Paquetes\SeguridadAdministracion\CU03_UsuariosRolesPermisos\UsuarioController;
-use App\Http\Controllers\Paquetes\SeguridadAdministracion\CU03_UsuariosRolesPermisos\RolController;
+use App\Http\Controllers\Paquetes\P1_SeguridadAdministracion\CU03_UsuariosRolesPermisos\UsuarioController;
+use App\Http\Controllers\Paquetes\P1_SeguridadAdministracion\CU03_UsuariosRolesPermisos\RolController;
 // CU04: Gestionar zonas de cobertura
-use App\Http\Controllers\Paquetes\GestionClientesZonas\CU04_ZonasCobertura\ZonaCoberturaController;
+use App\Http\Controllers\Paquetes\P2_GestionClientesZonas\CU04_ZonasCobertura\ZonaCoberturaController;
 // CU05: Registrar nuevo cliente
-use App\Http\Controllers\Paquetes\GestionClientesZonas\CU05_RegistrarCliente\ClienteRegistroController;
+use App\Http\Controllers\Paquetes\P2_GestionClientesZonas\CU05_RegistrarCliente\ClienteRegistroController;
 // CU06: Consultar y buscar clientes
-use App\Http\Controllers\Paquetes\GestionClientesZonas\CU06_ConsultarBuscarClientes\ClienteConsultaController;
+use App\Http\Controllers\Paquetes\P2_GestionClientesZonas\CU06_ConsultarBuscarClientes\ClienteConsultaController;
 // CU07: Actualizar datos y dar baja lógica a cliente
-use App\Http\Controllers\Paquetes\GestionClientesZonas\CU07_ActualizarBajaCliente\ClienteMantenimientoController;
+use App\Http\Controllers\Paquetes\P2_GestionClientesZonas\CU07_ActualizarBajaCliente\ClienteMantenimientoController;
 // CU08: Registrar y activar servicio de Internet
-use App\Http\Controllers\Paquetes\ServiciosPlanes\CU08_RegistrarActivarServicio\ServicioInternetController;
+use App\Http\Controllers\Paquetes\P3_ServiciosPlanes\CU08_RegistrarActivarServicio\ServicioInternetController;
 // CU09: Generar mensualidades de servicios
-use App\Http\Controllers\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\MensualidadGeneracionController;
+use App\Http\Controllers\Paquetes\P4_FacturacionCobranza\CU09_GenerarMensualidades\MensualidadGeneracionController;
 // CU10: Gestionar pago de mensualidad
-use App\Http\Controllers\Paquetes\FacturacionCobranza\CU10_GestionarPagoMensualidad\PagoMensualidadController;
+use App\Http\Controllers\Paquetes\P4_FacturacionCobranza\CU10_GestionarPagoMensualidad\PagoMensualidadController;
 // CU11: Consultar historial de pagos
-use App\Http\Controllers\Paquetes\FacturacionCobranza\CU11_ConsultarHistorialPagos\HistorialPagosController;
+use App\Http\Controllers\Paquetes\P4_FacturacionCobranza\CU11_ConsultarHistorialPagos\HistorialPagosController;
 // CU12: Visualizar alertas de vencimiento
-use App\Http\Controllers\Paquetes\FacturacionCobranza\CU12_VisualizarAlertasVencimiento\AlertasVencimientoController;
+use App\Http\Controllers\Paquetes\P4_FacturacionCobranza\CU12_VisualizarAlertasVencimiento\AlertasVencimientoController;
 // CU13: Consultar listado de servicios para corte
-use App\Http\Controllers\Paquetes\ServiciosPlanes\CU13_ListadoServiciosCorte\ServiciosCorteController;
+use App\Http\Controllers\Paquetes\P3_ServiciosPlanes\CU13_ListadoServiciosCorte\ServiciosCorteController;
 // CU14: Registrar corte realizado
-use App\Http\Controllers\Paquetes\ServiciosPlanes\CU14_RegistrarCorteRealizado\CorteRegistroController;
+use App\Http\Controllers\Paquetes\P3_ServiciosPlanes\CU14_RegistrarCorteRealizado\CorteRegistroController;
 // CU15: Gestionar lista y registro de reactivaciones
-use App\Http\Controllers\Paquetes\ServiciosPlanes\CU15_ListaRegistroReactivaciones\ReactivacionesController;
+use App\Http\Controllers\Paquetes\P3_ServiciosPlanes\CU15_GestionarReactivaciones\ReactivacionesController;
 // CU16: Gestionar Planes de Internet (catálogo: entidad UML PlanInternet)
-use App\Http\Controllers\Paquetes\ServiciosPlanes\CU16_GestionarCatalogoPlanes\PlanInternetController;
+use App\Http\Controllers\Paquetes\P3_ServiciosPlanes\CU16_GestionarCatalogoPlanes\PlanInternetController;
 // CU17: Asignar o cambiar el plan de un servicio (entidad UML AsignacionPlan)
-use App\Http\Controllers\Paquetes\ServiciosPlanes\CU17_AsignarCambiarPlanInternet\AsignacionPlanController;
+use App\Http\Controllers\Paquetes\P3_ServiciosPlanes\CU17_AsignarCambiarPlanInternet\AsignacionPlanController;
+// CU18: Registrar y Gestionar Catálogo de Equipos e Inventario
+use App\Http\Controllers\Paquetes\P5_EquiposProveedoresInventario\CU18_RegistrarCatalogoEquipos\CatalogoEquiposController;
+// CU19: Asignar equipo en comodato a un servicio (entidad UML Equipo, AsignacionEquipo, Inventario)
+use App\Http\Controllers\Paquetes\P5_EquiposProveedoresInventario\CU19_AsignarEquipoComodato\AsignacionEquipoComodatoController;
+// CU20: Reemplazar o retirar equipo de un servicio
+use App\Http\Controllers\Paquetes\P5_EquiposProveedoresInventario\CU20_ReemplazarRetirarEquipo\EquipoReemplazoRetiroController;
 // CU21: Registrar solicitud de instalación (entidad UML SolicitudInstalacion)
-use App\Http\Controllers\Paquetes\InstalacionesTecnicas\CU21_RegistrarSolicitudInstalacion\SolicitudInstalacionController;
+use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU21_RegistrarSolicitudInstalacion\SolicitudInstalacionController;
+// CU22: Programar instalación y asignar técnico
+use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU22_ProgramarInstalacion\InstalacionesController;
+// CU23: Registrar y Gestionar Órdenes de Instalación Técnica
+use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU23_RegistrarInstalacion\InstalacionRegistroController;
+// CU30: Procesar intención de voz con IA (NLP)
+use App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU30_ProcesarIntencionVozIA\IntencionVozController;
 
 /*
 |--------------------------------------------------------------------------
 | RUTAS API - TELCOM SISTEMA DE TELECOMUNICACIONES
-| Estructura MVC orientada a Casos de Uso (CU01 - CU17)
+| Estructura MVC orientada a Casos de Uso (CU01 - CU17, CU20)
 |--------------------------------------------------------------------------
 | - CU01 /login es la ÚNICA ruta pública (permite obtener el token).
 | - CU01 /logout y /me, y TODAS las rutas CU02-CU15 exigen auth:sanctum.
@@ -188,13 +200,25 @@ Route::prefix('cu13')->middleware(['auth:sanctum', 'permission:cortes.list'])->g
 
 // CU14: Registrar corte realizado (admin, secretaría)
 Route::prefix('cu14')->middleware(['auth:sanctum', 'permission:cortes.register'])->group(function () {
+    Route::get('/cortes', [CorteRegistroController::class, 'index']);
+    Route::get('/cortes/servicios-activos', [CorteRegistroController::class, 'serviciosActivos']);
+    Route::get('/cortes/{id}', [CorteRegistroController::class, 'show'])->whereNumber('id');
     Route::post('/cortes', [CorteRegistroController::class, 'store']);
 });
 
 // CU15: Gestionar lista y registro de reactivaciones (admin, secretaría)
 Route::prefix('cu15')->middleware(['auth:sanctum', 'permission:reactivaciones.manage'])->group(function () {
     Route::get('/reactivaciones', [ReactivacionesController::class, 'index']);
+    Route::get('/servicios-cortados', [ReactivacionesController::class, 'serviciosCortados']);
     Route::post('/reactivaciones', [ReactivacionesController::class, 'store']);
+});
+
+// CU22: Programar instalación y asignar cuadrilla técnica
+Route::prefix('cu22')->middleware(['auth:sanctum'])->group(function () {
+    Route::get('/instalaciones', [InstalacionesController::class, 'index'])
+        ->middleware('permission:instalaciones.view');
+    Route::post('/instalaciones', [InstalacionesController::class, 'store'])
+        ->middleware('permission:instalaciones.schedule');
 });
 
 /*
@@ -251,6 +275,72 @@ Route::prefix('cu08/servicios/{servicio}/planes')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
+| CU18 - REGISTRAR Y GESTIONAR CATÁLOGO DE EQUIPOS (EquiposInventario)
+|--------------------------------------------------------------------------
+| Permisos RBAC:
+|   - equipos.view   -> consultar catálogo e inventario.
+|   - equipos.manage -> registrar modelos y dar de alta unidades físicas.
+*/
+Route::prefix('cu18/equipos')->group(function () {
+    Route::get('/', [CatalogoEquiposController::class, 'index'])
+        ->middleware(['auth:sanctum', 'permission:equipos.view']);
+    Route::post('/', [CatalogoEquiposController::class, 'store'])
+        ->middleware(['auth:sanctum', 'permission:equipos.manage']);
+    Route::get('/{id}', [CatalogoEquiposController::class, 'show'])
+        ->whereNumber('id')
+        ->middleware(['auth:sanctum', 'permission:equipos.view']);
+    Route::put('/{id}', [CatalogoEquiposController::class, 'update'])
+        ->whereNumber('id')
+        ->middleware(['auth:sanctum', 'permission:equipos.manage']);
+    Route::post('/{id}/unidades', [CatalogoEquiposController::class, 'registrarUnidadFisica'])
+        ->whereNumber('id')
+        ->middleware(['auth:sanctum', 'permission:equipos.manage']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| CU19 - ASIGNAR EQUIPO EN COMODATO A UN SERVICIO (entidad AsignacionEquipo)
+|--------------------------------------------------------------------------
+| Permite registrar la entrega formal de un equipo (ONU, Router, Modem)
+| en comodato a un servicio activo, validando stock y registrando auditoría.
+| Actores: Administrador, Secretaría, Técnico.
+| Permisos RBAC:
+|   - equipos.view   -> Consultar equipos en stock y comodatos del servicio.
+|   - equipos.assign -> Asignar / entregar y retirar equipos en comodato.
+*/
+Route::prefix('cu19')->middleware('auth:sanctum')->group(function () {
+    Route::get('/equipos-disponibles', [AsignacionEquipoComodatoController::class, 'equiposDisponibles'])
+        ->middleware('permission:equipos.view');
+    Route::get('/servicios-activos', [AsignacionEquipoComodatoController::class, 'serviciosActivos'])
+        ->middleware('permission:equipos.view');
+    Route::get('/servicios/{id}/equipos', [AsignacionEquipoComodatoController::class, 'showServicioEquipos'])
+        ->whereNumber('id')
+        ->middleware('permission:equipos.view');
+    Route::get('/asignaciones', [AsignacionEquipoComodatoController::class, 'index'])
+        ->middleware('permission:equipos.view');
+
+    Route::post('/servicios/{id}/asignar-equipo', [AsignacionEquipoComodatoController::class, 'asignar'])
+        ->whereNumber('id')
+        ->middleware('permission:equipos.assign');
+    Route::post('/asignaciones/{id}/retirar', [AsignacionEquipoComodatoController::class, 'desvincular'])
+        ->whereNumber('id')
+        ->middleware('permission:equipos.assign');
+});
+
+// CU20: Reemplazar o retirar equipo conservando el historial (admin, secretaría y técnico).
+Route::prefix('cu20')->middleware('auth:sanctum')->group(function () {
+    Route::get('/servicios/{servicio}/equipo', [EquipoReemplazoRetiroController::class, 'consultar'])
+        ->middleware('permission:equipos.view');
+    Route::get('/equipos/disponibles', [EquipoReemplazoRetiroController::class, 'disponibles'])
+        ->middleware('permission:equipos.view');
+    Route::post('/servicios/{servicio}/equipo/reemplazar', [EquipoReemplazoRetiroController::class, 'reemplazar'])
+        ->middleware('permission:equipos.assign');
+    Route::post('/servicios/{servicio}/equipo/retirar', [EquipoReemplazoRetiroController::class, 'retirar'])
+        ->middleware('permission:equipos.assign');
+});
+
+/*
+|--------------------------------------------------------------------------
 | CU21 - REGISTRAR SOLICITUD DE INSTALACIÓN (InstalacionesTecnicas)
 |--------------------------------------------------------------------------
 | Permisos RBAC:
@@ -282,5 +372,46 @@ Route::prefix('cu21')->group(function () {
             ->whereNumber('id')
             ->middleware('permission:instalaciones.schedule');
     });
+});
+
+/*
+|--------------------------------------------------------------------------
+| CU23 - REGISTRAR ÓRDENES DE INSTALACIÓN TÉCNICA (InstalacionesTecnicas)
+|--------------------------------------------------------------------------
+| Permisos RBAC:
+|   - instalaciones.view     -> consultar órdenes técnicas e historial.
+|   - instalaciones.schedule -> crear orden y asignar técnico responsable.
+|   - instalaciones.execute  -> registrar cierre y finalización técnica.
+*/
+Route::prefix('cu23/instalaciones')->group(function () {
+    Route::get('/', [InstalacionRegistroController::class, 'index'])
+        ->middleware(['auth:sanctum', 'permission:instalaciones.view']);
+    Route::post('/', [InstalacionRegistroController::class, 'store'])
+        ->middleware(['auth:sanctum', 'permission:instalaciones.schedule']);
+    Route::get('/tecnicos', [InstalacionRegistroController::class, 'tecnicos'])
+        ->middleware(['auth:sanctum', 'permission:instalaciones.view']);
+    Route::get('/{id}', [InstalacionRegistroController::class, 'show'])
+        ->whereNumber('id')
+        ->middleware(['auth:sanctum', 'permission:instalaciones.view']);
+    Route::put('/{id}/tecnico', [InstalacionRegistroController::class, 'asignarTecnico'])
+        ->whereNumber('id')
+        ->middleware(['auth:sanctum', 'permission:instalaciones.schedule']);
+    Route::put('/{id}/finalizar', [InstalacionRegistroController::class, 'finalizar'])
+        ->whereNumber('id')
+        ->middleware(['auth:sanctum', 'permission:instalaciones.execute']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| CU30 - PROCESAR INTENCIÓN DE VOZ CON IA (NLP)
+|--------------------------------------------------------------------------
+| Permiso RBAC: voz.nlp (disponible para admin, secretaría, soporte técnico)
+*/
+Route::prefix('cu30')->middleware(['auth:sanctum', 'permission:voz.nlp'])->group(function () {
+    Route::post('/procesar', [IntencionVozController::class, 'procesar']);
+    Route::get('/historial', [IntencionVozController::class, 'historial']);
+    Route::get('/catalogo', [IntencionVozController::class, 'catalogo']);
+    Route::post('/feedback', [IntencionVozController::class, 'feedback']);
+    Route::post('/ejecutar', [IntencionVozController::class, 'ejecutar']);
 });
 

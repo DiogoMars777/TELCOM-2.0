@@ -1,0 +1,92 @@
+@startuml
+title P4: Facturación y Cobranza - Diagrama de componentes
+left to right direction
+skinparam backgroundColor white
+skinparam defaultFontName Segoe UI
+skinparam componentStyle uml2
+skinparam component {
+  BackgroundColor #FFFFFF
+  BorderColor #334155
+  FontColor #0F172A
+}
+skinparam database {
+  BackgroundColor #EFF6FF
+  BorderColor #2563EB
+  FontColor #0F172A
+}
+skinparam package {
+  BackgroundColor #F8FAFC
+  BorderColor #64748B
+}
+
+package "P4: Facturación y Cobranza" {
+  package "CU09 - Generar mensualidades" as G1 {
+    component "<<vista>>\nMensualidadGeneracionView.jsx" as V1
+    component "<<controlador>>\nMensualidadGeneracionController.php\nMensualidadGeneracionService.php" as C1
+    V1 --> C1 : API REST
+    database "<<tabla>>\nMensualidad" as T1_1
+    C1 ..> T1_1
+    database "<<tabla>>\nServicioInternet" as T1_2
+    C1 ..> T1_2
+    database "<<tabla>>\nAsignacionPlan" as T1_3
+    C1 ..> T1_3
+    database "<<tabla>>\nPlanInternet" as T1_4
+    C1 ..> T1_4
+    database "<<tabla>>\nCliente" as T1_5
+    C1 ..> T1_5
+    database "<<tabla>>\nBitacora" as T1_6
+    C1 ..> T1_6
+  }
+
+  package "CU10 - Gestionar pago de mensualidad" as G2 {
+    component "<<vista>>\nPagoMensualidadView.jsx\nPortalClienteModal.jsx" as V2
+    component "<<controlador>>\nPagoMensualidadController.php" as C2
+    V2 --> C2 : API REST
+    database "<<tabla>>\nMensualidad" as T2_1
+    C2 ..> T2_1
+    database "<<tabla>>\nPago" as T2_2
+    C2 ..> T2_2
+    database "<<tabla>>\nCliente" as T2_3
+    C2 ..> T2_3
+    database "<<tabla>>\nServicioInternet" as T2_4
+    C2 ..> T2_4
+    database "<<tabla>>\nBitacora" as T2_5
+    C2 ..> T2_5
+  }
+
+  package "CU11 - Consultar historial de pagos" as G3 {
+    component "<<vista>>\nHistorialPagosView.jsx" as V3
+    component "<<controlador>>\nHistorialPagosController.php" as C3
+    V3 --> C3 : API REST
+    database "<<tabla>>\nPago" as T3_1
+    C3 ..> T3_1
+    database "<<tabla>>\nDetallePago" as T3_2
+    C3 ..> T3_2
+    database "<<tabla>>\nMensualidad" as T3_3
+    C3 ..> T3_3
+    database "<<tabla>>\nCliente" as T3_4
+    C3 ..> T3_4
+    database "<<tabla>>\nServicioInternet" as T3_5
+    C3 ..> T3_5
+    database "<<tabla>>\nAsignacionPlan" as T3_6
+    C3 ..> T3_6
+    database "<<tabla>>\nPlanInternet" as T3_7
+    C3 ..> T3_7
+    database "<<tabla>>\nMetodoPago" as T3_8
+    C3 ..> T3_8
+  }
+
+  package "CU12 - Visualizar alertas de vencimiento" as G4 {
+    component "<<vista>>\nAlertasVencimientoView.jsx" as V4
+    component "<<controlador>>\nAlertasVencimientoController.php" as C4
+    V4 --> C4 : API REST
+    database "<<tabla>>\nMensualidad" as T4_1
+    C4 ..> T4_1
+    database "<<tabla>>\nCliente" as T4_2
+    C4 ..> T4_2
+    database "<<tabla>>\nServicioInternet" as T4_3
+    C4 ..> T4_3
+  }
+
+}
+@enduml

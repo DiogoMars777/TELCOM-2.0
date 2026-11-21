@@ -7,7 +7,7 @@ import {
   mockSolicitudesCu21,
   initialSolicitudInterna,
   initialSolicitudPublica,
-} from '../src/models/Paquetes/InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/solicitudInstalacionModel.js';
+} from '../src/models/Paquetes/P6_InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/solicitudInstalacionModel.js';
 
 test('CU21: Administrador tiene acceso a Registrar Solicitud de Instalación', () => {
   const admin = {

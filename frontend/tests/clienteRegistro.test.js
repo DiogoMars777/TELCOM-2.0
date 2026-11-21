@@ -26,7 +26,7 @@ globalThis.Event = class Event { constructor(type) { this.type = type; } };
 globalThis.window = { dispatchEvent: () => {} };
 
 const { clienteRegistroService, mockZonasCu05 } =
-  await import('../src/models/Paquetes/GestionClientesZonas/CU05_RegistrarCliente/clienteRegistroModel.js');
+  await import('../src/models/Paquetes/P2_GestionClientesZonas/CU05_RegistrarCliente/clienteRegistroModel.js');
 
 function jsonResponse(status, body) {
   return { ok: status >= 200 && status < 300, status, json: async () => body };

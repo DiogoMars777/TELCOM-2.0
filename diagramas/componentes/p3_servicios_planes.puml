@@ -1,0 +1,122 @@
+@startuml
+title P3: Servicios y Planes - Diagrama de componentes
+left to right direction
+skinparam backgroundColor white
+skinparam defaultFontName Segoe UI
+skinparam componentStyle uml2
+skinparam component {
+  BackgroundColor #FFFFFF
+  BorderColor #334155
+  FontColor #0F172A
+}
+skinparam database {
+  BackgroundColor #EFF6FF
+  BorderColor #2563EB
+  FontColor #0F172A
+}
+skinparam package {
+  BackgroundColor #F8FAFC
+  BorderColor #64748B
+}
+
+package "P3: Servicios y Planes" {
+  package "CU08 - Registrar y activar servicio de Internet" as G1 {
+    component "<<vista>>\nServicioInternetView.jsx" as V1
+    component "<<controlador>>\nServicioInternetController.php" as C1
+    V1 --> C1 : API REST
+    database "<<tabla>>\nServicioInternet" as T1_1
+    C1 ..> T1_1
+    database "<<tabla>>\nCliente" as T1_2
+    C1 ..> T1_2
+    database "<<tabla>>\nZona" as T1_3
+    C1 ..> T1_3
+    database "<<tabla>>\nEstadoServicio" as T1_4
+    C1 ..> T1_4
+    database "<<tabla>>\nPlanInternet" as T1_5
+    C1 ..> T1_5
+    database "<<tabla>>\nAsignacionPlan" as T1_6
+    C1 ..> T1_6
+    database "<<tabla>>\nBitacora" as T1_7
+    C1 ..> T1_7
+  }
+
+  package "CU13 - Consultar servicios para corte" as G2 {
+    component "<<vista>>\nServiciosCorteView.jsx" as V2
+    component "<<controlador>>\nServiciosCorteController.php" as C2
+    V2 --> C2 : API REST
+    database "<<tabla>>\nServicioInternet" as T2_1
+    C2 ..> T2_1
+    database "<<tabla>>\nCliente" as T2_2
+    C2 ..> T2_2
+    database "<<tabla>>\nZona" as T2_3
+    C2 ..> T2_3
+    database "<<tabla>>\nMensualidad" as T2_4
+    C2 ..> T2_4
+    database "<<tabla>>\nAsignacionPlan" as T2_5
+    C2 ..> T2_5
+    database "<<tabla>>\nPlanInternet" as T2_6
+    C2 ..> T2_6
+  }
+
+  package "CU14 - Registrar corte realizado" as G3 {
+    component "<<vista>>\nCorteRegistroView.jsx" as V3
+    component "<<controlador>>\nCorteRegistroController.php" as C3
+    V3 --> C3 : API REST
+    database "<<tabla>>\nAccionServicio" as T3_1
+    C3 ..> T3_1
+    database "<<tabla>>\nServicioInternet" as T3_2
+    C3 ..> T3_2
+    database "<<tabla>>\nEstadoServicio" as T3_3
+    C3 ..> T3_3
+    database "<<tabla>>\nUsuario" as T3_4
+    C3 ..> T3_4
+    database "<<tabla>>\nBitacora" as T3_5
+    C3 ..> T3_5
+  }
+
+  package "CU15 - Gestionar reactivaciones" as G4 {
+    component "<<vista>>\nReactivacionesView.jsx\nReactivacionModal.jsx" as V4
+    component "<<controlador>>\nReactivacionesController.php" as C4
+    V4 --> C4 : API REST
+    database "<<tabla>>\nAccionServicio" as T4_1
+    C4 ..> T4_1
+    database "<<tabla>>\nServicioInternet" as T4_2
+    C4 ..> T4_2
+    database "<<tabla>>\nEstadoServicio" as T4_3
+    C4 ..> T4_3
+    database "<<tabla>>\nPago" as T4_4
+    C4 ..> T4_4
+    database "<<tabla>>\nUsuario" as T4_5
+    C4 ..> T4_5
+    database "<<tabla>>\nBitacora" as T4_6
+    C4 ..> T4_6
+  }
+
+  package "CU16 - Gestionar catálogo de planes" as G5 {
+    component "<<vista>>\nPlanCatalogoView.jsx\nPlanesInternetView.jsx" as V5
+    component "<<controlador>>\nPlanInternetController.php" as C5
+    V5 --> C5 : API REST
+    database "<<tabla>>\nPlanInternet" as T5_1
+    C5 ..> T5_1
+    database "<<tabla>>\nBitacora" as T5_2
+    C5 ..> T5_2
+  }
+
+  package "CU17 - Asignar o cambiar plan del servicio" as G6 {
+    component "<<vista>>\nAsignarPlanView.jsx\nServicioBuscador.jsx" as V6
+    component "<<controlador>>\nAsignacionPlanController.php" as C6
+    V6 --> C6 : API REST
+    database "<<tabla>>\nAsignacionPlan" as T6_1
+    C6 ..> T6_1
+    database "<<tabla>>\nServicioInternet" as T6_2
+    C6 ..> T6_2
+    database "<<tabla>>\nPlanInternet" as T6_3
+    C6 ..> T6_3
+    database "<<tabla>>\nUsuario" as T6_4
+    C6 ..> T6_4
+    database "<<tabla>>\nBitacora" as T6_5
+    C6 ..> T6_5
+  }
+
+}
+@enduml

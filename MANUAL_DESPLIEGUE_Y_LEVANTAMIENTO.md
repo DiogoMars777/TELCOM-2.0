@@ -3,6 +3,9 @@
 
 Este documento detalla paso a paso cómo clonar, configurar y levantar el proyecto completo (Backend Laravel + Frontend React + Base de Datos PostgreSQL) desde una máquina limpia.
 
+> 💡 **¿Prefieres levantar todo con Docker en un solo comando?**  
+> Ejecuta `docker compose up -d --build` y consulta la guía rápida en [DOCKER.md](file:///c:/Users/MSI/Desktop/TELCOM-2.0-main/DOCKER.md).
+
 ---
 
 ## 🛠️ 1. Requisitos Previos del Sistema
@@ -185,6 +188,10 @@ Al abrir la aplicación en tu navegador verás el **Dashboard Central de TELCOM 
    - **CU13:** Consultar Listado de Servicios para Corte.
    - **CU14:** Registrar Corte Realizado (corte lógico o físico).
    - **CU15:** Gestionar Lista y Registro de Reactivaciones (reconexión tras pago).
+7. **Equipos & Comodato:**
+   - **CU16:** Gestionar Planes de Internet.
+   - **CU17:** Asignar o Cambiar Plan de Servicio.
+   - **CU19:** Asignar Equipo en Comodato a un Servicio (entrega formal de ONUs/Routers/Modems en inventario, validación de precondiciones y bitácora).
 
 ---
 

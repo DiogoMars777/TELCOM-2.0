@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\Paquetes\GestionClientesZonas\CU04_ZonasCobertura\Zona;
-use App\Models\Paquetes\GestionClientesZonas\CU05_RegistrarCliente\Cliente;
-use App\Models\Paquetes\InstalacionesTecnicas\CU21_RegistrarSolicitudInstalacion\SolicitudInstalacion;
-use App\Models\Paquetes\SeguridadAdministracion\CU03_UsuariosRolesPermisos\Rol;
+use App\Models\Paquetes\P2_GestionClientesZonas\CU04_ZonasCobertura\Zona;
+use App\Models\Paquetes\P2_GestionClientesZonas\CU05_RegistrarCliente\Cliente;
+use App\Models\Paquetes\P6_InstalacionesTecnicas\CU21_RegistrarSolicitudInstalacion\SolicitudInstalacion;
+use App\Models\Paquetes\P1_SeguridadAdministracion\CU03_UsuariosRolesPermisos\Rol;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;

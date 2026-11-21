@@ -42,6 +42,7 @@ class DatabaseSeeder extends Seeder
     private function runUnitTestsFixture(): void
     {
         $tablasLimpieza = [
+            'IntencionVozIA',
             'DetallePago', 'Pago', 'Mensualidad', 'AsignacionEquipo', 'Instalacion',
             'SolicitudInstalacion', 'HistorialEstadoServicio', 'AccionServicio',
             'AsignacionPlan', 'ServicioInternet', 'Cliente', 'Zona', 'DetalleCompra',
@@ -107,6 +108,7 @@ class DatabaseSeeder extends Seeder
             ['slug' => 'proveedores.manage', 'nombre' => 'Gestionar Proveedores', 'modulo' => 'PROVEEDORES', 'descripcion' => 'Gestión de proveedores.'],
             ['slug' => 'compras.manage', 'nombre' => 'Gestionar Compras', 'modulo' => 'COMPRAS', 'descripcion' => 'Gestión de compras.'],
             ['slug' => 'reportes.view', 'nombre' => 'Ver Reportes Gerenciales', 'modulo' => 'REPORTES', 'descripcion' => 'Reportes e indicadores.'],
+            ['slug' => 'voz.nlp', 'nombre' => 'Procesar Intenciones de Voz con IA (NLP)', 'modulo' => 'INTELIGENCIA_VOZ', 'descripcion' => 'Permite procesar comandos de voz y texto con el motor NLP e Inteligencia Artificial (CU30).'],
         ];
 
         $permisosIds = [];
@@ -374,6 +376,7 @@ class DatabaseSeeder extends Seeder
             ['slug' => 'proveedores.manage', 'nombre' => 'Gestionar Proveedores', 'modulo' => 'PROVEEDORES', 'descripcion' => 'Catálogo de importadores y proveedores.'],
             ['slug' => 'compras.manage', 'nombre' => 'Gestionar Compras', 'modulo' => 'COMPRAS', 'descripcion' => 'Órdenes de compra e ingreso de insumos.'],
             ['slug' => 'reportes.view', 'nombre' => 'Ver Reportes Gerenciales', 'modulo' => 'REPORTES', 'descripcion' => 'Métricas e inteligencia de negocio.'],
+            ['slug' => 'voz.nlp', 'nombre' => 'Procesar Intenciones de Voz con IA (NLP)', 'modulo' => 'INTELIGENCIA_VOZ', 'descripcion' => 'Permite procesar comandos de voz y texto con el motor NLP e Inteligencia Artificial (CU30).'],
         ];
 
         $permisosIds = [];

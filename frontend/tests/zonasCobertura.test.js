@@ -22,9 +22,9 @@ globalThis.Event = class Event { constructor(type) { this.type = type; } };
 globalThis.window = { dispatchEvent: () => {} };
 
 const { ESTADOS_COBERTURA, esAreaValida, contarVertices, boundsDeArea, areaToSvgPoints, normalizarPoligono } =
-  await import('../src/models/Paquetes/GestionClientesZonas/CU04_ZonasCobertura/geoArea.js');
+  await import('../src/models/Paquetes/P2_GestionClientesZonas/CU04_ZonasCobertura/geoArea.js');
 const { zonaService, mockZonas } =
-  await import('../src/models/Paquetes/GestionClientesZonas/CU04_ZonasCobertura/zonaCoberturaModel.js');
+  await import('../src/models/Paquetes/P2_GestionClientesZonas/CU04_ZonasCobertura/zonaCoberturaModel.js');
 
 const POLIGONO = {
   type: 'Polygon',

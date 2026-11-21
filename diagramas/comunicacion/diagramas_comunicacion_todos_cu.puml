@@ -1,5 +1,5 @@
 ' ==============================================================================
-' TELCOM - DIAGRAMAS DE COMUNICACIÓN (CU01 AL CU17)
+' TELCOM - DIAGRAMAS DE COMUNICACIÓN (CU01 AL CU23)
 ' Estilo: Enterprise Architect (Actor - Boundary - Control - Entity)
 ' Modelos de Entidad actualizados con las tablas canónicas de la base de datos
 ' ==============================================================================
@@ -611,6 +611,129 @@ frame "sd CU17 Asignar o cambiar plan de Internet" {
 }
 @enduml
 
+@startuml cu18_gestionar_catalogo_equipos
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam interfaceBackgroundColor transparent
+skinparam interfaceBorderColor transparent
+skinparam actorBackgroundColor #FEFECE
+skinparam actorBorderColor #A80036
+skinparam boundaryBackgroundColor #CCEEFF
+skinparam boundaryBorderColor #0088CC
+skinparam controlBackgroundColor #CCEEFF
+skinparam controlBorderColor #0088CC
+skinparam entityBackgroundColor #CCEEFF
+skinparam entityBorderColor #0088CC
+
+frame "sd CU18 Registrar y gestionar catálogo de equipos e inventario" {
+    () " " as spacer
+    actor "Administrador / Almacén" as AdminActor
+    boundary UI_CatalogoEquipos
+    control CatalogoEquiposController
+    entity ProductoEquipo
+    entity Inventario
+    entity Equipo
+
+    spacer -[hidden]down- AdminActor
+
+    AdminActor -right- UI_CatalogoEquipos : <font color=#000000>1: listarCatalogoEquipos(filtros) →</font>\n<font color=#800000>2: registrarNuevoProducto(datos) →</font>\n<font color=#008000>3: verDetalleProducto(id) →</font>\n<font color=#000080>4: registrarUnidadSerializada(id, serial, mac, prop) →</font>
+
+    UI_CatalogoEquipos -right- CatalogoEquiposController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: store(Request) →</font>\n<font color=#008000>3.1: show(id) →</font>\n<font color=#000080>4.1: registrarUnidadFisica(Request, id) →</font>
+
+    CatalogoEquiposController -right- ProductoEquipo : <font color=#000000>1.2: with('inventario')->get() →</font>\n<font color=#800000>2.2: create(validated) →</font>\n<font color=#008000>3.2: with(['inventario', 'equipos'])->find(id) →</font>
+
+    CatalogoEquiposController -up- Inventario : <font color=#800000>2.3: create(idProducto, stock: 0) →</font>\n<font color=#000080>4.3: increment('stockActual', 1) →</font>
+
+    CatalogoEquiposController -down- Equipo : <font color=#000080>4.2: create(validatedSerial) →</font>
+}
+@enduml
+
+@startuml cu19_asignar_equipo_comodato
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam interfaceBackgroundColor transparent
+skinparam interfaceBorderColor transparent
+skinparam actorBackgroundColor #FEFECE
+skinparam actorBorderColor #A80036
+skinparam boundaryBackgroundColor #CCEEFF
+skinparam boundaryBorderColor #0088CC
+skinparam controlBackgroundColor #CCEEFF
+skinparam controlBorderColor #0088CC
+skinparam entityBackgroundColor #CCEEFF
+skinparam entityBorderColor #0088CC
+
+frame "sd CU19 Asignar equipo en comodato a un servicio" {
+    () " " as spacer
+    actor "Administrador / Secretaría / Técnico" as AdminActor
+    boundary UI_AsignarEquipoComodato
+    control AsignacionEquipoComodatoController
+    entity ServicioInternet
+    entity Equipo
+    entity AsignacionEquipo
+    entity Inventario
+    entity Bitacora
+
+    spacer -[hidden]down- AdminActor
+
+    AdminActor -right- UI_AsignarEquipoComodato : <font color=#000000>1: consultarServiciosActivos(buscar) →</font>\n<font color=#800000>2: consultarEquiposDisponibles(tipo) →</font>\n<font color=#008000>3: asignarEquipoComodato(idServicio, datos) →</font>\n<font color=#000080>4: listarAsignaciones(filtros) →</font>
+
+    UI_AsignarEquipoComodato -right- AsignacionEquipoComodatoController : <font color=#000000>1.1: serviciosActivos(Request) →</font>\n<font color=#800000>2.1: equiposDisponibles(Request) →</font>\n<font color=#008000>3.1: asignar(Request, idServicio) →</font>\n<font color=#000080>4.1: index(Request) →</font>
+
+    AsignacionEquipoComodatoController -up- ServicioInternet : <font color=#000000>1.2: with(['cliente','estado','zona'])->paginate(25) →</font>\n<font color=#008000>3.2: with(['cliente','estado'])->find(idServicio) →</font>\n<font color=#008000>3.7: update(['macRouter' => mac, 'ipAsignada' => ip]) →</font>
+
+    AsignacionEquipoComodatoController -right- Equipo : <font color=#800000>2.2: with('producto.inventario')->disponibles()->get() →</font>\n<font color=#008000>3.3: with('producto.inventario')->find(idEquipo) →</font>\n<font color=#008000>3.5: update(['asignada' => true, 'estadoEquipo' => 'ASIGNADO']) →</font>
+
+    AsignacionEquipoComodatoController -down- AsignacionEquipo : <font color=#008000>3.4: create(['idEquipo' => ..., 'idServicio' => ..., 'fechaAsignacion' => ...]) →</font>\n<font color=#000080>4.2: with(['equipo.producto','servicio.cliente'])->paginate(20) →</font>
+
+    AsignacionEquipoComodatoController -left- Inventario : <font color=#008000>3.6: where('idProducto', prodId)->decrement('stockActual', 1) →</font>
+
+    AsignacionEquipoComodatoController -down- Bitacora : <font color=#008000>3.8: log('CU19', 'ASIGNAR_EQUIPO_COMODATO', ...) →</font>
+}
+@enduml
+
+@startuml cu20_reemplazar_retirar_equipo
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam interfaceBackgroundColor transparent
+skinparam interfaceBorderColor transparent
+skinparam actorBackgroundColor #FEFECE
+skinparam actorBorderColor #A80036
+skinparam boundaryBackgroundColor #CCEEFF
+skinparam boundaryBorderColor #0088CC
+skinparam controlBackgroundColor #CCEEFF
+skinparam controlBorderColor #0088CC
+skinparam entityBackgroundColor #CCEEFF
+skinparam entityBorderColor #0088CC
+
+frame "sd CU20 Reemplazar o retirar equipo" {
+    () " " as spacer
+    actor "Administrador / Secretaría / Técnico" as AdminActor
+    boundary UI_EquipoReemplazoRetiro
+    control EquipoReemplazoRetiroController
+    entity ServicioInternet
+    entity AsignacionEquipo
+    entity Equipo
+    entity Bitacora
+
+    spacer -[hidden]down- AdminActor
+
+    AdminActor -right- UI_EquipoReemplazoRetiro : <font color=#000000>1: consultarEquipoActual(idServicio) →</font>\n<font color=#800000>2: consultarEquiposDisponibles() →</font>\n<font color=#008000>3: reemplazarEquipo(idServicio, equipoNuevoId, motivo) →</font>\n<font color=#000080>4: retirarEquipo(idServicio, motivo) →</font>
+
+    UI_EquipoReemplazoRetiro -right- EquipoReemplazoRetiroController : <font color=#000000>1.1: consultar(servicio) →</font>\n<font color=#800000>2.1: disponibles() →</font>\n<font color=#008000>3.1: reemplazar(Request, servicio) →</font>\n<font color=#000080>4.1: retirar(Request, servicio) →</font>
+
+    EquipoReemplazoRetiroController -up- ServicioInternet : <font color=#008000>3.2: lockForUpdate()->findOrFail(idServicio) →</font>\n<font color=#008000>3.7: update(['ipAsignada' => ip, 'macRouter' => mac]) →</font>\n<font color=#000080>4.4: update(['ipAsignada' => null, 'macRouter' => null]) →</font>
+
+    EquipoReemplazoRetiroController -right- AsignacionEquipo : <font color=#000000>1.2: with('equipo.producto')->whereNull('fechaRetiro')->first() →</font>\n<font color=#008000>3.3: update(['fechaRetiro' => now(), 'motivoRetiro' => motivo]) →</font>\n<font color=#008000>3.6: create(['idEquipo' => nuevoId, 'idServicio' => id, 'fechaAsignacion' => now()]) →</font>\n<font color=#000080>4.2: update(['fechaRetiro' => now(), 'motivoRetiro' => motivo]) →</font>
+
+    EquipoReemplazoRetiroController -down- Equipo : <font color=#800000>2.2: with('producto')->where('asignada', false)->get() →</font>\n<font color=#008000>3.4: lockForUpdate()->find(nuevoId) →</font>\n<font color=#008000>3.5: anterior->update(['asignada' => false]); nuevo->update(['asignada' => true]) →</font>\n<font color=#000080>4.3: equipo->update(['asignada' => false]) →</font>
+
+    EquipoReemplazoRetiroController -down- Bitacora : <font color=#008000>3.8: log('CU20', 'REEMPLAZAR_EQUIPO', ...) →</font>\n<font color=#000080>4.5: log('CU20', 'RETIRAR_EQUIPO', ...) →</font>
+}
+@enduml
+
 @startuml cu21_registrar_solicitud_instalacion
 skinparam backgroundColor white
 skinparam defaultFontName "Segoe UI"
@@ -646,5 +769,84 @@ frame "sd CU21 Registrar solicitud de instalación" {
     SolicitudInstalacionController -down- Zona : <font color=#800000>2.3: find(zonaId) [valida cobertura != 'Saturada'] →</font>
 
     SolicitudInstalacionController -right- SolicitudInstalacion : <font color=#000000>1.2: with('cliente')->orderBy('idSolicitud','desc')->paginate() →</font>\n<font color=#800000>2.4: create(numeroOrden, fecha, dir, gps, 'PENDIENTE', idCliente) →</font>\n<font color=#008000>3.2: findOrFail(id) →</font>\n<font color=#008000>3.3: update(['estadoSolicitud' => 'CANCELADA', 'observacion' => motivo]) →</font>
+}
+@enduml
+
+@startuml cu22_programar_instalacion
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam interfaceBackgroundColor transparent
+skinparam interfaceBorderColor transparent
+skinparam actorBackgroundColor #FEFECE
+skinparam actorBorderColor #A80036
+skinparam boundaryBackgroundColor #CCEEFF
+skinparam boundaryBorderColor #0088CC
+skinparam controlBackgroundColor #CCEEFF
+skinparam controlBorderColor #0088CC
+skinparam entityBackgroundColor #CCEEFF
+skinparam entityBorderColor #0088CC
+
+frame "sd CU22 Programar instalación y asignar técnico" {
+    () " " as spacer
+    actor "Secretaría / Administrador" as AdminActor
+    boundary UI_ProgramarInstalacion
+    control InstalacionesController
+    entity SolicitudInstalacion
+    entity Tecnico
+    entity Instalacion
+    entity Bitacora
+
+    spacer -[hidden]down- AdminActor
+
+    AdminActor -right- UI_ProgramarInstalacion : <font color=#000000>1: consultarAgendaYSolicitudes() →</font>\n<font color=#800000>2: programarInstalacion(solicitudId, tecnicoId, fecha, hora, costo, obs) →</font>
+
+    UI_ProgramarInstalacion -right- InstalacionesController : <font color=#000000>1.1: index() →</font>\n<font color=#800000>2.1: store(Request) →</font>
+
+    InstalacionesController -right- SolicitudInstalacion : <font color=#000000>1.2: with(['cliente','instalacion.tecnico'])->whereIn('estadoSolicitud',['PENDIENTE','PROGRAMADA'])->get() →</font>\n<font color=#800000>2.3: lockForUpdate()->findOrFail(solicitudId) →</font>\n<font color=#800000>2.5: update(['estadoSolicitud' => 'PROGRAMADA']) →</font>
+
+    InstalacionesController -down- Tecnico : <font color=#000000>1.3: where('activo', true)->get() →</font>\n<font color=#800000>2.6: find(tecnicoId) →</font>
+
+    InstalacionesController -up- Instalacion : <font color=#000000>1.4: with(['tecnico','solicitud.cliente'])->where('estadoInstalacion','PROGRAMADA')->get() →</font>\n<font color=#800000>2.2: where('idTecnico', id)->where('fechaProgramada', f)->where('horaProgramada', h)->exists() →</font>\n<font color=#800000>2.4: updateOrCreate(['idSolicitud' => sId], ['idTecnico' => tId, 'fechaProgramada' => f, 'estadoInstalacion' => 'PROGRAMADA']) →</font>
+
+    InstalacionesController -down- Bitacora : <font color=#800000>2.7: log('CU22', 'PROGRAMAR_INSTALACION', ...) →</font>
+}
+@enduml
+
+@startuml cu23_registrar_instalacion
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam interfaceBackgroundColor transparent
+skinparam interfaceBorderColor transparent
+skinparam actorBackgroundColor #FEFECE
+skinparam actorBorderColor #A80036
+skinparam boundaryBackgroundColor #CCEEFF
+skinparam boundaryBorderColor #0088CC
+skinparam controlBackgroundColor #CCEEFF
+skinparam controlBorderColor #0088CC
+skinparam entityBackgroundColor #CCEEFF
+skinparam entityBorderColor #0088CC
+
+frame "sd CU23 Registrar y gestionar órdenes de instalación técnica" {
+    () " " as spacer
+    actor "Administrador / Soporte Técnico" as AdminActor
+    boundary UI_Instalacion
+    control InstalacionRegistroController
+    entity Instalacion
+    entity SolicitudInstalacion
+    entity Tecnico
+
+    spacer -[hidden]down- AdminActor
+
+    AdminActor -right- UI_Instalacion : <font color=#000000>1: listarInstalaciones(filtros) →</font>\n<font color=#800000>2: programarInstalacion(datos) →</font>\n<font color=#008000>3: asignarTecnico(id, idTecnico) →</font>\n<font color=#000080>4: finalizarInstalacion(id, fechaReal, obs) →</font>
+
+    UI_Instalacion -right- InstalacionRegistroController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: store(Request) →</font>\n<font color=#008000>3.1: asignarTecnico(Request, id) →</font>\n<font color=#000080>4.1: finalizar(Request, id) →</font>
+
+    InstalacionRegistroController -right- Instalacion : <font color=#000000>1.2: with(['solicitud.cliente', 'tecnico'])->get() →</font>\n<font color=#800000>2.3: create(validatedInstalacion) →</font>\n<font color=#008000>3.3: update(['idTecnico' => idTecnico, 'estado' => 'ASIGNADA']) →</font>\n<font color=#000080>4.2: update(['fechaRealizada' => fecha, 'estado' => 'FINALIZADA']) →</font>
+
+    InstalacionRegistroController -up- SolicitudInstalacion : <font color=#800000>2.2: create(validatedSolicitud) →</font>\n<font color=#000080>4.3: update(['estadoSolicitud' => 'COMPLETADA']) →</font>
+
+    InstalacionRegistroController -down- Tecnico : <font color=#008000>3.2: exists:Tecnico,idTecnico →</font>
 }
 @enduml

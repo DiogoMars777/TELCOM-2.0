@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Models\Paquetes\SeguridadAdministracion\CU03_UsuariosRolesPermisos\Permiso;
-use App\Models\Paquetes\SeguridadAdministracion\CU03_UsuariosRolesPermisos\Rol;
-use App\Models\Paquetes\GestionClientesZonas\CU05_RegistrarCliente\Cliente;
-use App\Models\Paquetes\ServiciosPlanes\CU08_RegistrarActivarServicio\ServicioInternet;
-use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\MensualidadFacturacion;
+use App\Models\Paquetes\P1_SeguridadAdministracion\CU03_UsuariosRolesPermisos\Permiso;
+use App\Models\Paquetes\P1_SeguridadAdministracion\CU03_UsuariosRolesPermisos\Rol;
+use App\Models\Paquetes\P2_GestionClientesZonas\CU05_RegistrarCliente\Cliente;
+use App\Models\Paquetes\P3_ServiciosPlanes\CU08_RegistrarActivarServicio\ServicioInternet;
+use App\Models\Paquetes\P4_FacturacionCobranza\CU09_GenerarMensualidades\MensualidadFacturacion;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -76,7 +76,7 @@ class AuthorizationRbacTest extends TestCase
         $secretaria = Rol::where('slug', 'secretaria')->firstOrFail();
         $tecnico = Rol::where('slug', 'tecnico')->firstOrFail();
 
-        $this->assertSame(29, $admin->permisos()->count(), 'El administrador debe tener todos los permisos.');
+        $this->assertSame(30, $admin->permisos()->count(), 'El administrador debe tener todos los permisos.');
         $this->assertSame(20, $secretaria->permisos()->count());
         $this->assertSame(8, $tecnico->permisos()->count());
 
@@ -173,7 +173,7 @@ class AuthorizationRbacTest extends TestCase
     public function test_secretaria_puede_registrar_cliente(): void
     {
         $secretaria = $this->usuarioConRol('secretaria');
-        $zona = \App\Models\Paquetes\GestionClientesZonas\CU04_ZonasCobertura\ZonaCobertura::firstOrFail();
+        $zona = \App\Models\Paquetes\P2_GestionClientesZonas\CU04_ZonasCobertura\ZonaCobertura::firstOrFail();
 
         $this->withHeaders($this->bearer($secretaria))
             ->postJson('/api/cu05/clientes', [

@@ -21,7 +21,7 @@ globalThis.localStorage = new MemoryStorage();
 globalThis.Event = class Event { constructor(type) { this.type = type; } };
 globalThis.window = { dispatchEvent: () => {} };
 
-const { authService } = await import('../src/models/Paquetes/SeguridadAdministracion/CU01_IniciarCerrarSesion/authModel.js');
+const { authService } = await import('../src/models/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/authModel.js');
 const { authToken } = await import('../src/services/apiClient.js');
 
 function jsonResponse(status, body) {

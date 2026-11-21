@@ -31,6 +31,7 @@ const PERMISOS_ADMIN = [
   'equipos.view', 'equipos.manage', 'equipos.assign',
   'instalaciones.view', 'instalaciones.schedule', 'instalaciones.execute',
   'proveedores.manage', 'compras.manage', 'reportes.view',
+  'voz.nlp',
 ];
 
 const PERMISOS_SECRETARIA = [
@@ -113,6 +114,30 @@ test('Manipular el estado de React no concede acceso (guardas por permiso)', () 
 
 test('Módulo desconocido nunca es accesible', () => {
   assert.equal(canAccessCu(admin, 'CU99'), false);
+});
+
+test('CU20 permite el acceso a Administrador, Secretaría y Técnico', () => {
+  for (const user of [admin, secretaria, tecnico]) {
+    assert.equal(canAccessCu(user, 'CU20'), true);
+  }
+  assert.equal(CU_PERMISSIONS.CU20, 'equipos.view');
+  assert.equal(CU_ORDER.includes('CU20'), true);
+  assert.ok(CU_ORDER.indexOf('CU20') > CU_ORDER.indexOf('CU17'));
+});
+
+test('CU20 exige equipos.view incluso si el usuario puede gestionar o asignar equipos', () => {
+  assert.equal(canAccessCu({ permisos: ['equipos.assign', 'equipos.manage'] }, 'CU20'), false);
+  assert.equal(canAccessCu(sinPermisos, 'CU20'), false);
+  assert.equal(canAccessCu(null, 'CU20'), false);
+  assert.equal(canAccessCu({ permisos: ['equipos.view'] }, 'CU20'), true);
+});
+
+test('CU20 distingue consulta y asignación: equipos.manage no concede acciones', () => {
+  const consulta = { permisos: ['equipos.view', 'equipos.manage'] };
+  assert.equal(canAccessCu(consulta, 'CU20'), true);
+  assert.equal(hasPermission(consulta, 'equipos.assign'), false);
+  assert.equal(hasPermission(secretaria, 'equipos.manage'), false);
+  assert.equal(hasPermission(secretaria, 'equipos.assign'), true);
 });
 
 test('Administrador, Secretaría y Soporte Técnico pueden cambiar su contraseña', () => {

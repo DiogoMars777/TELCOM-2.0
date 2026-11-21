@@ -271,6 +271,8 @@ body {
   flex: 1;
   overflow-y: auto;
   padding: 2rem;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Panels & Cards */
@@ -355,6 +357,13 @@ body {
   background-color: var(--bg-card-hover);
 }
 
+.cell-nowrap,
+.nowrap,
+.data-table th.cell-nowrap,
+.data-table td.cell-nowrap {
+  white-space: nowrap;
+}
+
 /* Buttons */
 .btn {
   display: inline-flex;
@@ -367,6 +376,7 @@ body {
   cursor: pointer;
   transition: all 0.2s;
   border: none;
+  white-space: nowrap;
 }
 
 .btn-primary {
@@ -409,6 +419,7 @@ body {
   border-radius: 9999px;
   font-size: 0.72rem;
   font-weight: 700;
+  white-space: nowrap;
 }
 .badge-info { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
 .badge-success { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
@@ -714,6 +725,143 @@ input:focus, select:focus, textarea:focus {
   justify-content: flex-end;
   gap: 0.75rem;
   margin-top: 1rem;
+}
+
+.modal-card-scrollable {
+  max-height: 90vh;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-card);
+  flex-shrink: 0;
+}
+
+.modal-body {
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-card);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Responsive Table-to-Cards Pattern (Mobile First)                   */
+/* ------------------------------------------------------------------ */
+.users-table-wrap {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.users-mobile-status {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1rem;
+  color: var(--text-secondary);
+  background-color: var(--bg-card);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.users-cards {
+  display: none;
+}
+
+.user-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.user-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.user-card-id {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--info);
+}
+
+.user-card-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.user-card-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.user-card-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.user-card-value {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.user-card-actions .btn {
+  width: 100%;
+  justify-content: center;
+  min-height: 42px;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 640px) {
+  .users-table-wrap {
+    display: none !important;
+  }
+
+  .users-mobile-status {
+    display: flex !important;
+  }
+
+  .users-cards {
+    display: flex !important;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
 }
 
 /* Alerts */
@@ -1342,4 +1490,34 @@ input:focus, select:focus, textarea:focus {
   .sidebar {
     transition: none;
   }
+}
+
+
+/* ==========================================================================
+   Scrollbars Invisibles (Ocultar visualmente manteniendo desplazamiento)
+   ========================================================================== */
+
+/* Ocultar scrollbar para Chrome, Safari, Edge (Chromium) y Opera */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar,
+.modal-body::-webkit-scrollbar,
+.content-body::-webkit-scrollbar,
+.table-responsive::-webkit-scrollbar,
+.users-table-wrap::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Ocultar scrollbar para IE, Edge y Firefox */
+html,
+body,
+.no-scrollbar,
+.modal-body,
+.content-body,
+.table-responsive,
+.users-table-wrap {
+  -ms-overflow-style: none;  /* IE y Edge */
+  scrollbar-width: none;     /* Firefox */
 }

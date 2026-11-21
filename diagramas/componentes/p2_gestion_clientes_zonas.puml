@@ -1,0 +1,68 @@
+@startuml
+title P2: Gestión de Clientes y Zonas - Diagrama de componentes
+left to right direction
+skinparam backgroundColor white
+skinparam defaultFontName Segoe UI
+skinparam componentStyle uml2
+skinparam component {
+  BackgroundColor #FFFFFF
+  BorderColor #334155
+  FontColor #0F172A
+}
+skinparam database {
+  BackgroundColor #EFF6FF
+  BorderColor #2563EB
+  FontColor #0F172A
+}
+skinparam package {
+  BackgroundColor #F8FAFC
+  BorderColor #64748B
+}
+
+package "P2: Gestión de Clientes y Zonas" {
+  package "CU04 - Gestionar zonas de cobertura" as G1 {
+    component "<<vista>>\nZonasCoberturaView.jsx\nMapaArea.jsx" as V1
+    component "<<controlador>>\nZonaCoberturaController.php" as C1
+    V1 --> C1 : API REST
+    database "<<tabla>>\nZona" as T1_1
+    C1 ..> T1_1
+    database "<<tabla>>\nBitacora" as T1_2
+    C1 ..> T1_2
+  }
+
+  package "CU05 - Registrar nuevo cliente" as G2 {
+    component "<<vista>>\nClienteRegistroView.jsx" as V2
+    component "<<controlador>>\nClienteRegistroController.php\nZonaCoberturaController.php" as C2
+    V2 --> C2 : API REST
+    database "<<tabla>>\nCliente" as T2_1
+    C2 ..> T2_1
+    database "<<tabla>>\nZona" as T2_2
+    C2 ..> T2_2
+    database "<<tabla>>\nBitacora" as T2_3
+    C2 ..> T2_3
+  }
+
+  package "CU06 - Consultar y buscar clientes" as G3 {
+    component "<<vista>>\nClienteConsultaView.jsx" as V3
+    component "<<controlador>>\nClienteConsultaController.php" as C3
+    V3 --> C3 : API REST
+    database "<<tabla>>\nCliente" as T3_1
+    C3 ..> T3_1
+    database "<<tabla>>\nZona" as T3_2
+    C3 ..> T3_2
+  }
+
+  package "CU07 - Actualizar y dar de baja lógica al cliente" as G4 {
+    component "<<vista>>\nClienteMantenimientoView.jsx" as V4
+    component "<<controlador>>\nClienteMantenimientoController.php" as C4
+    V4 --> C4 : API REST
+    database "<<tabla>>\nCliente" as T4_1
+    C4 ..> T4_1
+    database "<<tabla>>\nZona" as T4_2
+    C4 ..> T4_2
+    database "<<tabla>>\nBitacora" as T4_3
+    C4 ..> T4_3
+  }
+
+}
+@enduml

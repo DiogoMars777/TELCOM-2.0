@@ -22,15 +22,15 @@ globalThis.Event = class Event { constructor(type) { this.type = type; } };
 globalThis.window = { dispatchEvent: () => {} };
 
 const { isDemoMode } = await import('../src/config/appConfig.js');
-const { zonaService, mockZonas } = await import('../src/models/Paquetes/GestionClientesZonas/CU04_ZonasCobertura/zonaCoberturaModel.js');
-const { clienteConsultaService } = await import('../src/models/Paquetes/GestionClientesZonas/CU06_ConsultarBuscarClientes/clienteConsultaModel.js');
-const { mensualidadService } = await import('../src/models/Paquetes/FacturacionCobranza/CU09_GenerarMensualidades/mensualidadModel.js');
-const { alertasService } = await import('../src/models/Paquetes/FacturacionCobranza/CU12_VisualizarAlertasVencimiento/alertaVencimientoModel.js');
-const { historialPagosService } = await import('../src/models/Paquetes/FacturacionCobranza/CU11_ConsultarHistorialPagos/historialPagoModel.js');
-const { pagoMensualidadService } = await import('../src/models/Paquetes/FacturacionCobranza/CU10_GestionarPagoMensualidad/pagoMensualidadModel.js');
-const { planInternetService } = await import('../src/models/Paquetes/ServiciosPlanes/CU16_GestionarCatalogoPlanes/planInternetModel.js');
-const { asignacionPlanService } = await import('../src/models/Paquetes/ServiciosPlanes/CU17_AsignarCambiarPlanInternet/asignacionPlanModel.js');
-const { serviciosCorteService } = await import('../src/models/Paquetes/ServiciosPlanes/CU13_ListadoServiciosCorte/servicioCorteModel.js');
+const { zonaService, mockZonas } = await import('../src/models/Paquetes/P2_GestionClientesZonas/CU04_ZonasCobertura/zonaCoberturaModel.js');
+const { clienteConsultaService } = await import('../src/models/Paquetes/P2_GestionClientesZonas/CU06_ConsultarBuscarClientes/clienteConsultaModel.js');
+const { mensualidadService } = await import('../src/models/Paquetes/P4_FacturacionCobranza/CU09_GenerarMensualidades/mensualidadModel.js');
+const { alertasService } = await import('../src/models/Paquetes/P4_FacturacionCobranza/CU12_VisualizarAlertasVencimiento/alertaVencimientoModel.js');
+const { historialPagosService } = await import('../src/models/Paquetes/P4_FacturacionCobranza/CU11_ConsultarHistorialPagos/historialPagoModel.js');
+const { pagoMensualidadService } = await import('../src/models/Paquetes/P4_FacturacionCobranza/CU10_GestionarPagoMensualidad/pagoMensualidadModel.js');
+const { planInternetService } = await import('../src/models/Paquetes/P3_ServiciosPlanes/CU16_GestionarCatalogoPlanes/planInternetModel.js');
+const { asignacionPlanService } = await import('../src/models/Paquetes/P3_ServiciosPlanes/CU17_AsignarCambiarPlanInternet/asignacionPlanModel.js');
+const { serviciosCorteService } = await import('../src/models/Paquetes/P3_ServiciosPlanes/CU13_ListadoServiciosCorte/servicioCorteModel.js');
 
 function jsonResponse(status, body) {
   return { ok: status >= 200 && status < 300, status, json: async () => body };

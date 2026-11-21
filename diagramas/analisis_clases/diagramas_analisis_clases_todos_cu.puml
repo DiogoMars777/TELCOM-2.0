@@ -1,5 +1,5 @@
 ' ==============================================================================
-' TELCOM - DIAGRAMAS DE ANÃLISIS DE CLASES (CU01 AL CU17)
+' TELCOM - DIAGRAMAS DE ANÁLISIS DE CLASES (CU01 AL CU23)
 ' Estilo: Enterprise Architect (Actor - Boundary - Control - Entity)
 ' PatrÃ³n: Entidad principal conectada al Controlador + Entidades relacionadas con cardinalidades
 ' ==============================================================================
@@ -1538,6 +1538,322 @@ frame "sd Diagrama de anÃ¡lisis de clases - CU17 Asignar o cambiar el plan de 
     AsignacionPlan "0..*" -down- "1" Usuario
 }
 @enduml
+@startuml cu18_analisis_gestionar_catalogo_equipos
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de análisis de clases - CU18 Registrar y gestionar catálogo de equipos e inventario" {
+    actor "Administrador / Almacén" as AdminActor
+
+    class UI_CatalogoEquipos {
+        + listarProductos(): void
+        + registrarProducto(): void
+        + obtenerDetalleProducto(): void
+        + actualizarProducto(): void
+        + registrarUnidadFisica(): void
+        + filtrarPorTipo(): void
+    }
+
+    class CatalogoEquiposController {
+        + index(Request): JsonResponse
+        + store(Request): JsonResponse
+        + show(id): JsonResponse
+        + update(Request, id): JsonResponse
+        + registrarUnidadFisica(Request, id): JsonResponse
+    }
+
+    class ProductoEquipo {
+        - idProducto: int
+        - nombre: string
+        - tipoEquipo: string
+        - marca: string
+        - modelo: string
+        - descripcion: string
+        - estado: string
+        --
+        + create(): ProductoEquipo
+        + find(): ProductoEquipo
+        + get(): Collection
+        + update(): bool
+        + with(): Builder
+    }
+
+    class Inventario {
+        - idInventario: int
+        - stockActual: int
+        - fechaActualizacion: timestamp
+        - idProducto: int
+        --
+        + create(): Inventario
+        + increment(): int
+        + update(): bool
+        + where(): Builder
+    }
+
+    class Equipo {
+        - idEquipo: int
+        - numeroSerie: string
+        - mac: string
+        - ip: string
+        - asignada: boolean
+        - propiedad: string
+        - estadoEquipo: string
+        - idProducto: int
+        --
+        + create(): Equipo
+        + find(): Equipo
+        + where(): Builder
+    }
+
+    AdminActor -right- UI_CatalogoEquipos
+    UI_CatalogoEquipos -right- CatalogoEquiposController
+    CatalogoEquiposController -right- ProductoEquipo
+
+    ProductoEquipo "1" -up- "1" Inventario
+    ProductoEquipo "1" -right- "0..*" Equipo
+}
+@enduml
+
+@startuml cu19_analisis_asignar_equipo_comodato
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de análisis de clases - CU19 Asignar equipo en comodato a un servicio" {
+    actor "Administrador / Secretaría / Técnico" as AdminActor
+
+    class UI_AsignarEquipoComodato {
+        + consultarServiciosActivos(): void
+        + consultarEquiposDisponibles(): void
+        + asignarEquipoComodato(): void
+        + listarAsignaciones(): void
+        + emitirActaComodato(): void
+    }
+
+    class AsignacionEquipoComodatoController {
+        + index(Request): JsonResponse
+        + serviciosActivos(Request): JsonResponse
+        + equiposDisponibles(Request): JsonResponse
+        + asignar(Request, idServicio): JsonResponse
+        + actaComodato(id): JsonResponse
+        + historialPorServicio(idServicio): JsonResponse
+    }
+
+    class AsignacionEquipo {
+        - idAsignacionEquipo: int
+        - fechaAsignacion: date
+        - fechaRetiro: date
+        - motivoRetiro: string
+        - observaciones: text
+        - condicionEntrega: string
+        - idEquipo: int
+        - idServicio: int
+        --
+        + create(): AsignacionEquipo
+        + find(): AsignacionEquipo
+        + where(): Builder
+        + update(): bool
+    }
+
+    class Equipo {
+        - idEquipo: int
+        - numeroSerie: string
+        - mac: string
+        - ip: string
+        - asignada: boolean
+        - propiedad: string
+        - estadoEquipo: string
+        - idProducto: int
+        --
+        + find(): Equipo
+        + update(): bool
+        + where(): Builder
+    }
+
+    class ProductoEquipo {
+        - idProducto: int
+        - nombre: string
+        - tipoEquipo: string
+        - marca: string
+        - modelo: string
+        --
+        + find(): ProductoEquipo
+    }
+
+    class Inventario {
+        - idInventario: int
+        - stockActual: int
+        - idProducto: int
+        --
+        + decrement(): int
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - codigoServicio: string
+        - ipAsignada: string
+        - macRouter: string
+        - idCliente: int
+        - idEstadoServicio: int
+        --
+        + find(): ServicioInternet
+        + update(): bool
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - ci: string
+        - nombreCompleto: string
+        --
+        + find(): Cliente
+    }
+
+    AdminActor -right- UI_AsignarEquipoComodato
+    UI_AsignarEquipoComodato -right- AsignacionEquipoComodatoController
+    AsignacionEquipoComodatoController -right- AsignacionEquipo
+
+    ProductoEquipo "1" -up- "1" Inventario
+    ProductoEquipo "1" -right- "0..*" Equipo
+    Equipo "1" -right- "0..*" AsignacionEquipo
+    ServicioInternet "1" -down- "0..*" AsignacionEquipo
+    Cliente "1" -right- "0..*" ServicioInternet
+}
+@enduml
+
+@startuml cu20_analisis_reemplazar_retirar_equipo
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de análisis de clases - CU20 Reemplazar o retirar equipo" {
+    actor "Administrador / Secretaría / Técnico" as AdminActor
+
+    class UI_EquipoReemplazoRetiro {
+        + consultarEquipoActual(): void
+        + consultarEquiposDisponibles(): void
+        + reemplazarEquipo(): void
+        + retirarEquipo(): void
+    }
+
+    class EquipoReemplazoRetiroController {
+        + consultar(ServicioInternet): JsonResponse
+        + disponibles(): JsonResponse
+        + reemplazar(Request, ServicioInternet): JsonResponse
+        + retirar(Request, ServicioInternet): JsonResponse
+    }
+
+    class AsignacionEquipo {
+        - idAsignacionEquipo: int
+        - fechaAsignacion: date
+        - fechaRetiro: date
+        - motivoRetiro: string
+        - idEquipo: int
+        - idServicio: int
+        --
+        + create(): AsignacionEquipo
+        + where(): Builder
+        + update(): bool
+    }
+
+    class Equipo {
+        - idEquipo: int
+        - numeroSerie: string
+        - mac: string
+        - ip: string
+        - asignada: boolean
+        - estadoEquipo: string
+        - idProducto: int
+        --
+        + find(): Equipo
+        + update(): bool
+        + lockForUpdate(): Builder
+    }
+
+    class ProductoEquipo {
+        - idProducto: int
+        - nombre: string
+        - marca: string
+        - modelo: string
+        --
+        + find(): ProductoEquipo
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - codigoServicio: string
+        - ipAsignada: string
+        - macRouter: string
+        --
+        + lockForUpdate(): Builder
+        + findOrFail(): ServicioInternet
+        + update(): bool
+    }
+
+    AdminActor -right- UI_EquipoReemplazoRetiro
+    UI_EquipoReemplazoRetiro -right- EquipoReemplazoRetiroController
+    EquipoReemplazoRetiroController -right- AsignacionEquipo
+
+    ProductoEquipo "1" -right- "0..*" Equipo
+    Equipo "1" -right- "0..*" AsignacionEquipo
+    ServicioInternet "1" -down- "0..*" AsignacionEquipo
+}
+@enduml
 
 @startuml cu21_analisis_registrar_solicitud_instalacion
 allowmixing
@@ -1600,7 +1916,7 @@ frame "sd Diagrama de análisis de clases - CU21 Registrar solicitud de instalac
         + create(): SolicitudInstalacion
         + find(): SolicitudInstalacion
         + where(): Builder
-        + cliente(): BelongsTo
+        + update(): bool
     }
 
     class Cliente {
@@ -1614,7 +1930,7 @@ frame "sd Diagrama de análisis de clases - CU21 Registrar solicitud de instalac
         - idZona: int
         --
         + find(): Cliente
-        + solicitudes(): HasMany
+        + where(): Builder
     }
 
     class Zona {
@@ -1626,25 +1942,233 @@ frame "sd Diagrama de análisis de clases - CU21 Registrar solicitud de instalac
         + find(): Zona
     }
 
-    class Bitacora {
-        - idBitacora: int
-        - fechaHora: timestamp
-        - accion: string
-        - descripcion: text
-        - modulo: string
-        --
-        + create(): Bitacora
-    }
-
     ActorCU21 -right- UI_SolicitudInstalacion
     UI_SolicitudInstalacion -right- SolicitudInstalacionController
     SolicitudInstalacionController -right- SolicitudInstalacion
 
-    SolicitudInstalacionController -down- Cliente
-    SolicitudInstalacionController -down- Zona
-    SolicitudInstalacionController -up- Bitacora
-
     SolicitudInstalacion "0..*" -right- "1" Cliente
     Cliente "0..*" -right- "1" Zona
+}
+@enduml
+
+@startuml cu22_analisis_programar_instalacion
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de análisis de clases - CU22 Programar instalación y asignar técnico" {
+    actor "Secretaría / Administrador" as AdminActor
+
+    class UI_ProgramarInstalacion {
+        + consultarAgendaYSolicitudes(): void
+        + seleccionarSolicitudPendiente(): void
+        + asignarTecnicoCuadrilla(): void
+        + programarFechaHora(): void
+        + guardarProgramacion(): void
+    }
+
+    class InstalacionesController {
+        + index(): JsonResponse
+        + store(Request): JsonResponse
+    }
+
+    class SolicitudInstalacion {
+        - idSolicitud: int
+        - numeroOrden: string
+        - fechaSolicitud: date
+        - direccion: text
+        - estadoSolicitud: string
+        - idCliente: int
+        --
+        + findOrFail(): SolicitudInstalacion
+        + lockForUpdate(): Builder
+        + update(): bool
+    }
+
+    class Instalacion {
+        - idInstalacion: int
+        - fechaProgramada: date
+        - horaProgramada: string
+        - costoInstalacion: decimal
+        - estadoInstalacion: string
+        - observacion: text
+        - idSolicitud: int
+        - idTecnico: int
+        --
+        + updateOrCreate(): Instalacion
+        + where(): Builder
+        + exists(): bool
+    }
+
+    class Tecnico {
+        - idTecnico: int
+        - nombreCompleto: string
+        - telefono: string
+        - especialidad: string
+        - activo: boolean
+        --
+        + find(): Tecnico
+        + where(): Builder
+        + get(): Collection
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - ci: string
+        - nombreCompleto: string
+        - telefonoPrincipal: string
+        --
+        + find(): Cliente
+    }
+
+    AdminActor -right- UI_ProgramarInstalacion
+    UI_ProgramarInstalacion -right- InstalacionesController
+    InstalacionesController -right- Instalacion
+
+    Instalacion "0..1" -up- "1" SolicitudInstalacion
+    SolicitudInstalacion "0..*" -right- "1" Cliente
+    Instalacion "0..*" -down- "0..1" Tecnico
+}
+@enduml
+
+@startuml cu23_analisis_registrar_instalacion
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de análisis de clases - CU23 Registrar resultado, costo e instalación" {
+    actor "Administrador / Soporte Técnico" as AdminActor
+
+    class UI_Instalacion {
+        + mostrarFormularioInstalacion(): void
+        + registrarOrdenInstalacion(): void
+        + listarInstalaciones(): void
+        + asignarTecnicoCuadrilla(): void
+        + registrarFinalizacionTecnica(): void
+        + listarTecnicosDisponibles(): void
+    }
+
+    class InstalacionRegistroController {
+        + index(Request): JsonResponse
+        + store(Request): JsonResponse
+        + show(id): JsonResponse
+        + asignarTecnico(Request, id): JsonResponse
+        + finalizar(Request, id): JsonResponse
+        + tecnicos(): JsonResponse
+    }
+
+    class Instalacion {
+        - idInstalacion: int
+        - fechaProgramada: date
+        - fechaRealizada: date
+        - costoInstalacion: decimal
+        - estadoInstalacion: string
+        - observacion: string
+        - idSolicitud: int
+        - idServicio: int
+        - idTecnico: int
+        --
+        + create(): Instalacion
+        + find(): Instalacion
+        + update(): bool
+        + with(): Builder
+    }
+
+    class SolicitudInstalacion {
+        - idSolicitud: int
+        - numeroOrden: string
+        - fechaSolicitud: date
+        - direccion: text
+        - referencia: text
+        - latitud: decimal
+        - longitud: decimal
+        - estadoSolicitud: string
+        - observacion: text
+        - idCliente: int
+        --
+        + count(): int
+        + create(): SolicitudInstalacion
+        + find(): SolicitudInstalacion
+        + update(): bool
+    }
+
+    class Tecnico {
+        - idTecnico: int
+        - nombreCompleto: string
+        - telefono: string
+        - especialidad: string
+        - activo: boolean
+        --
+        + find(): Tecnico
+        + get(): Collection
+        + where(): Builder
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - codigoServicio: string
+        - ipAsignada: string
+        - macRouter: string
+        - idEstadoServicio: int
+        --
+        + find(): ServicioInternet
+        + update(): bool
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - nombreCompleto: string
+        - telefono: string
+        - direccion: string
+        --
+        + find(): Cliente
+    }
+
+    AdminActor -right- UI_Instalacion
+    UI_Instalacion -right- InstalacionRegistroController
+    InstalacionRegistroController -right- Instalacion
+
+    Instalacion "0..1" -up- "1" SolicitudInstalacion
+    SolicitudInstalacion "0..*" -right- "1" Cliente
+    Instalacion "0..*" -right- "0..1" ServicioInternet
+    Instalacion "0..*" -down- "0..1" Tecnico
 }
 @enduml

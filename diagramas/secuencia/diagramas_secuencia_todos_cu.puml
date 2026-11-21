@@ -1,0 +1,2205 @@
+' ==============================================================================
+' TELCOM - DIAGRAMAS DE SECUENCIA (CU01 AL CU23)
+' Estilo: Enterprise Architect (Actor - Boundary - Control - Entity)
+' Entidades canónicas estrictas de la base de datos (sin elementos auxiliares inventados)
+' ==============================================================================
+
+@startuml cu01_secuencia_iniciar_cerrar_sesion
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Usuario / Administrador" as UsuarioActor
+boundary UI_Sesion
+control AuthController
+entity Usuario
+entity UserSession
+
+== Flujo 1: Iniciar Sesión (Login) ==
+
+UsuarioActor -> UI_Sesion: 1: iniciarSesion(email, password)
+activate UI_Sesion
+
+UI_Sesion -> AuthController: 1.1: login(Request)
+activate AuthController
+
+AuthController -> AuthController: validate([email, password])
+
+AuthController -> Usuario: 1.2: where('email', email)->first()
+activate Usuario
+Usuario --> AuthController: $user / null
+deactivate Usuario
+
+alt Credenciales incorrectas o usuario no encontrado
+    AuthController --> UI_Sesion: error('Credenciales incorrectas.', 401)
+    UI_Sesion --> UsuarioActor: mostrarError()
+else Cuenta desactivada (!user->activo)
+    AuthController --> UI_Sesion: error('Tu cuenta está desactivada.', 403)
+    UI_Sesion --> UsuarioActor: mostrarAlertaInactivo()
+else Credenciales válidas y cuenta activa
+    AuthController -> Usuario: createToken('auth_token')->plainTextToken
+    activate Usuario
+    Usuario --> AuthController: $token
+    deactivate Usuario
+
+    AuthController -> UserSession: 1.3: create(['user_id' => id, 'ip_address' => ip, 'login_at' => now(), 'is_active' => true])
+    activate UserSession
+    UserSession --> AuthController: sesionRegistrada
+    deactivate UserSession
+
+    AuthController --> UI_Sesion: success(['user' => presentUser, 'token' => token])
+    deactivate AuthController
+
+    UI_Sesion -> UI_Sesion: guardarTokenLocalStorage()
+    UI_Sesion --> UsuarioActor: redireccionarDashboard()
+    deactivate UI_Sesion
+end
+
+== Flujo 2: Cerrar Sesión (Logout) ==
+
+UsuarioActor -> UI_Sesion: 2: cerrarSesion()
+activate UI_Sesion
+
+UI_Sesion -> AuthController: 2.1: logout(Request)
+activate AuthController
+
+AuthController -> Usuario: currentAccessToken()->delete()
+activate Usuario
+Usuario --> AuthController: tokenRevocado
+deactivate Usuario
+
+AuthController -> UserSession: 2.2: where('user_id', id)->where('is_active', true)->update(['logout_at' => now(), 'is_active' => false])
+activate UserSession
+UserSession --> AuthController: sesionCerrada
+deactivate UserSession
+
+AuthController --> UI_Sesion: success(null, 'Sesión finalizada exitosamente.')
+deactivate AuthController
+
+UI_Sesion -> UI_Sesion: limpiarLocalStorage()
+UI_Sesion --> UsuarioActor: redireccionarLogin()
+deactivate UI_Sesion
+
+== Flujo 3: Recuperar Contraseña (Olvido de contraseña) ==
+
+UsuarioActor -> UI_Sesion: 3: solicitarRecuperacion(email)
+activate UI_Sesion
+
+UI_Sesion -> AuthController: 3.1: forgotPassword(Request)
+activate AuthController
+
+AuthController -> AuthController: validate([email])
+
+AuthController -> Usuario: 3.2: where('email', email)->exists()
+activate Usuario
+Usuario --> AuthController: bool $exists
+deactivate Usuario
+
+AuthController --> UI_Sesion: success('Si el correo existe, recibirás un código de verificación.')
+deactivate AuthController
+
+UI_Sesion --> UsuarioActor: mostrarFormularioCodigo()
+
+UsuarioActor -> UI_Sesion: 4: restablecerPassword(email, codigo, nuevoPassword, confirmacion)
+
+UI_Sesion -> AuthController: 4.1: resetPassword(Request)
+activate AuthController
+
+AuthController -> AuthController: validate([email, code, new_password, new_password_confirmation])
+
+AuthController -> Usuario: 4.2: where('email', email)->first()
+activate Usuario
+Usuario --> AuthController: $user
+deactivate Usuario
+
+alt Verificación fallida o código inválido
+    AuthController --> UI_Sesion: error('Código inválido o vencido.', 422)
+    UI_Sesion --> UsuarioActor: mostrarErrorValidacion()
+else Verificación exitosa
+    AuthController -> Usuario: 4.3: update(['password' => Hash::make(new_password)])
+    activate Usuario
+    Usuario --> AuthController: passwordActualizado
+    deactivate Usuario
+
+    AuthController -> Usuario: 4.4: tokens()->delete()
+    activate Usuario
+    Usuario --> AuthController: tokensRevocados
+    deactivate Usuario
+
+    AuthController --> UI_Sesion: success(null, 'Contraseña restablecida correctamente.')
+    deactivate AuthController
+
+    UI_Sesion --> UsuarioActor: notificarExitoRedireccionarLogin()
+    deactivate UI_Sesion
+end
+@enduml
+
+
+@startuml cu02_secuencia_consultar_bitacora_auditoria
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor Administrador
+boundary UI_Auditoria
+control AuditoriaController
+entity Bitacora
+entity Usuario
+
+== Flujo 1: Consultar bitácora general ==
+
+Administrador -> UI_Auditoria: 1: mostrarBitacora()
+activate UI_Auditoria
+
+UI_Auditoria -> AuditoriaController: 1.1: index(Request)
+activate AuditoriaController
+
+AuditoriaController -> Bitacora: 1.2: with('user')->latest()->paginate(25)
+activate Bitacora
+Bitacora --> AuditoriaController: $registrosPaginados
+deactivate Bitacora
+
+AuditoriaController --> UI_Auditoria: success($registrosPaginados)
+deactivate AuditoriaController
+
+UI_Auditoria --> Administrador: renderizarTablaBitacora()
+deactivate UI_Auditoria
+
+== Flujo 2: Filtrar bitácora por módulo, acción o fecha ==
+
+Administrador -> UI_Auditoria: 2: filtrarPorModuloAccion(filtros)
+activate UI_Auditoria
+
+UI_Auditoria -> AuditoriaController: 2.1: index(Request)
+activate AuditoriaController
+
+AuditoriaController -> Bitacora: 2.2: where(filtros)->paginate(25)
+activate Bitacora
+Bitacora --> AuditoriaController: $registrosFiltrados
+deactivate Bitacora
+
+AuditoriaController --> UI_Auditoria: success($registrosFiltrados)
+deactivate AuditoriaController
+
+UI_Auditoria --> Administrador: actualizarVistaFiltrada()
+deactivate UI_Auditoria
+
+== Flujo 3: Listar usuarios con registros de auditoría ==
+
+Administrador -> UI_Auditoria: 3: listarUsuariosAuditoria()
+activate UI_Auditoria
+
+UI_Auditoria -> AuditoriaController: 3.1: usuarios()
+activate AuditoriaController
+
+AuditoriaController -> Bitacora: 3.2: distinct()->pluck('idUsuario')
+activate Bitacora
+Bitacora --> AuditoriaController: $userIds
+deactivate Bitacora
+
+AuditoriaController -> Usuario: 3.3: whereIn('idUsuario', $userIds)->get()
+activate Usuario
+Usuario --> AuditoriaController: $usuariosAuditoria
+deactivate Usuario
+
+AuditoriaController --> UI_Auditoria: success($usuariosAuditoria)
+deactivate AuditoriaController
+
+UI_Auditoria --> Administrador: cargarOpcionesSelectUsuarios()
+deactivate UI_Auditoria
+@enduml
+
+
+@startuml cu03_secuencia_gestionar_usuarios_roles_permisos
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor Administrador
+boundary UI_Usuario
+control UsuarioController
+entity Usuario
+entity Rol
+
+== Flujo 1: Listar usuarios y roles ==
+
+Administrador -> UI_Usuario: 1: mostrarUsuarios()
+activate UI_Usuario
+
+UI_Usuario -> UsuarioController: 1.1: index()
+activate UsuarioController
+
+UsuarioController -> Usuario: 1.2: with('rol')->paginate()
+activate Usuario
+Usuario --> UsuarioController: $usuarios
+deactivate Usuario
+
+UsuarioController -> Rol: 1.3: with('permisos')->get()
+activate Rol
+Rol --> UsuarioController: $rolesPermisos
+deactivate Rol
+
+UsuarioController --> UI_Usuario: success([usuarios, roles])
+deactivate UsuarioController
+
+UI_Usuario --> Administrador: mostrarListadoYFiltros()
+deactivate UI_Usuario
+
+== Flujo 2: Crear nuevo usuario ==
+
+Administrador -> UI_Usuario: 2: crearUsuario(datos)
+activate UI_Usuario
+
+UI_Usuario -> UsuarioController: 2.1: store(Request)
+activate UsuarioController
+
+UsuarioController -> UsuarioController: validate(datos)
+
+UsuarioController -> Rol: 2.2: find(rol_id)
+activate Rol
+Rol --> UsuarioController: $rol
+deactivate Rol
+
+UsuarioController -> Usuario: 2.3: create(validated)
+activate Usuario
+Usuario --> UsuarioController: $nuevoUsuario
+deactivate Usuario
+
+UsuarioController --> UI_Usuario: success($nuevoUsuario, 'Usuario creado exitosamente.')
+deactivate UsuarioController
+
+UI_Usuario --> Administrador: notificarCreacionYActualizarTabla()
+deactivate UI_Usuario
+
+== Flujo 3: Asignar o actualizar rol de usuario ==
+
+Administrador -> UI_Usuario: 3: asignarRol(id, idRol)
+activate UI_Usuario
+
+UI_Usuario -> UsuarioController: 3.1: updateRoles(Request, id)
+activate UsuarioController
+
+UsuarioController -> Rol: 3.2: find(idRol)
+activate Rol
+Rol --> UsuarioController: $rol
+deactivate Rol
+
+UsuarioController -> Usuario: 3.3: update(['idRol' => idRol])
+activate Usuario
+Usuario --> UsuarioController: usuarioActualizado
+deactivate Usuario
+
+UsuarioController --> UI_Usuario: success(null, 'Rol asignado correctamente.')
+deactivate UsuarioController
+
+UI_Usuario --> Administrador: confirmarActualizacionRol()
+deactivate UI_Usuario
+@enduml
+
+
+@startuml cu04_secuencia_gestionar_zonas_cobertura
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor Administrador
+boundary UI_ZonaCobertura
+control ZonaCoberturaController
+entity Zona
+
+== Flujo 1: Mostrar catálogo de zonas ==
+
+Administrador -> UI_ZonaCobertura: 1: mostrarZonas()
+activate UI_ZonaCobertura
+
+UI_ZonaCobertura -> ZonaCoberturaController: 1.1: index()
+activate ZonaCoberturaController
+
+ZonaCoberturaController -> Zona: 1.2: orderBy('nombreZona')->get()
+activate Zona
+Zona --> ZonaCoberturaController: $zonas
+deactivate Zona
+
+ZonaCoberturaController --> UI_ZonaCobertura: success($zonas)
+deactivate ZonaCoberturaController
+
+UI_ZonaCobertura --> Administrador: renderizarMapaYListado()
+deactivate UI_ZonaCobertura
+
+== Flujo 2: Registrar nueva zona de cobertura ==
+
+Administrador -> UI_ZonaCobertura: 2: crearZona(datos)
+activate UI_ZonaCobertura
+
+UI_ZonaCobertura -> ZonaCoberturaController: 2.1: store(Request)
+activate ZonaCoberturaController
+
+ZonaCoberturaController -> ZonaCoberturaController: validate(datosZona)
+
+ZonaCoberturaController -> Zona: 2.2: create(validated)
+activate Zona
+Zona --> ZonaCoberturaController: $nuevaZona
+deactivate Zona
+
+ZonaCoberturaController --> UI_ZonaCobertura: success($nuevaZona, 'Zona registrada.')
+deactivate ZonaCoberturaController
+
+UI_ZonaCobertura --> Administrador: agregarZonaAListado()
+deactivate UI_ZonaCobertura
+
+== Flujo 3: Actualizar datos o cambiar estado de zona ==
+
+Administrador -> UI_ZonaCobertura: 3: cambiarEstado(id, estado)
+activate UI_ZonaCobertura
+
+UI_ZonaCobertura -> ZonaCoberturaController: 3.1: update(Request, id)
+activate ZonaCoberturaController
+
+ZonaCoberturaController -> Zona: 3.2: findOrFail(id)->update(['estado' => estado])
+activate Zona
+Zona --> ZonaCoberturaController: zonaActualizada
+deactivate Zona
+
+ZonaCoberturaController --> UI_ZonaCobertura: success(null, 'Estado de cobertura actualizado.')
+deactivate ZonaCoberturaController
+
+UI_ZonaCobertura --> Administrador: notificarActualizacion()
+deactivate UI_ZonaCobertura
+@enduml
+
+
+@startuml cu05_secuencia_registrar_nuevo_cliente
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Secretaría" as Admin
+boundary UI_ClienteRegistro
+control ClienteRegistroController
+entity Cliente
+entity Zona
+
+== Flujo 1: Cargar formulario y zonas disponibles ==
+
+Admin -> UI_ClienteRegistro: 1: cargarFormulario()
+activate UI_ClienteRegistro
+
+UI_ClienteRegistro -> ClienteRegistroController: 1.1: create()
+activate ClienteRegistroController
+
+ClienteRegistroController -> Zona: 1.2: all()
+activate Zona
+Zona --> ClienteRegistroController: $zonasDisponibles
+deactivate Zona
+
+ClienteRegistroController --> UI_ClienteRegistro: success($zonasDisponibles)
+deactivate ClienteRegistroController
+
+UI_ClienteRegistro --> Admin: renderizarFormularioConZonas()
+deactivate UI_ClienteRegistro
+
+== Flujo 2: Validar cédula de identidad en tiempo real ==
+
+Admin -> UI_ClienteRegistro: 2: validarDocumento(ci)
+activate UI_ClienteRegistro
+
+UI_ClienteRegistro -> ClienteRegistroController: 2.1: validar(ci)
+activate ClienteRegistroController
+
+ClienteRegistroController -> Cliente: 2.2: where('ci', ci)->exists()
+activate Cliente
+Cliente --> ClienteRegistroController: bool $existe
+deactivate Cliente
+
+alt Documento ya registrado
+    ClienteRegistroController --> UI_ClienteRegistro: error('El documento ya se encuentra registrado.', 422)
+    UI_ClienteRegistro --> Admin: marcarCampoDuplicado()
+else Documento disponible
+    ClienteRegistroController --> UI_ClienteRegistro: success(true, 'Documento disponible.')
+    UI_ClienteRegistro --> Admin: habilitarBotonGuardar()
+end
+deactivate ClienteRegistroController
+deactivate UI_ClienteRegistro
+
+== Flujo 3: Registrar nuevo cliente abonado ==
+
+Admin -> UI_ClienteRegistro: 3: registrarCliente(datos)
+activate UI_ClienteRegistro
+
+UI_ClienteRegistro -> ClienteRegistroController: 3.1: store(Request)
+activate ClienteRegistroController
+
+ClienteRegistroController -> ClienteRegistroController: validate(datosCliente)
+
+ClienteRegistroController -> Zona: 3.2: exists:Zona,idZona
+activate Zona
+Zona --> ClienteRegistroController: bool $zonaExiste
+deactivate Zona
+
+ClienteRegistroController -> Cliente: 3.3: create(validated)
+activate Cliente
+Cliente --> ClienteRegistroController: $nuevoCliente
+deactivate Cliente
+
+ClienteRegistroController --> UI_ClienteRegistro: success($nuevoCliente, 'Cliente registrado exitosamente.')
+deactivate ClienteRegistroController
+
+UI_ClienteRegistro --> Admin: mostrarComprobanteRegistro()
+deactivate UI_ClienteRegistro
+@enduml
+
+
+@startuml cu06_secuencia_consultar_buscar_clientes
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Secretaría" as Admin
+boundary UI_ClienteConsulta
+control ClienteConsultaController
+entity Cliente
+
+== Flujo 1: Mostrar listado inicial de clientes ==
+
+Admin -> UI_ClienteConsulta: 1: mostrarClientes()
+activate UI_ClienteConsulta
+
+UI_ClienteConsulta -> ClienteConsultaController: 1.1: index(Request)
+activate ClienteConsultaController
+
+ClienteConsultaController -> Cliente: 1.2: withTrashed()->latest()->paginate(15)
+activate Cliente
+Cliente --> ClienteConsultaController: $clientesPaginados
+deactivate Cliente
+
+ClienteConsultaController --> UI_ClienteConsulta: success($clientesPaginados)
+deactivate ClienteConsultaController
+
+UI_ClienteConsulta --> Admin: renderizarTablaClientes()
+deactivate UI_ClienteConsulta
+
+== Flujo 2: Búsqueda dinámica de clientes ==
+
+Admin -> UI_ClienteConsulta: 2: buscarCliente(termino)
+activate UI_ClienteConsulta
+
+UI_ClienteConsulta -> ClienteConsultaController: 2.1: index(Request)
+activate ClienteConsultaController
+
+ClienteConsultaController -> Cliente: 2.2: withTrashed()->buscar(termino)->paginate(15)
+activate Cliente
+Cliente --> ClienteConsultaController: $resultadosCoincidentes
+deactivate Cliente
+
+ClienteConsultaController --> UI_ClienteConsulta: success($resultadosCoincidentes)
+deactivate ClienteConsultaController
+
+UI_ClienteConsulta --> Admin: actualizarResultadosBusqueda()
+deactivate UI_ClienteConsulta
+
+== Flujo 3: Consultar ficha y detalle de cliente ==
+
+Admin -> UI_ClienteConsulta: 3: verDetalleCliente(id)
+activate UI_ClienteConsulta
+
+UI_ClienteConsulta -> ClienteConsultaController: 3.1: show(id)
+activate ClienteConsultaController
+
+ClienteConsultaController -> Cliente: 3.2: withTrashed()->findOrFail(id)
+activate Cliente
+Cliente --> ClienteConsultaController: $clienteDetalle
+deactivate Cliente
+
+ClienteConsultaController --> UI_ClienteConsulta: success($clienteDetalle)
+deactivate ClienteConsultaController
+
+UI_ClienteConsulta --> Admin: desplegarModalDetalleCliente()
+deactivate UI_ClienteConsulta
+@enduml
+
+
+@startuml cu07_secuencia_actualizar_baja_cliente
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Secretaría" as Admin
+boundary UI_ClienteMantenimiento
+control ClienteMantenimientoController
+entity Cliente
+
+== Flujo 1: Modificar datos de cliente ==
+
+Admin -> UI_ClienteMantenimiento: 1: editar(id, datos)
+activate UI_ClienteMantenimiento
+
+UI_ClienteMantenimiento -> ClienteMantenimientoController: 1.1: update(Request, id)
+activate ClienteMantenimientoController
+
+ClienteMantenimientoController -> ClienteMantenimientoController: validate(datosModificados)
+
+ClienteMantenimientoController -> Cliente: 1.2: withTrashed()->findOrFail(id)->update(validated)
+activate Cliente
+Cliente --> ClienteMantenimientoController: clienteActualizado
+deactivate Cliente
+
+ClienteMantenimientoController --> UI_ClienteMantenimiento: success(null, 'Datos de cliente actualizados.')
+deactivate ClienteMantenimientoController
+
+UI_ClienteMantenimiento --> Admin: notificarEdicionExitosa()
+deactivate UI_ClienteMantenimiento
+
+== Flujo 2: Dar de baja lógica al cliente ==
+
+Admin -> UI_ClienteMantenimiento: 2: darBaja(id, motivo)
+activate UI_ClienteMantenimiento
+
+UI_ClienteMantenimiento -> ClienteMantenimientoController: 2.1: bajaLogica(Request, id)
+activate ClienteMantenimientoController
+
+ClienteMantenimientoController -> Cliente: 2.2: withTrashed()->findOrFail(id)->update(['estadoCliente' => 'INACTIVO'])->delete()
+activate Cliente
+Cliente --> ClienteMantenimientoController: clienteBajaLogica
+deactivate Cliente
+
+ClienteMantenimientoController --> UI_ClienteMantenimiento: success(null, 'Cliente dado de baja lógica correctamente.')
+deactivate ClienteMantenimientoController
+
+UI_ClienteMantenimiento --> Admin: marcarFilaInactivaYNotificar()
+deactivate UI_ClienteMantenimiento
+@enduml
+
+
+@startuml cu08_secuencia_registrar_activar_servicio
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Secretaría" as Admin
+boundary UI_ServicioInternet
+control ServicioInternetController
+entity ServicioInternet
+entity Cliente
+entity PlanInternet
+entity AsignacionPlan
+
+== Flujo 1: Listar servicios de Internet ==
+
+Admin -> UI_ServicioInternet: 1: mostrarServicios()
+activate UI_ServicioInternet
+
+UI_ServicioInternet -> ServicioInternetController: 1.1: index(Request)
+activate ServicioInternetController
+
+ServicioInternetController -> ServicioInternet: 1.2: with(['cliente','zona','estado'])->paginate()
+activate ServicioInternet
+ServicioInternet --> ServicioInternetController: $servicios
+deactivate ServicioInternet
+
+ServicioInternetController --> UI_ServicioInternet: success($servicios)
+deactivate ServicioInternetController
+
+UI_ServicioInternet --> Admin: renderizarTablaServicios()
+deactivate UI_ServicioInternet
+
+== Flujo 2: Registrar nuevo servicio y asociar plan ==
+
+Admin -> UI_ServicioInternet: 2: registrarServicio(datos)
+activate UI_ServicioInternet
+
+UI_ServicioInternet -> ServicioInternetController: 2.1: store(Request)
+activate ServicioInternetController
+
+ServicioInternetController -> Cliente: 2.2: find(clienteId)
+activate Cliente
+Cliente --> ServicioInternetController: $cliente
+deactivate Cliente
+
+ServicioInternetController -> PlanInternet: 2.3: find(planId)
+activate PlanInternet
+PlanInternet --> ServicioInternetController: $plan
+deactivate PlanInternet
+
+ServicioInternetController -> ServicioInternet: 2.4: create(validated)
+activate ServicioInternet
+ServicioInternet --> ServicioInternetController: $nuevoServicio
+deactivate ServicioInternet
+
+ServicioInternetController -> AsignacionPlan: 2.5: create(['idServicio' => id, 'idPlan' => planId, 'fechaInicio' => now()])
+activate AsignacionPlan
+AsignacionPlan --> ServicioInternetController: asignacionRegistrada
+deactivate AsignacionPlan
+
+ServicioInternetController --> UI_ServicioInternet: success($nuevoServicio, 'Servicio registrado exitosamente.')
+deactivate ServicioInternetController
+
+UI_ServicioInternet --> Admin: mostrarDetalleNuevoServicio()
+deactivate UI_ServicioInternet
+
+== Flujo 3: Activar servicio técnico ==
+
+Admin -> UI_ServicioInternet: 3: activarServicio(id)
+activate UI_ServicioInternet
+
+UI_ServicioInternet -> ServicioInternetController: 3.1: activar(Request, id)
+activate ServicioInternetController
+
+ServicioInternetController -> ServicioInternet: 3.2: findOrFail(id)->update(['idEstadoServicio' => idActivo])
+activate ServicioInternet
+ServicioInternet --> ServicioInternetController: servicioActivado
+deactivate ServicioInternet
+
+ServicioInternetController --> UI_ServicioInternet: success(null, 'Servicio activado.')
+deactivate ServicioInternetController
+
+UI_ServicioInternet --> Admin: actualizarBadgeEstadoActivo()
+deactivate UI_ServicioInternet
+@enduml
+
+
+@startuml cu09_secuencia_generar_mensualidades
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Secretaría" as Admin
+boundary UI_MensualidadGeneracion
+control MensualidadGeneracionController
+entity Mensualidad
+entity ServicioInternet
+
+== Flujo 1: Consultar mensualidades generadas ==
+
+Admin -> UI_MensualidadGeneracion: 1: mostrarMensualidades(periodo)
+activate UI_MensualidadGeneracion
+
+UI_MensualidadGeneracion -> MensualidadGeneracionController: 1.1: index(Request)
+activate MensualidadGeneracionController
+
+MensualidadGeneracionController -> Mensualidad: 1.2: with(['cliente','servicio'])->where('periodo', periodo)->paginate()
+activate Mensualidad
+Mensualidad --> MensualidadGeneracionController: $mensualidadesPeriodo
+deactivate Mensualidad
+
+MensualidadGeneracionController --> UI_MensualidadGeneracion: success($mensualidadesPeriodo)
+deactivate MensualidadGeneracionController
+
+UI_MensualidadGeneracion --> Admin: renderizarListadoMensualidades()
+deactivate UI_MensualidadGeneracion
+
+== Flujo 2: Generar lote mensual de facturación ==
+
+Admin -> UI_MensualidadGeneracion: 2: generarMensualidades(periodo)
+activate UI_MensualidadGeneracion
+
+UI_MensualidadGeneracion -> MensualidadGeneracionController: 2.1: generar(Request)
+activate MensualidadGeneracionController
+
+MensualidadGeneracionController -> ServicioInternet: 2.2: where('idEstadoServicio', ACTIVO)->get()
+activate ServicioInternet
+ServicioInternet --> MensualidadGeneracionController: $serviciosActivos
+deactivate ServicioInternet
+
+loop Por cada servicio activo
+    MensualidadGeneracionController -> Mensualidad: 2.3: lockForUpdate() / create(['idServicio' => id, 'periodo' => periodo, 'monto' => precio])
+    activate Mensualidad
+    Mensualidad --> MensualidadGeneracionController: mensualidadCreada
+    deactivate Mensualidad
+end
+
+MensualidadGeneracionController --> UI_MensualidadGeneracion: success(['total_generadas' => count], 'Mensualidades generadas exitosamente.')
+deactivate MensualidadGeneracionController
+
+UI_MensualidadGeneracion --> Admin: reportarResumenGeneracion()
+deactivate UI_MensualidadGeneracion
+@enduml
+
+
+@startuml cu10_secuencia_gestionar_pago_mensualidad
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Cajero" as Cajero
+boundary UI_PagoMensualidad
+control PagoMensualidadController
+entity Mensualidad
+entity Pago
+entity Cliente
+entity ServicioInternet
+
+== Flujo 1: Consultar deudas pendientes por cliente ==
+
+Cajero -> UI_PagoMensualidad: 1: consultarPorCI(ci)
+activate UI_PagoMensualidad
+
+UI_PagoMensualidad -> PagoMensualidadController: 1.1: consultarPorCI(ci)
+activate PagoMensualidadController
+
+PagoMensualidadController -> Cliente: 1.2: where('ci', ci)->first()
+activate Cliente
+Cliente --> PagoMensualidadController: $cliente
+deactivate Cliente
+
+PagoMensualidadController -> ServicioInternet: 1.3: where('idCliente', $cliente->id)->first()
+activate ServicioInternet
+ServicioInternet --> PagoMensualidadController: $servicio
+deactivate ServicioInternet
+
+PagoMensualidadController -> Mensualidad: 1.4: where('idServicio', $servicio->id)->where('estado_pago', '!=', 'PAGADO')->get()
+activate Mensualidad
+Mensualidad --> PagoMensualidadController: $mensualidadesPendientes
+deactivate Mensualidad
+
+PagoMensualidadController --> UI_PagoMensualidad: success($mensualidadesPendientes)
+deactivate PagoMensualidadController
+
+UI_PagoMensualidad --> Cajero: listarFacturasPendientesCobro()
+deactivate UI_PagoMensualidad
+
+== Flujo 2: Registrar cobro y comprobante de pago ==
+
+Cajero -> UI_PagoMensualidad: 2: registrarPago(datosPago)
+activate UI_PagoMensualidad
+
+UI_PagoMensualidad -> PagoMensualidadController: 2.1: store(Request)
+activate PagoMensualidadController
+
+PagoMensualidadController -> Mensualidad: 2.2: lockForUpdate()->findOrFail(idMensualidad)
+activate Mensualidad
+Mensualidad --> PagoMensualidadController: $mensualidad
+deactivate Mensualidad
+
+PagoMensualidadController -> Pago: 2.3: create(validatedPago)
+activate Pago
+Pago --> PagoMensualidadController: $nuevoPago
+deactivate Pago
+
+PagoMensualidadController -> Mensualidad: 2.4: update(['estado_pago' => 'PAGADO'])
+activate Mensualidad
+Mensualidad --> PagoMensualidadController: mensualidadSaldada
+deactivate Mensualidad
+
+PagoMensualidadController --> UI_PagoMensualidad: success($nuevoPago, 'Pago registrado exitosamente.')
+deactivate PagoMensualidadController
+
+UI_PagoMensualidad --> Cajero: emitirReciboImprimible()
+deactivate UI_PagoMensualidad
+@enduml
+
+
+@startuml cu11_secuencia_consultar_historial_pagos
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Secretaría" as Admin
+boundary UI_HistorialPagos
+control HistorialPagosController
+entity Pago
+entity PlanInternet
+entity MetodoPago
+
+== Flujo 1: Consultar historial general de pagos ==
+
+Admin -> UI_HistorialPagos: 1: mostrarHistorial()
+activate UI_HistorialPagos
+
+UI_HistorialPagos -> HistorialPagosController: 1.1: index(Request)
+activate HistorialPagosController
+
+HistorialPagosController -> Pago: 1.2: with(relaciones)->orderByDesc('fechaHora')->paginate(20)
+activate Pago
+Pago --> HistorialPagosController: $historialPagos
+deactivate Pago
+
+HistorialPagosController --> UI_HistorialPagos: success($historialPagos)
+deactivate HistorialPagosController
+
+UI_HistorialPagos --> Admin: renderizarTablaHistorial()
+deactivate UI_HistorialPagos
+
+== Flujo 2: Cargar filtros de planes y métodos de pago ==
+
+Admin -> UI_HistorialPagos: 2: cargarFiltros()
+activate UI_HistorialPagos
+
+UI_HistorialPagos -> HistorialPagosController: 2.1: filtros()
+activate HistorialPagosController
+
+HistorialPagosController -> PlanInternet: 2.2: where('activo', true)->get()
+activate PlanInternet
+PlanInternet --> HistorialPagosController: $planes
+deactivate PlanInternet
+
+HistorialPagosController -> MetodoPago: 2.3: where('estado', true)->pluck('nombreMetodo')
+activate MetodoPago
+MetodoPago --> HistorialPagosController: $metodos
+deactivate MetodoPago
+
+HistorialPagosController --> UI_HistorialPagos: success([planes, metodos])
+deactivate HistorialPagosController
+
+UI_HistorialPagos --> Admin: poblarSelectsFiltros()
+deactivate UI_HistorialPagos
+
+== Flujo 3: Consultar detalle de recibo ==
+
+Admin -> UI_HistorialPagos: 3: verDetalleRecibo(id)
+activate UI_HistorialPagos
+
+UI_HistorialPagos -> HistorialPagosController: 3.1: show(id)
+activate HistorialPagosController
+
+HistorialPagosController -> Pago: 3.2: with(relaciones)->findOrFail(id)
+activate Pago
+Pago --> HistorialPagosController: $detallePago
+deactivate Pago
+
+HistorialPagosController --> UI_HistorialPagos: success($detallePago)
+deactivate HistorialPagosController
+
+UI_HistorialPagos --> Admin: mostrarComprobanteDetallado()
+deactivate UI_HistorialPagos
+@enduml
+
+
+@startuml cu12_secuencia_visualizar_alertas_vencimiento
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Secretaría" as Admin
+boundary UI_AlertasVencimiento
+control AlertasVencimientoController
+entity Mensualidad
+
+== Flujo 1: Mostrar alertas de vencimiento activas ==
+
+Admin -> UI_AlertasVencimiento: 1: mostrarAlertas()
+activate UI_AlertasVencimiento
+
+UI_AlertasVencimiento -> AlertasVencimientoController: 1.1: index(Request)
+activate AlertasVencimientoController
+
+AlertasVencimientoController -> Mensualidad: 1.2: with(['cliente','servicio'])->where('estado_pago','!=','PAGADO')->where('fecha_vencimiento','<=',now())->get()
+activate Mensualidad
+Mensualidad --> AlertasVencimientoController: $mensualidadesVencidas
+deactivate Mensualidad
+
+AlertasVencimientoController --> UI_AlertasVencimiento: success($mensualidadesVencidas)
+deactivate AlertasVencimientoController
+
+UI_AlertasVencimiento --> Admin: mostrarTarjetasYSemaforoAlertas()
+deactivate UI_AlertasVencimiento
+
+== Flujo 2: Filtrar alertas por días de mora o severidad ==
+
+Admin -> UI_AlertasVencimiento: 2: filtrarPorSeveridad(severidad)
+activate UI_AlertasVencimiento
+
+UI_AlertasVencimiento -> AlertasVencimientoController: 2.1: index(Request)
+activate AlertasVencimientoController
+
+AlertasVencimientoController -> Mensualidad: 2.2: where('fecha_vencimiento','<=',now())->get()
+activate Mensualidad
+Mensualidad --> AlertasVencimientoController: $coleccionMora
+deactivate Mensualidad
+
+AlertasVencimientoController --> UI_AlertasVencimiento: success($coleccionFiltrada)
+deactivate AlertasVencimientoController
+
+UI_AlertasVencimiento --> Admin: actualizarTableroAlertas()
+deactivate UI_AlertasVencimiento
+@enduml
+
+
+@startuml cu13_secuencia_servicios_corte
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Secretaría" as Admin
+boundary UI_ServiciosCorte
+control ServiciosCorteController
+entity ServicioInternet
+entity Zona
+
+== Flujo 1: Consultar listado de servicios elegibles para corte ==
+
+Admin -> UI_ServiciosCorte: 1: mostrarServiciosParaCorte()
+activate UI_ServiciosCorte
+
+UI_ServiciosCorte -> ServiciosCorteController: 1.1: index(Request)
+activate ServiciosCorteController
+
+ServiciosCorteController -> ServicioInternet: 1.2: with(['cliente','zona','mensualidades'])->elegiblesParaCorte()->paginate(25)
+activate ServicioInternet
+ServicioInternet --> ServiciosCorteController: $serviciosCandidatos
+deactivate ServicioInternet
+
+ServiciosCorteController --> UI_ServiciosCorte: success($serviciosCandidatos)
+deactivate ServiciosCorteController
+
+UI_ServiciosCorte --> Admin: renderizarListadoCorte()
+deactivate UI_ServiciosCorte
+
+== Flujo 2: Filtrar candidatos por zona de cobertura ==
+
+Admin -> UI_ServiciosCorte: 2: filtrarPorZona(zona_id)
+activate UI_ServiciosCorte
+
+UI_ServiciosCorte -> ServiciosCorteController: 2.1: index(Request)
+activate ServiciosCorteController
+
+ServiciosCorteController -> Zona: 2.2: find(zona_id)
+activate Zona
+Zona --> ServiciosCorteController: $zona
+deactivate Zona
+
+ServiciosCorteController -> ServicioInternet: 2.3: where('idZona', zona_id)->elegiblesParaCorte()->paginate()
+activate ServicioInternet
+ServicioInternet --> ServiciosCorteController: $candidatosZona
+deactivate ServicioInternet
+
+ServiciosCorteController --> UI_ServiciosCorte: success($candidatosZona)
+deactivate ServiciosCorteController
+
+UI_ServiciosCorte --> Admin: actualizarTablaZona()
+deactivate UI_ServiciosCorte
+@enduml
+
+
+@startuml cu14_secuencia_registrar_corte_realizado
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Técnico" as Admin
+boundary UI_CorteRegistro
+control CorteRegistroController
+entity ServicioInternet
+entity AccionServicio
+entity EstadoServicio
+
+== Flujo 1: Consultar servicio para ejecutar corte ==
+
+Admin -> UI_CorteRegistro: 1: seleccionarServicio(id)
+activate UI_CorteRegistro
+
+UI_CorteRegistro -> CorteRegistroController: 1.1: show(id)
+activate CorteRegistroController
+
+CorteRegistroController -> ServicioInternet: 1.2: findOrFail(id)
+activate ServicioInternet
+ServicioInternet --> CorteRegistroController: $servicio
+deactivate ServicioInternet
+
+CorteRegistroController --> UI_CorteRegistro: success($servicio)
+deactivate CorteRegistroController
+
+UI_CorteRegistro --> Admin: desplegarFormularioCorte()
+deactivate UI_CorteRegistro
+
+== Flujo 2: Registrar corte técnico y actualizar estado ==
+
+Admin -> UI_CorteRegistro: 2: registrarCorte(datosCorte)
+activate UI_CorteRegistro
+
+UI_CorteRegistro -> CorteRegistroController: 2.1: store(Request)
+activate CorteRegistroController
+
+CorteRegistroController -> ServicioInternet: 2.2: lockForUpdate()->findOrFail(id)
+activate ServicioInternet
+ServicioInternet --> CorteRegistroController: $servicioBloqueado
+deactivate ServicioInternet
+
+CorteRegistroController -> AccionServicio: 2.3: create(validatedAccion)
+activate AccionServicio
+AccionServicio --> CorteRegistroController: $accionCorteRegistrada
+deactivate AccionServicio
+
+CorteRegistroController -> EstadoServicio: 2.4: where('nombre_estado', 'CORTADO')->value('id')
+activate EstadoServicio
+EstadoServicio --> CorteRegistroController: $idEstadoCortado
+deactivate EstadoServicio
+
+CorteRegistroController -> ServicioInternet: 2.5: update(['idEstadoServicio' => $idEstadoCortado])
+activate ServicioInternet
+ServicioInternet --> CorteRegistroController: servicioCortado
+deactivate ServicioInternet
+
+CorteRegistroController --> UI_CorteRegistro: success(null, 'Corte de servicio registrado exitosamente.')
+deactivate CorteRegistroController
+
+UI_CorteRegistro --> Admin: notificarCorteExitoso()
+deactivate UI_CorteRegistro
+@enduml
+
+
+@startuml cu15_secuencia_gestionar_reactivaciones
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Secretaría" as Admin
+boundary UI_Reactivaciones
+control ReactivacionesController
+entity AccionServicio
+entity ServicioInternet
+entity Pago
+entity EstadoServicio
+
+== Flujo 1: Listar solicitudes y servicios para reactivación ==
+
+Admin -> UI_Reactivaciones: 1: mostrarServiciosCortados()
+activate UI_Reactivaciones
+
+UI_Reactivaciones -> ReactivacionesController: 1.1: index()
+activate ReactivacionesController
+
+ReactivacionesController -> AccionServicio: 1.2: with(['servicio.cliente','pago'])->paginate()
+activate AccionServicio
+AccionServicio --> ReactivacionesController: $historialReactivaciones
+deactivate AccionServicio
+
+ReactivacionesController --> UI_Reactivaciones: success($historialReactivaciones)
+deactivate ReactivacionesController
+
+UI_Reactivaciones --> Admin: renderizarListadoReactivaciones()
+deactivate UI_Reactivaciones
+
+== Flujo 2: Registrar reactivación tras verificar pago ==
+
+Admin -> UI_Reactivaciones: 2: registrarReactivacion(datos)
+activate UI_Reactivaciones
+
+UI_Reactivaciones -> ReactivacionesController: 2.1: store(Request)
+activate ReactivacionesController
+
+ReactivacionesController -> ServicioInternet: 2.2: lockForUpdate()->findOrFail(servicioId)
+activate ServicioInternet
+ServicioInternet --> ReactivacionesController: $servicio
+deactivate ServicioInternet
+
+ReactivacionesController -> Pago: 2.3: exists:Pago,idPago
+activate Pago
+Pago --> ReactivacionesController: bool $pagoValido
+deactivate Pago
+
+ReactivacionesController -> AccionServicio: 2.4: create(validatedReactivacion)
+activate AccionServicio
+AccionServicio --> ReactivacionesController: $accionReactivacion
+deactivate AccionServicio
+
+ReactivacionesController -> EstadoServicio: 2.5: where('nombre_estado', 'ACTIVO')->value('id')
+activate EstadoServicio
+EstadoServicio --> ReactivacionesController: $idEstadoActivo
+deactivate EstadoServicio
+
+ReactivacionesController -> ServicioInternet: 2.6: update(['idEstadoServicio' => $idEstadoActivo])
+activate ServicioInternet
+ServicioInternet --> ReactivacionesController: servicioReactivado
+deactivate ServicioInternet
+
+ReactivacionesController --> UI_Reactivaciones: success(null, 'Servicio reactivado exitosamente.')
+deactivate ReactivacionesController
+
+UI_Reactivaciones --> Admin: notificarReactivacionExitosa()
+deactivate UI_Reactivaciones
+@enduml
+
+
+@startuml cu16_secuencia_gestionar_catalogo_planes
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor Administrador
+boundary UI_PlanInternet
+control PlanInternetController
+entity PlanInternet
+
+== Flujo 1: Consultar catálogo de planes ==
+
+Administrador -> UI_PlanInternet: 1: mostrarPlanes()
+activate UI_PlanInternet
+
+UI_PlanInternet -> PlanInternetController: 1.1: index(Request)
+activate PlanInternetController
+
+PlanInternetController -> PlanInternet: 1.2: orderBy('velocidad_mbps')->get()
+activate PlanInternet
+PlanInternet --> PlanInternetController: $planesInternet
+deactivate PlanInternet
+
+PlanInternetController --> UI_PlanInternet: success($planesInternet)
+deactivate PlanInternetController
+
+UI_PlanInternet --> Administrador: renderizarTarjetasPlanes()
+deactivate UI_PlanInternet
+
+== Flujo 2: Crear nuevo plan de Internet ==
+
+Administrador -> UI_PlanInternet: 2: crearPlan(datosPlan)
+activate UI_PlanInternet
+
+UI_PlanInternet -> PlanInternetController: 2.1: store(Request)
+activate PlanInternetController
+
+PlanInternetController -> PlanInternetController: validate(datosPlan)
+
+PlanInternetController -> PlanInternet: 2.2: create(validated)
+activate PlanInternet
+PlanInternet --> PlanInternetController: $nuevoPlan
+deactivate PlanInternet
+
+PlanInternetController --> UI_PlanInternet: success($nuevoPlan, 'Plan registrado con éxito.')
+deactivate PlanInternetController
+
+UI_PlanInternet --> Administrador: agregarPlanAlCatalogo()
+deactivate UI_PlanInternet
+
+== Flujo 3: Actualizar o desactivar plan ==
+
+Administrador -> UI_PlanInternet: 3: desactivarPlan(id)
+activate UI_PlanInternet
+
+UI_PlanInternet -> PlanInternetController: 3.1: destroy(id)
+activate PlanInternetController
+
+PlanInternetController -> PlanInternet: 3.2: findOrFail(id)->update(['activo' => false])
+activate PlanInternet
+PlanInternet --> PlanInternetController: planDesactivado
+deactivate PlanInternet
+
+PlanInternetController --> UI_PlanInternet: success(null, 'Plan desactivado correctamente.')
+deactivate PlanInternetController
+
+UI_PlanInternet --> Administrador: marcarPlanInactivoEnUI()
+deactivate UI_PlanInternet
+@enduml
+
+
+@startuml cu17_secuencia_asignar_cambiar_plan_servicio
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Secretaría" as Admin
+boundary UI_AsignacionPlan
+control AsignacionPlanController
+entity AsignacionPlan
+entity ServicioInternet
+entity PlanInternet
+
+== Flujo 1: Consultar historial de planes del servicio ==
+
+Admin -> UI_AsignacionPlan: 1: mostrarHistorialPlanes(idServicio)
+activate UI_AsignacionPlan
+
+UI_AsignacionPlan -> AsignacionPlanController: 1.1: index(servicio)
+activate AsignacionPlanController
+
+AsignacionPlanController -> ServicioInternet: 1.2: findOrFail(idServicio)
+activate ServicioInternet
+ServicioInternet --> AsignacionPlanController: $servicio
+deactivate ServicioInternet
+
+AsignacionPlanController -> AsignacionPlan: 1.3: with(['plan','usuario'])->where('idServicio', idServicio)->get()
+activate AsignacionPlan
+AsignacionPlan --> AsignacionPlanController: $historialPlanes
+deactivate AsignacionPlan
+
+AsignacionPlanController --> UI_AsignacionPlan: success($historialPlanes)
+deactivate AsignacionPlanController
+
+UI_AsignacionPlan --> Admin: renderizarLineaTiempoPlanes()
+deactivate UI_AsignacionPlan
+
+== Flujo 2: Asignar o cambiar plan al servicio ==
+
+Admin -> UI_AsignacionPlan: 2: asignarNuevoPlan(datos)
+activate UI_AsignacionPlan
+
+UI_AsignacionPlan -> AsignacionPlanController: 2.1: store(Request, servicio)
+activate AsignacionPlanController
+
+AsignacionPlanController -> PlanInternet: 2.2: findOrFail(planId)
+activate PlanInternet
+PlanInternet --> AsignacionPlanController: $planNuevo
+deactivate PlanInternet
+
+AsignacionPlanController -> AsignacionPlan: 2.3: where('idServicio', id)->whereNull('fechaFin')->update(['fechaFin' => now()])
+activate AsignacionPlan
+AsignacionPlan --> AsignacionPlanController: planAnteriorCerrado
+deactivate AsignacionPlan
+
+AsignacionPlanController -> AsignacionPlan: 2.4: create(validatedAsignacion)
+activate AsignacionPlan
+AsignacionPlan --> AsignacionPlanController: $nuevaAsignacion
+deactivate AsignacionPlan
+
+AsignacionPlanController -> ServicioInternet: 2.5: update(['idPlan' => planId])
+activate ServicioInternet
+ServicioInternet --> AsignacionPlanController: servicioActualizado
+deactivate ServicioInternet
+
+AsignacionPlanController --> UI_AsignacionPlan: success($nuevaAsignacion, 'Plan actualizado exitosamente.')
+deactivate AsignacionPlanController
+
+UI_AsignacionPlan --> Admin: notificarCambioDePlan()
+deactivate UI_AsignacionPlan
+@enduml
+
+
+@startuml cu18_secuencia_gestionar_catalogo_equipos
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Almacén" as Admin
+boundary UI_CatalogoEquipos
+control CatalogoEquiposController
+entity ProductoEquipo
+entity Inventario
+entity Equipo
+
+== Flujo 1: Consultar catálogo de productos e inventario ==
+
+Admin -> UI_CatalogoEquipos: 1: listarCatalogoEquipos()
+activate UI_CatalogoEquipos
+
+UI_CatalogoEquipos -> CatalogoEquiposController: 1.1: index(Request)
+activate CatalogoEquiposController
+
+CatalogoEquiposController -> ProductoEquipo: 1.2: with('inventario')->get()
+activate ProductoEquipo
+ProductoEquipo --> CatalogoEquiposController: $productosConStock
+deactivate ProductoEquipo
+
+CatalogoEquiposController --> UI_CatalogoEquipos: success($productosConStock)
+deactivate CatalogoEquiposController
+
+UI_CatalogoEquipos --> Admin: renderizarCatalogoProductos()
+deactivate UI_CatalogoEquipos
+
+== Flujo 2: Registrar nuevo producto de equipo ==
+
+Admin -> UI_CatalogoEquipos: 2: registrarNuevoProducto(datos)
+activate UI_CatalogoEquipos
+
+UI_CatalogoEquipos -> CatalogoEquiposController: 2.1: store(Request)
+activate CatalogoEquiposController
+
+CatalogoEquiposController -> ProductoEquipo: 2.2: create(validatedProducto)
+activate ProductoEquipo
+ProductoEquipo --> CatalogoEquiposController: $productoCreado
+deactivate ProductoEquipo
+
+CatalogoEquiposController -> Inventario: 2.3: create(['idProducto' => $productoCreado->id, 'stockActual' => 0])
+activate Inventario
+Inventario --> CatalogoEquiposController: inventarioInicializado
+deactivate Inventario
+
+CatalogoEquiposController --> UI_CatalogoEquipos: success($productoCreado, 'Producto registrado.')
+deactivate CatalogoEquiposController
+
+UI_CatalogoEquipos --> Admin: notificarRegistroProducto()
+deactivate UI_CatalogoEquipos
+
+== Flujo 3: Registrar unidad física serializada ==
+
+Admin -> UI_CatalogoEquipos: 3: registrarUnidadSerializada(id, serial, mac)
+activate UI_CatalogoEquipos
+
+UI_CatalogoEquipos -> CatalogoEquiposController: 3.1: registrarUnidadFisica(Request, id)
+activate CatalogoEquiposController
+
+CatalogoEquiposController -> Equipo: 3.2: create(validatedSerial)
+activate Equipo
+Equipo --> CatalogoEquiposController: $unidadEquipo
+deactivate Equipo
+
+CatalogoEquiposController -> Inventario: 3.3: increment('stockActual', 1)
+activate Inventario
+Inventario --> CatalogoEquiposController: stockActualizado
+deactivate Inventario
+
+CatalogoEquiposController --> UI_CatalogoEquipos: success($unidadEquipo, 'Unidad serializada agregada.')
+deactivate CatalogoEquiposController
+
+UI_CatalogoEquipos --> Admin: actualizarContadorStockEnUI()
+deactivate UI_CatalogoEquipos
+@enduml
+
+
+@startuml cu19_secuencia_asignar_equipo_comodato
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Secretaría / Técnico" as Admin
+boundary UI_AsignarEquipoComodato
+control AsignacionEquipoComodatoController
+entity ServicioInternet
+entity Equipo
+entity AsignacionEquipo
+entity Inventario
+
+== Flujo 1: Consultar servicios activos y equipos libres ==
+
+Admin -> UI_AsignarEquipoComodato: 1: consultarDisponibilidad()
+activate UI_AsignarEquipoComodato
+
+UI_AsignarEquipoComodato -> AsignacionEquipoComodatoController: 1.1: serviciosActivos(Request)
+activate AsignacionEquipoComodatoController
+
+AsignacionEquipoComodatoController -> ServicioInternet: 1.2: with(['cliente','estado','zona'])->paginate(25)
+activate ServicioInternet
+ServicioInternet --> AsignacionEquipoComodatoController: $serviciosActivos
+deactivate ServicioInternet
+
+AsignacionEquipoComodatoController --> UI_AsignarEquipoComodato: success($serviciosActivos)
+deactivate AsignacionEquipoComodatoController
+
+UI_AsignarEquipoComodato -> AsignacionEquipoComodatoController: 1.3: equiposDisponibles(Request)
+activate AsignacionEquipoComodatoController
+
+AsignacionEquipoComodatoController -> Equipo: 1.4: with('producto.inventario')->disponibles()->get()
+activate Equipo
+Equipo --> AsignacionEquipoComodatoController: $equiposLibres
+deactivate Equipo
+
+AsignacionEquipoComodatoController --> UI_AsignarEquipoComodato: success($equiposLibres)
+deactivate AsignacionEquipoComodatoController
+
+UI_AsignarEquipoComodato --> Admin: mostrarSelectoresDeAsignacion()
+deactivate UI_AsignarEquipoComodato
+
+== Flujo 2: Asignar equipo en comodato formal ==
+
+Admin -> UI_AsignarEquipoComodato: 2: asignarEquipoComodato(idServicio, idEquipo)
+activate UI_AsignarEquipoComodato
+
+UI_AsignarEquipoComodato -> AsignacionEquipoComodatoController: 2.1: asignar(Request, idServicio)
+activate AsignacionEquipoComodatoController
+
+AsignacionEquipoComodatoController -> ServicioInternet: 2.2: with(['cliente','estado'])->find(idServicio)
+activate ServicioInternet
+ServicioInternet --> AsignacionEquipoComodatoController: $servicio
+deactivate ServicioInternet
+
+AsignacionEquipoComodatoController -> Equipo: 2.3: with('producto.inventario')->find(idEquipo)
+activate Equipo
+Equipo --> AsignacionEquipoComodatoController: $equipo
+deactivate Equipo
+
+AsignacionEquipoComodatoController -> AsignacionEquipo: 2.4: create(validatedAsignacion)
+activate AsignacionEquipo
+AsignacionEquipo --> AsignacionEquipoComodatoController: $actaAsignacion
+deactivate AsignacionEquipo
+
+AsignacionEquipoComodatoController -> Equipo: 2.5: update(['asignada' => true, 'estadoEquipo' => 'ASIGNADO'])
+activate Equipo
+Equipo --> AsignacionEquipoComodatoController: equipoMarcadoAsignado
+deactivate Equipo
+
+AsignacionEquipoComodatoController -> Inventario: 2.6: where('idProducto', prodId)->decrement('stockActual', 1)
+activate Inventario
+Inventario --> AsignacionEquipoComodatoController: stockDecrementado
+deactivate Inventario
+
+AsignacionEquipoComodatoController -> ServicioInternet: 2.7: update(['macRouter' => mac, 'ipAsignada' => ip])
+activate ServicioInternet
+ServicioInternet --> AsignacionEquipoComodatoController: servicioActualizado
+deactivate ServicioInternet
+
+AsignacionEquipoComodatoController --> UI_AsignarEquipoComodato: success($actaAsignacion, 'Equipo asignado en comodato exitosamente.')
+deactivate AsignacionEquipoComodatoController
+
+UI_AsignarEquipoComodato --> Admin: generarActaComodatoImprimible()
+deactivate UI_AsignarEquipoComodato
+@enduml
+
+
+@startuml cu20_secuencia_reemplazar_retirar_equipo
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Secretaría / Técnico" as Admin
+boundary UI_EquipoReemplazoRetiro
+control EquipoReemplazoRetiroController
+entity ServicioInternet
+entity AsignacionEquipo
+entity Equipo
+
+== Flujo 1: Consultar equipo asignado actualmente al servicio ==
+
+Admin -> UI_EquipoReemplazoRetiro: 1: consultarEquipoActual(idServicio)
+activate UI_EquipoReemplazoRetiro
+
+UI_EquipoReemplazoRetiro -> EquipoReemplazoRetiroController: 1.1: consultar(servicio)
+activate EquipoReemplazoRetiroController
+
+EquipoReemplazoRetiroController -> AsignacionEquipo: 1.2: with('equipo.producto')->whereNull('fechaRetiro')->first()
+activate AsignacionEquipo
+AsignacionEquipo --> EquipoReemplazoRetiroController: $asignacionVigente
+deactivate AsignacionEquipo
+
+EquipoReemplazoRetiroController --> UI_EquipoReemplazoRetiro: success($asignacionVigente)
+deactivate EquipoReemplazoRetiroController
+
+UI_EquipoReemplazoRetiro --> Admin: desplegarOpcionesReemplazoRetiro()
+deactivate UI_EquipoReemplazoRetiro
+
+== Flujo 2: Reemplazar equipo en servicio ==
+
+Admin -> UI_EquipoReemplazoRetiro: 2: reemplazarEquipo(idServicio, equipoNuevoId, motivo)
+activate UI_EquipoReemplazoRetiro
+
+UI_EquipoReemplazoRetiro -> EquipoReemplazoRetiroController: 2.1: reemplazar(Request, servicio)
+activate EquipoReemplazoRetiroController
+
+EquipoReemplazoRetiroController -> ServicioInternet: 2.2: lockForUpdate()->findOrFail(idServicio)
+activate ServicioInternet
+ServicioInternet --> EquipoReemplazoRetiroController: $servicioBloqueado
+deactivate ServicioInternet
+
+EquipoReemplazoRetiroController -> AsignacionEquipo: 2.3: update(['fechaRetiro' => now(), 'motivoRetiro' => motivo])
+activate AsignacionEquipo
+AsignacionEquipo --> EquipoReemplazoRetiroController: asignacionAnteriorCerrada
+deactivate AsignacionEquipo
+
+EquipoReemplazoRetiroController -> Equipo: 2.4: anterior->update(['asignada' => false]); nuevo->update(['asignada' => true])
+activate Equipo
+Equipo --> EquipoReemplazoRetiroController: estadosEquiposActualizados
+deactivate Equipo
+
+EquipoReemplazoRetiroController -> AsignacionEquipo: 2.5: create(['idEquipo' => nuevoId, 'idServicio' => id, 'fechaAsignacion' => now()])
+activate AsignacionEquipo
+AsignacionEquipo --> EquipoReemplazoRetiroController: nuevaAsignacionRegistrada
+deactivate AsignacionEquipo
+
+EquipoReemplazoRetiroController -> ServicioInternet: 2.6: update(['ipAsignada' => ip, 'macRouter' => mac])
+activate ServicioInternet
+ServicioInternet --> EquipoReemplazoRetiroController: servicioActualizado
+deactivate ServicioInternet
+
+EquipoReemplazoRetiroController --> UI_EquipoReemplazoRetiro: success(null, 'Reemplazo de equipo completado.')
+deactivate EquipoReemplazoRetiroController
+
+UI_EquipoReemplazoRetiro --> Admin: notificarReemplazoExitoso()
+deactivate UI_EquipoReemplazoRetiro
+
+== Flujo 3: Retirar equipo definitivamente del servicio ==
+
+Admin -> UI_EquipoReemplazoRetiro: 3: retirarEquipo(idServicio, motivo)
+activate UI_EquipoReemplazoRetiro
+
+UI_EquipoReemplazoRetiro -> EquipoReemplazoRetiroController: 3.1: retirar(Request, servicio)
+activate EquipoReemplazoRetiroController
+
+EquipoReemplazoRetiroController -> AsignacionEquipo: 3.2: update(['fechaRetiro' => now(), 'motivoRetiro' => motivo])
+activate AsignacionEquipo
+AsignacionEquipo --> EquipoReemplazoRetiroController: asignacionRetirada
+deactivate AsignacionEquipo
+
+EquipoReemplazoRetiroController -> Equipo: 3.3: equipo->update(['asignada' => false])
+activate Equipo
+Equipo --> EquipoReemplazoRetiroController: equipoLiberado
+deactivate Equipo
+
+EquipoReemplazoRetiroController -> ServicioInternet: 3.4: update(['ipAsignada' => null, 'macRouter' => null])
+activate ServicioInternet
+ServicioInternet --> EquipoReemplazoRetiroController: servicioSinEquipo
+deactivate ServicioInternet
+
+EquipoReemplazoRetiroController --> UI_EquipoReemplazoRetiro: success(null, 'Equipo retirado con éxito.')
+deactivate EquipoReemplazoRetiroController
+
+UI_EquipoReemplazoRetiro --> Admin: actualizarFichaServicio()
+deactivate UI_EquipoReemplazoRetiro
+@enduml
+
+
+@startuml cu21_secuencia_registrar_solicitud_instalacion
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Secretaría / Cliente" as ActorCU21
+boundary UI_SolicitudInstalacion
+control SolicitudInstalacionController
+entity SolicitudInstalacion
+entity Cliente
+entity Zona
+
+== Flujo 1: Consultar solicitudes de instalación ==
+
+ActorCU21 -> UI_SolicitudInstalacion: 1: listarSolicitudes(filtros)
+activate UI_SolicitudInstalacion
+
+UI_SolicitudInstalacion -> SolicitudInstalacionController: 1.1: index(Request)
+activate SolicitudInstalacionController
+
+SolicitudInstalacionController -> SolicitudInstalacion: 1.2: with('cliente')->paginate()
+activate SolicitudInstalacion
+SolicitudInstalacion --> SolicitudInstalacionController: $solicitudesPaginadas
+deactivate SolicitudInstalacion
+
+SolicitudInstalacionController --> UI_SolicitudInstalacion: success($solicitudesPaginadas)
+deactivate SolicitudInstalacionController
+
+UI_SolicitudInstalacion --> ActorCU21: renderizarBandejaSolicitudes()
+deactivate UI_SolicitudInstalacion
+
+== Flujo 2: Registrar nueva solicitud de instalación técnica ==
+
+ActorCU21 -> UI_SolicitudInstalacion: 2: registrarSolicitud(datos, gps)
+activate UI_SolicitudInstalacion
+
+UI_SolicitudInstalacion -> SolicitudInstalacionController: 2.1: store(Request)
+activate SolicitudInstalacionController
+
+SolicitudInstalacionController -> Cliente: 2.2: findOrFail(idCliente)
+activate Cliente
+Cliente --> SolicitudInstalacionController: $cliente
+deactivate Cliente
+
+SolicitudInstalacionController -> Zona: 2.3: find(idZona)
+activate Zona
+Zona --> SolicitudInstalacionController: $zona
+deactivate Zona
+
+SolicitudInstalacionController -> SolicitudInstalacion: 2.4: create(numeroOrden, 'PENDIENTE', validated)
+activate SolicitudInstalacion
+SolicitudInstalacion --> SolicitudInstalacionController: $nuevaSolicitud
+deactivate SolicitudInstalacion
+
+SolicitudInstalacionController --> UI_SolicitudInstalacion: success($nuevaSolicitud, 'Solicitud registrada.')
+deactivate SolicitudInstalacionController
+
+UI_SolicitudInstalacion --> ActorCU21: emitirComprobanteOrdenInstalacion()
+deactivate UI_SolicitudInstalacion
+
+== Flujo 3: Cancelar solicitud de instalación ==
+
+ActorCU21 -> UI_SolicitudInstalacion: 3: cancelarSolicitud(id, motivo)
+activate UI_SolicitudInstalacion
+
+UI_SolicitudInstalacion -> SolicitudInstalacionController: 3.1: cancelar(Request, id)
+activate SolicitudInstalacionController
+
+SolicitudInstalacionController -> SolicitudInstalacion: 3.2: update(['estadoSolicitud' => 'CANCELADA'])
+activate SolicitudInstalacion
+SolicitudInstalacion --> SolicitudInstalacionController: solicitudCancelada
+deactivate SolicitudInstalacion
+
+SolicitudInstalacionController --> UI_SolicitudInstalacion: success(null, 'Solicitud cancelada exitosamente.')
+deactivate SolicitudInstalacionController
+
+UI_SolicitudInstalacion --> ActorCU21: notificarCancelacion()
+deactivate UI_SolicitudInstalacion
+@enduml
+
+
+@startuml cu22_secuencia_programar_instalacion
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Secretaría / Administrador" as Admin
+boundary UI_ProgramarInstalacion
+control InstalacionesController
+entity SolicitudInstalacion
+entity Tecnico
+entity Instalacion
+
+== Flujo 1: Consultar agenda técnica y solicitudes pendientes ==
+
+Admin -> UI_ProgramarInstalacion: 1: consultarAgendaYSolicitudes()
+activate UI_ProgramarInstalacion
+
+UI_ProgramarInstalacion -> InstalacionesController: 1.1: index()
+activate InstalacionesController
+
+InstalacionesController -> SolicitudInstalacion: 1.2: with(['cliente','instalacion.tecnico'])->whereIn('estadoSolicitud',['PENDIENTE','PROGRAMADA'])->get()
+activate SolicitudInstalacion
+SolicitudInstalacion --> InstalacionesController: $solicitudes
+deactivate SolicitudInstalacion
+
+InstalacionesController -> Tecnico: 1.3: where('activo', true)->get()
+activate Tecnico
+Tecnico --> InstalacionesController: $tecnicosDisponibles
+deactivate Tecnico
+
+InstalacionesController -> Instalacion: 1.4: with(['tecnico','solicitud.cliente'])->where('estadoInstalacion','PROGRAMADA')->get()
+activate Instalacion
+Instalacion --> InstalacionesController: $agendaProgramada
+deactivate Instalacion
+
+InstalacionesController --> UI_ProgramarInstalacion: success([solicitudes, tecnicos, agenda])
+deactivate InstalacionesController
+
+UI_ProgramarInstalacion --> Admin: mostrarCalendarioYCuadrillas()
+deactivate UI_ProgramarInstalacion
+
+== Flujo 2: Programar fecha, hora y asignar técnico ==
+
+Admin -> UI_ProgramarInstalacion: 2: programarInstalacion(solicitudId, tecnicoId, fecha, hora, costo)
+activate UI_ProgramarInstalacion
+
+UI_ProgramarInstalacion -> InstalacionesController: 2.1: store(Request)
+activate InstalacionesController
+
+InstalacionesController -> Instalacion: 2.2: where('idTecnico', id)->where('fechaProgramada', f)->where('horaProgramada', h)->exists()
+activate Instalacion
+Instalacion --> InstalacionesController: bool $cruceHorario
+deactivate Instalacion
+
+alt Cruce de horario detectado para el técnico
+    InstalacionesController --> UI_ProgramarInstalacion: error('El técnico ya tiene una instalación programada en ese horario.', 422)
+    UI_ProgramarInstalacion --> Admin: alertarConflictoAgenda()
+else Horario disponible
+    InstalacionesController -> SolicitudInstalacion: 2.3: lockForUpdate()->findOrFail(solicitudId)
+    activate SolicitudInstalacion
+    SolicitudInstalacion --> InstalacionesController: $solicitud
+    deactivate SolicitudInstalacion
+
+    InstalacionesController -> Instalacion: 2.4: updateOrCreate(['idSolicitud' => sId], ['idTecnico' => tId, 'fechaProgramada' => f, 'estadoInstalacion' => 'PROGRAMADA'])
+    activate Instalacion
+    Instalacion --> InstalacionesController: $ordenProgramada
+    deactivate Instalacion
+
+    InstalacionesController -> SolicitudInstalacion: 2.5: update(['estadoSolicitud' => 'PROGRAMADA'])
+    activate SolicitudInstalacion
+    SolicitudInstalacion --> InstalacionesController: solicitudActualizada
+    deactivate SolicitudInstalacion
+
+    InstalacionesController --> UI_ProgramarInstalacion: success($ordenProgramada, 'Instalación programada exitosamente.')
+    UI_ProgramarInstalacion --> Admin: confirmarAgendamiento()
+end
+deactivate InstalacionesController
+deactivate UI_ProgramarInstalacion
+@enduml
+
+
+@startuml cu23_secuencia_registrar_instalacion
+autonumber
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.2
+skinparam roundcorner 6
+
+skinparam sequence {
+    ArrowColor black
+    ActorBorderColor #A80036
+    ActorBackgroundColor #FEFECE
+    LifeLineBorderColor #8A4B38
+    LifeLineBackgroundColor #FFF2E6
+    ParticipantBorderColor #8A4B38
+    ParticipantBackgroundColor #FFF2E6
+    BoxBorderColor #A80036
+    BoxBackgroundColor #FAFAFA
+    GroupBackgroundColor #F8F9FA
+    GroupBorderColor #8A4B38
+    DividerBackgroundColor #EFEFEF
+    DividerBorderColor #8A4B38
+}
+
+actor "Administrador / Soporte Técnico" as Admin
+boundary UI_Instalacion
+control InstalacionRegistroController
+entity Instalacion
+entity SolicitudInstalacion
+entity Tecnico
+
+== Flujo 1: Consultar listado de instalaciones y cuadrillas ==
+
+Admin -> UI_Instalacion: 1: listarInstalaciones(filtros)
+activate UI_Instalacion
+
+UI_Instalacion -> InstalacionRegistroController: 1.1: index(Request)
+activate InstalacionRegistroController
+
+InstalacionRegistroController -> Instalacion: 1.2: with(['solicitud.cliente', 'tecnico'])->get()
+activate Instalacion
+Instalacion --> InstalacionRegistroController: $instalaciones
+deactivate Instalacion
+
+InstalacionRegistroController --> UI_Instalacion: success($instalaciones)
+deactivate InstalacionRegistroController
+
+UI_Instalacion --> Admin: renderizarTableroInstalaciones()
+deactivate UI_Instalacion
+
+== Flujo 2: Asignar técnico responsable a la orden ==
+
+Admin -> UI_Instalacion: 2: asignarTecnico(id, idTecnico)
+activate UI_Instalacion
+
+UI_Instalacion -> InstalacionRegistroController: 2.1: asignarTecnico(Request, id)
+activate InstalacionRegistroController
+
+InstalacionRegistroController -> Tecnico: 2.2: exists:Tecnico,idTecnico
+activate Tecnico
+Tecnico --> InstalacionRegistroController: bool $existe
+deactivate Tecnico
+
+InstalacionRegistroController -> Instalacion: 2.3: update(['idTecnico' => idTecnico, 'estadoInstalacion' => 'ASIGNADA'])
+activate Instalacion
+Instalacion --> InstalacionRegistroController: instalacionAsignada
+deactivate Instalacion
+
+InstalacionRegistroController --> UI_Instalacion: success(null, 'Técnico asignado a la cuadrilla.')
+deactivate InstalacionRegistroController
+
+UI_Instalacion --> Admin: notificarAsignacion()
+deactivate UI_Instalacion
+
+== Flujo 3: Registrar resultado técnico y finalizar instalación ==
+
+Admin -> UI_Instalacion: 3: finalizarInstalacion(id, fechaReal, costo, obs)
+activate UI_Instalacion
+
+UI_Instalacion -> InstalacionRegistroController: 3.1: finalizar(Request, id)
+activate InstalacionRegistroController
+
+InstalacionRegistroController -> Instalacion: 3.2: update(['fechaRealizada' => fecha, 'costoInstalacion' => costo, 'estadoInstalacion' => 'FINALIZADA'])
+activate Instalacion
+Instalacion --> InstalacionRegistroController: instalacionFinalizada
+deactivate Instalacion
+
+InstalacionRegistroController -> SolicitudInstalacion: 3.3: update(['estadoSolicitud' => 'COMPLETADA'])
+activate SolicitudInstalacion
+SolicitudInstalacion --> InstalacionRegistroController: solicitudCompletada
+deactivate SolicitudInstalacion
+
+InstalacionRegistroController --> UI_Instalacion: success(null, 'Instalación finalizada con éxito.')
+deactivate InstalacionRegistroController
+
+UI_Instalacion --> Admin: emitirActaEntregaServicio()
+deactivate UI_Instalacion
+@enduml
+
