@@ -2172,3 +2172,137 @@ frame "sd Diagrama de análisis de clases - CU23 Registrar resultado, costo e in
     Instalacion "0..*" -down- "0..1" Tecnico
 }
 @enduml
+
+@startuml cu25_analisis_registrar_compra_equipo
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de análisis de clases - CU25 Registrar compra de equipo y actualizar stock" {
+    actor "Administrador / Almacén" as AdminActor
+
+    class UI_CompraRegistro {
+        + listarCompras(): void
+        + abrirModalRegistro(): void
+        + agregarItemDetalle(): void
+        + registrarCompraEquipo(): void
+        + verDetalleCompra(): void
+    }
+
+    class CompraEquipoRegistroController {
+        + index(): JsonResponse
+        + show(): JsonResponse
+        + proveedores(): JsonResponse
+        + productos(): JsonResponse
+        + estados(): JsonResponse
+        + store(): JsonResponse
+    }
+
+    class Compra {
+        - idCompra: int
+        - fechaCompra: date
+        - nroComprobante: string
+        - montoTotal: decimal
+        - observacion: string
+        - idProveedor: int
+        - idEstadoCompra: int
+        --
+        + create(): Compra
+        + find(): Compra
+        + with(): Builder
+    }
+
+    class DetalleCompra {
+        - idDetalleCompra: int
+        - cantidad: int
+        - precioUnitario: decimal
+        - subtotal: decimal
+        - idCompra: int
+        - idInventario: int
+        --
+        + create(): DetalleCompra
+    }
+
+    class Proveedor {
+        - idProveedor: int
+        - razonSocial: string
+        - nit: string
+        - telefono: string
+        - correo: string
+        - direccion: string
+        - estado: boolean
+        --
+        + where(): Builder
+        + get(): Collection
+    }
+
+    class EstadoCompra {
+        - idEstadoCompra: int
+        - nombreEstado: string
+        - descripcion: string
+        --
+        + all(): Collection
+    }
+
+    class Inventario {
+        - idInventario: int
+        - stockActual: int
+        - fechaActualizacion: timestamp
+        - idProducto: int
+        --
+        + find(): Inventario
+        + save(): bool
+    }
+
+    class ProductoEquipo {
+        - idProducto: int
+        - nombre: string
+        - tipoEquipo: string
+        - marca: string
+        - modelo: string
+        - estado: string
+        --
+        + with(): Builder
+        + all(): Collection
+    }
+
+    class Equipo {
+        - idEquipo: int
+        - numeroSerie: string
+        - mac: string
+        - estadoEquipo: string
+        - idProducto: int
+        --
+        + create(): Equipo
+    }
+
+    AdminActor -right- UI_CompraRegistro
+    UI_CompraRegistro -right- CompraEquipoRegistroController
+    CompraEquipoRegistroController -right- Compra
+
+    Compra "1" *-down- "1..*" DetalleCompra
+    Compra "0..*" -up- "1" Proveedor
+    Compra "0..*" -up- "1" EstadoCompra
+    DetalleCompra "0..*" -right- "1" Inventario
+    Inventario "1" -right- "1" ProductoEquipo
+    Equipo "0..*" -up- "1" ProductoEquipo
+}
+@enduml

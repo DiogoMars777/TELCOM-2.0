@@ -25,6 +25,7 @@ class Zona extends Model
         'codigo',
         'ciudad',
         'barrio',
+        'sector',
         'tecnologia',
         'estadoCobertura',
         'capacidadNodos',

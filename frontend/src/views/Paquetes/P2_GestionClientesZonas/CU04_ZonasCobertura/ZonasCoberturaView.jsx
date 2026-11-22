@@ -114,7 +114,8 @@ export default function ZonasCoberturaView({ user }) {
             </div>
 
             <p className="location-text"><MapPin size={14} /> {z.ciudad}</p>
-            {z.barrio && <p className="cu04-barrio">Barrio / sector: <strong>{z.barrio}</strong></p>}
+            {z.barrio && <p className="cu04-barrio">Barrio: <strong>{z.barrio}</strong></p>}
+            {z.sector && <p className="cu04-barrio">Sector: <strong>{z.sector}</strong></p>}
 
             {z.area_mapa && <AreaPreview area={z.area_mapa} />}
 
@@ -176,13 +177,23 @@ export default function ZonasCoberturaView({ user }) {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Barrio o sector <span className="cu04-optional">(opcional)</span></label>
+                  <label>Barrio <span className="cu04-optional">(opcional)</span></label>
                   <input
                     type="text"
                     maxLength={150}
-                    placeholder="Ej. Villa Fátima"
+                    placeholder="Ej. Equipetrol"
                     value={newZona.barrio}
                     onChange={(e) => actualizarCampo('barrio', e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Sector <span className="cu04-optional">(opcional)</span></label>
+                  <input
+                    type="text"
+                    maxLength={150}
+                    placeholder="Ej. Sector Empresarial Norte"
+                    value={newZona.sector}
+                    onChange={(e) => actualizarCampo('sector', e.target.value)}
                   />
                 </div>
                 <div className="form-group">

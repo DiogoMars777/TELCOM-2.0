@@ -49,7 +49,7 @@ class ZonaCoberturaController extends Controller
         $validated = $this->validarZona($request, $zona);
 
         $camposAuditables = [
-            'nombre', 'ciudad', 'barrio', 'tecnologia',
+            'nombre', 'ciudad', 'barrio', 'sector', 'tecnologia',
             'estado_cobertura', 'capacidad_nodos', 'area_mapa', 'activo',
         ];
         $previos = $zona->only($camposAuditables);
@@ -90,6 +90,7 @@ class ZonaCoberturaController extends Controller
             'nombre'           => $req . '|string|max:150',
             'ciudad'           => $req . '|string|max:100',
             'barrio'           => 'nullable|string|max:150',
+            'sector'           => 'nullable|string|max:150',
             'tecnologia'       => $req . '|string|max:100',
             'estado_cobertura' => $estado,
             'capacidad_nodos'  => $req . '|integer|min:1',

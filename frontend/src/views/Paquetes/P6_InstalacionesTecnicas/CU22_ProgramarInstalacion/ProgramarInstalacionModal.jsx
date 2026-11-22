@@ -237,7 +237,7 @@ function ProgramarInstalacionModalContent({
                 <option value="">— Seleccione cuadrilla técnica —</option>
                 {tecnicos.map((t) => (
                   <option key={t.id} value={t.id}>
-                    {t.nombre_completo} — {t.especialidad}
+                    {t.nombre_completo} — {t.especialidad}{t.domicilio ? ` [Domicilio: ${t.domicilio}]` : ''}
                   </option>
                 ))}
               </select>

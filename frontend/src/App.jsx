@@ -24,6 +24,7 @@ import AsignarPlanView from './views/Paquetes/P3_ServiciosPlanes/CU17_AsignarCam
 import EquiposView from './views/Paquetes/P5_EquiposProveedoresInventario/CU18_RegistrarCatalogoEquipos/EquiposView';
 import AsignarEquipoComodatoView from './views/Paquetes/P5_EquiposProveedoresInventario/CU19_AsignarEquipoComodato/AsignarEquipoComodatoView';
 import EquipoReemplazoRetiroView from './views/Paquetes/P5_EquiposProveedoresInventario/CU20_ReemplazarRetirarEquipo/EquipoReemplazoRetiroView';
+import CompraRegistroView from './views/Paquetes/P5_EquiposProveedoresInventario/CU25_RegistrarCompraEquipo/CompraRegistroView';
 import SolicitudInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/SolicitudInstalacionView';
 import ProgramarInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/CU22_ProgramarInstalacion/InstalacionesView';
 import InstalacionesView from './views/Paquetes/P6_InstalacionesTecnicas/CU23_RegistrarInstalacion/InstalacionesView';
@@ -33,7 +34,7 @@ import {
   Radio, LogOut, History, Users, MapPin,
   Wifi, Calendar,
   CreditCard, Clock, AlertTriangle, Scissors, RefreshCw, Lock,
-  Router, ArrowRightLeft, Package, Wrench, HardDrive, ClipboardList,
+  Router, ArrowRightLeft, Package, Wrench, HardDrive, ClipboardList, ShoppingCart,
 } from 'lucide-react';
 
 import { authService } from './models/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/authModel';
@@ -241,6 +242,7 @@ export default function App() {
         { id: 'CU18', label: 'Catálogo de Equipos e Inventario', icon: Package },
         { id: 'CU19', label: 'Asignar Equipo en Comodato', icon: HardDrive },
         { id: 'CU20', label: 'Reemplazar / Retirar Equipo', icon: Router },
+        { id: 'CU25', label: 'Registrar Compra y Stock', icon: ShoppingCart },
       ],
     },
     {
@@ -323,6 +325,8 @@ export default function App() {
         return <AsignarEquipoComodatoView user={currentUser} />;
       case 'CU20':
         return <EquipoReemplazoRetiroView user={currentUser} />;
+      case 'CU25':
+        return <CompraRegistroView user={currentUser} />;
       case 'CU21':
         return <SolicitudInstalacionView user={currentUser} />;
       case 'CU22':
