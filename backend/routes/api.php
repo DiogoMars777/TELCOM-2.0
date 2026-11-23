@@ -54,6 +54,8 @@ use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU21_RegistrarSolicit
 use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU22_ProgramarInstalacion\InstalacionesController;
 // CU23: Registrar y Gestionar Órdenes de Instalación Técnica
 use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU23_RegistrarInstalacion\InstalacionRegistroController;
+// CU24: Gestionar proveedores (Administrador)
+use App\Http\Controllers\Paquetes\P5_EquiposProveedoresInventario\CU24_GestionarProveedores\ProveedorController;
 // CU26: Visualizar Dashboard administrativo y financiero
 use App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU26_VisualizarDashboardAdminFinanciero\DashboardAdminFinancieroController;
 // CU27: Generar y exportar reportes tradicionales
@@ -62,6 +64,8 @@ use App\Http\Controllers\Paquetes\DashboardReportesInteligenciaVoz\CU27_GenerarE
 use App\Http\Controllers\Paquetes\DashboardReportesInteligenciaVoz\CU29_CapturarTranscribirComandosVoz\ComandoVozController;
 // CU30: Procesar intención de voz con IA (NLP)
 use App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU30_ProcesarIntencionVozIA\IntencionVozController;
+// CU31: Generar reporte inteligente con voz / IA
+use App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU31_GenerarReporteInteligenteVoz\ReporteInteligenteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +79,10 @@ use App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU30_Proce
 |   y `rol_permiso`. Sin permiso -> HTTP 403.
 |--------------------------------------------------------------------------
 */
+
+// CU31: generar reportes mediante texto transcrito o intención estructurada (CU30).
+Route::post('cu31/reportes/generar', [ReporteInteligenteController::class, 'generar'])
+    ->middleware(['auth:sanctum', 'permission:reportes.view']);
 
 // CU01: Iniciar y cerrar sesión
 Route::prefix('cu01')->group(function () {
@@ -178,6 +186,16 @@ Route::prefix('cu08')->group(function () {
         ->middleware(['auth:sanctum', 'permission:servicios.manage']);
     Route::put('/servicios/{id}/activar', [ServicioInternetController::class, 'activar'])
         ->middleware(['auth:sanctum', 'permission:servicios.manage']);
+});
+
+// CU24: Gestionar proveedores. Baja lógica mediante estado; sin ruta DELETE.
+Route::prefix('cu24/proveedores')->middleware(['auth:sanctum', 'permission:proveedores.manage'])->group(function () {
+    Route::get('/', [ProveedorController::class, 'index']);
+    Route::post('/', [ProveedorController::class, 'store']);
+    Route::get('/{proveedor}', [ProveedorController::class, 'show'])->whereNumber('proveedor');
+    Route::put('/{proveedor}', [ProveedorController::class, 'update'])->whereNumber('proveedor');
+    Route::put('/{proveedor}/activar', [ProveedorController::class, 'activar'])->whereNumber('proveedor');
+    Route::put('/{proveedor}/desactivar', [ProveedorController::class, 'desactivar'])->whereNumber('proveedor');
 });
 
 // CU09: Generar mensualidades de servicios (admin, secretaría)
