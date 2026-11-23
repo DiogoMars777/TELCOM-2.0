@@ -84,7 +84,6 @@
   <line x1="1010" y1="380" x2="1010" y2="180" class="link-line" />
   <line x1="1040" y1="150" x2="1200" y2="150" class="link-line" />
   <line x1="1380" y1="380" x2="1380" y2="180" class="link-line" />
-  <line x1="710" y1="460" x2="710" y2="690" class="link-line" />
 
   <!-- INSTANCIAS ROBUSTEZ BCE -->
   <g transform="translate(120, 420)">
@@ -157,14 +156,6 @@
     <text x="0" y="44" class="node-title">Usuario</text>
   </g>
 
-  <g transform="translate(710, 720)">
-    
-  <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
-  <line x1="-22" y1="26" x2="22" y2="26" stroke="#475569" stroke-width="2.5" />
-
-    <text x="0" y="44" class="node-title">Bitacora</text>
-  </g>
-
   <!-- MENSAJES Y LLAMADAS -->
   <g transform="translate(145, 335)">
     <text x="0" y="0" class="flow-1">1: enviarComandoVozTexto(dictado) &rarr;</text>
@@ -197,10 +188,6 @@
 
   <g transform="translate(1395, 270)">
     <text x="0" y="0" class="flow-2">2.3: with('usuario') &rarr;</text>
-  </g>
-
-  <g transform="translate(725, 570)">
-    <text x="0" y="0" class="flow-1">1.6: AuditLogger::log('CU30', 'PROCESAR_INTENCION_NLP', motor, intencion) &rarr;</text>
   </g>
 
   <!-- LEYENDA INFERIOR -->

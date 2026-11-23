@@ -85,7 +85,6 @@
   <line x1="1340" y1="260" x2="1490" y2="260" class="link-line" />
   <line x1="1040" y1="440" x2="1260" y2="560" class="link-line" />
   <line x1="1340" y1="560" x2="1490" y2="560" class="link-line" />
-  <line x1="710" y1="460" x2="710" y2="690" class="link-line" />
 
   <!-- INSTANCIAS ROBUSTEZ BCE -->
   <g transform="translate(120, 420)">
@@ -167,14 +166,6 @@
     <text x="0" y="44" class="node-title">Pago</text>
   </g>
 
-  <g transform="translate(710, 720)">
-    
-  <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
-  <line x1="-22" y1="26" x2="22" y2="26" stroke="#475569" stroke-width="2.5" />
-
-    <text x="0" y="44" class="node-title">Bitacora</text>
-  </g>
-
   <!-- MENSAJES Y LLAMADAS -->
   <g transform="translate(145, 345)">
     <text x="0" y="0" class="flow-1">1: dictarComandoReporte(comando/intencion) &rarr;</text>
@@ -203,10 +194,6 @@
 
   <g transform="translate(1350, 520)">
     <text x="0" y="0" class="flow-1">1.4.3: table('Pago')->get() &rarr;</text>
-  </g>
-
-  <g transform="translate(725, 570)">
-    <text x="0" y="0" class="flow-1">1.5: AuditLogger::log('CU31', 'GENERAR_REPORTE_INTELIGENTE', tipo, filas) &rarr;</text>
   </g>
 
   <!-- LEYENDA INFERIOR -->

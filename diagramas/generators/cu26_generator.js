@@ -49,7 +49,6 @@ function buildCU26Communication() {
   <line x1="740" y1="490" x2="560" y2="730" class="link-line" />
   <line x1="760" y1="490" x2="760" y2="730" class="link-line" />
   <line x1="780" y1="490" x2="970" y2="730" class="link-line" />
-  <line x1="740" y1="440" x2="680" y2="330" class="link-line" />
 
   <!-- INSTANCIAS -->
   <g transform="translate(130, 460)">
@@ -97,11 +96,6 @@ function buildCU26Communication() {
     <text x="0" y="44" class="node-title">Zona</text>
   </g>
 
-  <g transform="translate(680, 300)">
-    ${entityIcon(0, 0, 20)}
-    <text x="0" y="40" class="node-title">Bitacora</text>
-  </g>
-
   <!-- MENSAJES -->
   <g transform="translate(150, 380)">
     <text x="0" y="0" class="flow-1">1: consultarDashboard(periodo) &rarr;</text>
@@ -140,10 +134,6 @@ function buildCU26Communication() {
 
   <g transform="translate(900, 645)">
     <text x="0" y="0" class="flow-1">1.8: select('capacidadNodos')->withCount('servicios') &rarr;</text>
-  </g>
-
-  <g transform="translate(550, 340)">
-    <text x="0" y="0" class="flow-1">1.9: log('CU26', 'CONSULTA_DASHBOARD') &rarr;</text>
   </g>
 
   <g transform="translate(50, 890)">
@@ -398,7 +388,6 @@ function buildCU26Sequence() {
   <line x1="${xPago}" y1="130" x2="${xPago}" y2="${height - 50}" class="life-line" />
   <line x1="${xMens}" y1="130" x2="${xMens}" y2="${height - 50}" class="life-line" />
   <line x1="${xCli}" y1="130" x2="${xCli}" y2="${height - 50}" class="life-line" />
-  <line x1="${xBit}" y1="130" x2="${xBit}" y2="${height - 50}" class="life-line" />
 
   <!-- CABECERAS -->
   <g transform="translate(${xAdmin}, 90)">
@@ -428,10 +417,6 @@ function buildCU26Sequence() {
   <g transform="translate(${xCli}, 90)">
     ${entityIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">Cliente</text>
-  </g>
-  <g transform="translate(${xBit}, 90)">
-    ${entityIcon(0, 0, 20)}
-    <text x="0" y="36" class="life-title">Bitacora</text>
   </g>
 
   <!-- BLOQUE 1 -->
@@ -481,10 +466,6 @@ function buildCU26Sequence() {
 
   <line x1="${xServ - 5}" y1="370" x2="${xCtrl + 5}" y2="370" class="msg-ret" />
   <text x="560" y="365" class="ret-text">($metricasConsolidadas)</text>
-
-  <line x1="${xCtrl + 5}" y1="390" x2="${xBit - 5}" y2="390" class="msg-call" />
-  <polygon points="${xBit - 5},390 ${xBit - 11},387 ${xBit - 11},393" fill="#1e293b" />
-  <text x="1100" y="385" class="call-text">1.6: AuditLogger::log('CU26', 'CONSULTA_DASHBOARD', ip)</text>
 
   <line x1="${xCtrl - 5}" y1="415" x2="${xUI + 5}" y2="415" class="msg-ret" />
   <text x="330" y="410" class="ret-text">success({metricas})</text>

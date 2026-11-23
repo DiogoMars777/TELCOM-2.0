@@ -872,7 +872,6 @@ frame "sd CU24 Gestionar proveedores" {
     boundary UI_Proveedor
     control ProveedorController
     entity Proveedor
-    entity Bitacora
 
     spacer -[hidden]down- AdminActor
 
@@ -881,8 +880,6 @@ frame "sd CU24 Gestionar proveedores" {
     UI_Proveedor -right- ProveedorController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: store(Request) →</font>\n<font color=#008000>3.1: update(Request, id) →</font>\n<font color=#000080>4.1: activar(id) / desactivar(id) →</font>
 
     ProveedorController -right- Proveedor : <font color=#000000>1.2: query()->whereLike()->get() →</font>\n<font color=#800000>2.2: create([...datos, estado: true]) →</font>\n<font color=#008000>3.2: findOrFail(id)->update(datos) →</font>\n<font color=#000080>4.2: findOrFail(id)->update(['estado' => bool]) →</font>
-
-    ProveedorController -down- Bitacora : <font color=#800000>2.3: log('CU24', 'CREAR_PROVEEDOR') →</font>\n<font color=#008000>3.3: log('CU24', 'ACTUALIZAR_PROVEEDOR') →</font>\n<font color=#000080>4.3: log('CU24', 'ESTADO_PROVEEDOR') →</font>
 }
 @enduml
 
@@ -953,7 +950,6 @@ frame "sd CU26 Visualizar Dashboard administrativo y financiero" {
     entity ServicioInternet
     entity PlanInternet
     entity Zona
-    entity Bitacora
 
     spacer -[hidden]down- AdminActor
 
@@ -972,8 +968,6 @@ frame "sd CU26 Visualizar Dashboard administrativo y financiero" {
     DashboardAdminFinancieroController -down- PlanInternet : <font color=#000000>1.7: withCount(['asignaciones' => whereNull('fechaFin')]) [abonados por plan] →</font>
 
     DashboardAdminFinancieroController -down- Zona : <font color=#000000>1.8: select('capacidadNodos')->withCount('servicios') [saturación red] →</font>
-
-    DashboardAdminFinancieroController -left- Bitacora : <font color=#000000>1.9: log('CU26', 'CONSULTA_DASHBOARD', 'user_id', ip) →</font>
 }
 @enduml
 
@@ -1003,7 +997,6 @@ frame "sd CU27 Generar y exportar reportes tradicionales" {
     entity Cliente
     entity Pago
     entity Mensualidad
-    entity Bitacora
 
     spacer -[hidden]down- AdminActor
 
@@ -1020,8 +1013,6 @@ frame "sd CU27 Generar y exportar reportes tradicionales" {
     ReporteTradicional -down- Pago : <font color=#800000>2.3.2: table('Pago')->join('MetodoPago')->whereBetween()->get() →</font>
 
     ReporteTradicional -down- Mensualidad : <font color=#800000>2.3.3: table('Mensualidad')->whereIn('estado', ['PENDIENTE','VENCIDA'])->get() →</font>
-
-    ReporteTradicionalController -down- Bitacora : <font color=#800000>2.4: log('CU27', 'GENERAR_REPORTE') →</font>\n<font color=#008000>3.3: log('CU27', 'EXPORTAR_EXCEL') →</font>\n<font color=#000080>4.3: log('CU27', 'EXPORTAR_PDF') →</font>
 }
 @enduml
 
@@ -1047,7 +1038,6 @@ frame "sd CU28 Generar y restaurar copias de seguridad" {
     control CopiasSeguridadController
     entity CopiaSeguridad
     entity Usuario
-    entity Bitacora
 
     spacer -[hidden]down- AdminActor
 
@@ -1058,8 +1048,6 @@ frame "sd CU28 Generar y restaurar copias de seguridad" {
     CopiasSeguridadController -right- CopiaSeguridad : <font color=#000000>1.2: orderByDesc('idCopiaSeguridad')->get() →</font>\n<font color=#800000>2.3: Process(pg_dump) -> create([nombre, ruta, tamano]) →</font>\n<font color=#008000>3.2: findOrFail(id) -> Process(psql restore) →</font>\n<font color=#000080>4.2: findOrFail(id) -> Storage::download() →</font>
 
     CopiasSeguridadController -up- Usuario : <font color=#000000>1.3: with('usuario:idUsuario,nombreCompleto') →</font>\n<font color=#800000>2.2: auth()->user()->idUsuario →</font>
-
-    CopiasSeguridadController -down- Bitacora : <font color=#800000>2.4: log('CU28', 'GENERAR_BACKUP') →</font>\n<font color=#008000>3.3: log('CU28', 'RESTAURAR_BACKUP') →</font>\n<font color=#000080>4.3: log('CU28', 'DESCARGAR_BACKUP') →</font>
 }
 @enduml
 
@@ -1086,7 +1074,6 @@ frame "sd CU29 Capturar y transcribir comandos de voz" {
     entity ComandoVoz
     entity Zona
     entity Usuario
-    entity Bitacora
 
     spacer -[hidden]down- UserActor
 
@@ -1099,8 +1086,6 @@ frame "sd CU29 Capturar y transcribir comandos de voz" {
     ComandoVozController -up- Zona : <font color=#800000>2.2: Zona::pluck('nombreZona') [contexto geográfico] →</font>
 
     ComandoVoz -up- Usuario : <font color=#008000>3.3: with('usuario') →</font>
-
-    ComandoVozController -down- Bitacora : <font color=#800000>2.4: log('CU29', 'TRANSCRIBIR_VOZ') →</font>
 }
 @enduml
 
@@ -1129,7 +1114,6 @@ frame "sd CU30 Procesar intención de voz con IA (NLP)" {
     entity Usuario
     entity Cliente
     entity Zona
-    entity Bitacora
 
     spacer -[hidden]down- OperadorActor
 
@@ -1146,8 +1130,6 @@ frame "sd CU30 Procesar intención de voz con IA (NLP)" {
     NlpIntencionService -right- IntencionVozIA : <font color=#000000>1.4: create([intencion, confianza, entidades, datosEnVivo]) →</font>\n<font color=#800000>2.3: orderByDesc()->paginate() →</font>
 
     IntencionVozIA -up- Usuario : <font color=#800000>2.2: with('usuario') →</font>
-
-    IntencionVozController -down- Bitacora : <font color=#000000>1.5: log('CU30', 'PROCESAR_INTENCION_NLP') →</font>
 }
 @enduml
 
@@ -1178,7 +1160,6 @@ frame "sd CU31 Generar reporte inteligente vía comando de voz" {
     entity Zona
     entity Mensualidad
     entity Pago
-    entity Bitacora
 
     spacer -[hidden]down- AdminActor
 
@@ -1199,7 +1180,5 @@ frame "sd CU31 Generar reporte inteligente vía comando de voz" {
     Mensualidad -down- Pago : <font color=#000000>1.4.1: hasMany(Pago) →</font>
 
     ReporteInteligenteController -down- ReporteInteligente : <font color=#000000>1.6: create([tipo, comando, filtros, filas]) →</font>
-
-    ReporteInteligenteController -down- Bitacora : <font color=#000000>1.7: log('CU31', 'GENERAR_REPORTE_INTELIGENTE') →</font>
 }
 @enduml

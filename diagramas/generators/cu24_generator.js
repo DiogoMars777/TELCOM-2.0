@@ -42,7 +42,6 @@ function buildCU24Communication() {
   <line x1="150" y1="360" x2="380" y2="360" class="link-line" />
   <line x1="420" y1="360" x2="730" y2="360" class="link-line" />
   <line x1="770" y1="360" x2="1160" y2="360" class="link-line" />
-  <line x1="750" y1="400" x2="750" y2="650" class="link-line" />
 
   <!-- INSTANCIAS DEL PATRÓN ROBUSTEZ BCE -->
   <g transform="translate(120, 360)">
@@ -65,11 +64,6 @@ function buildCU24Communication() {
     <text x="0" y="48" class="node-title">Proveedor</text>
   </g>
 
-  <g transform="translate(750, 680)">
-    ${entityIcon(0, 0, 22)}
-    <text x="0" y="44" class="node-title">Bitacora</text>
-  </g>
-
   <!-- MENSAJES -->
   <g transform="translate(150, 260)">
     <text x="0" y="0" class="flow-1">1: consultarProveedores(buscar, estado) &rarr;</text>
@@ -90,12 +84,6 @@ function buildCU24Communication() {
     <text x="0" y="18" class="flow-2">2.2: create([...datos, estado: true]) &rarr;</text>
     <text x="0" y="36" class="flow-3">3.2: findOrFail(id)-&gt;update(datos) &rarr;</text>
     <text x="0" y="54" class="flow-4">4.2: findOrFail(id)-&gt;update(['estado' =&gt; bool]) &rarr;</text>
-  </g>
-
-  <g transform="translate(765, 520)">
-    <text x="0" y="0" class="flow-2">2.3: log('CU24', 'CREAR_PROVEEDOR') &rarr;</text>
-    <text x="0" y="20" class="flow-3">3.3: log('CU24', 'ACTUALIZAR_PROVEEDOR') &rarr;</text>
-    <text x="0" y="40" class="flow-4">4.3: log('CU24', 'ESTADO_PROVEEDOR') &rarr;</text>
   </g>
 
   <g transform="translate(50, 810)">
@@ -202,11 +190,10 @@ function buildCU24Sequence() {
   const height = 1100;
   const tabW = 380;
 
-  const xAdmin = 90;
-  const xUI = 330;
-  const xCtrl = 680;
-  const xProv = 1080;
-  const xBit = 1420;
+  const xAdmin = 120;
+  const xUI = 440;
+  const xCtrl = 860;
+  const xProv = 1320;
 
   return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
@@ -240,7 +227,6 @@ function buildCU24Sequence() {
   <line x1="${xUI}" y1="130" x2="${xUI}" y2="${height - 50}" class="life-line" />
   <line x1="${xCtrl}" y1="130" x2="${xCtrl}" y2="${height - 50}" class="life-line" />
   <line x1="${xProv}" y1="130" x2="${xProv}" y2="${height - 50}" class="life-line" />
-  <line x1="${xBit}" y1="130" x2="${xBit}" y2="${height - 50}" class="life-line" />
 
   <!-- CABECERAS -->
   <g transform="translate(${xAdmin}, 90)">
@@ -259,10 +245,6 @@ function buildCU24Sequence() {
     ${entityIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">Proveedor</text>
   </g>
-  <g transform="translate(${xBit}, 90)">
-    ${entityIcon(0, 0, 20)}
-    <text x="0" y="36" class="life-title">Bitacora</text>
-  </g>
 
   <!-- BLOQUE 1 -->
   <rect x="35" y="150" width="${width - 70}" height="180" class="frame-box" />
@@ -275,24 +257,24 @@ function buildCU24Sequence() {
 
   <line x1="${xAdmin + 5}" y1="180" x2="${xUI - 5}" y2="180" class="msg-call" />
   <polygon points="${xUI - 5},180 ${xUI - 11},177 ${xUI - 11},183" fill="#1e293b" />
-  <text x="130" y="175" class="call-text">1: consultarProveedores(buscar, estado)</text>
+  <text x="160" y="175" class="call-text">1: consultarProveedores(buscar, estado)</text>
 
   <line x1="${xUI + 5}" y1="195" x2="${xCtrl - 5}" y2="195" class="msg-call" />
   <polygon points="${xCtrl - 5},195 ${xCtrl - 11},192 ${xCtrl - 11},198" fill="#1e293b" />
-  <text x="380" y="190" class="call-text">1.1: index(Request $request)</text>
+  <text x="500" y="190" class="call-text">1.1: index(Request $request)</text>
 
   <line x1="${xCtrl + 5}" y1="210" x2="${xProv - 5}" y2="210" class="msg-call" />
   <polygon points="${xProv - 5},210 ${xProv - 11},207 ${xProv - 11},213" fill="#1e293b" />
-  <text x="730" y="205" class="call-text">1.2: query()->whereLike()->orderBy('razonSocial')->get()</text>
+  <text x="910" y="205" class="call-text">1.2: query()->whereLike()->orderBy('razonSocial')->get()</text>
 
   <line x1="${xProv - 5}" y1="235" x2="${xCtrl + 5}" y2="235" class="msg-ret" />
-  <text x="780" y="230" class="ret-text">($proveedores)</text>
+  <text x="980" y="230" class="ret-text">($proveedores)</text>
 
   <line x1="${xCtrl - 5}" y1="265" x2="${xUI + 5}" y2="265" class="msg-ret" />
-  <text x="420" y="260" class="ret-text">success({proveedores})</text>
+  <text x="540" y="260" class="ret-text">success({proveedores})</text>
 
   <line x1="${xUI - 5}" y1="290" x2="${xAdmin + 5}" y2="290" class="msg-ret" />
-  <text x="130" y="285" class="ret-text">renderizarTablaProveedores()</text>
+  <text x="160" y="285" class="ret-text">renderizarTablaProveedores()</text>
 
   <!-- BLOQUE 2 -->
   <rect x="35" y="350" width="${width - 70}" height="220" class="frame-box" />
@@ -305,11 +287,11 @@ function buildCU24Sequence() {
 
   <line x1="${xAdmin + 5}" y1="380" x2="${xUI - 5}" y2="380" class="msg-call" />
   <polygon points="${xUI - 5},380 ${xUI - 11},177 ${xUI - 11},383" fill="#1e293b" />
-  <text x="130" y="375" class="call-text">2: registrarProveedor(razonSocial, nit, telefono)</text>
+  <text x="160" y="375" class="call-text">2: registrarProveedor(razonSocial, nit, telefono)</text>
 
   <line x1="${xUI + 5}" y1="395" x2="${xCtrl - 5}" y2="395" class="msg-call" />
   <polygon points="${xCtrl - 5},395 ${xCtrl - 11},392 ${xCtrl - 11},398" fill="#1e293b" />
-  <text x="380" y="390" class="call-text">2.1: store(Request $request)</text>
+  <text x="500" y="390" class="call-text">2.1: store(Request $request)</text>
 
   <line x1="${xCtrl + 5}" y1="415" x2="${xCtrl + 35}" y2="415" class="msg-call" />
   <line x1="${xCtrl + 35}" y1="415" x2="${xCtrl + 35}" y2="430" class="msg-call" />
@@ -319,17 +301,13 @@ function buildCU24Sequence() {
 
   <line x1="${xCtrl + 5}" y1="450" x2="${xProv - 5}" y2="450" class="msg-call" />
   <polygon points="${xProv - 5},450 ${xProv - 11},447 ${xProv - 11},453" fill="#1e293b" />
-  <text x="730" y="445" class="call-text">2.2: create([...datos, 'estado' => true])</text>
+  <text x="910" y="445" class="call-text">2.2: create([...datos, 'estado' => true])</text>
 
   <line x1="${xProv - 5}" y1="470" x2="${xCtrl + 5}" y2="470" class="msg-ret" />
-  <text x="780" y="465" class="ret-text">($proveedorCreado)</text>
+  <text x="980" y="465" class="ret-text">($proveedorCreado)</text>
 
-  <line x1="${xCtrl + 5}" y1="490" x2="${xBit - 5}" y2="490" class="msg-call" />
-  <polygon points="${xBit - 5},490 ${xBit - 11},487 ${xBit - 11},493" fill="#1e293b" />
-  <text x="1100" y="485" class="call-text">2.3: log('CU24', 'CREAR_PROVEEDOR')</text>
-
-  <line x1="${xCtrl - 5}" y1="520" x2="${xUI + 5}" y2="520" class="msg-ret" />
-  <text x="420" y="515" class="ret-text">success({proveedor}, 201)</text>
+  <line x1="${xCtrl - 5}" y1="500" x2="${xUI + 5}" y2="500" class="msg-ret" />
+  <text x="540" y="495" class="ret-text">success({proveedor}, 201)</text>
 
   <!-- BLOQUE 3 -->
   <rect x="35" y="590" width="${width - 70}" height="220" class="frame-box" />
@@ -342,28 +320,24 @@ function buildCU24Sequence() {
 
   <line x1="${xAdmin + 5}" y1="620" x2="${xUI - 5}" y2="620" class="msg-call" />
   <polygon points="${xUI - 5},620 ${xUI - 11},617 ${xUI - 11},623" fill="#1e293b" />
-  <text x="130" y="615" class="call-text">3: desactivarProveedor(id)</text>
+  <text x="160" y="615" class="call-text">3: desactivarProveedor(id)</text>
 
   <line x1="${xUI + 5}" y1="640" x2="${xCtrl - 5}" y2="640" class="msg-call" />
   <polygon points="${xCtrl - 5},640 ${xCtrl - 11},637 ${xCtrl - 11},643" fill="#1e293b" />
-  <text x="380" y="635" class="call-text">3.1: desactivar(id)</text>
+  <text x="500" y="635" class="call-text">3.1: desactivar(id)</text>
 
   <line x1="${xCtrl + 5}" y1="660" x2="${xProv - 5}" y2="660" class="msg-call" />
   <polygon points="${xProv - 5},660 ${xProv - 11},657 ${xProv - 11},663" fill="#1e293b" />
-  <text x="730" y="655" class="call-text">3.2: findOrFail(id)->update(['estado' => false])</text>
+  <text x="910" y="655" class="call-text">3.2: findOrFail(id)->update(['estado' => false])</text>
 
   <line x1="${xProv - 5}" y1="680" x2="${xCtrl + 5}" y2="680" class="msg-ret" />
-  <text x="780" y="675" class="ret-text">($proveedorActualizado)</text>
+  <text x="980" y="675" class="ret-text">($proveedorActualizado)</text>
 
-  <line x1="${xCtrl + 5}" y1="700" x2="${xBit - 5}" y2="700" class="msg-call" />
-  <polygon points="${xBit - 5},700 ${xBit - 11},697 ${xBit - 11},703" fill="#1e293b" />
-  <text x="1100" y="695" class="call-text">3.3: log('CU24', 'DESACTIVAR_PROVEEDOR')</text>
+  <line x1="${xCtrl - 5}" y1="710" x2="${xUI + 5}" y2="710" class="msg-ret" />
+  <text x="540" y="705" class="ret-text">success({proveedor}, 'Proveedor desactivado')</text>
 
-  <line x1="${xCtrl - 5}" y1="730" x2="${xUI + 5}" y2="730" class="msg-ret" />
-  <text x="420" y="725" class="ret-text">success({proveedor}, 'Proveedor desactivado')</text>
-
-  <line x1="${xUI - 5}" y1="755" x2="${xAdmin + 5}" y2="755" class="msg-ret" />
-  <text x="130" y="750" class="ret-text">actualizarVista()</text>
+  <line x1="${xUI - 5}" y1="740" x2="${xAdmin + 5}" y2="740" class="msg-ret" />
+  <text x="160" y="735" class="ret-text">actualizarVista()</text>
 </svg>`;
 }
 

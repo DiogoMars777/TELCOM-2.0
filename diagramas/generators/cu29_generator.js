@@ -41,7 +41,6 @@ function buildCU29Communication() {
   <line x1="750" y1="360" x2="1140" y2="360" class="link-line" />
   <line x1="730" y1="320" x2="730" y2="150" class="link-line" />
   <line x1="1160" y1="320" x2="1160" y2="150" class="link-line" />
-  <line x1="730" y1="400" x2="730" y2="650" class="link-line" />
 
   <!-- INSTANCIAS ROBUSTEZ BCE -->
   <g transform="translate(110, 360)">
@@ -74,11 +73,6 @@ function buildCU29Communication() {
     <text x="0" y="44" class="node-title">Usuario</text>
   </g>
 
-  <g transform="translate(730, 670)">
-    ${entityIcon(0, 0, 22)}
-    <text x="0" y="44" class="node-title">Bitacora</text>
-  </g>
-
   <!-- MENSAJES Y LLAMADAS -->
   <g transform="translate(150, 275)">
     <text x="0" y="0" class="flow-1">1: cargarEjemplosComandos() &rarr;</text>
@@ -103,10 +97,6 @@ function buildCU29Communication() {
 
   <g transform="translate(1175, 220)">
     <text x="0" y="0" class="flow-3">3.3: with('usuario') &rarr;</text>
-  </g>
-
-  <g transform="translate(745, 520)">
-    <text x="0" y="0" class="flow-2">2.4: log('CU29', 'TRANSCRIBIR_VOZ', texto, idComando) &rarr;</text>
   </g>
 
   <!-- LEYENDA INFERIOR -->
@@ -253,7 +243,7 @@ function buildCU29Sequence() {
   const xCtrl = 570;
   const xZona = 860;
   const xEnt = 1140;
-  const xBit = 1440;
+  const xUsu = 1440;
 
   return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
@@ -288,7 +278,7 @@ function buildCU29Sequence() {
   <line x1="${xCtrl}" y1="130" x2="${xCtrl}" y2="${height - 50}" class="life-line" />
   <line x1="${xZona}" y1="130" x2="${xZona}" y2="${height - 50}" class="life-line" />
   <line x1="${xEnt}" y1="130" x2="${xEnt}" y2="${height - 50}" class="life-line" />
-  <line x1="${xBit}" y1="130" x2="${xBit}" y2="${height - 50}" class="life-line" />
+  <line x1="${xUsu}" y1="130" x2="${xUsu}" y2="${height - 50}" class="life-line" />
 
   <!-- CABECERAS -->
   <g transform="translate(${xAdmin}, 90)">
@@ -311,9 +301,9 @@ function buildCU29Sequence() {
     ${entityIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">ComandoVoz</text>
   </g>
-  <g transform="translate(${xBit}, 90)">
+  <g transform="translate(${xUsu}, 90)">
     ${entityIcon(0, 0, 20)}
-    <text x="0" y="36" class="life-title">Bitacora</text>
+    <text x="0" y="36" class="life-title">Usuario</text>
   </g>
 
   <!-- BLOQUE 1: TRANSCRIBIR VOZ -->
@@ -346,10 +336,6 @@ function buildCU29Sequence() {
 
   <line x1="${xEnt - 5}" y1="280" x2="${xCtrl + 5}" y2="280" class="msg-ret" />
   <text x="820" y="275" class="ret-text">($comandoGuardado)</text>
-
-  <line x1="${xCtrl + 5}" y1="305" x2="${xBit - 5}" y2="305" class="msg-call" />
-  <polygon points="${xBit - 5},305 ${xBit - 11},302 ${xBit - 11},308" fill="#1e293b" />
-  <text x="960" y="300" class="call-text">1.4: AuditLogger::log('CU29', 'TRANSCRIBIR_VOZ', textoDictado)</text>
 
   <line x1="${xCtrl - 5}" y1="335" x2="${xUI + 5}" y2="335" class="msg-ret" />
   <text x="360" y="330" class="ret-text">success({transcripcion, intencion, accion_sugerida})</text>

@@ -48,7 +48,6 @@ function buildCU25Communication() {
   <line x1="740" y1="380" x2="940" y2="180" class="link-line" />
   <line x1="710" y1="450" x2="540" y2="680" class="link-line" />
   <line x1="730" y1="460" x2="730" y2="680" class="link-line" />
-  <line x1="760" y1="450" x2="980" y2="680" class="link-line" />
 
   <!-- INSTANCIAS -->
   <g transform="translate(120, 420)">
@@ -91,11 +90,6 @@ function buildCU25Communication() {
     <text x="0" y="44" class="node-title">Inventario</text>
   </g>
 
-  <g transform="translate(1000, 710)">
-    ${entityIcon(0, 0, 22)}
-    <text x="0" y="44" class="node-title">Bitacora</text>
-  </g>
-
   <!-- MENSAJES -->
   <g transform="translate(140, 320)">
     <text x="0" y="0" class="flow-1">1: consultarCompras(filtros) &rarr;</text>
@@ -131,10 +125,6 @@ function buildCU25Communication() {
 
   <g transform="translate(740, 580)">
     <text x="0" y="0" class="flow-3">3.5: increment('stockActual', cant) &rarr;</text>
-  </g>
-
-  <g transform="translate(880, 580)">
-    <text x="0" y="0" class="flow-3">3.8: log('CU25', 'REGISTRAR_COMPRA') &rarr;</text>
   </g>
 
   <g transform="translate(50, 870)">
@@ -329,11 +319,11 @@ function buildCU25Sequence() {
 
   const xAdmin = 90;
   const xUI = 320;
-  const xCtrl = 640;
-  const xComp = 980;
-  const xDet = 1240;
-  const xInv = 1440;
-  const xBit = 1600;
+  const xCtrl = 600;
+  const xProv = 860;
+  const xComp = 1080;
+  const xDet = 1280;
+  const xInv = 1480;
 
   return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
@@ -366,10 +356,10 @@ function buildCU25Sequence() {
   <line x1="${xAdmin}" y1="130" x2="${xAdmin}" y2="${height - 50}" class="life-line" />
   <line x1="${xUI}" y1="130" x2="${xUI}" y2="${height - 50}" class="life-line" />
   <line x1="${xCtrl}" y1="130" x2="${xCtrl}" y2="${height - 50}" class="life-line" />
+  <line x1="${xProv}" y1="130" x2="${xProv}" y2="${height - 50}" class="life-line" />
   <line x1="${xComp}" y1="130" x2="${xComp}" y2="${height - 50}" class="life-line" />
   <line x1="${xDet}" y1="130" x2="${xDet}" y2="${height - 50}" class="life-line" />
   <line x1="${xInv}" y1="130" x2="${xInv}" y2="${height - 50}" class="life-line" />
-  <line x1="${xBit}" y1="130" x2="${xBit}" y2="${height - 50}" class="life-line" />
 
   <!-- CABECERAS -->
   <g transform="translate(${xAdmin}, 90)">
@@ -384,6 +374,10 @@ function buildCU25Sequence() {
     ${controlIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">CompraEquipoRegistroController</text>
   </g>
+  <g transform="translate(${xProv}, 90)">
+    ${entityIcon(0, 0, 20)}
+    <text x="0" y="36" class="life-title">Proveedor</text>
+  </g>
   <g transform="translate(${xComp}, 90)">
     ${entityIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">Compra</text>
@@ -395,10 +389,6 @@ function buildCU25Sequence() {
   <g transform="translate(${xInv}, 90)">
     ${entityIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">Inventario</text>
-  </g>
-  <g transform="translate(${xBit}, 90)">
-    ${entityIcon(0, 0, 20)}
-    <text x="0" y="36" class="life-title">Bitacora</text>
   </g>
 
   <!-- BLOQUE 1 -->
@@ -418,12 +408,12 @@ function buildCU25Sequence() {
   <polygon points="${xCtrl - 5},195 ${xCtrl - 11},192 ${xCtrl - 11},198" fill="#1e293b" />
   <text x="360" y="190" class="call-text">1.1: proveedores(), productos()</text>
 
-  <line x1="${xCtrl + 5}" y1="215" x2="${xComp - 5}" y2="215" class="msg-call" />
-  <polygon points="${xComp - 5},215 ${xComp - 11},212 ${xComp - 11},218" fill="#1e293b" />
-  <text x="690" y="210" class="call-text">1.2: Proveedor::where('estado', true)->get(), ProductoEquipo::all()</text>
+  <line x1="${xCtrl + 5}" y1="215" x2="${xProv - 5}" y2="215" class="msg-call" />
+  <polygon points="${xProv - 5},215 ${xProv - 11},212 ${xProv - 11},218" fill="#1e293b" />
+  <text x="640" y="210" class="call-text">1.2: Proveedor::where('estado', true)->get()</text>
 
-  <line x1="${xComp - 5}" y1="240" x2="${xCtrl + 5}" y2="240" class="msg-ret" />
-  <text x="730" y="235" class="ret-text">($proveedoresActivos, $productos)</text>
+  <line x1="${xProv - 5}" y1="240" x2="${xCtrl + 5}" y2="240" class="msg-ret" />
+  <text x="670" y="235" class="ret-text">($proveedoresActivos)</text>
 
   <line x1="${xCtrl - 5}" y1="265" x2="${xUI + 5}" y2="265" class="msg-ret" />
   <text x="390" y="260" class="ret-text">success({proveedores, productos})</text>
@@ -463,37 +453,33 @@ function buildCU25Sequence() {
 
   <line x1="${xCtrl + 5}" y1="520" x2="${xDet - 5}" y2="520" class="msg-call" />
   <polygon points="${xDet - 5},520 ${xDet - 11},517 ${xDet - 11},523" fill="#1e293b" />
-  <text x="690" y="515" class="call-text">2.3: foreach items: DetalleCompra::create([idCompra, idProducto, cant, pUnit])</text>
+  <text x="790" y="515" class="call-text">2.3: foreach items: DetalleCompra::create([idCompra, idProducto, cant, pUnit])</text>
 
   <line x1="${xDet - 5}" y1="545" x2="${xCtrl + 5}" y2="545" class="msg-ret" />
-  <text x="890" y="540" class="ret-text">($detalleInsertado)</text>
+  <text x="960" y="540" class="ret-text">($detalleInsertado)</text>
 
   <line x1="${xCtrl + 5}" y1="570" x2="${xInv - 5}" y2="570" class="msg-call" />
   <polygon points="${xInv - 5},570 ${xInv - 11},567 ${xInv - 11},573" fill="#1e293b" />
-  <text x="890" y="565" class="call-text">2.4: Inventario::where('idProducto', $idProd)->increment('stockActual', $cant)</text>
+  <text x="960" y="565" class="call-text">2.4: Inventario::where('idProducto', $idProd)->increment('stockActual', $cant)</text>
 
   <line x1="${xInv - 5}" y1="595" x2="${xCtrl + 5}" y2="595" class="msg-ret" />
-  <text x="1080" y="590" class="ret-text">(nuevoStockConfirmado)</text>
+  <text x="1120" y="590" class="ret-text">(nuevoStockConfirmado)</text>
 
   <line x1="${xCtrl + 5}" y1="625" x2="${xComp - 5}" y2="625" class="msg-call" />
   <polygon points="${xComp - 5},625 ${xComp - 11},622 ${xComp - 11},628" fill="#1e293b" />
   <text x="690" y="620" class="call-text">2.5: Compra::where('idCompra', $id)->update(['montoTotal' => $sumTotal])</text>
 
-  <line x1="${xCtrl + 5}" y1="655" x2="${xBit - 5}" y2="655" class="msg-call" />
-  <polygon points="${xBit - 5},655 ${xBit - 11},652 ${xBit - 11},658" fill="#1e293b" />
-  <text x="890" y="650" class="call-text">2.6: AuditLogger::log('CU25', 'REGISTRAR_COMPRA', detalle)</text>
+  <line x1="${xCtrl + 5}" y1="655" x2="${xCtrl + 35}" y2="655" class="msg-call" />
+  <line x1="${xCtrl + 35}" y1="655" x2="${xCtrl + 35}" y2="670" class="msg-call" />
+  <line x1="${xCtrl + 35}" y1="670" x2="${xCtrl + 5}" y2="670" class="msg-call" />
+  <polygon points="${xCtrl + 5},670 ${xCtrl - 11},667 ${xCtrl - 11},673" fill="#1e293b" />
+  <text x="${xCtrl + 40}" y="665" class="call-text">DB::commit()</text>
 
-  <line x1="${xCtrl + 5}" y1="685" x2="${xCtrl + 35}" y2="685" class="msg-call" />
-  <line x1="${xCtrl + 35}" y1="685" x2="${xCtrl + 35}" y2="700" class="msg-call" />
-  <line x1="${xCtrl + 35}" y1="700" x2="${xCtrl + 5}" y2="700" class="msg-call" />
-  <polygon points="${xCtrl + 5},700 ${xCtrl - 11},697 ${xCtrl - 11},703" fill="#1e293b" />
-  <text x="${xCtrl + 40}" y="695" class="call-text">DB::commit()</text>
+  <line x1="${xCtrl - 5}" y1="700" x2="${xUI + 5}" y2="700" class="msg-ret" />
+  <text x="390" y="695" class="ret-text">success({compra: $compraFresh}, 'Compra registrada y stock actualizado')</text>
 
-  <line x1="${xCtrl - 5}" y1="725" x2="${xUI + 5}" y2="725" class="msg-ret" />
-  <text x="390" y="720" class="ret-text">success({compra: $compraFresh}, 'Compra registrada y stock actualizado')</text>
-
-  <line x1="${xUI - 5}" y1="750" x2="${xAdmin + 5}" y2="750" class="msg-ret" />
-  <text x="130" y="745" class="ret-text">notificarExitoYActualizarTabla()</text>
+  <line x1="${xUI - 5}" y1="730" x2="${xAdmin + 5}" y2="730" class="msg-ret" />
+  <text x="130" y="725" class="ret-text">notificarExitoYActualizarTabla()</text>
 </svg>`;
 }
 

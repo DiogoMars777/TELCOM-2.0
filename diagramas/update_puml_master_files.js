@@ -31,7 +31,6 @@ frame "sd CU24 Gestionar proveedores" {
     boundary UI_Proveedor
     control ProveedorController
     entity Proveedor
-    entity Bitacora
 
     spacer -[hidden]down- AdminActor
 
@@ -40,8 +39,6 @@ frame "sd CU24 Gestionar proveedores" {
     UI_Proveedor -right- ProveedorController : <font color=#000000>1.1: index(Request) →</font>\\n<font color=#800000>2.1: store(Request) →</font>\\n<font color=#008000>3.1: update(Request, id) →</font>\\n<font color=#000080>4.1: activar(id) / desactivar(id) →</font>
 
     ProveedorController -right- Proveedor : <font color=#000000>1.2: query()->whereLike()->get() →</font>\\n<font color=#800000>2.2: create([...datos, estado: true]) →</font>\\n<font color=#008000>3.2: findOrFail(id)->update(datos) →</font>\\n<font color=#000080>4.2: findOrFail(id)->update(['estado' => bool]) →</font>
-
-    ProveedorController -down- Bitacora : <font color=#800000>2.3: log('CU24', 'CREAR_PROVEEDOR') →</font>\\n<font color=#008000>3.3: log('CU24', 'ACTUALIZAR_PROVEEDOR') →</font>\\n<font color=#000080>4.3: log('CU24', 'ESTADO_PROVEEDOR') →</font>
 }
 @enduml
 
@@ -112,7 +109,6 @@ frame "sd CU26 Visualizar Dashboard administrativo y financiero" {
     entity ServicioInternet
     entity PlanInternet
     entity Zona
-    entity Bitacora
 
     spacer -[hidden]down- AdminActor
 
@@ -131,8 +127,6 @@ frame "sd CU26 Visualizar Dashboard administrativo y financiero" {
     DashboardAdminFinancieroController -down- PlanInternet : <font color=#000000>1.7: withCount(['asignaciones' => whereNull('fechaFin')]) [abonados por plan] →</font>
 
     DashboardAdminFinancieroController -down- Zona : <font color=#000000>1.8: select('capacidadNodos')->withCount('servicios') [saturación red] →</font>
-
-    DashboardAdminFinancieroController -left- Bitacora : <font color=#000000>1.9: log('CU26', 'CONSULTA_DASHBOARD', 'user_id', ip) →</font>
 }
 @enduml
 
@@ -162,7 +156,6 @@ frame "sd CU27 Generar y exportar reportes tradicionales" {
     entity Cliente
     entity Pago
     entity Mensualidad
-    entity Bitacora
 
     spacer -[hidden]down- AdminActor
 
@@ -179,8 +172,6 @@ frame "sd CU27 Generar y exportar reportes tradicionales" {
     ReporteTradicional -down- Pago : <font color=#800000>2.3.2: table('Pago')->join('MetodoPago')->whereBetween()->get() →</font>
 
     ReporteTradicional -down- Mensualidad : <font color=#800000>2.3.3: table('Mensualidad')->whereIn('estado', ['PENDIENTE','VENCIDA'])->get() →</font>
-
-    ReporteTradicionalController -down- Bitacora : <font color=#800000>2.4: log('CU27', 'GENERAR_REPORTE') →</font>\\n<font color=#008000>3.3: log('CU27', 'EXPORTAR_EXCEL') →</font>\\n<font color=#000080>4.3: log('CU27', 'EXPORTAR_PDF') →</font>
 }
 @enduml
 
@@ -206,7 +197,6 @@ frame "sd CU28 Generar y restaurar copias de seguridad" {
     control CopiasSeguridadController
     entity CopiaSeguridad
     entity Usuario
-    entity Bitacora
 
     spacer -[hidden]down- AdminActor
 
@@ -217,8 +207,6 @@ frame "sd CU28 Generar y restaurar copias de seguridad" {
     CopiasSeguridadController -right- CopiaSeguridad : <font color=#000000>1.2: orderByDesc('idCopiaSeguridad')->get() →</font>\\n<font color=#800000>2.3: Process(pg_dump) -> create([nombre, ruta, tamano]) →</font>\\n<font color=#008000>3.2: findOrFail(id) -> Process(psql restore) →</font>\\n<font color=#000080>4.2: findOrFail(id) -> Storage::download() →</font>
 
     CopiasSeguridadController -up- Usuario : <font color=#000000>1.3: with('usuario:idUsuario,nombreCompleto') →</font>\\n<font color=#800000>2.2: auth()->user()->idUsuario →</font>
-
-    CopiasSeguridadController -down- Bitacora : <font color=#800000>2.4: log('CU28', 'GENERAR_BACKUP') →</font>\\n<font color=#008000>3.3: log('CU28', 'RESTAURAR_BACKUP') →</font>\\n<font color=#000080>4.3: log('CU28', 'DESCARGAR_BACKUP') →</font>
 }
 @enduml
 
@@ -245,7 +233,6 @@ frame "sd CU29 Capturar y transcribir comandos de voz" {
     entity ComandoVoz
     entity Zona
     entity Usuario
-    entity Bitacora
 
     spacer -[hidden]down- UserActor
 
@@ -258,8 +245,6 @@ frame "sd CU29 Capturar y transcribir comandos de voz" {
     ComandoVozController -up- Zona : <font color=#800000>2.2: Zona::pluck('nombreZona') [contexto geográfico] →</font>
 
     ComandoVoz -up- Usuario : <font color=#008000>3.3: with('usuario') →</font>
-
-    ComandoVozController -down- Bitacora : <font color=#800000>2.4: log('CU29', 'TRANSCRIBIR_VOZ') →</font>
 }
 @enduml
 
@@ -288,7 +273,6 @@ frame "sd CU30 Procesar intención de voz con IA (NLP)" {
     entity Usuario
     entity Cliente
     entity Zona
-    entity Bitacora
 
     spacer -[hidden]down- OperadorActor
 
@@ -305,8 +289,6 @@ frame "sd CU30 Procesar intención de voz con IA (NLP)" {
     NlpIntencionService -right- IntencionVozIA : <font color=#000000>1.4: create([intencion, confianza, entidades, datosEnVivo]) →</font>\\n<font color=#800000>2.3: orderByDesc()->paginate() →</font>
 
     IntencionVozIA -up- Usuario : <font color=#800000>2.2: with('usuario') →</font>
-
-    IntencionVozController -down- Bitacora : <font color=#000000>1.5: log('CU30', 'PROCESAR_INTENCION_NLP') →</font>
 }
 @enduml
 
@@ -337,7 +319,6 @@ frame "sd CU31 Generar reporte inteligente vía comando de voz" {
     entity Zona
     entity Mensualidad
     entity Pago
-    entity Bitacora
 
     spacer -[hidden]down- AdminActor
 
@@ -358,8 +339,6 @@ frame "sd CU31 Generar reporte inteligente vía comando de voz" {
     Mensualidad -down- Pago : <font color=#000000>1.4.1: hasMany(Pago) →</font>
 
     ReporteInteligenteController -down- ReporteInteligente : <font color=#000000>1.6: create([tipo, comando, filtros, filas]) →</font>
-
-    ReporteInteligenteController -down- Bitacora : <font color=#000000>1.7: log('CU31', 'GENERAR_REPORTE_INTELIGENTE') →</font>
 }
 @enduml
 `;
@@ -1103,7 +1082,6 @@ actor "Administrador / Almacén" as AdminActor
 boundary UI_Proveedor
 control ProveedorController
 entity Proveedor
-entity Bitacora
 
 == Flujo 1: Consultar catálogo de proveedores ==
 AdminActor -> UI_Proveedor: 1: consultarProveedores(buscar, estado)
@@ -1129,10 +1107,6 @@ ProveedorController -> Proveedor: 2.2: create([...datos, 'estado' => true])
 activate Proveedor
 Proveedor --> ProveedorController: $proveedorCreado
 deactivate Proveedor
-ProveedorController -> Bitacora: 2.3: log('CU24', 'CREAR_PROVEEDOR', detalle)
-activate Bitacora
-Bitacora --> ProveedorController: ok
-deactivate Bitacora
 ProveedorController --> UI_Proveedor: success({proveedor}, 201)
 deactivate ProveedorController
 UI_Proveedor --> AdminActor: notificarRegistroExitoso()
@@ -1147,10 +1121,6 @@ ProveedorController -> Proveedor: 3.2: findOrFail(id)->update(['estado' => false
 activate Proveedor
 Proveedor --> ProveedorController: $proveedorActualizado
 deactivate Proveedor
-ProveedorController -> Bitacora: 3.3: log('CU24', 'DESACTIVAR_PROVEEDOR', detalle)
-activate Bitacora
-Bitacora --> ProveedorController: ok
-deactivate Bitacora
 ProveedorController --> UI_Proveedor: success({proveedor}, 'Proveedor desactivado')
 deactivate ProveedorController
 UI_Proveedor --> AdminActor: actualizarFilaEnTabla()
@@ -1171,7 +1141,7 @@ control CompraEquipoRegistroController
 entity Compra
 entity DetalleCompra
 entity Inventario
-entity Bitacora
+entity Proveedor
 
 == Flujo 1: Abrir formulario y cargar catálogos ==
 AdminActor -> UI_CompraRegistro: 1: abrirFormularioCompra()
@@ -1205,10 +1175,6 @@ CompraEquipoRegistroController -> Compra: 2.5: update(['montoTotal' => sumTotal]
 activate Compra
 Compra --> CompraEquipoRegistroController: ok
 deactivate Compra
-CompraEquipoRegistroController -> Bitacora: 2.6: log('CU25', 'REGISTRAR_COMPRA', detalle)
-activate Bitacora
-Bitacora --> CompraEquipoRegistroController: ok
-deactivate Bitacora
 CompraEquipoRegistroController -> CompraEquipoRegistroController: DB::commit()
 CompraEquipoRegistroController --> UI_CompraRegistro: success({compra}, 'Compra registrada')
 deactivate CompraEquipoRegistroController
@@ -1231,7 +1197,6 @@ control DashboardMetricasService
 entity Pago
 entity Mensualidad
 entity Cliente
-entity Bitacora
 
 == Flujo 1: Consultar Dashboard general y métricas operativas ==
 AdminActor -> UI_DashboardAdminFinanciero: 1: consultarDashboard(periodo)
@@ -1254,10 +1219,6 @@ Cliente --> DashboardMetricasService: $totalClientes
 deactivate Cliente
 DashboardMetricasService --> DashboardAdminFinancieroController: $metricasConsolidadas
 deactivate DashboardMetricasService
-DashboardAdminFinancieroController -> Bitacora: 1.6: log('CU26', 'CONSULTA_DASHBOARD', ip)
-activate Bitacora
-Bitacora --> DashboardAdminFinancieroController: ok
-deactivate Bitacora
 DashboardAdminFinancieroController --> UI_DashboardAdminFinanciero: success({metricas})
 deactivate DashboardAdminFinancieroController
 UI_DashboardAdminFinanciero --> AdminActor: renderizarTarjetasKPIyGraficos()
@@ -1294,7 +1255,6 @@ entity Zona
 entity Cliente
 entity Pago
 entity Mensualidad
-entity Bitacora
 
 == Flujo 1: Consultar catálogo y parámetros ==
 AdminActor -> UI_ReporteTradicional: 1: consultarCatalogoReportes()
@@ -1335,10 +1295,6 @@ Mensualidad --> ReporteTradicional: $mensualidades
 deactivate Mensualidad
 ReporteTradicional --> ReporteTradicionalController: $reporteConsolidado
 deactivate ReporteTradicional
-ReporteTradicionalController -> Bitacora: 2.7: log('CU27', 'GENERAR_REPORTE', detalle)
-activate Bitacora
-Bitacora --> ReporteTradicionalController: ok
-deactivate Bitacora
 ReporteTradicionalController --> UI_ReporteTradicional: success({reporte: $reporteConsolidado})
 deactivate ReporteTradicionalController
 UI_ReporteTradicional --> AdminActor: mostrarTablaReporteConKPIs()
@@ -1349,10 +1305,6 @@ AdminActor -> UI_ReporteTradicional: 3: exportarExcel(tipo, filtros)
 activate UI_ReporteTradicional
 UI_ReporteTradicional -> ReporteTradicionalController: 3.1: exportarExcel(Request)
 activate ReporteTradicionalController
-ReporteTradicionalController -> Bitacora: 3.2: log('CU27', 'EXPORTAR_EXCEL', detalle)
-activate Bitacora
-Bitacora --> ReporteTradicionalController: ok
-deactivate Bitacora
 ReporteTradicionalController --> UI_ReporteTradicional: streamDownload()
 deactivate ReporteTradicionalController
 UI_ReporteTradicional --> AdminActor: descargarArchivoBlob()
@@ -1371,7 +1323,7 @@ actor "Administrador del Sistema" as AdminActor
 boundary UI_CopiasSeguridad
 control CopiasSeguridadController
 entity CopiaSeguridad
-entity Bitacora
+entity Usuario
 
 == Flujo 1: Generar backup manual (pg_dump) ==
 AdminActor -> UI_CopiasSeguridad: 1: solicitarGenerarBackup(tipo, descripcion)
@@ -1383,10 +1335,6 @@ CopiasSeguridadController -> CopiaSeguridad: 1.2: create([nombreArchivo, ruta, t
 activate CopiaSeguridad
 CopiaSeguridad --> CopiasSeguridadController: $copiaRegistrada
 deactivate CopiaSeguridad
-CopiasSeguridadController -> Bitacora: 1.3: log('CU28', 'GENERAR_BACKUP', detalle)
-activate Bitacora
-Bitacora --> CopiasSeguridadController: ok
-deactivate Bitacora
 CopiasSeguridadController --> UI_CopiasSeguridad: success({copia: $copiaRegistrada})
 deactivate CopiasSeguridadController
 UI_CopiasSeguridad --> AdminActor: notificarBackupExitoso()
@@ -1402,10 +1350,6 @@ activate CopiaSeguridad
 CopiaSeguridad --> CopiasSeguridadController: $copiaSeguridad
 deactivate CopiaSeguridad
 CopiasSeguridadController -> CopiasSeguridadController: resolverBinario('psql') & ejecutarRestauracion($ruta)
-CopiasSeguridadController -> Bitacora: 2.3: log('CU28', 'RESTAURAR_BACKUP', 'RESTAURACION_EXITOSA')
-activate Bitacora
-Bitacora --> CopiasSeguridadController: ok
-deactivate Bitacora
 CopiasSeguridadController --> UI_CopiasSeguridad: success(null, 'Base de datos restaurada')
 deactivate CopiasSeguridadController
 UI_CopiasSeguridad --> AdminActor: mostrarMensajeExitoYRefrescar()
@@ -1425,7 +1369,7 @@ boundary UI_ComandoVoz
 control ComandoVozController
 entity Zona
 entity ComandoVoz
-entity Bitacora
+entity Usuario
 
 == Flujo 1: Enviar comando de audio y transcribir ==
 UserActor -> UI_ComandoVoz: 1: enviarAudioComando(blobWav, textoDictado)
@@ -1441,10 +1385,6 @@ ComandoVozController -> ComandoVoz: 1.3: create([textoDictado, intencion, report
 activate ComandoVoz
 ComandoVoz --> ComandoVozController: $comandoGuardado
 deactivate ComandoVoz
-ComandoVozController -> Bitacora: 1.4: log('CU29', 'TRANSCRIBIR_VOZ', textoDictado)
-activate Bitacora
-Bitacora --> ComandoVozController: ok
-deactivate Bitacora
 ComandoVozController --> UI_ComandoVoz: success({transcripcion, intencion, accion_sugerida})
 deactivate ComandoVozController
 UI_ComandoVoz --> UserActor: mostrarTextoInterpretadoYModalAccion()
@@ -1466,7 +1406,7 @@ control NlpIntencionService
 entity Zona
 entity Cliente
 entity IntencionVozIA
-entity Bitacora
+entity Usuario
 
 == Flujo 1: Procesar texto dictado con NLP y obtener datos en vivo ==
 OperadorActor -> UI_IntencionVoz: 1: enviarComandoTexto("Muéstrame morosos de Plan 3000")
@@ -1490,10 +1430,6 @@ IntencionVozController -> IntencionVozIA: 1.5: create([textoEntrada, intencion, 
 activate IntencionVozIA
 IntencionVozIA --> IntencionVozController: $registroPersistido
 deactivate IntencionVozIA
-IntencionVozController -> Bitacora: 1.6: log('CU30', 'PROCESAR_INTENCION_NLP', detalle)
-activate Bitacora
-Bitacora --> IntencionVozController: ok
-deactivate Bitacora
 IntencionVozController --> UI_IntencionVoz: success($resultadoNLP)
 deactivate IntencionVozController
 UI_IntencionVoz --> OperadorActor: renderizarRespuestaVozYDatosEnVivo()
@@ -1516,7 +1452,6 @@ control CatalogoReportesService
 entity Mensualidad
 entity Cliente
 entity ReporteInteligente
-entity Bitacora
 
 == Flujo 1: Interpretar con Gemini y consultar catálogo de reportes ==
 AdminActor -> UI_ReporteInteligente: 1: dictarComandoReporte("Genera un reporte de morosos de Zona Norte")
@@ -1543,10 +1478,6 @@ ReporteInteligenteController -> ReporteInteligente: 1.6: create([tipo, comando, 
 activate ReporteInteligente
 ReporteInteligente --> ReporteInteligenteController: $reporteGuardado
 deactivate ReporteInteligente
-ReporteInteligenteController -> Bitacora: 1.7: log('CU31', 'GENERAR_REPORTE_INTELIGENTE', detalle)
-activate Bitacora
-Bitacora --> ReporteInteligenteController: ok
-deactivate Bitacora
 ReporteInteligenteController --> UI_ReporteInteligente: success({interpretacion, reporte})
 deactivate ReporteInteligenteController
 UI_ReporteInteligente --> AdminActor: visualizarReporteConMetricasYExportar()

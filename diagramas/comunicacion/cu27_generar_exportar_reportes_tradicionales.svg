@@ -78,7 +78,6 @@
   <line x1="105" y1="360" x2="330" y2="360" class="link-line" />
   <line x1="370" y1="360" x2="680" y2="360" class="link-line" />
   <line x1="720" y1="360" x2="1140" y2="360" class="link-line" />
-  <line x1="700" y1="400" x2="700" y2="650" class="link-line" />
   <line x1="700" y1="320" x2="700" y2="150" class="link-line" />
   <line x1="1160" y1="320" x2="1160" y2="150" class="link-line" />
   <line x1="1160" y1="400" x2="1160" y2="650" class="link-line" />
@@ -128,14 +127,6 @@
   <line x1="-22" y1="26" x2="22" y2="26" stroke="#475569" stroke-width="2.5" />
 
     <text x="0" y="44" class="node-title">Zona</text>
-  </g>
-
-  <g transform="translate(700, 670)">
-    
-  <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
-  <line x1="-22" y1="26" x2="22" y2="26" stroke="#475569" stroke-width="2.5" />
-
-    <text x="0" y="44" class="node-title">Bitacora</text>
   </g>
 
   <g transform="translate(1160, 130)">

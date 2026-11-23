@@ -94,14 +94,14 @@
   </g>
 
   <!-- LÍNEAS DE VIDA -->
-  <line x1="90" y1="130" x2="90" y2="1100" class="life-line" />
-  <line x1="330" y1="130" x2="330" y2="1100" class="life-line" />
-  <line x1="680" y1="130" x2="680" y2="1100" class="life-line" />
+  <line x1="100" y1="130" x2="100" y2="1100" class="life-line" />
+  <line x1="380" y1="130" x2="380" y2="1100" class="life-line" />
+  <line x1="740" y1="130" x2="740" y2="1100" class="life-line" />
   <line x1="1100" y1="130" x2="1100" y2="1100" class="life-line" />
-  <line x1="1440" y1="130" x2="1440" y2="1100" class="life-line" />
+  <line x1="1380" y1="130" x2="1380" y2="1100" class="life-line" />
 
   <!-- CABECERAS -->
-  <g transform="translate(90, 90)">
+  <g transform="translate(100, 90)">
     
   <circle cx="0" cy="-26" r="8.5" fill="#ffffea" stroke="#1e293b" stroke-width="1.8" />
   <line x1="0" y1="-17.5" x2="0" y2="5" stroke="#1e293b" stroke-width="2" />
@@ -111,7 +111,7 @@
 
     <text x="0" y="40" class="life-title">Administrador del Sistema</text>
   </g>
-  <g transform="translate(330, 90)">
+  <g transform="translate(380, 90)">
     
   <line x1="-25" y1="-20" x2="-25" y2="20" stroke="#475569" stroke-width="2.5" />
   <line x1="-25" y1="0" x2="-20" y2="0" stroke="#475569" stroke-width="2" />
@@ -119,7 +119,7 @@
 
     <text x="0" y="36" class="life-title">UI_CopiasSeguridad</text>
   </g>
-  <g transform="translate(680, 90)">
+  <g transform="translate(740, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <path d="M -5 -20 L 4 -24 L 2 -20 C 11 -17 22 -2 20 6" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" />
@@ -134,12 +134,12 @@
 
     <text x="0" y="36" class="life-title">CopiaSeguridad</text>
   </g>
-  <g transform="translate(1440, 90)">
+  <g transform="translate(1380, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
 
-    <text x="0" y="36" class="life-title">Bitacora</text>
+    <text x="0" y="36" class="life-title">Usuario</text>
   </g>
 
   <!-- BLOQUE 1: GENERAR BACKUP -->
@@ -147,78 +147,71 @@
   <path d="M 35,170 L 35,150 L 370,150 L 382,170 Z" class="frame-tab" />
   <text x="45" y="164" class="frame-title">alt Flujo 1: Generar backup manual (pg_dump)</text>
 
-  <rect x="85" y="175" width="10" height="235" class="act-bar" />
-  <rect x="325" y="175" width="10" height="230" class="act-bar" />
-  <rect x="675" y="185" width="10" height="205" class="act-bar" />
+  <rect x="95" y="175" width="10" height="235" class="act-bar" />
+  <rect x="375" y="175" width="10" height="230" class="act-bar" />
+  <rect x="735" y="185" width="10" height="205" class="act-bar" />
 
-  <line x1="95" y1="180" x2="325" y2="180" class="msg-call" />
-  <polygon points="325,180 319,177 319,183" fill="#1e293b" />
+  <line x1="105" y1="180" x2="375" y2="180" class="msg-call" />
+  <polygon points="375,180 369,177 369,183" fill="#1e293b" />
   <text x="130" y="175" class="call-text">1: solicitarGenerarBackup(tipo: 'MANUAL', descripcion)</text>
 
-  <line x1="335" y1="195" x2="675" y2="195" class="msg-call" />
-  <polygon points="675,195 669,192 669,198" fill="#1e293b" />
-  <text x="380" y="190" class="call-text">1.1: store(Request $request)</text>
+  <line x1="385" y1="195" x2="735" y2="195" class="msg-call" />
+  <polygon points="735,195 729,192 729,198" fill="#1e293b" />
+  <text x="420" y="190" class="call-text">1.1: store(Request $request)</text>
 
-  <line x1="685" y1="215" x2="715" y2="215" class="msg-call" />
-  <line x1="715" y1="215" x2="715" y2="230" class="msg-call" />
-  <line x1="715" y1="230" x2="685" y2="230" class="msg-call" />
-  <polygon points="685,230 691,227 691,233" fill="#1e293b" />
-  <text x="720" y="226" class="call-text">resolverBinario('pg_dump') & ejecutarProceso()</text>
+  <line x1="745" y1="215" x2="1375" y2="215" class="msg-call" />
+  <polygon points="1375,215 1369,212 1369,218" fill="#1e293b" />
+  <text x="800" y="210" class="call-text">1.2: auth()->user()->idUsuario</text>
 
-  <line x1="685" y1="255" x2="1095" y2="255" class="msg-call" />
+  <line x1="1375" y1="235" x2="745" y2="235" class="msg-ret" />
+  <text x="840" y="230" class="ret-text">($idUsuarioAutenticado)</text>
+
+  <line x1="745" y1="255" x2="1095" y2="255" class="msg-call" />
   <polygon points="1095,255 1089,252 1089,258" fill="#1e293b" />
-  <text x="740" y="250" class="call-text">1.2: CopiaSeguridad::create([nombreArchivo, ruta, tamanoBytes, estado: 'EXITOSO'])</text>
+  <text x="760" y="250" class="call-text">1.3: CopiaSeguridad::create([nombreArchivo, ruta, tamanoBytes, estado: 'EXITOSO'])</text>
 
-  <line x1="1095" y1="280" x2="685" y2="280" class="msg-ret" />
-  <text x="780" y="275" class="ret-text">($copiaRegistrada)</text>
+  <line x1="1095" y1="280" x2="745" y2="280" class="msg-ret" />
+  <text x="800" y="275" class="ret-text">($copiaRegistrada)</text>
 
-  <line x1="685" y1="305" x2="1435" y2="305" class="msg-call" />
-  <polygon points="1435,305 1429,302 1429,308" fill="#1e293b" />
-  <text x="1140" y="300" class="call-text">1.3: AuditLogger::log('CU28', 'GENERAR_BACKUP', detalle)</text>
+  <line x1="735" y1="315" x2="385" y2="315" class="msg-ret" />
+  <text x="420" y="310" class="ret-text">success({copia: $copiaRegistrada}, 'Backup generado correctamente')</text>
 
-  <line x1="675" y1="335" x2="335" y2="335" class="msg-ret" />
-  <text x="420" y="330" class="ret-text">success({copia: $copiaRegistrada}, 'Backup generado correctamente')</text>
-
-  <line x1="325" y1="360" x2="95" y2="360" class="msg-ret" />
-  <text x="130" y="355" class="ret-text">actualizarTablaYDescargarOpcion()</text>
+  <line x1="375" y1="345" x2="105" y2="345" class="msg-ret" />
+  <text x="130" y="340" class="ret-text">actualizarTablaYDescargarOpcion()</text>
 
   <!-- BLOQUE 2: RESTAURAR BASE DE DATOS -->
-  <rect x="35" y="460" width="1550" height="320" class="frame-box" />
+  <rect x="35" y="460" width="1550" height="300" class="frame-box" />
   <path d="M 35,480 L 35,460 L 370,460 L 382,480 Z" class="frame-tab" />
   <text x="45" y="474" class="frame-title">alt Flujo 2: Restaurar base de datos desde copia (psql)</text>
 
-  <rect x="85" y="485" width="10" height="275" class="act-bar" />
-  <rect x="325" y="485" width="10" height="270" class="act-bar" />
-  <rect x="675" y="495" width="10" height="245" class="act-bar" />
+  <rect x="95" y="485" width="10" height="255" class="act-bar" />
+  <rect x="375" y="485" width="10" height="250" class="act-bar" />
+  <rect x="735" y="495" width="10" height="225" class="act-bar" />
 
-  <line x1="95" y1="490" x2="325" y2="490" class="msg-call" />
-  <polygon points="325,490 319,487 319,493" fill="#1e293b" />
+  <line x1="105" y1="490" x2="375" y2="490" class="msg-call" />
+  <polygon points="375,490 369,487 369,493" fill="#1e293b" />
   <text x="130" y="485" class="call-text">2: confirmarYEjecutarRestauracion(idCopia)</text>
 
-  <line x1="335" y1="510" x2="675" y2="510" class="msg-call" />
-  <polygon points="675,510 669,507 669,513" fill="#1e293b" />
-  <text x="380" y="505" class="call-text">2.1: restore(int $id)</text>
+  <line x1="385" y1="510" x2="735" y2="510" class="msg-call" />
+  <polygon points="735,510 729,507 729,513" fill="#1e293b" />
+  <text x="420" y="505" class="call-text">2.1: restore(int $id)</text>
 
-  <line x1="685" y1="535" x2="1095" y2="535" class="msg-call" />
+  <line x1="745" y1="535" x2="1095" y2="535" class="msg-call" />
   <polygon points="1095,535 1089,532 1089,538" fill="#1e293b" />
-  <text x="740" y="530" class="call-text">2.2: CopiaSeguridad::findOrFail($id)</text>
+  <text x="760" y="530" class="call-text">2.2: CopiaSeguridad::findOrFail($id)</text>
 
-  <line x1="1095" y1="560" x2="685" y2="560" class="msg-ret" />
-  <text x="780" y="555" class="ret-text">($copiaSeguridad)</text>
+  <line x1="1095" y1="560" x2="745" y2="560" class="msg-ret" />
+  <text x="800" y="555" class="ret-text">($copiaSeguridad)</text>
 
-  <line x1="685" y1="585" x2="715" y2="585" class="msg-call" />
-  <line x1="715" y1="585" x2="715" y2="600" class="msg-call" />
-  <line x1="715" y1="600" x2="685" y2="600" class="msg-call" />
-  <polygon points="685,600 691,597 691,603" fill="#1e293b" />
-  <text x="720" y="596" class="call-text">resolverBinario('psql') & ejecutarRestauracion($ruta)</text>
+  <line x1="745" y1="590" x2="775" y2="590" class="msg-call" />
+  <line x1="775" y1="590" x2="775" y2="605" class="msg-call" />
+  <line x1="775" y1="605" x2="745" y2="605" class="msg-call" />
+  <polygon points="745,605 751,602 751,608" fill="#1e293b" />
+  <text x="780" y="601" class="call-text">resolverBinario('psql') & ejecutarRestauracion($ruta)</text>
 
-  <line x1="685" y1="630" x2="1435" y2="630" class="msg-call" />
-  <polygon points="1435,630 1429,627 1429,633" fill="#1e293b" />
-  <text x="1140" y="625" class="call-text">2.3: AuditLogger::log('CU28', 'RESTAURAR_BACKUP', 'RESTAURACION_EXITOSA')</text>
+  <line x1="735" y1="640" x2="385" y2="640" class="msg-ret" />
+  <text x="420" y="635" class="ret-text">success(null, 'Base de datos restaurada exitosamente.')</text>
 
-  <line x1="675" y1="660" x2="335" y2="660" class="msg-ret" />
-  <text x="420" y="655" class="ret-text">success(null, 'Base de datos restaurada exitosamente.')</text>
-
-  <line x1="325" y1="690" x2="95" y2="690" class="msg-ret" />
-  <text x="130" y="685" class="ret-text">mostrarMensajeExitoYRefrescarEstado()</text>
+  <line x1="375" y1="670" x2="105" y2="670" class="msg-ret" />
+  <text x="130" y="665" class="ret-text">mostrarMensajeExitoYRefrescarEstado()</text>
 </svg>

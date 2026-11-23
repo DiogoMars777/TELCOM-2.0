@@ -44,7 +44,6 @@ function buildCU27Communication() {
   <line x1="105" y1="360" x2="330" y2="360" class="link-line" />
   <line x1="370" y1="360" x2="680" y2="360" class="link-line" />
   <line x1="720" y1="360" x2="1140" y2="360" class="link-line" />
-  <line x1="700" y1="400" x2="700" y2="650" class="link-line" />
   <line x1="700" y1="320" x2="700" y2="150" class="link-line" />
   <line x1="1160" y1="320" x2="1160" y2="150" class="link-line" />
   <line x1="1160" y1="400" x2="1160" y2="650" class="link-line" />
@@ -74,11 +73,6 @@ function buildCU27Communication() {
   <g transform="translate(700, 130)">
     ${entityIcon(0, 0, 22)}
     <text x="0" y="44" class="node-title">Zona</text>
-  </g>
-
-  <g transform="translate(700, 670)">
-    ${entityIcon(0, 0, 22)}
-    <text x="0" y="44" class="node-title">Bitacora</text>
   </g>
 
   <g transform="translate(1160, 130)">
@@ -328,15 +322,14 @@ function buildCU27Sequence() {
   const height = 1180;
   const tabW = 460;
 
-  const xAdmin = 70;
-  const xUI = 240;
-  const xCtrl = 440;
-  const xDom = 650;
-  const xZona = 840;
-  const xCli = 1030;
-  const xPago = 1220;
-  const xMens = 1410;
-  const xBit = 1590;
+  const xAdmin = 80;
+  const xUI = 260;
+  const xCtrl = 480;
+  const xDom = 720;
+  const xZona = 940;
+  const xCli = 1150;
+  const xPago = 1360;
+  const xMens = 1550;
 
   return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
@@ -374,7 +367,6 @@ function buildCU27Sequence() {
   <line x1="${xCli}" y1="130" x2="${xCli}" y2="${height - 50}" class="life-line" />
   <line x1="${xPago}" y1="130" x2="${xPago}" y2="${height - 50}" class="life-line" />
   <line x1="${xMens}" y1="130" x2="${xMens}" y2="${height - 50}" class="life-line" />
-  <line x1="${xBit}" y1="130" x2="${xBit}" y2="${height - 50}" class="life-line" />
 
   <!-- CABECERAS -->
   <g transform="translate(${xAdmin}, 90)">
@@ -408,10 +400,6 @@ function buildCU27Sequence() {
   <g transform="translate(${xMens}, 90)">
     ${entityIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">Mensualidad</text>
-  </g>
-  <g transform="translate(${xBit}, 90)">
-    ${entityIcon(0, 0, 20)}
-    <text x="0" y="36" class="life-title">Bitacora</text>
   </g>
 
   <!-- BLOQUE 1 -->
@@ -499,10 +487,6 @@ function buildCU27Sequence() {
   <line x1="${xDom - 5}" y1="580" x2="${xCtrl + 5}" y2="580" class="msg-ret" />
   <text x="490" y="575" class="ret-text">($reporteConsolidado)</text>
 
-  <line x1="${xCtrl + 5}" y1="595" x2="${xBit - 5}" y2="595" class="msg-call" />
-  <polygon points="${xBit - 5},595 ${xBit - 11},592 ${xBit - 11},598" fill="#1e293b" />
-  <text x="1100" y="590" class="call-text">2.4: AuditLogger::log('CU27', 'GENERAR_REPORTE', detalle)</text>
-
   <line x1="${xCtrl - 5}" y1="610" x2="${xUI + 5}" y2="610" class="msg-ret" />
   <text x="270" y="605" class="ret-text">success({reporte: $reporteConsolidado})</text>
 
@@ -525,10 +509,6 @@ function buildCU27Sequence() {
   <line x1="${xUI + 5}" y1="720" x2="${xCtrl - 5}" y2="720" class="msg-call" />
   <polygon points="${xCtrl - 5},720 ${xCtrl - 11},717 ${xCtrl - 11},723" fill="#1e293b" />
   <text x="270" y="715" class="call-text">3.1: exportarExcel(Request)</text>
-
-  <line x1="${xCtrl + 5}" y1="740" x2="${xBit - 5}" y2="740" class="msg-call" />
-  <polygon points="${xBit - 5},740 ${xBit - 11},737 ${xBit - 11},743" fill="#1e293b" />
-  <text x="1100" y="735" class="call-text">3.2: AuditLogger::log('CU27', 'EXPORTAR_ARCHIVO')</text>
 
   <line x1="${xCtrl - 5}" y1="765" x2="${xUI + 5}" y2="765" class="msg-ret" />
   <text x="270" y="760" class="ret-text">response()->streamDownload()</text>

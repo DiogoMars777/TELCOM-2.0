@@ -123,11 +123,11 @@
   <!-- LÍNEAS DE VIDA -->
   <line x1="90" y1="130" x2="90" y2="1130" class="life-line" />
   <line x1="320" y1="130" x2="320" y2="1130" class="life-line" />
-  <line x1="640" y1="130" x2="640" y2="1130" class="life-line" />
-  <line x1="980" y1="130" x2="980" y2="1130" class="life-line" />
-  <line x1="1240" y1="130" x2="1240" y2="1130" class="life-line" />
-  <line x1="1440" y1="130" x2="1440" y2="1130" class="life-line" />
-  <line x1="1600" y1="130" x2="1600" y2="1130" class="life-line" />
+  <line x1="600" y1="130" x2="600" y2="1130" class="life-line" />
+  <line x1="860" y1="130" x2="860" y2="1130" class="life-line" />
+  <line x1="1080" y1="130" x2="1080" y2="1130" class="life-line" />
+  <line x1="1280" y1="130" x2="1280" y2="1130" class="life-line" />
+  <line x1="1480" y1="130" x2="1480" y2="1130" class="life-line" />
 
   <!-- CABECERAS -->
   <g transform="translate(90, 90)">
@@ -148,7 +148,7 @@
 
     <text x="0" y="36" class="life-title">UI_CompraRegistro</text>
   </g>
-  <g transform="translate(640, 90)">
+  <g transform="translate(600, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <path d="M -5 -20 L 4 -24 L 2 -20 C 11 -17 22 -2 20 6" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" />
@@ -156,33 +156,33 @@
 
     <text x="0" y="36" class="life-title">CompraEquipoRegistroController</text>
   </g>
-  <g transform="translate(980, 90)">
+  <g transform="translate(860, 90)">
+    
+  <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
+  <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
+
+    <text x="0" y="36" class="life-title">Proveedor</text>
+  </g>
+  <g transform="translate(1080, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
 
     <text x="0" y="36" class="life-title">Compra</text>
   </g>
-  <g transform="translate(1240, 90)">
+  <g transform="translate(1280, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
 
     <text x="0" y="36" class="life-title">DetalleCompra</text>
   </g>
-  <g transform="translate(1440, 90)">
+  <g transform="translate(1480, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
 
     <text x="0" y="36" class="life-title">Inventario</text>
-  </g>
-  <g transform="translate(1600, 90)">
-    
-  <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
-  <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
-
-    <text x="0" y="36" class="life-title">Bitacora</text>
   </g>
 
   <!-- BLOQUE 1 -->
@@ -192,24 +192,24 @@
 
   <rect x="85" y="175" width="10" height="140" class="act-bar" />
   <rect x="315" y="175" width="10" height="135" class="act-bar" />
-  <rect x="635" y="185" width="10" height="110" class="act-bar" />
+  <rect x="595" y="185" width="10" height="110" class="act-bar" />
 
   <line x1="95" y1="180" x2="315" y2="180" class="msg-call" />
   <polygon points="315,180 309,177 309,183" fill="#1e293b" />
   <text x="130" y="175" class="call-text">1: abrirFormularioCompra()</text>
 
-  <line x1="325" y1="195" x2="635" y2="195" class="msg-call" />
-  <polygon points="635,195 629,192 629,198" fill="#1e293b" />
+  <line x1="325" y1="195" x2="595" y2="195" class="msg-call" />
+  <polygon points="595,195 589,192 589,198" fill="#1e293b" />
   <text x="360" y="190" class="call-text">1.1: proveedores(), productos()</text>
 
-  <line x1="645" y1="215" x2="975" y2="215" class="msg-call" />
-  <polygon points="975,215 969,212 969,218" fill="#1e293b" />
-  <text x="690" y="210" class="call-text">1.2: Proveedor::where('estado', true)->get(), ProductoEquipo::all()</text>
+  <line x1="605" y1="215" x2="855" y2="215" class="msg-call" />
+  <polygon points="855,215 849,212 849,218" fill="#1e293b" />
+  <text x="640" y="210" class="call-text">1.2: Proveedor::where('estado', true)->get()</text>
 
-  <line x1="975" y1="240" x2="645" y2="240" class="msg-ret" />
-  <text x="730" y="235" class="ret-text">($proveedoresActivos, $productos)</text>
+  <line x1="855" y1="240" x2="605" y2="240" class="msg-ret" />
+  <text x="670" y="235" class="ret-text">($proveedoresActivos)</text>
 
-  <line x1="635" y1="265" x2="325" y2="265" class="msg-ret" />
+  <line x1="595" y1="265" x2="325" y2="265" class="msg-ret" />
   <text x="390" y="260" class="ret-text">success({proveedores, productos})</text>
 
   <line x1="315" y1="290" x2="95" y2="290" class="msg-ret" />
@@ -222,62 +222,58 @@
 
   <rect x="85" y="385" width="10" height="375" class="act-bar" />
   <rect x="315" y="385" width="10" height="370" class="act-bar" />
-  <rect x="635" y="395" width="10" height="345" class="act-bar" />
+  <rect x="595" y="395" width="10" height="345" class="act-bar" />
 
   <line x1="95" y1="390" x2="315" y2="390" class="msg-call" />
   <polygon points="315,390 309,387 309,393" fill="#1e293b" />
   <text x="130" y="385" class="call-text">2: submitCompra(idProveedor, nroComprobante, items)</text>
 
-  <line x1="325" y1="410" x2="635" y2="410" class="msg-call" />
-  <polygon points="635,410 629,407 629,413" fill="#1e293b" />
+  <line x1="325" y1="410" x2="595" y2="410" class="msg-call" />
+  <polygon points="595,410 589,407 589,413" fill="#1e293b" />
   <text x="360" y="405" class="call-text">2.1: store(Request $request)</text>
 
-  <line x1="645" y1="430" x2="675" y2="430" class="msg-call" />
-  <line x1="675" y1="430" x2="675" y2="445" class="msg-call" />
-  <line x1="675" y1="445" x2="645" y2="445" class="msg-call" />
-  <polygon points="645,445 651,442 651,448" fill="#1e293b" />
-  <text x="680" y="440" class="call-text">DB::beginTransaction() & validate()</text>
+  <line x1="605" y1="430" x2="635" y2="430" class="msg-call" />
+  <line x1="635" y1="430" x2="635" y2="445" class="msg-call" />
+  <line x1="635" y1="445" x2="605" y2="445" class="msg-call" />
+  <polygon points="605,445 611,442 611,448" fill="#1e293b" />
+  <text x="640" y="440" class="call-text">DB::beginTransaction() & validate()</text>
 
-  <line x1="645" y1="470" x2="975" y2="470" class="msg-call" />
-  <polygon points="975,470 969,467 969,473" fill="#1e293b" />
+  <line x1="605" y1="470" x2="1075" y2="470" class="msg-call" />
+  <polygon points="1075,470 1069,467 1069,473" fill="#1e293b" />
   <text x="690" y="465" class="call-text">2.2: create([nroComprobante, fecha, idProveedor, montoTotal: 0])</text>
 
-  <line x1="975" y1="490" x2="645" y2="490" class="msg-ret" />
+  <line x1="1075" y1="490" x2="605" y2="490" class="msg-ret" />
   <text x="730" y="485" class="ret-text">($compraId)</text>
 
-  <line x1="645" y1="520" x2="1235" y2="520" class="msg-call" />
-  <polygon points="1235,520 1229,517 1229,523" fill="#1e293b" />
-  <text x="690" y="515" class="call-text">2.3: foreach items: DetalleCompra::create([idCompra, idProducto, cant, pUnit])</text>
+  <line x1="605" y1="520" x2="1275" y2="520" class="msg-call" />
+  <polygon points="1275,520 1269,517 1269,523" fill="#1e293b" />
+  <text x="790" y="515" class="call-text">2.3: foreach items: DetalleCompra::create([idCompra, idProducto, cant, pUnit])</text>
 
-  <line x1="1235" y1="545" x2="645" y2="545" class="msg-ret" />
-  <text x="890" y="540" class="ret-text">($detalleInsertado)</text>
+  <line x1="1275" y1="545" x2="605" y2="545" class="msg-ret" />
+  <text x="960" y="540" class="ret-text">($detalleInsertado)</text>
 
-  <line x1="645" y1="570" x2="1435" y2="570" class="msg-call" />
-  <polygon points="1435,570 1429,567 1429,573" fill="#1e293b" />
-  <text x="890" y="565" class="call-text">2.4: Inventario::where('idProducto', $idProd)->increment('stockActual', $cant)</text>
+  <line x1="605" y1="570" x2="1475" y2="570" class="msg-call" />
+  <polygon points="1475,570 1469,567 1469,573" fill="#1e293b" />
+  <text x="960" y="565" class="call-text">2.4: Inventario::where('idProducto', $idProd)->increment('stockActual', $cant)</text>
 
-  <line x1="1435" y1="595" x2="645" y2="595" class="msg-ret" />
-  <text x="1080" y="590" class="ret-text">(nuevoStockConfirmado)</text>
+  <line x1="1475" y1="595" x2="605" y2="595" class="msg-ret" />
+  <text x="1120" y="590" class="ret-text">(nuevoStockConfirmado)</text>
 
-  <line x1="645" y1="625" x2="975" y2="625" class="msg-call" />
-  <polygon points="975,625 969,622 969,628" fill="#1e293b" />
+  <line x1="605" y1="625" x2="1075" y2="625" class="msg-call" />
+  <polygon points="1075,625 1069,622 1069,628" fill="#1e293b" />
   <text x="690" y="620" class="call-text">2.5: Compra::where('idCompra', $id)->update(['montoTotal' => $sumTotal])</text>
 
-  <line x1="645" y1="655" x2="1595" y2="655" class="msg-call" />
-  <polygon points="1595,655 1589,652 1589,658" fill="#1e293b" />
-  <text x="890" y="650" class="call-text">2.6: AuditLogger::log('CU25', 'REGISTRAR_COMPRA', detalle)</text>
+  <line x1="605" y1="655" x2="635" y2="655" class="msg-call" />
+  <line x1="635" y1="655" x2="635" y2="670" class="msg-call" />
+  <line x1="635" y1="670" x2="605" y2="670" class="msg-call" />
+  <polygon points="605,670 589,667 589,673" fill="#1e293b" />
+  <text x="640" y="665" class="call-text">DB::commit()</text>
 
-  <line x1="645" y1="685" x2="675" y2="685" class="msg-call" />
-  <line x1="675" y1="685" x2="675" y2="700" class="msg-call" />
-  <line x1="675" y1="700" x2="645" y2="700" class="msg-call" />
-  <polygon points="645,700 629,697 629,703" fill="#1e293b" />
-  <text x="680" y="695" class="call-text">DB::commit()</text>
+  <line x1="595" y1="700" x2="325" y2="700" class="msg-ret" />
+  <text x="390" y="695" class="ret-text">success({compra: $compraFresh}, 'Compra registrada y stock actualizado')</text>
 
-  <line x1="635" y1="725" x2="325" y2="725" class="msg-ret" />
-  <text x="390" y="720" class="ret-text">success({compra: $compraFresh}, 'Compra registrada y stock actualizado')</text>
-
-  <line x1="315" y1="750" x2="95" y2="750" class="msg-ret" />
-  <text x="130" y="745" class="ret-text">notificarExitoYActualizarTabla()</text>
+  <line x1="315" y1="730" x2="95" y2="730" class="msg-ret" />
+  <text x="130" y="725" class="ret-text">notificarExitoYActualizarTabla()</text>
 </svg>
 </body>
 </html>

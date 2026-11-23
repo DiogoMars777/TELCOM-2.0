@@ -41,7 +41,6 @@ function buildCU28Communication() {
   <line x1="420" y1="380" x2="720" y2="380" class="link-line" />
   <line x1="770" y1="380" x2="1140" y2="380" class="link-line" />
   <line x1="740" y1="340" x2="740" y2="160" class="link-line" />
-  <line x1="740" y1="420" x2="740" y2="670" class="link-line" />
 
   <!-- INSTANCIAS ROBUSTEZ BCE -->
   <g transform="translate(120, 380)">
@@ -69,11 +68,6 @@ function buildCU28Communication() {
     <text x="0" y="44" class="node-title">Usuario</text>
   </g>
 
-  <g transform="translate(740, 700)">
-    ${entityIcon(0, 0, 22)}
-    <text x="0" y="44" class="node-title">Bitacora</text>
-  </g>
-
   <!-- MENSAJES Y LLAMADAS -->
   <g transform="translate(145, 280)">
     <text x="0" y="0" class="flow-1">1: consultarBackups() &rarr;</text>
@@ -99,12 +93,6 @@ function buildCU28Communication() {
     <text x="0" y="18" class="flow-2">2.3: Process(pg_dump) -> create([nombre, ruta, tamano]) &rarr;</text>
     <text x="0" y="36" class="flow-3">3.2: findOrFail(id) -> Process(psql restore) &rarr;</text>
     <text x="0" y="54" class="flow-4">4.2: findOrFail(id) -> Storage::download() &rarr;</text>
-  </g>
-
-  <g transform="translate(755, 520)">
-    <text x="0" y="0" class="flow-2">2.4: log('CU28', 'GENERAR_BACKUP', nombre, bytes) &rarr;</text>
-    <text x="0" y="20" class="flow-3">3.3: log('CU28', 'RESTAURAR_BACKUP', resultado, estado) &rarr;</text>
-    <text x="0" y="40" class="flow-4">4.3: log('CU28', 'DESCARGAR_BACKUP', idCopia) &rarr;</text>
   </g>
 
   <!-- LEYENDA INFERIOR -->
@@ -230,11 +218,11 @@ function buildCU28Sequence() {
   const height = 1150;
   const tabW = 440;
 
-  const xAdmin = 90;
-  const xUI = 330;
-  const xCtrl = 680;
+  const xAdmin = 100;
+  const xUI = 380;
+  const xCtrl = 740;
   const xEnt = 1100;
-  const xBit = 1440;
+  const xUsu = 1380;
 
   return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
@@ -268,7 +256,7 @@ function buildCU28Sequence() {
   <line x1="${xUI}" y1="130" x2="${xUI}" y2="${height - 50}" class="life-line" />
   <line x1="${xCtrl}" y1="130" x2="${xCtrl}" y2="${height - 50}" class="life-line" />
   <line x1="${xEnt}" y1="130" x2="${xEnt}" y2="${height - 50}" class="life-line" />
-  <line x1="${xBit}" y1="130" x2="${xBit}" y2="${height - 50}" class="life-line" />
+  <line x1="${xUsu}" y1="130" x2="${xUsu}" y2="${height - 50}" class="life-line" />
 
   <!-- CABECERAS -->
   <g transform="translate(${xAdmin}, 90)">
@@ -287,9 +275,9 @@ function buildCU28Sequence() {
     ${entityIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">CopiaSeguridad</text>
   </g>
-  <g transform="translate(${xBit}, 90)">
+  <g transform="translate(${xUsu}, 90)">
     ${entityIcon(0, 0, 20)}
-    <text x="0" y="36" class="life-title">Bitacora</text>
+    <text x="0" y="36" class="life-title">Usuario</text>
   </g>
 
   <!-- BLOQUE 1: GENERAR BACKUP -->
@@ -307,39 +295,36 @@ function buildCU28Sequence() {
 
   <line x1="${xUI + 5}" y1="195" x2="${xCtrl - 5}" y2="195" class="msg-call" />
   <polygon points="${xCtrl - 5},195 ${xCtrl - 11},192 ${xCtrl - 11},198" fill="#1e293b" />
-  <text x="380" y="190" class="call-text">1.1: store(Request $request)</text>
+  <text x="420" y="190" class="call-text">1.1: store(Request $request)</text>
 
-  <line x1="${xCtrl + 5}" y1="215" x2="${xCtrl + 35}" y2="215" class="msg-call" />
-  <line x1="${xCtrl + 35}" y1="215" x2="${xCtrl + 35}" y2="230" class="msg-call" />
-  <line x1="${xCtrl + 35}" y1="230" x2="${xCtrl + 5}" y2="230" class="msg-call" />
-  <polygon points="${xCtrl + 5},230 ${xCtrl + 11},227 ${xCtrl + 11},233" fill="#1e293b" />
-  <text x="${xCtrl + 40}" y="226" class="call-text">resolverBinario('pg_dump') & ejecutarProceso()</text>
+  <line x1="${xCtrl + 5}" y1="215" x2="${xUsu - 5}" y2="215" class="msg-call" />
+  <polygon points="${xUsu - 5},215 ${xUsu - 11},212 ${xUsu - 11},218" fill="#1e293b" />
+  <text x="800" y="210" class="call-text">1.2: auth()->user()->idUsuario</text>
+
+  <line x1="${xUsu - 5}" y1="235" x2="${xCtrl + 5}" y2="235" class="msg-ret" />
+  <text x="840" y="230" class="ret-text">($idUsuarioAutenticado)</text>
 
   <line x1="${xCtrl + 5}" y1="255" x2="${xEnt - 5}" y2="255" class="msg-call" />
   <polygon points="${xEnt - 5},255 ${xEnt - 11},252 ${xEnt - 11},258" fill="#1e293b" />
-  <text x="740" y="250" class="call-text">1.2: CopiaSeguridad::create([nombreArchivo, ruta, tamanoBytes, estado: 'EXITOSO'])</text>
+  <text x="760" y="250" class="call-text">1.3: CopiaSeguridad::create([nombreArchivo, ruta, tamanoBytes, estado: 'EXITOSO'])</text>
 
   <line x1="${xEnt - 5}" y1="280" x2="${xCtrl + 5}" y2="280" class="msg-ret" />
-  <text x="780" y="275" class="ret-text">($copiaRegistrada)</text>
+  <text x="800" y="275" class="ret-text">($copiaRegistrada)</text>
 
-  <line x1="${xCtrl + 5}" y1="305" x2="${xBit - 5}" y2="305" class="msg-call" />
-  <polygon points="${xBit - 5},305 ${xBit - 11},302 ${xBit - 11},308" fill="#1e293b" />
-  <text x="1140" y="300" class="call-text">1.3: AuditLogger::log('CU28', 'GENERAR_BACKUP', detalle)</text>
+  <line x1="${xCtrl - 5}" y1="315" x2="${xUI + 5}" y2="315" class="msg-ret" />
+  <text x="420" y="310" class="ret-text">success({copia: $copiaRegistrada}, 'Backup generado correctamente')</text>
 
-  <line x1="${xCtrl - 5}" y1="335" x2="${xUI + 5}" y2="335" class="msg-ret" />
-  <text x="420" y="330" class="ret-text">success({copia: $copiaRegistrada}, 'Backup generado correctamente')</text>
-
-  <line x1="${xUI - 5}" y1="360" x2="${xAdmin + 5}" y2="360" class="msg-ret" />
-  <text x="130" y="355" class="ret-text">actualizarTablaYDescargarOpcion()</text>
+  <line x1="${xUI - 5}" y1="345" x2="${xAdmin + 5}" y2="345" class="msg-ret" />
+  <text x="130" y="340" class="ret-text">actualizarTablaYDescargarOpcion()</text>
 
   <!-- BLOQUE 2: RESTAURAR BASE DE DATOS -->
-  <rect x="35" y="460" width="${width - 70}" height="320" class="frame-box" />
+  <rect x="35" y="460" width="${width - 70}" height="300" class="frame-box" />
   <path d="M 35,480 L 35,460 L 370,460 L 382,480 Z" class="frame-tab" />
   <text x="45" y="474" class="frame-title">alt Flujo 2: Restaurar base de datos desde copia (psql)</text>
 
-  <rect x="${xAdmin - 5}" y="485" width="10" height="275" class="act-bar" />
-  <rect x="${xUI - 5}" y="485" width="10" height="270" class="act-bar" />
-  <rect x="${xCtrl - 5}" y="495" width="10" height="245" class="act-bar" />
+  <rect x="${xAdmin - 5}" y="485" width="10" height="255" class="act-bar" />
+  <rect x="${xUI - 5}" y="485" width="10" height="250" class="act-bar" />
+  <rect x="${xCtrl - 5}" y="495" width="10" height="225" class="act-bar" />
 
   <line x1="${xAdmin + 5}" y1="490" x2="${xUI - 5}" y2="490" class="msg-call" />
   <polygon points="${xUI - 5},490 ${xUI - 11},487 ${xUI - 11},493" fill="#1e293b" />
@@ -347,30 +332,26 @@ function buildCU28Sequence() {
 
   <line x1="${xUI + 5}" y1="510" x2="${xCtrl - 5}" y2="510" class="msg-call" />
   <polygon points="${xCtrl - 5},510 ${xCtrl - 11},507 ${xCtrl - 11},513" fill="#1e293b" />
-  <text x="380" y="505" class="call-text">2.1: restore(int $id)</text>
+  <text x="420" y="505" class="call-text">2.1: restore(int $id)</text>
 
   <line x1="${xCtrl + 5}" y1="535" x2="${xEnt - 5}" y2="535" class="msg-call" />
   <polygon points="${xEnt - 5},535 ${xEnt - 11},532 ${xEnt - 11},538" fill="#1e293b" />
-  <text x="740" y="530" class="call-text">2.2: CopiaSeguridad::findOrFail($id)</text>
+  <text x="760" y="530" class="call-text">2.2: CopiaSeguridad::findOrFail($id)</text>
 
   <line x1="${xEnt - 5}" y1="560" x2="${xCtrl + 5}" y2="560" class="msg-ret" />
-  <text x="780" y="555" class="ret-text">($copiaSeguridad)</text>
+  <text x="800" y="555" class="ret-text">($copiaSeguridad)</text>
 
-  <line x1="${xCtrl + 5}" y1="585" x2="${xCtrl + 35}" y2="585" class="msg-call" />
-  <line x1="${xCtrl + 35}" y1="585" x2="${xCtrl + 35}" y2="600" class="msg-call" />
-  <line x1="${xCtrl + 35}" y1="600" x2="${xCtrl + 5}" y2="600" class="msg-call" />
-  <polygon points="${xCtrl + 5},600 ${xCtrl + 11},597 ${xCtrl + 11},603" fill="#1e293b" />
-  <text x="${xCtrl + 40}" y="596" class="call-text">resolverBinario('psql') & ejecutarRestauracion($ruta)</text>
+  <line x1="${xCtrl + 5}" y1="590" x2="${xCtrl + 35}" y2="590" class="msg-call" />
+  <line x1="${xCtrl + 35}" y1="590" x2="${xCtrl + 35}" y2="605" class="msg-call" />
+  <line x1="${xCtrl + 35}" y1="605" x2="${xCtrl + 5}" y2="605" class="msg-call" />
+  <polygon points="${xCtrl + 5},605 ${xCtrl + 11},602 ${xCtrl + 11},608" fill="#1e293b" />
+  <text x="${xCtrl + 40}" y="601" class="call-text">resolverBinario('psql') & ejecutarRestauracion($ruta)</text>
 
-  <line x1="${xCtrl + 5}" y1="630" x2="${xBit - 5}" y2="630" class="msg-call" />
-  <polygon points="${xBit - 5},630 ${xBit - 11},627 ${xBit - 11},633" fill="#1e293b" />
-  <text x="1140" y="625" class="call-text">2.3: AuditLogger::log('CU28', 'RESTAURAR_BACKUP', 'RESTAURACION_EXITOSA')</text>
+  <line x1="${xCtrl - 5}" y1="640" x2="${xUI + 5}" y2="640" class="msg-ret" />
+  <text x="420" y="635" class="ret-text">success(null, 'Base de datos restaurada exitosamente.')</text>
 
-  <line x1="${xCtrl - 5}" y1="660" x2="${xUI + 5}" y2="660" class="msg-ret" />
-  <text x="420" y="655" class="ret-text">success(null, 'Base de datos restaurada exitosamente.')</text>
-
-  <line x1="${xUI - 5}" y1="690" x2="${xAdmin + 5}" y2="690" class="msg-ret" />
-  <text x="130" y="685" class="ret-text">mostrarMensajeExitoYRefrescarEstado()</text>
+  <line x1="${xUI - 5}" y1="670" x2="${xAdmin + 5}" y2="670" class="msg-ret" />
+  <text x="130" y="665" class="ret-text">mostrarMensajeExitoYRefrescarEstado()</text>
 </svg>`;
 }
 

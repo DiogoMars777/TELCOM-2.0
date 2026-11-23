@@ -44,7 +44,6 @@ function buildCU31Communication() {
   <line x1="1340" y1="260" x2="1490" y2="260" class="link-line" />
   <line x1="1040" y1="440" x2="1260" y2="560" class="link-line" />
   <line x1="1340" y1="560" x2="1490" y2="560" class="link-line" />
-  <line x1="710" y1="460" x2="710" y2="690" class="link-line" />
 
   <!-- INSTANCIAS ROBUSTEZ BCE -->
   <g transform="translate(120, 420)">
@@ -92,11 +91,6 @@ function buildCU31Communication() {
     <text x="0" y="44" class="node-title">Pago</text>
   </g>
 
-  <g transform="translate(710, 720)">
-    ${entityIcon(0, 0, 22)}
-    <text x="0" y="44" class="node-title">Bitacora</text>
-  </g>
-
   <!-- MENSAJES Y LLAMADAS -->
   <g transform="translate(145, 345)">
     <text x="0" y="0" class="flow-1">1: dictarComandoReporte(comando/intencion) &rarr;</text>
@@ -125,10 +119,6 @@ function buildCU31Communication() {
 
   <g transform="translate(1350, 520)">
     <text x="0" y="0" class="flow-1">1.4.3: table('Pago')->get() &rarr;</text>
-  </g>
-
-  <g transform="translate(725, 570)">
-    <text x="0" y="0" class="flow-1">1.5: AuditLogger::log('CU31', 'GENERAR_REPORTE_INTELIGENTE', tipo, filas) &rarr;</text>
   </g>
 
   <!-- LEYENDA INFERIOR -->
@@ -312,7 +302,6 @@ function buildCU31Sequence() {
   const xCli = 1050;
   const xMens = 1250;
   const xPago = 1430;
-  const xBit = 1600;
 
   return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
@@ -350,7 +339,6 @@ function buildCU31Sequence() {
   <line x1="${xCli}" y1="130" x2="${xCli}" y2="${height - 50}" class="life-line" />
   <line x1="${xMens}" y1="130" x2="${xMens}" y2="${height - 50}" class="life-line" />
   <line x1="${xPago}" y1="130" x2="${xPago}" y2="${height - 50}" class="life-line" />
-  <line x1="${xBit}" y1="130" x2="${xBit}" y2="${height - 50}" class="life-line" />
 
   <!-- CABECERAS -->
   <g transform="translate(${xAdmin}, 90)">
@@ -384,10 +372,6 @@ function buildCU31Sequence() {
   <g transform="translate(${xPago}, 90)">
     ${entityIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">Pago</text>
-  </g>
-  <g transform="translate(${xBit}, 90)">
-    ${entityIcon(0, 0, 20)}
-    <text x="0" y="36" class="life-title">Bitacora</text>
   </g>
 
   <!-- BLOQUE 1: GENERACIÓN INTELIGENTE -->
@@ -436,10 +420,6 @@ function buildCU31Sequence() {
 
   <line x1="${xCat - 5}" y1="375" x2="${xCtrl + 5}" y2="375" class="msg-ret" />
   <text x="500" y="370" class="ret-text">($reporteGenerado: {tipo, filas, columnas, resumen, truncado})</text>
-
-  <line x1="${xCtrl + 5}" y1="395" x2="${xBit - 5}" y2="395" class="msg-call" />
-  <polygon points="${xBit - 5},395 ${xBit - 11},392 ${xBit - 11},398" fill="#1e293b" />
-  <text x="1100" y="390" class="call-text">1.6: AuditLogger::log('CU31', 'GENERAR_REPORTE_INTELIGENTE', detalle)</text>
 
   <line x1="${xCtrl - 5}" y1="420" x2="${xUI + 5}" y2="420" class="msg-ret" />
   <text x="250" y="415" class="ret-text">success({interpretacion, reporte}, 'Reporte generado correctamente')</text>

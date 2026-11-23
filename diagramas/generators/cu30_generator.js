@@ -44,7 +44,6 @@ function buildCU30Communication() {
   <line x1="1010" y1="380" x2="1010" y2="180" class="link-line" />
   <line x1="1040" y1="150" x2="1200" y2="150" class="link-line" />
   <line x1="1380" y1="380" x2="1380" y2="180" class="link-line" />
-  <line x1="710" y1="460" x2="710" y2="690" class="link-line" />
 
   <!-- INSTANCIAS ROBUSTEZ BCE -->
   <g transform="translate(120, 420)">
@@ -87,11 +86,6 @@ function buildCU30Communication() {
     <text x="0" y="44" class="node-title">Usuario</text>
   </g>
 
-  <g transform="translate(710, 720)">
-    ${entityIcon(0, 0, 22)}
-    <text x="0" y="44" class="node-title">Bitacora</text>
-  </g>
-
   <!-- MENSAJES Y LLAMADAS -->
   <g transform="translate(145, 335)">
     <text x="0" y="0" class="flow-1">1: enviarComandoVozTexto(dictado) &rarr;</text>
@@ -124,10 +118,6 @@ function buildCU30Communication() {
 
   <g transform="translate(1395, 270)">
     <text x="0" y="0" class="flow-2">2.3: with('usuario') &rarr;</text>
-  </g>
-
-  <g transform="translate(725, 570)">
-    <text x="0" y="0" class="flow-1">1.6: AuditLogger::log('CU30', 'PROCESAR_INTENCION_NLP', motor, intencion) &rarr;</text>
   </g>
 
   <!-- LEYENDA INFERIOR -->
@@ -293,7 +283,7 @@ function buildCU30Sequence() {
   const xZona = 960;
   const xCli = 1170;
   const xEnt = 1380;
-  const xBit = 1580;
+  const xUsu = 1580;
 
   return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
@@ -330,7 +320,7 @@ function buildCU30Sequence() {
   <line x1="${xZona}" y1="130" x2="${xZona}" y2="${height - 50}" class="life-line" />
   <line x1="${xCli}" y1="130" x2="${xCli}" y2="${height - 50}" class="life-line" />
   <line x1="${xEnt}" y1="130" x2="${xEnt}" y2="${height - 50}" class="life-line" />
-  <line x1="${xBit}" y1="130" x2="${xBit}" y2="${height - 50}" class="life-line" />
+  <line x1="${xUsu}" y1="130" x2="${xUsu}" y2="${height - 50}" class="life-line" />
 
   <!-- CABECERAS -->
   <g transform="translate(${xAdmin}, 90)">
@@ -361,9 +351,9 @@ function buildCU30Sequence() {
     ${entityIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">IntencionVozIA</text>
   </g>
-  <g transform="translate(${xBit}, 90)">
+  <g transform="translate(${xUsu}, 90)">
     ${entityIcon(0, 0, 20)}
-    <text x="0" y="36" class="life-title">Bitacora</text>
+    <text x="0" y="36" class="life-title">Usuario</text>
   </g>
 
   <!-- BLOQUE 1: PROCESAMIENTO NLP -->
@@ -418,10 +408,6 @@ function buildCU30Sequence() {
 
   <line x1="${xEnt - 5}" y1="405" x2="${xCtrl + 5}" y2="405" class="msg-ret" />
   <text x="1150" y="400" class="ret-text">($registroPersistido)</text>
-
-  <line x1="${xCtrl + 5}" y1="430" x2="${xBit - 5}" y2="430" class="msg-call" />
-  <polygon points="${xBit - 5},430 ${xBit - 11},427 ${xBit - 11},433" fill="#1e293b" />
-  <text x="1100" y="425" class="call-text">1.6: AuditLogger::log('CU30', 'PROCESAR_INTENCION_NLP', detalle)</text>
 
   <line x1="${xCtrl - 5}" y1="455" x2="${xUI + 5}" y2="455" class="msg-ret" />
   <text x="280" y="450" class="ret-text">success($resultado, 'Intención de voz procesada exitosamente con IA')</text>

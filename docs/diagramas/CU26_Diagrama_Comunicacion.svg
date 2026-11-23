@@ -85,7 +85,6 @@
   <line x1="740" y1="490" x2="560" y2="730" class="link-line" />
   <line x1="760" y1="490" x2="760" y2="730" class="link-line" />
   <line x1="780" y1="490" x2="970" y2="730" class="link-line" />
-  <line x1="740" y1="440" x2="680" y2="330" class="link-line" />
 
   <!-- INSTANCIAS -->
   <g transform="translate(130, 460)">
@@ -165,14 +164,6 @@
     <text x="0" y="44" class="node-title">Zona</text>
   </g>
 
-  <g transform="translate(680, 300)">
-    
-  <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
-  <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
-
-    <text x="0" y="40" class="node-title">Bitacora</text>
-  </g>
-
   <!-- MENSAJES -->
   <g transform="translate(150, 380)">
     <text x="0" y="0" class="flow-1">1: consultarDashboard(periodo) &rarr;</text>
@@ -211,10 +202,6 @@
 
   <g transform="translate(900, 645)">
     <text x="0" y="0" class="flow-1">1.8: select('capacidadNodos')->withCount('servicios') &rarr;</text>
-  </g>
-
-  <g transform="translate(550, 340)">
-    <text x="0" y="0" class="flow-1">1.9: log('CU26', 'CONSULTA_DASHBOARD') &rarr;</text>
   </g>
 
   <g transform="translate(50, 890)">
