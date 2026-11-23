@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Paquetes\DashboardReportesInteligenciaVoz\CU29_CapturarTranscribirComandosVoz;
+namespace App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU29_CapturarTranscribirComandosVoz;
 
 use App\Http\Controllers\Controller;
-use App\Models\Paquetes\DashboardReportesInteligenciaVoz\CU29_CapturarTranscribirComandosVoz\ComandoVoz;
+use App\Models\Paquetes\P7_DashboardReportesInteligenciaVoz\CU29_CapturarTranscribirComandosVoz\ComandoVoz;
 use App\Support\AuditLogger;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;

@@ -3,7 +3,7 @@ import {
   FileText, Users, CreditCard, AlertTriangle, HardDrive, Download,
   Printer, Filter, RefreshCw, Search, Calendar, CheckCircle2, AlertCircle, X, MapPin,
 } from 'lucide-react';
-import { useReporteTradicionalController } from '../../../../controllers/Paquetes/DashboardReportesInteligenciaVoz/CU27_GenerarExportarReportesTradicionales/useReporteTradicionalController.js';
+import { useReporteTradicionalController } from '../../../../controllers/Paquetes/P7_DashboardReportesInteligenciaVoz/CU27_GenerarExportarReportesTradicionales/useReporteTradicionalController.js';
 import './ReporteTradicionalView.css';
 
 const ICON_MAP = {

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Paquetes\DashboardReportesInteligenciaVoz\CU29_CapturarTranscribirComandosVoz\ComandoVoz;
+use App\Models\Paquetes\P7_DashboardReportesInteligenciaVoz\CU29_CapturarTranscribirComandosVoz\ComandoVoz;
 use App\Models\Paquetes\P1_SeguridadAdministracion\CU03_UsuariosRolesPermisos\Rol;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;

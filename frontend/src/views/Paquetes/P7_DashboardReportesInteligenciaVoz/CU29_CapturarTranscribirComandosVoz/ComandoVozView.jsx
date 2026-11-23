@@ -4,7 +4,7 @@ import {
   RefreshCw, History, ArrowRight, Keyboard, RotateCcw,
   CreditCard, AlertTriangle, Users, HardDrive, FileText,
 } from 'lucide-react';
-import { useComandoVozController } from '../../../../controllers/Paquetes/DashboardReportesInteligenciaVoz/CU29_CapturarTranscribirComandosVoz/useComandoVozController.js';
+import { useComandoVozController } from '../../../../controllers/Paquetes/P7_DashboardReportesInteligenciaVoz/CU29_CapturarTranscribirComandosVoz/useComandoVozController.js';
 import './ComandoVozView.css';
 
 const ICON_MAP = {

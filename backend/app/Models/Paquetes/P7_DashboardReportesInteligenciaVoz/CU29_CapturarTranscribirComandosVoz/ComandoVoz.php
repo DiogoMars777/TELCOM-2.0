@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models\Paquetes\DashboardReportesInteligenciaVoz\CU29_CapturarTranscribirComandosVoz;
+namespace App\Models\Paquetes\P7_DashboardReportesInteligenciaVoz\CU29_CapturarTranscribirComandosVoz;
 
-use App\Models\Paquetes\DashboardReportesInteligenciaVoz\CU27_GenerarExportarReportesTradicionales\ReporteTradicional;
+use App\Models\Paquetes\P7_DashboardReportesInteligenciaVoz\CU27_GenerarExportarReportesTradicionales\ReporteTradicional;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

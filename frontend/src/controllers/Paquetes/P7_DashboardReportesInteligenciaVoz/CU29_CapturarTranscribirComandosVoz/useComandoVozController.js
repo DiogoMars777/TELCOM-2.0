@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { comandoVozModel } from '../../../../models/Paquetes/DashboardReportesInteligenciaVoz/CU29_CapturarTranscribirComandosVoz/comandoVozModel.js';
+import { comandoVozModel } from '../../../../models/Paquetes/P7_DashboardReportesInteligenciaVoz/CU29_CapturarTranscribirComandosVoz/comandoVozModel.js';
 
 export function useComandoVozController(onEjecutarComando = null) {
   const [textoTranscrito, setTextoTranscrito] = useState('');

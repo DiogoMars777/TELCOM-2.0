@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Paquetes\DashboardReportesInteligenciaVoz\CU27_GenerarExportarReportesTradicionales;
+namespace App\Models\Paquetes\P7_DashboardReportesInteligenciaVoz\CU27_GenerarExportarReportesTradicionales;
 
 use App\Models\Paquetes\P5_EquiposProveedoresInventario\CU19_AsignarEquipoComodato\AsignacionEquipo;
 use App\Models\Paquetes\P5_EquiposProveedoresInventario\CU19_AsignarEquipoComodato\Equipo;

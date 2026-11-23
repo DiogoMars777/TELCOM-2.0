@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Paquetes\DashboardReportesInteligenciaVoz\CU27_GenerarExportarReportesTradicionales;
+namespace App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU27_GenerarExportarReportesTradicionales;
 
 use App\Http\Controllers\Controller;
-use App\Models\Paquetes\DashboardReportesInteligenciaVoz\CU27_GenerarExportarReportesTradicionales\ReporteTradicional;
+use App\Models\Paquetes\P7_DashboardReportesInteligenciaVoz\CU27_GenerarExportarReportesTradicionales\ReporteTradicional;
 use App\Models\Paquetes\P4_FacturacionCobranza\CU10_GestionarPagoMensualidad\MetodoPago;
 use App\Models\Paquetes\P2_GestionClientesZonas\CU04_ZonasCobertura\Zona;
 use App\Support\AuditLogger;

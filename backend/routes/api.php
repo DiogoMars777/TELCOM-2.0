@@ -59,9 +59,9 @@ use App\Http\Controllers\Paquetes\P5_EquiposProveedoresInventario\CU24_Gestionar
 // CU26: Visualizar Dashboard administrativo y financiero
 use App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU26_VisualizarDashboardAdminFinanciero\DashboardAdminFinancieroController;
 // CU27: Generar y exportar reportes tradicionales
-use App\Http\Controllers\Paquetes\DashboardReportesInteligenciaVoz\CU27_GenerarExportarReportesTradicionales\ReporteTradicionalController;
+use App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU27_GenerarExportarReportesTradicionales\ReporteTradicionalController;
 // CU29: Capturar y transcribir comandos de voz
-use App\Http\Controllers\Paquetes\DashboardReportesInteligenciaVoz\CU29_CapturarTranscribirComandosVoz\ComandoVozController;
+use App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU29_CapturarTranscribirComandosVoz\ComandoVozController;
 // CU30: Procesar intención de voz con IA (NLP)
 use App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU30_ProcesarIntencionVozIA\IntencionVozController;
 // CU31: Generar reporte inteligente con voz / IA

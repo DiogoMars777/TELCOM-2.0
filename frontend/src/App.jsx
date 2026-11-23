@@ -32,8 +32,8 @@ import InstalacionesView from './views/Paquetes/P6_InstalacionesTecnicas/CU23_Re
 import IntencionVozView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU30_ProcesarIntencionVozIA/IntencionVozView';
 import DashboardAdminFinancieroView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU26_VisualizarDashboardAdminFinanciero/DashboardAdminFinancieroView';
 import CopiasSeguridadView from './views/Paquetes/P1_SeguridadAdministracion/CU28_GenerarRestaurarCopiasSeguridad/CopiasSeguridadView';
-import ReporteTradicionalView from './views/Paquetes/DashboardReportesInteligenciaVoz/CU27_GenerarExportarReportesTradicionales/ReporteTradicionalView';
-import ComandoVozView from './views/Paquetes/DashboardReportesInteligenciaVoz/CU29_CapturarTranscribirComandosVoz/ComandoVozView';
+import ReporteTradicionalView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU27_GenerarExportarReportesTradicionales/ReporteTradicionalView';
+import ComandoVozView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU29_CapturarTranscribirComandosVoz/ComandoVozView';
 import ReporteInteligenteView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU31_GenerarReporteInteligenteVoz/ReporteInteligenteView';
 
 // Iconos de cada módulo del panel

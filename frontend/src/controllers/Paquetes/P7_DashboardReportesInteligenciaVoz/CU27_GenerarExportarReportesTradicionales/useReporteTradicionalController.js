@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { reporteTradicionalModel } from '../../../../models/Paquetes/DashboardReportesInteligenciaVoz/CU27_GenerarExportarReportesTradicionales/reporteTradicionalModel.js';
+import { reporteTradicionalModel } from '../../../../models/Paquetes/P7_DashboardReportesInteligenciaVoz/CU27_GenerarExportarReportesTradicionales/reporteTradicionalModel.js';
 
 export function useReporteTradicionalController(initialTipo = 'clientes_zona', initialFilters = {}) {
   const [catalogo, setCatalogo] = useState([]);

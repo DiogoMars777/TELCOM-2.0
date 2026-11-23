@@ -16,7 +16,7 @@ globalThis.Event = class Event { constructor(type) { this.type = type; } };
 globalThis.window = { dispatchEvent: () => {} };
 
 const { canAccessCu } = await import('../src/config/access.js');
-const { reporteTradicionalModel } = await import('../src/models/Paquetes/DashboardReportesInteligenciaVoz/CU27_GenerarExportarReportesTradicionales/reporteTradicionalModel.js');
+const { reporteTradicionalModel } = await import('../src/models/Paquetes/P7_DashboardReportesInteligenciaVoz/CU27_GenerarExportarReportesTradicionales/reporteTradicionalModel.js');
 
 function jsonResponse(status, body) {
   return { ok: status >= 200 && status < 300, status, json: async () => body };
