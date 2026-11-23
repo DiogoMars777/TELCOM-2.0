@@ -2172,3 +2172,128 @@ frame "sd Diagrama de análisis de clases - CU23 Registrar resultado, costo e in
     Instalacion "0..*" -down- "0..1" Tecnico
 }
 @enduml
+
+@startuml cu26_analisis_dashboard_admin_financiero
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de análisis de clases - CU26 Visualizar Dashboard administrativo y financiero" {
+    actor "Administrador / Secretaría" as AdminActor
+
+    class UI_DashboardAdminFinanciero <<boundary>> {
+        + cambiarPeriodo(periodo: string): void
+        + cambiarPestana(tab: string): void
+        + exportarReporte(): void
+        + recargarMetricas(): void
+    }
+
+    class DashboardAdminFinancieroControlador <<control>> {
+        + alertas(request: Request): JsonResponse
+        + financiero(request: Request): JsonResponse
+        + index(request: Request): JsonResponse
+        + operativo(request: Request): JsonResponse
+    }
+
+    class Pago <<entity>> {
+        - idPago: int
+        - montoTotal: decimal
+        - fechaHora: timestamp
+        - numeroComprobante: string
+        - idMetodoPago: int
+        - idMensualidad: int
+        --
+        + count(): int
+        + sum(columna: string): decimal
+        + whereDate(columna: string, valor: string): Builder
+    }
+
+    class Mensualidad <<entity>> {
+        - idMensualidad: int
+        - monto: decimal
+        - estado: string
+        - periodo: string
+        - fechaEmision: date
+        - fechaVencimiento: date
+        - idCliente: int
+        - idServicio: int
+        --
+        + count(): int
+        + orderByDesc(columna: string): Builder
+        + sum(columna: string): decimal
+        + where(columna: string, valor: string): Builder
+    }
+
+    class Cliente <<entity>> {
+        - idCliente: int
+        - codigoCliente: string
+        - nombreCompleto: string
+        - telefonoPrincipal: string
+        - estadoCliente: string
+        - fechaRegistro: date
+        - idZona: int
+        --
+        + count(): int
+        + find(id: int): Cliente
+        + where(columna: string, valor: string): Builder
+    }
+
+    class ServicioInternet <<entity>> {
+        - idServicio: int
+        - codigoServicio: string
+        - ipAsignada: string
+        - fechaActivacion: date
+        - idEstadoServicio: int
+        - idCliente: int
+        - idPlan: int
+        --
+        + count(): int
+        + groupBy(columna: string): Builder
+        + where(columna: string, valor: string): Builder
+    }
+
+    class Bitacora <<entity>> {
+        - idBitacora: int
+        - casoUso: string
+        - accion: string
+        - detalles: text
+        - ip: string
+        - idUsuario: int
+        - fechaHora: timestamp
+        --
+        + create(datos: array): Bitacora
+        + where(columna: string, valor: string): Builder
+    }
+
+    AdminActor -right- UI_DashboardAdminFinanciero
+    UI_DashboardAdminFinanciero -right- DashboardAdminFinancieroControlador
+
+    DashboardAdminFinancieroControlador "1" -up- "0..*" Pago : calcula recaudacion >
+    DashboardAdminFinancieroControlador "1" -up- "0..*" Mensualidad : monitorea mora >
+    DashboardAdminFinancieroControlador "1" -right- "0..*" Cliente : consolida abonados >
+    DashboardAdminFinancieroControlador "1" -down- "0..*" ServicioInternet : evalua estado red >
+    DashboardAdminFinancieroControlador "1" -down- "0..*" Bitacora : registra auditoria >
+
+    Cliente "1" -down- "1..*" ServicioInternet : posee >
+    ServicioInternet "1" -up- "0..*" Mensualidad : genera >
+    Mensualidad "1" -left- "0..1" Pago : cancela con >
+}
+@enduml
