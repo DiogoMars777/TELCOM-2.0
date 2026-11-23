@@ -850,3 +850,55 @@ frame "sd CU23 Registrar y gestionar órdenes de instalación técnica" {
     InstalacionRegistroController -down- Tecnico : <font color=#008000>3.2: exists:Tecnico,idTecnico →</font>
 }
 @enduml
+
+@startuml cu26_visualizar_dashboard_admin_financiero
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam interfaceBackgroundColor transparent
+skinparam interfaceBorderColor transparent
+skinparam roundCorner 10
+skinparam Shadowing false
+skinparam ArrowThickness 1.2
+
+skinparam boundaryBackgroundColor #D0EBF5
+skinparam boundaryBorderColor #0088CC
+skinparam controlBackgroundColor #D0EBF5
+skinparam controlBorderColor #0088CC
+skinparam entityBackgroundColor #D0EBF5
+skinparam entityBorderColor #0088CC
+
+frame "sd CU26 Visualizar Dashboard administrativo y financiero" {
+    () " " as spacer
+    actor "Administrador / Secretaría" as AdminActor
+    boundary UI_DashboardAdminFinanciero
+    control DashboardAdminFinancieroController
+    entity Pago
+    entity Mensualidad
+    entity Cliente
+    entity ServicioInternet
+    entity PlanInternet
+    entity Zona
+    entity Bitacora
+
+    spacer -[hidden]down- AdminActor
+
+    AdminActor -right- UI_DashboardAdminFinanciero : <font color=#000000>1: consultarDashboard(periodo) →</font>\n<font color=#800000>2: filtrarFinanciero(periodo) →</font>\n<font color=#008000>3: consultarAlertasMorosidad() →</font>
+
+    UI_DashboardAdminFinanciero -right- DashboardAdminFinancieroController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: financiero(Request) →</font>\n<font color=#008000>3.1: alertas() →</font>
+
+    DashboardAdminFinancieroController -up- Pago : <font color=#000000>1.3: sum('montoTotal'), count(*) [recaudación] →</font>\n<font color=#800000>2.2: leftJoin('MetodoPago')->groupBy() [canales QR/Efectivo] →</font>
+
+    DashboardAdminFinancieroController -up- Mensualidad : <font color=#000000>1.4: where('estado','PENDIENTE')->sum('monto') [cartera vencida] →</font>\n<font color=#800000>2.3: selectRaw('sum(monto)')->groupBy('periodo') [evolución semestral] →</font>\n<font color=#008000>3.2: join('Cliente')->where('estado','PENDIENTE')->orderByDesc('mora') →</font>
+
+    DashboardAdminFinancieroController -right- Cliente : <font color=#000000>1.5: where('estadoCliente','ACTIVO')->count() [clientes activos] →</font>\n<font color=#008000>3.3: findOrFail(idCliente) [contacto/deuda] →</font>
+
+    DashboardAdminFinancieroController -down- ServicioInternet : <font color=#000000>1.6: leftJoin('EstadoServicio')->groupBy('estado') [servicios activos/cortes] →</font>
+
+    DashboardAdminFinancieroController -down- PlanInternet : <font color=#000000>1.7: withCount(['asignaciones' => whereNull('fechaFin')]) [abonados por plan] →</font>
+
+    DashboardAdminFinancieroController -down- Zona : <font color=#000000>1.8: select('capacidadNodos')->withCount('servicios') [saturación red] →</font>
+
+    DashboardAdminFinancieroController -left- Bitacora : <font color=#000000>1.9: log('CU26', 'CONSULTA_DASHBOARD', 'user_id', ip) →</font>
+}
+@enduml
