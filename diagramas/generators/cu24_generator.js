@@ -120,8 +120,8 @@ function buildCU24Communication() {
 }
 
 function buildCU24ClassAnalysis() {
-  const width = 1600;
-  const height = 750;
+  const width = 1100;
+  const height = 540;
   const tabW = 480;
 
   return `
@@ -148,37 +148,22 @@ function buildCU24ClassAnalysis() {
 
   <!-- LÍNEAS DE ASOCIACIÓN -->
   <!-- Actor a UI -->
-  <line x1="110" y1="360" x2="160" y2="360" class="link-line" />
+  <line x1="110" y1="260" x2="160" y2="260" class="link-line" />
 
   <!-- UI a Controller -->
-  <line x1="370" y1="360" x2="430" y2="360" class="link-line" />
+  <line x1="370" y1="260" x2="430" y2="260" class="link-line" />
 
-  <!-- Controller a Entidad Principal (SOLO A PROVEEDOR!) -->
-  <line x1="670" y1="360" x2="730" y2="360" class="link-line" />
-
-  <!-- Proveedor a Usuario (Arriba) -->
-  <line x1="835" y1="260" x2="835" y2="170" class="link-line" />
-  <text x="845" y="245" class="mult-text">0..*</text>
-  <text x="845" y="185" class="mult-text">1</text>
-
-  <!-- Proveedor a Compra (Derecha) -->
-  <line x1="940" y1="360" x2="1020" y2="360" class="link-line" />
-  <text x="955" y="350" class="mult-text">1</text>
-  <text x="1000" y="350" class="mult-text">0..*</text>
-
-  <!-- Compra a DetalleCompra (Derecha) -->
-  <line x1="1230" y1="360" x2="1310" y2="360" class="link-line" />
-  <text x="1245" y="350" class="mult-text">1</text>
-  <text x="1285" y="350" class="mult-text">1..*</text>
+  <!-- Controller a Entidad Principal (SOLO A PROVEEDOR, ÚNICO MODELO USADO EN EL CONTROLADOR) -->
+  <line x1="670" y1="260" x2="740" y2="260" class="link-line" />
 
   <!-- 1. ACTOR -->
-  <g transform="translate(60, 360)">
+  <g transform="translate(60, 260)">
     ${actorIcon(0, 0)}
     <text x="0" y="45" class="class-title">Administrador / Almacén</text>
   </g>
 
   <!-- 2. BOUNDARY: UI_Proveedor -->
-  <g transform="translate(160, 275)">
+  <g transform="translate(160, 175)">
     <rect x="0" y="0" width="210" height="170" class="class-box" />
     <text x="105" y="20" class="class-title">UI_Proveedor</text>
     <line x1="0" y1="28" x2="210" y2="28" class="divider" />
@@ -191,7 +176,7 @@ function buildCU24ClassAnalysis() {
   </g>
 
   <!-- 3. CONTROL: ProveedorController -->
-  <g transform="translate(430, 270)">
+  <g transform="translate(430, 170)">
     <rect x="0" y="0" width="240" height="180" class="class-box" />
     <text x="120" y="20" class="class-title">ProveedorController</text>
     <line x1="0" y1="28" x2="240" y2="28" class="divider" />
@@ -203,11 +188,11 @@ function buildCU24ClassAnalysis() {
     <text x="10" y="160" class="method-text">+ desactivar(): void</text>
   </g>
 
-  <!-- 4. TABLA PRINCIPAL: Proveedor -->
-  <g transform="translate(730, 260)">
-    <rect x="0" y="0" width="210" height="200" class="class-box" />
-    <text x="105" y="20" class="class-title">Proveedor</text>
-    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
+  <!-- 4. TABLA PRINCIPAL: Proveedor (Única tabla ocupada en el código) -->
+  <g transform="translate(740, 160)">
+    <rect x="0" y="0" width="230" height="200" class="class-box" />
+    <text x="115" y="20" class="class-title">Proveedor</text>
+    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
     <text x="10" y="46" class="attr-text">- idProveedor: int</text>
     <text x="10" y="64" class="attr-text">- razonSocial: string</text>
     <text x="10" y="82" class="attr-text">- nit: string</text>
@@ -215,50 +200,9 @@ function buildCU24ClassAnalysis() {
     <text x="10" y="118" class="attr-text">- correo: string</text>
     <text x="10" y="136" class="attr-text">- direccion: string</text>
     <text x="10" y="154" class="attr-text">- estado: boolean</text>
-    <line x1="0" y1="162" x2="210" y2="162" class="divider" />
+    <line x1="0" y1="162" x2="230" y2="162" class="divider" />
     <text x="10" y="180" class="method-text">+ create(): void</text>
     <text x="10" y="196" class="method-text">+ update(): void</text>
-  </g>
-
-  <!-- 5. ENTIDAD RELACIONADA (ARRIBA): Usuario -->
-  <g transform="translate(730, 50)">
-    <rect x="0" y="0" width="210" height="120" class="class-box" />
-    <text x="105" y="20" class="class-title">Usuario</text>
-    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
-    <text x="10" y="46" class="attr-text">- idUsuario: int</text>
-    <text x="10" y="64" class="attr-text">- nombreCompleto: string</text>
-    <text x="10" y="82" class="attr-text">- nombreUsuario: string</text>
-    <line x1="0" y1="90" x2="210" y2="90" class="divider" />
-    <text x="10" y="108" class="method-text">+ find(): void</text>
-  </g>
-
-  <!-- 6. ENTIDAD RELACIONADA (DERECHA): Compra -->
-  <g transform="translate(1020, 275)">
-    <rect x="0" y="0" width="210" height="170" class="class-box" />
-    <text x="105" y="20" class="class-title">Compra</text>
-    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
-    <text x="10" y="46" class="attr-text">- idCompra: int</text>
-    <text x="10" y="64" class="attr-text">- nroComprobante: string</text>
-    <text x="10" y="82" class="attr-text">- fechaCompra: date</text>
-    <text x="10" y="100" class="attr-text">- montoTotal: decimal</text>
-    <text x="10" y="118" class="attr-text">- idProveedor: int</text>
-    <line x1="0" y1="126" x2="210" y2="126" class="divider" />
-    <text x="10" y="146" class="method-text">+ find(): void</text>
-    <text x="10" y="162" class="method-text">+ where(): void</text>
-  </g>
-
-  <!-- 7. ENTIDAD RELACIONADA (DERECHA): DetalleCompra -->
-  <g transform="translate(1310, 285)">
-    <rect x="0" y="0" width="210" height="150" class="class-box" />
-    <text x="105" y="20" class="class-title">DetalleCompra</text>
-    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
-    <text x="10" y="46" class="attr-text">- idDetalleCompra: int</text>
-    <text x="10" y="64" class="attr-text">- cantidad: int</text>
-    <text x="10" y="82" class="attr-text">- precioUnitario: decimal</text>
-    <text x="10" y="100" class="attr-text">- subtotal: decimal</text>
-    <text x="10" y="118" class="attr-text">- idCompra: int</text>
-    <line x1="0" y1="126" x2="210" y2="126" class="divider" />
-    <text x="10" y="144" class="method-text">+ get(): void</text>
   </g>
 </svg>`;
 }

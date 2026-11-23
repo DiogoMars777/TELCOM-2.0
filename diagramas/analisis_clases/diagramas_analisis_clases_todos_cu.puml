@@ -2229,43 +2229,9 @@ frame "sd Diagrama de análisis de clases - CU24 Gestionar proveedores" {
         + update(): void
     }
 
-    class Usuario {
-        - idUsuario: int
-        - nombreCompleto: string
-        - nombreUsuario: string
-        --
-        + find(): void
-    }
-
-    class Compra {
-        - idCompra: int
-        - nroComprobante: string
-        - fechaCompra: date
-        - montoTotal: decimal
-        - idProveedor: int
-        --
-        + find(): void
-        + where(): void
-    }
-
-    class DetalleCompra {
-        - idDetalleCompra: int
-        - cantidad: int
-        - precioUnitario: decimal
-        - subtotal: decimal
-        - idCompra: int
-        - idProducto: int
-        --
-        + create(): void
-    }
-
     AdminActor -right- UI_Proveedor
     UI_Proveedor -right- ProveedorController
     ProveedorController -right- Proveedor
-
-    Proveedor "0..*" -up- "1" Usuario
-    Proveedor "1" -right- "0..*" Compra
-    Compra "1" -right- "1..*" DetalleCompra
 }
 @enduml
 
@@ -2662,47 +2628,18 @@ frame "sd Diagrama de análisis de clases - CU28 Generar y restaurar copias de s
     class Usuario {
         - idUsuario: int
         - nombreCompleto: string
-        - idRol: int
+        - email: string
+        - nombreUsuario: string
         --
         + find(): void
-    }
-
-    class Rol {
-        - idRol: int
-        - nombreRol: string
-        - descripcion: string
-        --
-        + find(): void
-    }
-
-    class ConfiguracionBackup {
-        - idConfiguracion: int
-        - frecuencia: string
-        - retencionDias: int
-        - rutaDestino: string
-        --
-        + first(): void
-    }
-
-    class RestauracionBackup {
-        - idRestauracion: int
-        - idCopiaSeguridad: int
-        - fechaRestauracion: timestamp
-        - estado: string
-        - logSalida: text
-        --
-        + create(): void
-        + find(): void
+        + with(): void
     }
 
     AdminActor -right- UI_CopiasSeguridad
     UI_CopiasSeguridad -right- CopiasSeguridadController
     CopiasSeguridadController -right- CopiaSeguridad
 
-    CopiaSeguridad "0..*" -up- "1" Usuario
-    Usuario "0..*" -right- "1" Rol
-    CopiaSeguridad "0..*" -down- "1" ConfiguracionBackup
-    CopiaSeguridad "1" -right- "0..*" RestauracionBackup
+    CopiaSeguridad "0..*" -right- "1" Usuario
 }
 @enduml
 
@@ -2777,26 +2714,7 @@ frame "sd Diagrama de análisis de clases - CU29 Capturar y transcribir comandos
         - codigo: string
         --
         + pluck(): void
-    }
-
-    class ReporteTradicional {
-        + TIPO_CLIENTES_ZONA: str
-        + TIPO_INGRESOS_PAGOS: str
-        + TIPO_MOROSIDAD_CORTES: str
-        + TIPO_EQUIPOS_INSTAL: str
-        --
-        + catalogo(): void
-        + generar(): void
-    }
-
-    class Cliente {
-        - idCliente: int
-        - codigoCliente: string
-        - nombreCompleto: string
-        - estadoCliente: string
-        --
-        + find(): void
-        + where(): void
+        + first(): void
     }
 
     UserActor -right- UI_ComandoVoz
@@ -2804,9 +2722,7 @@ frame "sd Diagrama de análisis de clases - CU29 Capturar y transcribir comandos
     ComandoVozController -right- ComandoVoz
 
     ComandoVoz "0..*" -up- "1" Usuario
-    ComandoVoz "0..*" -down- "0..1" Zona
-    ComandoVoz "0..*" -right- "0..1" ReporteTradicional
-    ReporteTradicional "1" -right- "0..*" Cliente
+    ComandoVoz "0..*" -right- "0..1" Zona
 }
 @enduml
 
@@ -2875,25 +2791,6 @@ frame "sd Diagrama de análisis de clases - CU30 Procesar intención de voz con 
         + find(): void
     }
 
-    class ComandoVoz {
-        - idComandoVoz: int
-        - textoDictado: text
-        - intencion: string
-        - estado: string
-        --
-        + find(): void
-    }
-
-    class Mensualidad {
-        - idMensualidad: int
-        - periodo: string
-        - monto: decimal
-        - estado: string
-        --
-        + where(): void
-        + sum(): void
-    }
-
     class Cliente {
         - idCliente: int
         - codigoCliente: string
@@ -2916,9 +2813,7 @@ frame "sd Diagrama de análisis de clases - CU30 Procesar intención de voz con 
     IntencionVozController -right- IntencionVozIA
 
     IntencionVozIA "0..*" -up- "1" Usuario
-    IntencionVozIA "0..*" -down- "0..1" ComandoVoz
-    IntencionVozIA "1" -right- "0..*" Mensualidad
-    Mensualidad "0..*" -right- "1" Cliente
+    IntencionVozIA "0..*" -right- "0..1" Cliente
     Cliente "0..*" -down- "1" Zona
 }
 @enduml
@@ -2978,23 +2873,6 @@ frame "sd Diagrama de análisis de clases - CU31 Generar reporte inteligente ví
         + estructurarKPIs(): void
     }
 
-    class Usuario {
-        - idUsuario: int
-        - nombreCompleto: string
-        - email: string
-        --
-        + find(): void
-    }
-
-    class IntencionVozIA {
-        - idIntencion: int
-        - intencionCanonica: string
-        - motor: string
-        - entidadesExtraidas: json
-        --
-        + find(): void
-    }
-
     class Cliente {
         - idCliente: int
         - codigoCliente: string
@@ -3003,6 +2881,14 @@ frame "sd Diagrama de análisis de clases - CU31 Generar reporte inteligente ví
         --
         + find(): void
         + get(): void
+    }
+
+    class Zona {
+        - idZona: int
+        - nombreZona: string
+        - codigo: string
+        --
+        + find(): void
     }
 
     class Mensualidad {
@@ -3027,10 +2913,9 @@ frame "sd Diagrama de análisis de clases - CU31 Generar reporte inteligente ví
     UI_ReporteInteligente -right- ReporteInteligenteController
     ReporteInteligenteController -right- ReporteInteligente
 
-    ReporteInteligente "0..*" -up- "1" Usuario
-    ReporteInteligente "0..*" -down- "1" IntencionVozIA
     ReporteInteligente "1" -right- "0..*" Cliente
-    Cliente "1" -right- "0..*" Mensualidad
-    Mensualidad "1" -down- "0..1" Pago
+    Cliente "0..*" -up- "1" Zona
+    ReporteInteligente "1" -down- "0..*" Mensualidad
+    Mensualidad "1" -right- "0..1" Pago
 }
 @enduml

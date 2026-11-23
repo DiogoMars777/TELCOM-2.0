@@ -123,8 +123,8 @@ function buildCU30Communication() {
 }
 
 function buildCU30ClassAnalysis() {
-  const width = 1750;
-  const height = 750;
+  const width = 1420;
+  const height = 660;
   const tabW = 520;
 
   return `
@@ -149,47 +149,37 @@ function buildCU30ClassAnalysis() {
 
   <!-- LÍNEAS DE ASOCIACIÓN -->
   <!-- Actor a UI -->
-  <line x1="110" y1="360" x2="160" y2="360" class="link-line" />
+  <line x1="110" y1="330" x2="160" y2="330" class="link-line" />
 
   <!-- UI a Controller -->
-  <line x1="380" y1="360" x2="440" y2="360" class="link-line" />
+  <line x1="380" y1="330" x2="440" y2="330" class="link-line" />
 
   <!-- Controller a Entidad Principal (SOLO A INTENCIONVOZIA!) -->
-  <line x1="720" y1="360" x2="790" y2="360" class="link-line" />
+  <line x1="720" y1="330" x2="790" y2="330" class="link-line" />
 
   <!-- IntencionVozIA a Usuario (Arriba) -->
-  <line x1="905" y1="245" x2="905" y2="170" class="link-line" />
-  <text x="915" y="230" class="mult-text">0..*</text>
+  <line x1="905" y1="215" x2="905" y2="170" class="link-line" />
+  <text x="915" y="200" class="mult-text">0..*</text>
   <text x="915" y="185" class="mult-text">1</text>
 
-  <!-- IntencionVozIA a ComandoVoz (Abajo) -->
-  <line x1="905" y1="475" x2="905" y2="550" class="link-line" />
-  <text x="915" y="490" class="mult-text">0..*</text>
-  <text x="915" y="535" class="mult-text">0..1</text>
-
-  <!-- IntencionVozIA a Mensualidad (Derecha) -->
-  <line x1="1020" y1="360" x2="1100" y2="360" class="link-line" />
-  <text x="1035" y="350" class="mult-text">1</text>
-  <text x="1080" y="350" class="mult-text">0..*</text>
-
-  <!-- Mensualidad a Cliente (Derecha) -->
-  <line x1="1320" y1="360" x2="1400" y2="360" class="link-line" />
-  <text x="1335" y="350" class="mult-text">0..*</text>
-  <text x="1380" y="350" class="mult-text">1</text>
+  <!-- IntencionVozIA a Cliente (Derecha) -->
+  <line x1="1020" y1="330" x2="1100" y2="330" class="link-line" />
+  <text x="1035" y="320" class="mult-text">0..*</text>
+  <text x="1075" y="320" class="mult-text">0..1</text>
 
   <!-- Cliente a Zona (Abajo de Cliente) -->
-  <line x1="1505" y1="445" x2="1505" y2="550" class="link-line" />
-  <text x="1515" y="465" class="mult-text">0..*</text>
-  <text x="1515" y="535" class="mult-text">1</text>
+  <line x1="1205" y1="415" x2="1205" y2="480" class="link-line" />
+  <text x="1215" y="435" class="mult-text">0..*</text>
+  <text x="1215" y="470" class="mult-text">1</text>
 
   <!-- 1. ACTOR -->
-  <g transform="translate(60, 360)">
+  <g transform="translate(60, 330)">
     ${actorIcon(0, 0)}
     <text x="0" y="45" class="class-title">Operador / Asistente</text>
   </g>
 
   <!-- 2. BOUNDARY -->
-  <g transform="translate(160, 275)">
+  <g transform="translate(160, 245)">
     <rect x="0" y="0" width="220" height="170" class="class-box" />
     <text x="110" y="20" class="class-title">UI_IntencionVoz</text>
     <line x1="0" y1="28" x2="220" y2="28" class="divider" />
@@ -202,7 +192,7 @@ function buildCU30ClassAnalysis() {
   </g>
 
   <!-- 3. CONTROL -->
-  <g transform="translate(440, 265)">
+  <g transform="translate(440, 235)">
     <rect x="0" y="0" width="280" height="190" class="class-box" />
     <text x="140" y="20" class="class-title">IntencionVozController</text>
     <line x1="0" y1="28" x2="280" y2="28" class="divider" />
@@ -216,7 +206,7 @@ function buildCU30ClassAnalysis() {
   </g>
 
   <!-- 4. TABLA PRINCIPAL: IntencionVozIA -->
-  <g transform="translate(790, 245)">
+  <g transform="translate(790, 215)">
     <rect x="0" y="0" width="230" height="230" class="class-box" />
     <text x="115" y="20" class="class-title">IntencionVozIA</text>
     <line x1="0" y1="28" x2="230" y2="28" class="divider" />
@@ -233,7 +223,7 @@ function buildCU30ClassAnalysis() {
     <text x="10" y="214" class="method-text">+ findOrFail(): void</text>
   </g>
 
-  <!-- 5. ENTIDAD RELACIONADA (ARRIBA): Usuario -->
+  <!-- 5. ENTIDAD RELACIONADA (ARRIBA): Usuario (Auditoría y autor del dictado) -->
   <g transform="translate(790, 50)">
     <rect x="0" y="0" width="230" height="120" class="class-box" />
     <text x="115" y="20" class="class-title">Usuario</text>
@@ -245,35 +235,8 @@ function buildCU30ClassAnalysis() {
     <text x="10" y="108" class="method-text">+ find(): void</text>
   </g>
 
-  <!-- 6. ENTIDAD RELACIONADA (ABAJO): ComandoVoz -->
-  <g transform="translate(790, 550)">
-    <rect x="0" y="0" width="230" height="140" class="class-box" />
-    <text x="115" y="20" class="class-title">ComandoVoz</text>
-    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
-    <text x="10" y="46" class="attr-text">- idComandoVoz: int</text>
-    <text x="10" y="64" class="attr-text">- textoDictado: text</text>
-    <text x="10" y="82" class="attr-text">- intencion: string</text>
-    <text x="10" y="100" class="attr-text">- estado: string</text>
-    <line x1="0" y1="108" x2="230" y2="108" class="divider" />
-    <text x="10" y="128" class="method-text">+ find(): void</text>
-  </g>
-
-  <!-- 7. ENTIDAD RELACIONADA (DERECHA): Mensualidad -->
-  <g transform="translate(1100, 280)">
-    <rect x="0" y="0" width="220" height="160" class="class-box" />
-    <text x="110" y="20" class="class-title">Mensualidad</text>
-    <line x1="0" y1="28" x2="220" y2="28" class="divider" />
-    <text x="10" y="46" class="attr-text">- idMensualidad: int</text>
-    <text x="10" y="64" class="attr-text">- periodo: string</text>
-    <text x="10" y="82" class="attr-text">- monto: decimal</text>
-    <text x="10" y="100" class="attr-text">- estado: string</text>
-    <line x1="0" y1="108" x2="220" y2="108" class="divider" />
-    <text x="10" y="128" class="method-text">+ where(): void</text>
-    <text x="10" y="146" class="method-text">+ sum(): void</text>
-  </g>
-
-  <!-- 8. ENTIDAD RELACIONADA (DERECHA): Cliente -->
-  <g transform="translate(1400, 275)">
+  <!-- 6. ENTIDAD RELACIONADA (DERECHA): Cliente (Consultado para datos en vivo) -->
+  <g transform="translate(1100, 245)">
     <rect x="0" y="0" width="210" height="170" class="class-box" />
     <text x="105" y="20" class="class-title">Cliente</text>
     <line x1="0" y1="28" x2="210" y2="28" class="divider" />
@@ -286,8 +249,8 @@ function buildCU30ClassAnalysis() {
     <text x="10" y="146" class="method-text">+ count(): void</text>
   </g>
 
-  <!-- 9. ENTIDAD RELACIONADA (ABAJO DE CLIENTE): Zona -->
-  <g transform="translate(1400, 550)">
+  <!-- 7. ENTIDAD RELACIONADA (ABAJO DE CLIENTE): Zona -->
+  <g transform="translate(1100, 480)">
     <rect x="0" y="0" width="210" height="120" class="class-box" />
     <text x="105" y="20" class="class-title">Zona</text>
     <line x1="0" y1="28" x2="210" y2="28" class="divider" />

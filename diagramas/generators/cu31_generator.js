@@ -116,8 +116,8 @@ function buildCU31Communication() {
 }
 
 function buildCU31ClassAnalysis() {
-  const width = 1750;
-  const height = 750;
+  const width = 1450;
+  const height = 680;
   const tabW = 540;
 
   return `
@@ -142,47 +142,42 @@ function buildCU31ClassAnalysis() {
 
   <!-- LÍNEAS DE ASOCIACIÓN -->
   <!-- Actor a UI -->
-  <line x1="110" y1="360" x2="160" y2="360" class="link-line" />
+  <line x1="110" y1="330" x2="160" y2="330" class="link-line" />
 
   <!-- UI a Controller -->
-  <line x1="380" y1="360" x2="440" y2="360" class="link-line" />
+  <line x1="380" y1="330" x2="440" y2="330" class="link-line" />
 
   <!-- Controller a Entidad Principal (SOLO A REPORTEINTELIGENTE!) -->
-  <line x1="720" y1="360" x2="790" y2="360" class="link-line" />
-
-  <!-- ReporteInteligente a Usuario (Arriba) -->
-  <line x1="905" y1="250" x2="905" y2="170" class="link-line" />
-  <text x="915" y="235" class="mult-text">0..*</text>
-  <text x="915" y="185" class="mult-text">1</text>
-
-  <!-- ReporteInteligente a IntencionVozIA (Abajo) -->
-  <line x1="905" y1="470" x2="905" y2="550" class="link-line" />
-  <text x="915" y="485" class="mult-text">0..*</text>
-  <text x="915" y="535" class="mult-text">1</text>
+  <line x1="720" y1="330" x2="790" y2="330" class="link-line" />
 
   <!-- ReporteInteligente a Cliente (Derecha) -->
-  <line x1="1020" y1="360" x2="1100" y2="360" class="link-line" />
-  <text x="1035" y="350" class="mult-text">1</text>
-  <text x="1080" y="350" class="mult-text">0..*</text>
+  <line x1="1020" y1="330" x2="1100" y2="330" class="link-line" />
+  <text x="1035" y="320" class="mult-text">1</text>
+  <text x="1080" y="320" class="mult-text">0..*</text>
 
-  <!-- Cliente a Mensualidad (Derecha) -->
-  <line x1="1310" y1="360" x2="1390" y2="360" class="link-line" />
-  <text x="1325" y="350" class="mult-text">1</text>
-  <text x="1370" y="350" class="mult-text">0..*</text>
+  <!-- Cliente a Zona (Arriba de Cliente) -->
+  <line x1="1205" y1="245" x2="1205" y2="170" class="link-line" />
+  <text x="1215" y="230" class="mult-text">0..*</text>
+  <text x="1215" y="185" class="mult-text">1</text>
 
-  <!-- Mensualidad a Pago (Abajo) -->
-  <line x1="1495" y1="440" x2="1495" y2="550" class="link-line" />
-  <text x="1505" y="460" class="mult-text">1</text>
-  <text x="1505" y="535" class="mult-text">0..1</text>
+  <!-- ReporteInteligente a Mensualidad (Abajo) -->
+  <line x1="905" y1="440" x2="905" y2="500" class="link-line" />
+  <text x="915" y="460" class="mult-text">1</text>
+  <text x="915" y="490" class="mult-text">0..*</text>
+
+  <!-- Mensualidad a Pago (Derecha de Mensualidad) -->
+  <line x1="1020" y1="580" x2="1100" y2="580" class="link-line" />
+  <text x="1035" y="570" class="mult-text">1</text>
+  <text x="1075" y="570" class="mult-text">0..1</text>
 
   <!-- 1. ACTOR -->
-  <g transform="translate(60, 360)">
+  <g transform="translate(60, 330)">
     ${actorIcon(0, 0)}
     <text x="0" y="45" class="class-title">Administrador / Gerencia</text>
   </g>
 
   <!-- 2. BOUNDARY -->
-  <g transform="translate(160, 275)">
+  <g transform="translate(160, 245)">
     <rect x="0" y="0" width="220" height="170" class="class-box" />
     <text x="110" y="20" class="class-title">UI_ReporteInteligente</text>
     <line x1="0" y1="28" x2="220" y2="28" class="divider" />
@@ -195,7 +190,7 @@ function buildCU31ClassAnalysis() {
   </g>
 
   <!-- 3. CONTROL -->
-  <g transform="translate(440, 265)">
+  <g transform="translate(440, 235)">
     <rect x="0" y="0" width="280" height="190" class="class-box" />
     <text x="140" y="20" class="class-title">ReporteInteligenteController</text>
     <line x1="0" y1="28" x2="280" y2="28" class="divider" />
@@ -208,7 +203,7 @@ function buildCU31ClassAnalysis() {
   </g>
 
   <!-- 4. TABLA PRINCIPAL: ReporteInteligente -->
-  <g transform="translate(790, 250)">
+  <g transform="translate(790, 220)">
     <rect x="0" y="0" width="230" height="220" class="class-box" />
     <text x="115" y="20" class="class-title">ReporteInteligente</text>
     <line x1="0" y1="28" x2="230" y2="28" class="divider" />
@@ -224,33 +219,8 @@ function buildCU31ClassAnalysis() {
     <text x="10" y="200" class="method-text">+ estructurarKPIs(): void</text>
   </g>
 
-  <!-- 5. ENTIDAD RELACIONADA (ARRIBA): Usuario -->
-  <g transform="translate(790, 50)">
-    <rect x="0" y="0" width="230" height="120" class="class-box" />
-    <text x="115" y="20" class="class-title">Usuario</text>
-    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
-    <text x="10" y="46" class="attr-text">- idUsuario: int</text>
-    <text x="10" y="64" class="attr-text">- nombreCompleto: string</text>
-    <text x="10" y="82" class="attr-text">- email: string</text>
-    <line x1="0" y1="90" x2="230" y2="90" class="divider" />
-    <text x="10" y="108" class="method-text">+ find(): void</text>
-  </g>
-
-  <!-- 6. ENTIDAD RELACIONADA (ABAJO): IntencionVozIA -->
-  <g transform="translate(790, 550)">
-    <rect x="0" y="0" width="230" height="150" class="class-box" />
-    <text x="115" y="20" class="class-title">IntencionVozIA</text>
-    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
-    <text x="10" y="46" class="attr-text">- idIntencion: int</text>
-    <text x="10" y="64" class="attr-text">- intencionCanonica: string</text>
-    <text x="10" y="82" class="attr-text">- motor: string</text>
-    <text x="10" y="100" class="attr-text">- entidadesExtraidas: json</text>
-    <line x1="0" y1="108" x2="230" y2="108" class="divider" />
-    <text x="10" y="128" class="method-text">+ find(): void</text>
-  </g>
-
-  <!-- 7. ENTIDAD RELACIONADA (DERECHA): Cliente -->
-  <g transform="translate(1100, 275)">
+  <!-- 5. ENTIDAD RELACIONADA (DERECHA): Cliente -->
+  <g transform="translate(1100, 245)">
     <rect x="0" y="0" width="210" height="170" class="class-box" />
     <text x="105" y="20" class="class-title">Cliente</text>
     <line x1="0" y1="28" x2="210" y2="28" class="divider" />
@@ -263,21 +233,33 @@ function buildCU31ClassAnalysis() {
     <text x="10" y="146" class="method-text">+ get(): void</text>
   </g>
 
-  <!-- 8. ENTIDAD RELACIONADA (DERECHA): Mensualidad -->
-  <g transform="translate(1390, 280)">
-    <rect x="0" y="0" width="210" height="160" class="class-box" />
-    <text x="105" y="20" class="class-title">Mensualidad</text>
+  <!-- 6. ENTIDAD RELACIONADA (ARRIBA DE CLIENTE): Zona -->
+  <g transform="translate(1100, 50)">
+    <rect x="0" y="0" width="210" height="120" class="class-box" />
+    <text x="105" y="20" class="class-title">Zona</text>
     <line x1="0" y1="28" x2="210" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idZona: int</text>
+    <text x="10" y="64" class="attr-text">- nombreZona: string</text>
+    <text x="10" y="82" class="attr-text">- codigo: string</text>
+    <line x1="0" y1="90" x2="210" y2="90" class="divider" />
+    <text x="10" y="108" class="method-text">+ find(): void</text>
+  </g>
+
+  <!-- 7. ENTIDAD RELACIONADA (ABAJO): Mensualidad -->
+  <g transform="translate(790, 500)">
+    <rect x="0" y="0" width="230" height="150" class="class-box" />
+    <text x="115" y="20" class="class-title">Mensualidad</text>
+    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
     <text x="10" y="46" class="attr-text">- idMensualidad: int</text>
     <text x="10" y="64" class="attr-text">- periodo: string</text>
     <text x="10" y="82" class="attr-text">- monto: decimal</text>
     <text x="10" y="100" class="attr-text">- estado: string</text>
-    <line x1="0" y1="108" x2="210" y2="108" class="divider" />
+    <line x1="0" y1="108" x2="230" y2="108" class="divider" />
     <text x="10" y="128" class="method-text">+ where(): void</text>
   </g>
 
-  <!-- 9. ENTIDAD RELACIONADA (ABAJO DE MENSUALIDAD): Pago -->
-  <g transform="translate(1390, 550)">
+  <!-- 8. ENTIDAD RELACIONADA (DERECHA DE MENSUALIDAD): Pago -->
+  <g transform="translate(1100, 500)">
     <rect x="0" y="0" width="210" height="150" class="class-box" />
     <text x="105" y="20" class="class-title">Pago</text>
     <line x1="0" y1="28" x2="210" y2="28" class="divider" />

@@ -119,8 +119,8 @@ function buildCU28Communication() {
 }
 
 function buildCU28ClassAnalysis() {
-  const width = 1750;
-  const height = 750;
+  const width = 1380;
+  const height = 540;
   const tabW = 540;
 
   return `
@@ -145,42 +145,27 @@ function buildCU28ClassAnalysis() {
 
   <!-- LÍNEAS DE ASOCIACIÓN -->
   <!-- Actor a UI -->
-  <line x1="110" y1="360" x2="160" y2="360" class="link-line" />
+  <line x1="110" y1="260" x2="160" y2="260" class="link-line" />
 
   <!-- UI a Controller -->
-  <line x1="380" y1="360" x2="440" y2="360" class="link-line" />
+  <line x1="380" y1="260" x2="440" y2="260" class="link-line" />
 
   <!-- Controller a Entidad Principal (SOLO A COPIASEGURIDAD!) -->
-  <line x1="720" y1="360" x2="790" y2="360" class="link-line" />
+  <line x1="720" y1="260" x2="780" y2="260" class="link-line" />
 
-  <!-- CopiaSeguridad a Usuario (Arriba) -->
-  <line x1="905" y1="250" x2="905" y2="170" class="link-line" />
-  <text x="915" y="235" class="mult-text">0..*</text>
-  <text x="915" y="185" class="mult-text">1</text>
-
-  <!-- Usuario a Rol (Derecha de Usuario) -->
-  <line x1="1020" y1="110" x2="1100" y2="110" class="link-line" />
-  <text x="1035" y="100" class="mult-text">0..*</text>
-  <text x="1080" y="100" class="mult-text">1</text>
-
-  <!-- CopiaSeguridad a ConfiguracionBackup (Abajo) -->
-  <line x1="905" y1="470" x2="905" y2="550" class="link-line" />
-  <text x="915" y="485" class="mult-text">0..*</text>
-  <text x="915" y="535" class="mult-text">1</text>
-
-  <!-- CopiaSeguridad a RestauracionBackup (Derecha) -->
-  <line x1="1020" y1="360" x2="1100" y2="360" class="link-line" />
-  <text x="1035" y="350" class="mult-text">1</text>
-  <text x="1080" y="350" class="mult-text">0..*</text>
+  <!-- CopiaSeguridad a Usuario (Derecha) -->
+  <line x1="1010" y1="260" x2="1080" y2="260" class="link-line" />
+  <text x="1025" y="250" class="mult-text">0..*</text>
+  <text x="1065" y="250" class="mult-text">1</text>
 
   <!-- 1. ACTOR -->
-  <g transform="translate(60, 360)">
+  <g transform="translate(60, 260)">
     ${actorIcon(0, 0)}
     <text x="0" y="45" class="class-title">Administrador del Sistema</text>
   </g>
 
   <!-- 2. BOUNDARY -->
-  <g transform="translate(160, 275)">
+  <g transform="translate(160, 175)">
     <rect x="0" y="0" width="220" height="170" class="class-box" />
     <text x="110" y="20" class="class-title">UI_CopiasSeguridad</text>
     <line x1="0" y1="28" x2="220" y2="28" class="divider" />
@@ -193,7 +178,7 @@ function buildCU28ClassAnalysis() {
   </g>
 
   <!-- 3. CONTROL -->
-  <g transform="translate(440, 265)">
+  <g transform="translate(440, 165)">
     <rect x="0" y="0" width="280" height="190" class="class-box" />
     <text x="140" y="20" class="class-title">CopiasSeguridadController</text>
     <line x1="0" y1="28" x2="280" y2="28" class="divider" />
@@ -207,7 +192,7 @@ function buildCU28ClassAnalysis() {
   </g>
 
   <!-- 4. TABLA PRINCIPAL: CopiaSeguridad -->
-  <g transform="translate(790, 250)">
+  <g transform="translate(780, 150)">
     <rect x="0" y="0" width="230" height="220" class="class-box" />
     <text x="115" y="20" class="class-title">CopiaSeguridad</text>
     <line x1="0" y1="28" x2="230" y2="28" class="divider" />
@@ -224,56 +209,18 @@ function buildCU28ClassAnalysis() {
     <text x="10" y="214" class="method-text">+ findOrFail(): void</text>
   </g>
 
-  <!-- 5. ENTIDAD RELACIONADA (ARRIBA): Usuario -->
-  <g transform="translate(790, 50)">
-    <rect x="0" y="0" width="230" height="120" class="class-box" />
+  <!-- 5. ENTIDAD RELACIONADA (DERECHA): Usuario (Ocupada vía foreign key idUsuario) -->
+  <g transform="translate(1080, 185)">
+    <rect x="0" y="0" width="230" height="150" class="class-box" />
     <text x="115" y="20" class="class-title">Usuario</text>
     <line x1="0" y1="28" x2="230" y2="28" class="divider" />
     <text x="10" y="46" class="attr-text">- idUsuario: int</text>
     <text x="10" y="64" class="attr-text">- nombreCompleto: string</text>
-    <text x="10" y="82" class="attr-text">- idRol: int</text>
-    <line x1="0" y1="90" x2="230" y2="90" class="divider" />
-    <text x="10" y="108" class="method-text">+ find(): void</text>
-  </g>
-
-  <!-- 6. ENTIDAD RELACIONADA (DERECHA DE USUARIO): Rol -->
-  <g transform="translate(1100, 50)">
-    <rect x="0" y="0" width="210" height="120" class="class-box" />
-    <text x="105" y="20" class="class-title">Rol</text>
-    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
-    <text x="10" y="46" class="attr-text">- idRol: int</text>
-    <text x="10" y="64" class="attr-text">- nombreRol: string</text>
-    <text x="10" y="82" class="attr-text">- descripcion: string</text>
-    <line x1="0" y1="90" x2="210" y2="90" class="divider" />
-    <text x="10" y="108" class="method-text">+ find(): void</text>
-  </g>
-
-  <!-- 7. ENTIDAD RELACIONADA (ABAJO): ConfiguracionBackup -->
-  <g transform="translate(790, 550)">
-    <rect x="0" y="0" width="230" height="140" class="class-box" />
-    <text x="115" y="20" class="class-title">ConfiguracionBackup</text>
-    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
-    <text x="10" y="46" class="attr-text">- idConfiguracion: int</text>
-    <text x="10" y="64" class="attr-text">- frecuencia: string</text>
-    <text x="10" y="82" class="attr-text">- retencionDias: int</text>
-    <text x="10" y="100" class="attr-text">- rutaDestino: string</text>
+    <text x="10" y="82" class="attr-text">- email: string</text>
+    <text x="10" y="100" class="attr-text">- nombreUsuario: string</text>
     <line x1="0" y1="108" x2="230" y2="108" class="divider" />
-    <text x="10" y="128" class="method-text">+ first(): void</text>
-  </g>
-
-  <!-- 8. ENTIDAD RELACIONADA (DERECHA): RestauracionBackup -->
-  <g transform="translate(1100, 275)">
-    <rect x="0" y="0" width="230" height="170" class="class-box" />
-    <text x="115" y="20" class="class-title">RestauracionBackup</text>
-    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
-    <text x="10" y="46" class="attr-text">- idRestauracion: int</text>
-    <text x="10" y="64" class="attr-text">- idCopiaSeguridad: int</text>
-    <text x="10" y="82" class="attr-text">- fechaRestauracion: timestamp</text>
-    <text x="10" y="100" class="attr-text">- estado: string</text>
-    <text x="10" y="118" class="attr-text">- logSalida: text</text>
-    <line x1="0" y1="126" x2="230" y2="126" class="divider" />
-    <text x="10" y="146" class="method-text">+ create(): void</text>
-    <text x="10" y="162" class="method-text">+ find(): void</text>
+    <text x="10" y="128" class="method-text">+ find(): void</text>
+    <text x="10" y="142" class="method-text">+ with(): void</text>
   </g>
 </svg>`;
 }
