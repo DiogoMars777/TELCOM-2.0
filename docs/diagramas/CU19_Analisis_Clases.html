@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>CU19: Asignar equipo en comodato a un servicio - Diagrama de Análisis de Clases</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 10px;
+    }
+    svg {
+      width: 100%;
+      height: auto;
+      max-width: 1920px;
+    }
+  </style>
+</head>
+<body>
+  
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" style="background-color: #ffffff; font-family: Arial, Helvetica, sans-serif;">
+  <defs>
+    <style>
+      .ea-title { font-size: 21px; font-weight: bold; fill: #000000; font-family: Arial, sans-serif; }
+      .ea-tab-text { font-size: 10px; font-weight: bold; fill: #1e293b; font-family: Arial, sans-serif; }
+      .class-title { font-size: 12.5px; font-weight: bold; fill: #000000; text-anchor: middle; font-family: Arial, sans-serif; }
+      .attr-text { font-size: 11px; fill: #000000; font-family: Arial, sans-serif; }
+      .method-text { font-size: 11px; fill: #000000; font-family: Arial, sans-serif; }
+      .assoc-text { font-size: 10.5px; fill: #334155; font-style: italic; font-family: Arial, sans-serif; }
+      .mult-text { font-size: 11px; fill: #000000; font-weight: 500; font-family: Arial, sans-serif; }
+      .actor-text { font-size: 11px; font-weight: bold; fill: #000000; text-anchor: middle; font-family: Arial, sans-serif; }
+      .ea-box { fill: #ffffea; stroke: #606060; stroke-width: 1; }
+      .ea-line { stroke: #505050; stroke-width: 1; fill: none; }
+      .divider { stroke: #707070; stroke-width: 0.8; }
+    </style>
+  </defs>
+
+  <!-- Título Superior Externo -->
+  <text x="40" y="38" class="ea-title">CU19: Asignar equipo en comodato a un servicio.</text>
+
+  <!-- Pestaña de Diagrama Enterprise Architect -->
+  <path d="M 40,75 L 40,54 L 460,54 L 476,75 Z" fill="#ffffff" stroke="#606060" stroke-width="1" />
+  <text x="50" y="68" class="ea-tab-text">class Diagrama de análisis de clases - CU19 Asignar equipo en comodato</text>
+
+  <!-- Marco Exterior del Diagrama -->
+  <rect x="40" y="75" width="1840" height="970" fill="#ffffff" stroke="#606060" stroke-width="1" />
+
+  <!-- Marca de agua Enterprise Architect 17.2 -->
+  <g opacity="0.55">
+    
+    <text x="50" y="110" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="155" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="200" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="245" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="290" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="335" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="380" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="425" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="470" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="515" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="560" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="605" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="650" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="695" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="740" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="785" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="830" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="875" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="920" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="50" y="965" fill="#d8dbe0" font-family="Arial" font-size="12" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+  </g>
+
+  <!-- ================= LÍNEAS DE ASOCIACIÓN ================= -->
+
+  <!-- Actor a UI -->
+  <line x1="130" y1="535" x2="190" y2="535" class="ea-line" />
+
+  <!-- UI a Controller -->
+  <line x1="410" y1="535" x2="475" y2="535" class="ea-line" />
+
+  <!-- Controller a AsignacionEquipo -->
+  <line x1="720" y1="535" x2="795" y2="535" class="ea-line" />
+
+  <!-- Cliente a ServicioInternet -->
+  <line x1="710" y1="230" x2="795" y2="230" class="ea-line" />
+  <text x="735" y="222" class="assoc-text">contrata</text>
+  <text x="718" y="244" class="mult-text">1</text>
+  <text x="772" y="244" class="mult-text">0..*</text>
+
+  <!-- ServicioInternet a AsignacionEquipo (Vertical) -->
+  <line x1="915" y1="340" x2="915" y2="415" class="ea-line" />
+  <text x="924" y="380" class="assoc-text">recibe</text>
+  <text x="924" y="356" class="mult-text">1</text>
+  <text x="924" y="407" class="mult-text">0..*</text>
+
+  <!-- AsignacionEquipo a Equipo -->
+  <line x1="1035" y1="535" x2="1105" y2="535" class="ea-line" />
+  <text x="1052" y="525" class="assoc-text">posee</text>
+  <text x="1042" y="550" class="mult-text">0..*</text>
+  <text x="1090" y="550" class="mult-text">1</text>
+
+  <!-- Equipo a ProductoEquipo -->
+  <line x1="1305" y1="535" x2="1375" y2="535" class="ea-line" />
+  <text x="1317" y="525" class="assoc-text">representa</text>
+  <text x="1312" y="550" class="mult-text">0..*</text>
+  <text x="1360" y="550" class="mult-text">1</text>
+
+  <!-- ProductoEquipo a Inventario -->
+  <line x1="1575" y1="535" x2="1645" y2="535" class="ea-line" />
+  <text x="1580" y="525" class="assoc-text">corresponde a</text>
+  <text x="1580" y="550" class="mult-text">1</text>
+  <text x="1630" y="550" class="mult-text">1</text>
+
+  <!-- Usuario a AsignacionEquipo (Vertical) -->
+  <line x1="915" y1="770" x2="915" y2="675" class="ea-line" />
+  <text x="924" y="726" class="assoc-text">registra</text>
+  <text x="924" y="760" class="mult-text">1</text>
+  <text x="924" y="694" class="mult-text">0..*</text>
+
+  <!-- Usuario a Bitacora (Horizontal) -->
+  <line x1="795" y1="855" x2="710" y2="855" class="ea-line" />
+  <text x="735" y="847" class="assoc-text">genera</text>
+  <text x="778" y="870" class="mult-text">1</text>
+  <text x="718" y="870" class="mult-text">0..*</text>
+
+
+  <!-- ================= ACTOR ================= -->
+  <g transform="translate(100, 520)">
+    <!-- Cabeza -->
+    <circle cx="0" cy="-35" r="14" fill="#ffffea" stroke="#000000" stroke-width="1.3" />
+    <!-- Tronco -->
+    <line x1="0" y1="-21" x2="0" y2="12" stroke="#000000" stroke-width="1.3" />
+    <!-- Brazos -->
+    <line x1="-18" y1="-10" x2="18" y2="-10" stroke="#000000" stroke-width="1.3" />
+    <!-- Piernas -->
+    <line x1="0" y1="12" x2="-14" y2="40" stroke="#000000" stroke-width="1.3" />
+    <line x1="0" y1="12" x2="14" y2="40" stroke="#000000" stroke-width="1.3" />
+    <!-- Etiqueta del Actor -->
+    <text x="0" y="62" class="actor-text">Administrador /</text>
+    <text x="0" y="77" class="actor-text">Secretaría /</text>
+    <text x="0" y="92" class="actor-text">Técnico</text>
+  </g>
+
+
+  <!-- ================= CLASES ================= -->
+
+  <!-- 1. BOUNDARY: UI_AsignarEquipoComodato -->
+  <g transform="translate(190, 420)">
+    <rect x="0" y="0" width="220" height="215" class="ea-box" />
+    <!-- Encabezado -->
+    <text x="110" y="20" class="class-title">UI_AsignarEquipoComodato</text>
+    <line x1="0" y1="30" x2="220" y2="30" class="divider" />
+    <!-- Atributos (vacío en Boundary de Análisis) -->
+    <line x1="0" y1="38" x2="220" y2="38" class="divider" />
+    <!-- Métodos -->
+    <text x="10" y="55" class="method-text">+ cargarFormulario(): void</text>
+    <text x="10" y="75" class="method-text">+ listarEquiposDisponibles(): void</text>
+    <text x="10" y="95" class="method-text">+ filtrarPorTipoEquipo(): void</text>
+    <text x="10" y="115" class="method-text">+ buscarEquipoPorSerieMac(): void</text>
+    <text x="10" y="135" class="method-text">+ asignarEquipoComodato(): void</text>
+    <text x="10" y="155" class="method-text">+ retirarEquipoComodato(): void</text>
+    <text x="10" y="175" class="method-text">+ mostrarHistorialComodatos(): void</text>
+    <text x="10" y="195" class="method-text">+ alternarVistaPlegable(): void</text>
+  </g>
+
+
+  <!-- 2. CONTROL: AsignacionEquipoComodatoController -->
+  <g transform="translate(475, 440)">
+    <rect x="0" y="0" width="245" height="175" class="ea-box" />
+    <!-- Encabezado -->
+    <text x="122" y="20" class="class-title">AsignacionEquipoComodatoController</text>
+    <line x1="0" y1="30" x2="245" y2="30" class="divider" />
+    <!-- Atributos -->
+    <line x1="0" y1="38" x2="245" y2="38" class="divider" />
+    <!-- Métodos -->
+    <text x="10" y="58" class="method-text">+ index(): void</text>
+    <text x="10" y="80" class="method-text">+ equiposDisponibles(): void</text>
+    <text x="10" y="102" class="method-text">+ serviciosActivos(): void</text>
+    <text x="10" y="124" class="method-text">+ showServicioEquipos(): void</text>
+    <text x="10" y="146" class="method-text">+ asignar(): void</text>
+    <text x="10" y="168" class="method-text">+ desvincular(): void</text>
+  </g>
+
+
+  <!-- 3. ENTITY PRINCIPAL: AsignacionEquipo -->
+  <g transform="translate(795, 415)">
+    <rect x="0" y="0" width="240" height="260" class="ea-box" />
+    <text x="120" y="20" class="class-title">AsignacionEquipo</text>
+    <line x1="0" y1="28" x2="240" y2="28" class="divider" />
+    <!-- Atributos -->
+    <text x="10" y="45" class="attr-text">- estadoComodato: string</text>
+    <text x="10" y="63" class="attr-text">- fechaAsignacion: date</text>
+    <text x="10" y="81" class="attr-text">- fechaRetiro: date</text>
+    <text x="10" y="99" class="attr-text">- idAsignacionEquipo: int</text>
+    <text x="10" y="117" class="attr-text">- idEquipo: int</text>
+    <text x="10" y="135" class="attr-text">- idServicio: int</text>
+    <text x="10" y="153" class="attr-text">- idUsuario: int</text>
+    <text x="10" y="171" class="attr-text">- motivoRetiro: string</text>
+    <text x="10" y="189" class="attr-text">- observaciones: string</text>
+    <line x1="0" y1="198" x2="240" y2="198" class="divider" />
+    <!-- Métodos -->
+    <text x="10" y="215" class="method-text">+ create(): void</text>
+    <text x="10" y="231" class="method-text">+ find(): void</text>
+    <text x="10" y="247" class="method-text">+ update(): void</text>
+  </g>
+
+
+  <!-- 4. ENTITY: Equipo -->
+  <g transform="translate(1105, 425)">
+    <rect x="0" y="0" width="200" height="240" class="ea-box" />
+    <text x="100" y="20" class="class-title">Equipo</text>
+    <line x1="0" y1="28" x2="200" y2="28" class="divider" />
+    <!-- Atributos -->
+    <text x="10" y="46" class="attr-text">- estadoEquipo: string</text>
+    <text x="10" y="65" class="attr-text">- idEquipo: int</text>
+    <text x="10" y="84" class="attr-text">- idProducto: int</text>
+    <text x="10" y="103" class="attr-text">- ipAsignada: string</text>
+    <text x="10" y="122" class="attr-text">- mac: string</text>
+    <text x="10" y="141" class="attr-text">- numeroSerie: string</text>
+    <text x="10" y="160" class="attr-text">- propiedad: string</text>
+    <line x1="0" y1="170" x2="200" y2="170" class="divider" />
+    <!-- Métodos -->
+    <text x="10" y="188" class="method-text">+ find(): void</text>
+    <text x="10" y="206" class="method-text">+ update(): void</text>
+    <text x="10" y="224" class="method-text">+ where(): void</text>
+  </g>
+
+
+  <!-- 5. ENTITY: ProductoEquipo -->
+  <g transform="translate(1375, 425)">
+    <rect x="0" y="0" width="200" height="240" class="ea-box" />
+    <text x="100" y="20" class="class-title">ProductoEquipo</text>
+    <line x1="0" y1="28" x2="200" y2="28" class="divider" />
+    <!-- Atributos -->
+    <text x="10" y="46" class="attr-text">- descripcion: string</text>
+    <text x="10" y="65" class="attr-text">- estado: boolean</text>
+    <text x="10" y="84" class="attr-text">- idProducto: int</text>
+    <text x="10" y="103" class="attr-text">- marca: string</text>
+    <text x="10" y="122" class="attr-text">- modelo: string</text>
+    <text x="10" y="141" class="attr-text">- nombre: string</text>
+    <text x="10" y="160" class="attr-text">- tipoEquipo: string</text>
+    <line x1="0" y1="170" x2="200" y2="170" class="divider" />
+    <!-- Métodos -->
+    <text x="10" y="193" class="method-text">+ find(): void</text>
+    <text x="10" y="215" class="method-text">+ get(): void</text>
+  </g>
+
+
+  <!-- 6. ENTITY: Inventario -->
+  <g transform="translate(1645, 445)">
+    <rect x="0" y="0" width="200" height="175" class="ea-box" />
+    <text x="100" y="20" class="class-title">Inventario</text>
+    <line x1="0" y1="28" x2="200" y2="28" class="divider" />
+    <!-- Atributos -->
+    <text x="10" y="47" class="attr-text">- fechaActualizacion: timestamp</text>
+    <text x="10" y="68" class="attr-text">- idInventario: int</text>
+    <text x="10" y="89" class="attr-text">- idProducto: int</text>
+    <text x="10" y="110" class="attr-text">- stockActual: int</text>
+    <line x1="0" y1="120" x2="200" y2="120" class="divider" />
+    <!-- Métodos -->
+    <text x="10" y="138" class="method-text">+ decrement(): void</text>
+    <text x="10" y="156" class="method-text">+ update(): void</text>
+  </g>
+
+
+  <!-- 7. ENTITY: ServicioInternet (Superior) -->
+  <g transform="translate(795, 120)">
+    <rect x="0" y="0" width="240" height="220" class="ea-box" />
+    <text x="120" y="20" class="class-title">ServicioInternet</text>
+    <line x1="0" y1="28" x2="240" y2="28" class="divider" />
+    <!-- Atributos -->
+    <text x="10" y="46" class="attr-text">- codigoServicio: string</text>
+    <text x="10" y="64" class="attr-text">- direccion: string</text>
+    <text x="10" y="82" class="attr-text">- estadoServicio: string</text>
+    <text x="10" y="100" class="attr-text">- fechaActivacion: date</text>
+    <text x="10" y="118" class="attr-text">- idCliente: int</text>
+    <text x="10" y="136" class="attr-text">- idEstadoServicio: int</text>
+    <text x="10" y="154" class="attr-text">- idServicio: int</text>
+    <line x1="0" y1="164" x2="240" y2="164" class="divider" />
+    <!-- Métodos -->
+    <text x="10" y="184" class="method-text">+ find(): void</text>
+    <text x="10" y="204" class="method-text">+ where(): void</text>
+  </g>
+
+
+  <!-- 8. ENTITY: Cliente (Superior Izquierda) -->
+  <g transform="translate(480, 135)">
+    <rect x="0" y="0" width="230" height="190" class="ea-box" />
+    <text x="115" y="20" class="class-title">Cliente</text>
+    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
+    <!-- Atributos -->
+    <text x="10" y="48" class="attr-text">- ci: string</text>
+    <text x="10" y="68" class="attr-text">- codigoCliente: string</text>
+    <text x="10" y="88" class="attr-text">- idCliente: int</text>
+    <text x="10" y="108" class="attr-text">- nombreCompleto: string</text>
+    <text x="10" y="128" class="attr-text">- telefonoPrincipal: string</text>
+    <line x1="0" y1="138" x2="230" y2="138" class="divider" />
+    <!-- Métodos -->
+    <text x="10" y="158" class="method-text">+ find(): void</text>
+    <text x="10" y="178" class="method-text">+ where(): void</text>
+  </g>
+
+
+  <!-- 9. ENTITY: Usuario (Inferior Centro) -->
+  <g transform="translate(795, 770)">
+    <rect x="0" y="0" width="240" height="205" class="ea-box" />
+    <text x="120" y="20" class="class-title">Usuario</text>
+    <line x1="0" y1="28" x2="240" y2="28" class="divider" />
+    <!-- Atributos -->
+    <text x="10" y="46" class="attr-text">- activo: boolean</text>
+    <text x="10" y="64" class="attr-text">- correo: string</text>
+    <text x="10" y="82" class="attr-text">- idRol: int</text>
+    <text x="10" y="100" class="attr-text">- idUsuario: int</text>
+    <text x="10" y="118" class="attr-text">- nombreCompleto: string</text>
+    <text x="10" y="136" class="attr-text">- nombreUsuario: string</text>
+    <line x1="0" y1="146" x2="240" y2="146" class="divider" />
+    <!-- Métodos -->
+    <text x="10" y="168" class="method-text">+ find(): void</text>
+    <text x="10" y="188" class="method-text">+ where(): void</text>
+  </g>
+
+
+  <!-- 10. ENTITY: Bitacora (Inferior Izquierda) -->
+  <g transform="translate(480, 780)">
+    <rect x="0" y="0" width="230" height="190" class="ea-box" />
+    <text x="115" y="20" class="class-title">Bitacora</text>
+    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
+    <!-- Atributos -->
+    <text x="10" y="48" class="attr-text">- accion: string</text>
+    <text x="10" y="68" class="attr-text">- fechaHora: timestamp</text>
+    <text x="10" y="88" class="attr-text">- idBitacora: int</text>
+    <text x="10" y="108" class="attr-text">- idUsuario: int</text>
+    <text x="10" y="128" class="attr-text">- modulo: string</text>
+    <line x1="0" y1="138" x2="230" y2="138" class="divider" />
+    <!-- Métodos -->
+    <text x="10" y="158" class="method-text">+ create(): void</text>
+    <text x="10" y="178" class="method-text">+ where(): void</text>
+  </g>
+
+</svg>
+
+</body>
+</html>

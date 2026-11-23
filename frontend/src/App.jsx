@@ -6,6 +6,7 @@ import LoginView from './views/Paquetes/P1_SeguridadAdministracion/CU01_IniciarC
 import SesionView from './views/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/SesionView';
 import CambiarPasswordView from './views/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/CambiarPasswordView';
 
+<<<<<<< HEAD
 // Vistas de los Casos de Uso (módulos administrativos)
 import AuditoriaView from './views/Paquetes/P1_SeguridadAdministracion/CU02_BitacoraAuditoria/AuditoriaView';
 import UsuariosView from './views/Paquetes/P1_SeguridadAdministracion/CU03_UsuariosRolesPermisos/UsuariosView';
@@ -31,6 +32,8 @@ import InstalacionesView from './views/Paquetes/P6_InstalacionesTecnicas/CU23_Re
 import IntencionVozView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU30_ProcesarIntencionVozIA/IntencionVozView';
 import DashboardAdminFinancieroView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU26_VisualizarDashboardAdminFinanciero/DashboardAdminFinancieroView';
 import CopiasSeguridadView from './views/Paquetes/P1_SeguridadAdministracion/CU28_GenerarRestaurarCopiasSeguridad/CopiasSeguridadView';
+import ReporteTradicionalView from './views/Paquetes/DashboardReportesInteligenciaVoz/CU27_GenerarExportarReportesTradicionales/ReporteTradicionalView';
+import ComandoVozView from './views/Paquetes/DashboardReportesInteligenciaVoz/CU29_CapturarTranscribirComandosVoz/ComandoVozView';
 
 // Iconos de cada módulo del panel
 import {
@@ -38,7 +41,7 @@ import {
   Wifi, Calendar,
   CreditCard, Clock, AlertTriangle, Scissors, RefreshCw, Lock,
   Router, ArrowRightLeft, Package, Wrench, HardDrive, ClipboardList, ShoppingCart,
-  Sparkles, Brain, LayoutDashboard, Database,
+  Sparkles, Brain, LayoutDashboard, Database, BarChart3, Mic,
 } from 'lucide-react';
 
 import { authService } from './models/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/authModel';
@@ -125,6 +128,7 @@ export default function App() {
   const [booting, setBooting] = useState(true);
   const [activeCU, setActiveCU] = useState('CU06');
   const [corteServicioSelected, setCorteServicioSelected] = useState(null);
+  const [reporteVoiceFilter, setReporteVoiceFilter] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isAuthenticated = Boolean(currentUser);
@@ -262,6 +266,8 @@ export default function App() {
       title: 'P7: Dashboard, Reportes e Inteligencia por Voz',
       items: [
         { id: 'CU26', label: 'Dashboard General / Financiero', icon: LayoutDashboard },
+        { id: 'CU27', label: 'Reportes Tradicionales', icon: BarChart3 },
+        { id: 'CU29', label: 'Comandos de Voz', icon: Mic },
         { id: 'CU30', label: 'Asistente de Voz con IA (NLP)', icon: Sparkles },
       ],
     },
@@ -349,6 +355,22 @@ export default function App() {
         return <InstalacionesView user={currentUser} />;
       case 'CU26':
         return <DashboardAdminFinancieroView user={currentUser} onNavigate={(cu) => setActiveCU(cu)} />;
+      case 'CU27':
+        return (
+          <ReporteTradicionalView
+            initialTipo={reporteVoiceFilter?.tipo || 'clientes_zona'}
+            initialFilters={reporteVoiceFilter?.filtros || {}}
+          />
+        );
+      case 'CU29':
+        return (
+          <ComandoVozView
+            onIrAReporteTradicional={(tipo, params) => {
+              setReporteVoiceFilter({ tipo, filtros: params });
+              setActiveCU('CU27');
+            }}
+          />
+        );
       case 'CU30':
         return <IntencionVozView onNavigate={(targetCu) => setActiveCU(targetCu)} />;
       default:

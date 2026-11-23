@@ -56,6 +56,10 @@ use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU22_ProgramarInstala
 use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU23_RegistrarInstalacion\InstalacionRegistroController;
 // CU26: Visualizar Dashboard administrativo y financiero
 use App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU26_VisualizarDashboardAdminFinanciero\DashboardAdminFinancieroController;
+// CU27: Generar y exportar reportes tradicionales
+use App\Http\Controllers\Paquetes\DashboardReportesInteligenciaVoz\CU27_GenerarExportarReportesTradicionales\ReporteTradicionalController;
+// CU29: Capturar y transcribir comandos de voz
+use App\Http\Controllers\Paquetes\DashboardReportesInteligenciaVoz\CU29_CapturarTranscribirComandosVoz\ComandoVozController;
 // CU30: Procesar intención de voz con IA (NLP)
 use App\Http\Controllers\Paquetes\P7_DashboardReportesInteligenciaVoz\CU30_ProcesarIntencionVozIA\IntencionVozController;
 
@@ -357,6 +361,25 @@ Route::prefix('cu20')->middleware('auth:sanctum')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
+| CU27 - GENERAR Y EXPORTAR REPORTES TRADICIONALES
+|--------------------------------------------------------------------------
+| Permite al Administrador consultar, consolidar y exportar la información
+| administrativa, financiera y operativa de TELCOM en formatos PDF y Excel.
+| Actores: Administrador.
+| Permisos RBAC: reportes.view
+*/
+Route::prefix('cu27')->middleware(['auth:sanctum', 'permission:reportes.view'])->group(function () {
+    Route::get('/catalogo', [ReporteTradicionalController::class, 'catalogo']);
+    Route::get('/parametros', [ReporteTradicionalController::class, 'parametros']);
+    Route::get('/generar', [ReporteTradicionalController::class, 'generar']);
+    Route::get('/exportar-excel', [ReporteTradicionalController::class, 'exportarExcel']);
+    Route::get('/exportar-pdf', [ReporteTradicionalController::class, 'exportarPdf']);
+});
+});
+
+/*
+|--------------------------------------------------------------------------
+<<<<<<< HEAD
 | CU25 - REGISTRAR COMPRA DE EQUIPO Y ACTUALIZAR STOCK
 |--------------------------------------------------------------------------
 | Permite registrar órdenes de compra a proveedores de hardware e insumos,
@@ -471,5 +494,21 @@ Route::prefix('cu30')->middleware(['auth:sanctum', 'permission:voz.nlp'])->group
     Route::get('/catalogo', [IntencionVozController::class, 'catalogo']);
     Route::post('/feedback', [IntencionVozController::class, 'feedback']);
     Route::post('/ejecutar', [IntencionVozController::class, 'ejecutar']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| CU29 - CAPTURAR Y TRANSCRIBIR COMANDOS DE VOZ
+|--------------------------------------------------------------------------
+| Permite al Administrador dictar solicitudes y consultas mediante el micrófono
+| para convertirlas automáticamente en texto estructurado en tiempo real.
+| Actores: Administrador.
+| Permisos RBAC: reportes.view
+*/
+Route::prefix('cu29')->middleware(['auth:sanctum', 'permission:reportes.view'])->group(function () {
+    Route::post('/transcribir', [ComandoVozController::class, 'transcribir']);
+    Route::get('/historial', [ComandoVozController::class, 'historial']);
+    Route::post('/confirmar', [ComandoVozController::class, 'confirmar']);
+    Route::get('/ejemplos', [ComandoVozController::class, 'ejemplos']);
 });
 
