@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>CU27: Diagrama Secuencial - Generar y Exportar Reportes Tradicionales</title>
+  <title>CU27 Diagrama de Secuencia - Generar y Exportar Reportes Tradicionales</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -21,10 +21,11 @@
   </style>
 </head>
 <body>
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 1180" width="1680" height="1180" style="background:#ffffff; font-family: Arial, Helvetica, sans-serif;">
+  
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 1180" width="1680" height="1180" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
   <defs>
     <style>
-      .tab-title { font-size: 10px; font-weight: bold; fill: #1e293b; }
+      .tab-title { font-size: 11px; font-weight: bold; fill: #1e293b; }
       .life-title { font-size: 11.5px; font-weight: bold; fill: #0f172a; text-anchor: middle; }
       .life-line { stroke: #94a3b8; stroke-width: 1; stroke-dasharray: 4,4; fill: none; }
       .act-bar { fill: #ffffff; stroke: #475569; stroke-width: 1.2; }
@@ -38,14 +39,11 @@
     </style>
   </defs>
 
-  <!-- Pestaña de Diagrama EA -->
   <path d="M 20,45 L 20,24 L 440,24 L 456,45 Z" fill="#ffffff" stroke="#64748b" stroke-width="1" />
   <text x="30" y="38" class="tab-title">sd CU27 Generar y exportar reportes tradicionales</text>
 
-  <!-- Marco Exterior -->
   <rect x="20" y="45" width="1640" height="1115" fill="#ffffff" stroke="#64748b" stroke-width="1" />
 
-  <!-- Marcas de agua -->
   <g opacity="0.4">
     
     <text x="30" y="95" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
@@ -122,7 +120,7 @@
     </text>
   </g>
 
-  <!-- LÍNEAS DE VIDA VERTICALES -->
+  <!-- LÍNEAS DE VIDA -->
   <line x1="90" y1="130" x2="90" y2="1130" class="life-line" />
   <line x1="320" y1="130" x2="320" y2="1130" class="life-line" />
   <line x1="640" y1="130" x2="640" y2="1130" class="life-line" />
@@ -130,8 +128,7 @@
   <line x1="1320" y1="130" x2="1320" y2="1130" class="life-line" />
   <line x1="1540" y1="130" x2="1540" y2="1130" class="life-line" />
 
-  <!-- CABECERAS DE LÍNEAS DE VIDA -->
-  <!-- Admin -->
+  <!-- CABECERAS -->
   <g transform="translate(90, 90)">
     
   <circle cx="0" cy="-26" r="8.5" fill="#ffffea" stroke="#1e293b" stroke-width="1.8" />
@@ -140,10 +137,8 @@
   <line x1="0" y1="5" x2="-12" y2="25" stroke="#1e293b" stroke-width="2" />
   <line x1="0" y1="5" x2="12" y2="25" stroke="#1e293b" stroke-width="2" />
 
-    <text x="0" y="40" class="life-title">Administrador</text>
+    <text x="0" y="40" class="life-title">Administrador / Gerencia</text>
   </g>
-
-  <!-- UI_ReporteTradicional -->
   <g transform="translate(320, 90)">
     
   <line x1="-25" y1="-20" x2="-25" y2="20" stroke="#475569" stroke-width="2.5" />
@@ -152,8 +147,6 @@
 
     <text x="0" y="36" class="life-title">UI_ReporteTradicional</text>
   </g>
-
-  <!-- ReporteTradicionalController -->
   <g transform="translate(640, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
@@ -162,8 +155,6 @@
 
     <text x="0" y="36" class="life-title">ReporteTradicionalController</text>
   </g>
-
-  <!-- ReporteTradicional -->
   <g transform="translate(1000, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
@@ -171,17 +162,13 @@
 
     <text x="0" y="36" class="life-title">ReporteTradicional</text>
   </g>
-
-  <!-- Cliente / Pago / Zona -->
   <g transform="translate(1320, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
 
-    <text x="0" y="36" class="life-title">Cliente / Pago / Zona</text>
+    <text x="0" y="36" class="life-title">Cliente / Pago / Mensualidad</text>
   </g>
-
-  <!-- Bitacora -->
   <g transform="translate(1540, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
@@ -190,187 +177,110 @@
     <text x="0" y="36" class="life-title">Bitacora</text>
   </g>
 
-  <!-- ================= BLOQUE 1: FLUJO CATÁLOGO Y PARÁMETROS ================= -->
+  <!-- BLOQUE 1: CATÁLOGO Y PARÁMETROS -->
   <rect x="35" y="150" width="1610" height="195" class="frame-box" />
   <path d="M 35,170 L 35,150 L 360,150 L 372,170 Z" class="frame-tab" />
   <text x="45" y="164" class="frame-title">alt Flujo 1: Consultar catálogo y parámetros de filtrado</text>
 
-  <!-- Barras de activación -->
   <rect x="85" y="175" width="10" height="150" class="act-bar" />
   <rect x="315" y="175" width="10" height="145" class="act-bar" />
   <rect x="635" y="185" width="10" height="120" class="act-bar" />
 
-  <!-- 1: consultarCatalogoReportes() -->
-  <line x1="95" y1="180" x2="315" y2="180" class="msg-call" marker-end="url(#arrow)" />
+  <line x1="95" y1="180" x2="315" y2="180" class="msg-call" />
   <polygon points="315,180 309,177 309,183" fill="#1e293b" />
   <text x="130" y="175" class="call-text">1: consultarCatalogoReportes()</text>
 
-  <!-- 1.1: catalogo() -->
   <line x1="325" y1="195" x2="635" y2="195" class="msg-call" />
   <polygon points="635,195 629,192 629,198" fill="#1e293b" />
   <text x="410" y="190" class="call-text">1.1: catalogo()</text>
 
-  <!-- 1.2: catalogo() a ReporteTradicional -->
   <line x1="645" y1="210" x2="995" y2="210" class="msg-call" />
   <polygon points="995,210 989,207 989,213" fill="#1e293b" />
   <text x="730" y="205" class="call-text">1.2: catalogo(): array</text>
 
-  <!-- Retorno catálogo -->
   <line x1="995" y1="225" x2="645" y2="225" class="msg-ret" />
   <text x="750" y="222" class="ret-text">($catalogoDisponibles)</text>
 
-  <!-- 1.3: parametros() a Zona -->
   <line x1="645" y1="245" x2="1315" y2="245" class="msg-call" />
   <polygon points="1315,245 1309,242 1309,248" fill="#1e293b" />
-  <text x="730" y="240" class="call-text">1.3: Zona::select()-&gt;get(), MetodoPago::select()-&gt;get()</text>
+  <text x="730" y="240" class="call-text">1.3: Zona::select()->get(), MetodoPago::select()->get()</text>
 
-  <!-- Retorno parámetros -->
   <line x1="1315" y1="260" x2="645" y2="260" class="msg-ret" />
   <text x="960" y="256" class="ret-text">($zonas, $metodos, $estados)</text>
 
-  <!-- Respuesta JSON a UI -->
   <line x1="635" y1="285" x2="325" y2="285" class="msg-ret" />
   <text x="410" y="280" class="ret-text">success({catalogo, parametros})</text>
 
-  <!-- Renderizado UI -->
-  <line x1="315" y1="310" x2="95" y2="310" class="msg-ret" />
-  <text x="130" y="305" class="ret-text">mostrarCatalogoYFormularioFiltros()</text>
+  <line x1="315" y1="305" x2="95" y2="305" class="msg-ret" />
+  <text x="130" y="300" class="ret-text">renderizarFormularioFiltros()</text>
 
-  <!-- ================= BLOQUE 2: GENERAR REPORTE ================= -->
-  <rect x="35" y="360" width="1610" height="280" class="frame-box" />
-  <path d="M 35,380 L 35,360 L 340,360 L 352,380 Z" class="frame-tab" />
-  <text x="45" y="374" class="frame-title">alt Flujo 2: Generar y visualizar reporte consolidado</text>
+  <!-- BLOQUE 2: GENERAR Y AUDITAR -->
+  <rect x="35" y="360" width="1610" height="260" class="frame-box" />
+  <path d="M 35,380 L 35,360 L 370,360 L 382,380 Z" class="frame-tab" />
+  <text x="45" y="374" class="frame-title">alt Flujo 2: Generar consulta consolidada y auditoría</text>
 
-  <!-- Barras de activación -->
-  <rect x="85" y="385" width="10" height="235" class="act-bar" />
-  <rect x="315" y="385" width="10" height="230" class="act-bar" />
-  <rect x="635" y="395" width="10" height="205" class="act-bar" />
-  <rect x="995" y="425" width="10" height="110" class="act-bar" />
+  <rect x="85" y="385" width="10" height="215" class="act-bar" />
+  <rect x="315" y="385" width="10" height="210" class="act-bar" />
+  <rect x="635" y="395" width="10" height="185" class="act-bar" />
 
-  <!-- 2: generarReporte -->
-  <line x1="95" y1="395" x2="315" y2="395" class="msg-call" />
-  <polygon points="315,395 309,392 309,398" fill="#1e293b" />
-  <text x="110" y="390" class="call-text">2: generarReporte(tipo, filtros)</text>
+  <line x1="95" y1="390" x2="315" y2="390" class="msg-call" />
+  <polygon points="315,390 309,387 309,393" fill="#1e293b" />
+  <text x="130" y="385" class="call-text">2: generarReporte(tipo, filtros)</text>
 
-  <!-- 2.1: generar(Request) -->
   <line x1="325" y1="410" x2="635" y2="410" class="msg-call" />
   <polygon points="635,410 629,407 629,413" fill="#1e293b" />
-  <text x="380" y="405" class="call-text">2.1: generar(Request $request)</text>
+  <text x="410" y="405" class="call-text">2.1: generar(Request $request)</text>
 
-  <!-- Self-call validación -->
-  <path d="M 645,420 L 665,420 L 665,435 L 645,435" fill="none" stroke="#1e293b" stroke-width="1.1" />
-  <polygon points="645,435 651,432 651,438" fill="#1e293b" />
-  <text x="670" y="430" class="call-text">validate(filtros)</text>
+  <line x1="645" y1="430" x2="995" y2="430" class="msg-call" />
+  <polygon points="995,430 989,427 989,433" fill="#1e293b" />
+  <text x="730" y="425" class="call-text">2.2: generar($tipo, $filtros): array</text>
 
-  <!-- 2.2: generar() a ReporteTradicional -->
-  <line x1="645" y1="450" x2="995" y2="450" class="msg-call" />
-  <polygon points="995,450 989,447 989,453" fill="#1e293b" />
-  <text x="730" y="445" class="call-text">2.2: generar($tipo, $filtros): array</text>
+  <line x1="1005" y1="450" x2="1315" y2="450" class="msg-call" />
+  <polygon points="1315,450 1309,447 1309,453" fill="#1e293b" />
+  <text x="1040" y="445" class="call-text">2.3: DB::table(entidades)->where(filtros)->get()</text>
 
-  <!-- 2.3: Consulta DB Eloquent a Entidades -->
-  <line x1="1005" y1="470" x2="1315" y2="470" class="msg-call" />
-  <polygon points="1315,470 1309,467 1309,473" fill="#1e293b" />
-  <text x="1050" y="465" class="call-text">2.3: table('Cliente')-&gt;leftJoin()-&gt;where()-&gt;get() / Pago::whereBetween()</text>
+  <line x1="1315" y1="475" x2="1005" y2="475" class="msg-ret" />
+  <text x="1080" y="470" class="ret-text">($filas, $totales)</text>
 
-  <!-- Retorno DB -->
-  <line x1="1315" y1="495" x2="1005" y2="495" class="msg-ret" />
-  <text x="1100" y="490" class="ret-text">($registrosFiltrados)</text>
+  <line x1="995" y1="495" x2="645" y2="495" class="msg-ret" />
+  <text x="750" y="490" class="ret-text">($reporteConsolidado)</text>
 
-  <!-- Retorno estructura consolidada con KPIs -->
-  <line x1="995" y1="525" x2="645" y2="525" class="msg-ret" />
-  <text x="750" y="520" class="ret-text">return {titulo, registros, kpis, subtipo}</text>
+  <line x1="645" y1="520" x2="1535" y2="520" class="msg-call" />
+  <polygon points="1535,520 1529,517 1529,523" fill="#1e293b" />
+  <text x="1040" y="515" class="call-text">2.4: AuditLogger::log('CU27', 'GENERAR_REPORTE', detalle)</text>
 
-  <!-- 2.4: Auditoría obligatoria a Bitacora -->
-  <line x1="645" y1="550" x2="1535" y2="550" class="msg-call" />
-  <polygon points="1535,550 1529,547 1529,553" fill="#1e293b" />
-  <text x="850" y="545" class="call-text">2.4: AuditLogger::log('CU27', 'GENERAR_REPORTE', ...)</text>
+  <line x1="635" y1="545" x2="325" y2="545" class="msg-ret" />
+  <text x="410" y="540" class="ret-text">success({reporte: $reporteConsolidado})</text>
 
-  <!-- Retorno API JSON a UI -->
-  <line x1="635" y1="580" x2="325" y2="580" class="msg-ret" />
-  <text x="400" y="575" class="ret-text">success($reporte, 'Reporte generado exitosamente.')</text>
+  <line x1="315" y1="570" x2="95" y2="570" class="msg-ret" />
+  <text x="130" y="565" class="ret-text">mostrarTablaReporteConKPIs()</text>
 
-  <!-- Presentación en pantalla -->
-  <line x1="315" y1="605" x2="95" y2="605" class="msg-ret" />
-  <text x="110" y="600" class="ret-text">renderizarTablaResultadosYTarjetasKPI()</text>
+  <!-- BLOQUE 3: EXPORTACIÓN -->
+  <rect x="35" y="640" width="1610" height="220" class="frame-box" />
+  <path d="M 35,660 L 35,640 L 330,640 L 342,660 Z" class="frame-tab" />
+  <text x="45" y="654" class="frame-title">alt Flujo 3 y 4: Exportación a Excel y PDF oficial</text>
 
-  <!-- ================= BLOQUE 3: EXPORTAR A EXCEL ================= -->
-  <rect x="35" y="655" width="1610" height="220" class="frame-box" />
-  <path d="M 35,675 L 35,655 L 330,655 L 342,675 Z" class="frame-tab" />
-  <text x="45" y="669" class="frame-title">alt Flujo 3: Exportar reporte a formato Excel (CSV)</text>
+  <rect x="85" y="665" width="10" height="175" class="act-bar" />
+  <rect x="315" y="665" width="10" height="170" class="act-bar" />
+  <rect x="635" y="675" width="10" height="145" class="act-bar" />
 
-  <rect x="85" y="680" width="10" height="180" class="act-bar" />
-  <rect x="315" y="680" width="10" height="175" class="act-bar" />
-  <rect x="635" y="690" width="10" height="150" class="act-bar" />
+  <line x1="95" y1="670" x2="315" y2="670" class="msg-call" />
+  <polygon points="315,670 309,667 309,673" fill="#1e293b" />
+  <text x="130" y="665" class="call-text">3: exportarExcel(tipo, filtros) / exportarPdf()</text>
 
-  <!-- 3: exportarAExcel -->
-  <line x1="95" y1="690" x2="315" y2="690" class="msg-call" />
-  <polygon points="315,690 309,687 309,693" fill="#1e293b" />
-  <text x="120" y="685" class="call-text">3: exportarAExcel()</text>
+  <line x1="325" y1="690" x2="635" y2="690" class="msg-call" />
+  <polygon points="635,690 629,687 629,693" fill="#1e293b" />
+  <text x="410" y="685" class="call-text">3.1: exportarExcel(Request) / exportarPdf(Request)</text>
 
-  <!-- 3.1: exportarExcel(Request) -->
-  <line x1="325" y1="705" x2="635" y2="705" class="msg-call" />
-  <polygon points="635,705 629,702 629,708" fill="#1e293b" />
-  <text x="390" y="700" class="call-text">3.1: exportarExcel(Request $request)</text>
+  <line x1="645" y1="715" x2="1535" y2="715" class="msg-call" />
+  <polygon points="1535,715 1529,712 1529,718" fill="#1e293b" />
+  <text x="1040" y="710" class="call-text">3.2: AuditLogger::log('CU27', 'EXPORTAR_ARCHIVO', detalle)</text>
 
-  <!-- 3.2: generar() a ReporteTradicional -->
-  <line x1="645" y1="720" x2="995" y2="720" class="msg-call" />
-  <polygon points="995,720 989,717 989,723" fill="#1e293b" />
-  <text x="730" y="715" class="call-text">3.2: generar($tipo, $filtros)</text>
+  <line x1="635" y1="745" x2="325" y2="745" class="msg-ret" />
+  <text x="410" y="740" class="ret-text">response()->streamDownload() / JsonResponse base64</text>
 
-  <!-- Retorno datos -->
-  <line x1="995" y1="740" x2="645" y2="740" class="msg-ret" />
-  <text x="750" y="735" class="ret-text">($datosReporte)</text>
-
-  <!-- 3.3: Auditoría -->
-  <line x1="645" y1="760" x2="1535" y2="760" class="msg-call" />
-  <polygon points="1535,760 1529,757 1529,763" fill="#1e293b" />
-  <text x="850" y="755" class="call-text">3.3: AuditLogger::log('CU27', 'EXPORTAR_EXCEL', ...)</text>
-
-  <!-- 3.4: Streaming CSV con BOM UTF-8 -->
-  <line x1="635" y1="790" x2="325" y2="790" class="msg-ret" />
-  <text x="380" y="785" class="ret-text">response()-&gt;streamDownload(callback, "TELCOM_Reporte_*.csv")</text>
-
-  <!-- Descarga en navegador -->
-  <line x1="315" y1="820" x2="95" y2="820" class="msg-ret" />
-  <text x="120" y="815" class="ret-text">descargarArchivoBinarioCSV()</text>
-
-  <!-- ================= BLOQUE 4: EXPORTAR A PDF ================= -->
-  <rect x="35" y="890" width="1610" height="230" class="frame-box" />
-  <path d="M 35,910 L 35,890 L 350,890 L 362,910 Z" class="frame-tab" />
-  <text x="45" y="904" class="frame-title">alt Flujo 4: Exportar reporte a PDF e impresión oficial</text>
-
-  <rect x="85" y="920" width="10" height="180" class="act-bar" />
-  <rect x="315" y="920" width="10" height="175" class="act-bar" />
-  <rect x="635" y="930" width="10" height="130" class="act-bar" />
-
-  <!-- 4: exportarAPdf -->
-  <line x1="95" y1="930" x2="315" y2="930" class="msg-call" />
-  <polygon points="315,930 309,927 309,933" fill="#1e293b" />
-  <text x="120" y="925" class="call-text">4: exportarAPdf()</text>
-
-  <!-- 4.1: exportarPdf(Request) -->
-  <line x1="325" y1="945" x2="635" y2="945" class="msg-call" />
-  <polygon points="635,945 629,942 629,948" fill="#1e293b" />
-  <text x="390" y="940" class="call-text">4.1: exportarPdf(Request $request)</text>
-
-  <!-- 4.2: generar() a ReporteTradicional -->
-  <line x1="645" y1="965" x2="995" y2="965" class="msg-call" />
-  <polygon points="995,965 989,962 989,968" fill="#1e293b" />
-  <text x="730" y="960" class="call-text">4.2: generar($tipo, $filtros)</text>
-
-  <!-- 4.3: Auditoría -->
-  <line x1="645" y1="990" x2="1535" y2="990" class="msg-call" />
-  <polygon points="1535,990 1529,987 1529,993" fill="#1e293b" />
-  <text x="850" y="985" class="call-text">4.3: AuditLogger::log('CU27', 'EXPORTAR_PDF', ...)</text>
-
-  <!-- Retorno estructura PDF con membrete oficial -->
-  <line x1="635" y1="1020" x2="325" y2="1020" class="msg-ret" />
-  <text x="380" y="1015" class="ret-text">success({reporte, titulo, empresa, nit, direccion, usuarioGenerador})</text>
-
-  <!-- Vista previa e impresión nativa -->
-  <line x1="315" y1="1055" x2="95" y2="1055" class="msg-ret" />
-  <text x="120" y="1050" class="ret-text">abrirVistaPreviaImprimible() / window.print()</text>
-
+  <line x1="315" y1="770" x2="95" y2="770" class="msg-ret" />
+  <text x="130" y="765" class="ret-text">descargarArchivoBlobOImpresion()</text>
 </svg>
 </body>
 </html>

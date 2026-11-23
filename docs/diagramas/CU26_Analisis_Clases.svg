@@ -1,0 +1,220 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1750 980" width="1750" height="980" style="background:#ffffff; font-family: Arial, Helvetica, sans-serif;">
+  <defs>
+    <style>
+      .tab-title { font-size: 10px; font-weight: bold; fill: #1e293b; }
+      .class-box { fill: #ffffea; stroke: #606060; stroke-width: 1; }
+      .class-title { font-size: 12px; font-weight: bold; fill: #000000; text-anchor: middle; }
+      .attr-text { font-size: 10.5px; fill: #000000; font-family: monospace, Arial; }
+      .method-text { font-size: 10.5px; fill: #000000; font-family: monospace, Arial; }
+      .assoc-text { font-size: 10.5px; fill: #334155; font-style: italic; }
+      .mult-text { font-size: 11px; fill: #000000; font-weight: bold; }
+      .ea-line { stroke: #505050; stroke-width: 1; fill: none; }
+      .divider { stroke: #707070; stroke-width: 0.8; }
+    </style>
+  </defs>
+
+  <path d="M 20,45 L 20,24 L 460,24 L 476,45 Z" fill="#ffffff" stroke="#606060" stroke-width="1" />
+  <text x="30" y="38" class="tab-title">class CU26 Visualizar Dashboard administrativo y financiero</text>
+
+  <rect x="20" y="45" width="1710" height="915" fill="#ffffff" stroke="#606060" stroke-width="1" />
+
+  <g opacity="0.45">
+    
+    <text x="30" y="95" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="140" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="185" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="230" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="275" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="320" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="365" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="410" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="455" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="500" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="545" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="590" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="635" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="680" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="725" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="770" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="815" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="860" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="905" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+  </g>
+
+  <!-- ASOCIACIONES -->
+  <line x1="85" y1="280" x2="130" y2="280" class="ea-line" />
+  <line x1="390" y1="280" x2="470" y2="280" class="ea-line" />
+  <text x="410" y="272" class="assoc-text">invoca</text>
+
+  <line x1="790" y1="280" x2="870" y2="280" class="ea-line" />
+  <text x="810" y="272" class="assoc-text">consulta</text>
+
+  <line x1="990" y1="180" x2="990" y2="100" class="ea-line" />
+  <text x="1000" y="145" class="assoc-text">recaudación</text>
+
+  <line x1="1130" y1="280" x2="1220" y2="280" class="ea-line" />
+  <text x="1150" y="272" class="assoc-text">monitorea mora</text>
+
+  <line x1="990" y1="390" x2="990" y2="470" class="ea-line" />
+  <text x="1000" y="430" class="assoc-text">red de clientes</text>
+
+  <line x1="990" y1="670" x2="990" y2="730" class="ea-line" />
+  <text x="1000" y="705" class="assoc-text">distribución</text>
+
+  <line x1="630" y1="390" x2="630" y2="560" class="ea-line" />
+  <text x="640" y="480" class="assoc-text">audita</text>
+
+  <!-- CAJAS EA -->
+  <g transform="translate(60, 280)">
+    
+  <circle cx="0" cy="-26" r="8.5" fill="#ffffea" stroke="#1e293b" stroke-width="1.8" />
+  <line x1="0" y1="-17.5" x2="0" y2="5" stroke="#1e293b" stroke-width="2" />
+  <line x1="-15" y1="-8" x2="15" y2="-8" stroke="#1e293b" stroke-width="2" />
+  <line x1="0" y1="5" x2="-12" y2="25" stroke="#1e293b" stroke-width="2" />
+  <line x1="0" y1="5" x2="12" y2="25" stroke="#1e293b" stroke-width="2" />
+
+    <text x="0" y="45" class="class-title">Administrador / Secretaría</text>
+  </g>
+
+  <g transform="translate(130, 160)">
+    <rect x="0" y="0" width="260" height="230" class="class-box" />
+    <text x="130" y="20" class="class-title">UI_DashboardAdminFinanciero</text>
+    <line x1="0" y1="28" x2="260" y2="28" class="divider" />
+    <text x="10" y="48" class="method-text">+ consultarDashboard(periodo): void</text>
+    <text x="10" y="70" class="method-text">+ filtrarFinanciero(periodo): void</text>
+    <text x="10" y="92" class="method-text">+ consultarAlertasMorosidad(): void</text>
+    <text x="10" y="114" class="method-text">+ cambiarPeriodoFiltro(): void</text>
+    <text x="10" y="136" class="method-text">+ renderizarKPIs(): void</text>
+    <text x="10" y="158" class="method-text">+ renderizarGraficos(): void</text>
+    <text x="10" y="180" class="method-text">+ renderizarAlertasMora(): void</text>
+    <text x="10" y="202" class="method-text">+ exportarResumen(): void</text>
+  </g>
+
+  <g transform="translate(470, 160)">
+    <rect x="0" y="0" width="320" height="230" class="class-box" />
+    <text x="160" y="20" class="class-title">DashboardAdminFinancieroController</text>
+    <line x1="0" y1="28" x2="320" y2="28" class="divider" />
+    <text x="10" y="48" class="method-text">+ index(Request $request): JsonResponse</text>
+    <text x="10" y="72" class="method-text">+ financiero(Request $request): JsonResponse</text>
+    <text x="10" y="96" class="method-text">+ alertas(): JsonResponse</text>
+    <text x="10" y="120" class="method-text">- calcularKPIsRecaudacion(): array</text>
+    <text x="10" y="144" class="method-text">- calcularCarteraVencida(): array</text>
+    <text x="10" y="168" class="method-text">- obtenerSaturacionNodos(): array</text>
+    <text x="10" y="192" class="method-text">- auditarConsulta(): void</text>
+  </g>
+
+  <g transform="translate(870, 180)">
+    <rect x="0" y="0" width="260" height="210" class="class-box" />
+    <text x="130" y="20" class="class-title">DashboardMetricasService</text>
+    <line x1="0" y1="28" x2="260" y2="28" class="divider" />
+    <text x="10" y="48" class="method-text">+ obtenerMetricasGenerales(): array</text>
+    <text x="10" y="72" class="method-text">+ obtenerMetricasFinancieras(): array</text>
+    <text x="10" y="96" class="method-text">+ obtenerAlertasMorosidad(): array</text>
+    <text x="10" y="120" class="method-text">+ calcularTasaMorosidad(): float</text>
+    <text x="10" y="144" class="method-text">+ consolidarIngresosMetodo(): array</text>
+  </g>
+
+  <g transform="translate(870, 0)">
+    <rect x="0" y="0" width="240" height="100" class="class-box" />
+    <text x="120" y="18" class="class-title">Pago</text>
+    <line x1="0" y1="24" x2="240" y2="24" class="divider" />
+    <text x="10" y="40" class="attr-text">- idPago: int   - montoTotal: decimal</text>
+    <text x="10" y="56" class="attr-text">- fechaPago: date   - idMetodoPago: int</text>
+    <line x1="0" y1="64" x2="240" y2="64" class="divider" />
+    <text x="10" y="82" class="method-text">+ sum(): decimal   + count(): int</text>
+  </g>
+
+  <g transform="translate(1220, 200)">
+    <rect x="0" y="0" width="260" height="170" class="class-box" />
+    <text x="130" y="18" class="class-title">Mensualidad</text>
+    <line x1="0" y1="24" x2="260" y2="24" class="divider" />
+    <text x="10" y="40" class="attr-text">- idMensualidad: int</text>
+    <text x="10" y="56" class="attr-text">- periodo: string   - monto: decimal</text>
+    <text x="10" y="72" class="attr-text">- estado: string   - fechaVencimiento: date</text>
+    <line x1="0" y1="80" x2="260" y2="80" class="divider" />
+    <text x="10" y="100" class="method-text">+ where(col, val): Builder</text>
+    <text x="10" y="120" class="method-text">+ sum(col): decimal</text>
+  </g>
+
+  <g transform="translate(870, 470)">
+    <rect x="0" y="0" width="260" height="200" class="class-box" />
+    <text x="130" y="18" class="class-title">Cliente</text>
+    <line x1="0" y1="24" x2="260" y2="24" class="divider" />
+    <text x="10" y="40" class="attr-text">- idCliente: int   - codigoCliente: string</text>
+    <text x="10" y="56" class="attr-text">- nombreCompleto: string</text>
+    <text x="10" y="72" class="attr-text">- estadoCliente: string</text>
+    <text x="10" y="88" class="attr-text">- idZona: int</text>
+    <line x1="0" y1="96" x2="260" y2="96" class="divider" />
+    <text x="10" y="116" class="method-text">+ count(): int   + find(id): Cliente</text>
+    <text x="10" y="136" class="method-text">+ servicios(): HasMany</text>
+  </g>
+
+  <g transform="translate(870, 730)">
+    <rect x="0" y="0" width="260" height="180" class="class-box" />
+    <text x="130" y="18" class="class-title">ServicioInternet</text>
+    <line x1="0" y1="24" x2="260" y2="24" class="divider" />
+    <text x="10" y="40" class="attr-text">- idServicio: int   - idCliente: int</text>
+    <text x="10" y="56" class="attr-text">- idPlan: int   - idEstadoServicio: int</text>
+    <line x1="0" y1="64" x2="260" y2="64" class="divider" />
+    <text x="10" y="84" class="method-text">+ groupBy(): Builder   + count(): int</text>
+    <text x="10" y="104" class="method-text">+ mensualidades(): HasMany</text>
+  </g>
+
+  <g transform="translate(1220, 730)">
+    <rect x="0" y="0" width="240" height="150" class="class-box" />
+    <text x="120" y="18" class="class-title">Zona</text>
+    <line x1="0" y1="24" x2="240" y2="24" class="divider" />
+    <text x="10" y="40" class="attr-text">- idZona: int   - nombreZona: string</text>
+    <text x="10" y="56" class="attr-text">- capacidadNodos: int</text>
+    <line x1="0" y1="64" x2="240" y2="64" class="divider" />
+    <text x="10" y="84" class="method-text">+ withCount('servicios'): Builder</text>
+  </g>
+
+  <g transform="translate(510, 560)">
+    <rect x="0" y="0" width="240" height="160" class="class-box" />
+    <text x="120" y="18" class="class-title">Bitacora</text>
+    <line x1="0" y1="24" x2="240" y2="24" class="divider" />
+    <text x="10" y="40" class="attr-text">- idBitacora: int   - casoUso: 'CU26'</text>
+    <text x="10" y="56" class="attr-text">- accion: string   - detalles: text</text>
+    <line x1="0" y1="64" x2="240" y2="64" class="divider" />
+    <text x="10" y="84" class="method-text">+ create(array $datos): Bitacora</text>
+  </g>
+</svg>

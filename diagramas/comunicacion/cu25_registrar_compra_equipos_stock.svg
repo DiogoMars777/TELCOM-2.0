@@ -1,0 +1,259 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 960" width="1680" height="960" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
+  <defs>
+    <style>
+      .tab-title { font-size: 11px; font-weight: bold; fill: #1e293b; }
+      .node-title { font-size: 12px; font-weight: bold; fill: #0f172a; text-anchor: middle; }
+      .link-line { stroke: #64748b; stroke-width: 1.3; fill: none; }
+      .flow-1 { fill: #0f172a; font-size: 10.5px; font-weight: bold; }
+      .flow-2 { fill: #b91c1c; font-size: 10.5px; font-weight: bold; }
+      .flow-3 { fill: #15803d; font-size: 10.5px; font-weight: bold; }
+      .flow-4 { fill: #1d4ed8; font-size: 10.5px; font-weight: bold; }
+    </style>
+  </defs>
+
+  <!-- Pestaña de Diagrama EA -->
+  <path d="M 20,45 L 20,24 L 460,24 L 476,45 Z" fill="#ffffff" stroke="#64748b" stroke-width="1" />
+  <text x="30" y="38" class="tab-title">sd CU25 Registrar compra de equipos y actualización de stock</text>
+
+  <!-- Marco Exterior -->
+  <rect x="20" y="45" width="1640" height="895" fill="#ffffff" stroke="#64748b" stroke-width="1" />
+
+  <!-- Marcas de agua -->
+  <g opacity="0.45">
+    
+    <text x="30" y="95" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="140" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="185" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="230" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="275" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="320" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="365" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="410" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="455" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="500" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="545" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="590" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="635" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="680" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="725" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="770" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="815" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="860" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+    <text x="30" y="905" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
+      EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version   EA 17.2 Unregistered Trial Version
+    </text>
+  </g>
+
+  <!-- LÍNEAS DE ENLACE -->
+  <!-- Actor -> Boundary -->
+  <line x1="150" y1="420" x2="380" y2="420" class="link-line" />
+
+  <!-- Boundary -> Controller -->
+  <line x1="420" y1="420" x2="700" y2="420" class="link-line" />
+
+  <!-- Controller -> Compra (Derecha) -->
+  <line x1="750" y1="420" x2="1080" y2="420" class="link-line" />
+
+  <!-- Controller -> Proveedor (Arriba Izquierda) -->
+  <line x1="710" y1="380" x2="520" y2="180" class="link-line" />
+
+  <!-- Controller -> ProductoEquipo (Arriba Derecha) -->
+  <line x1="740" y1="380" x2="940" y2="180" class="link-line" />
+
+  <!-- Controller -> DetalleCompra (Abajo Izquierda) -->
+  <line x1="710" y1="450" x2="540" y2="680" class="link-line" />
+
+  <!-- Controller -> Inventario (Abajo Centro) -->
+  <line x1="730" y1="460" x2="730" y2="680" class="link-line" />
+
+  <!-- Controller -> Bitacora (Abajo Derecha) -->
+  <line x1="760" y1="450" x2="980" y2="680" class="link-line" />
+
+  <!-- Compra -> DetalleCompra -->
+  <line x1="1100" y1="450" x2="560" y2="700" class="link-line" />
+
+  <!-- INSTANCIAS DEL PATRÓN ROBUSTEZ BCE -->
+  <!-- 1. Actor -->
+  <g transform="translate(120, 420)">
+    
+  <circle cx="0" cy="-26" r="8.5" fill="#ffffea" stroke="#1e293b" stroke-width="1.8" />
+  <line x1="0" y1="-17.5" x2="0" y2="5" stroke="#1e293b" stroke-width="2" />
+  <line x1="-15" y1="-8" x2="15" y2="-8" stroke="#1e293b" stroke-width="2" />
+  <line x1="0" y1="5" x2="-12" y2="25" stroke="#1e293b" stroke-width="2" />
+  <line x1="0" y1="5" x2="12" y2="25" stroke="#1e293b" stroke-width="2" />
+
+    <text x="0" y="45" class="node-title">Administrador / Almacén</text>
+  </g>
+
+  <!-- 2. Boundary: UI_CompraRegistro -->
+  <g transform="translate(400, 420)">
+    
+  <line x1="-29" y1="-24" x2="-29" y2="24" stroke="#475569" stroke-width="2.5" />
+  <line x1="-29" y1="0" x2="-24" y2="0" stroke="#475569" stroke-width="2" />
+  <circle cx="0" cy="0" r="24" fill="#ffffea" stroke="#475569" stroke-width="2" />
+
+    <text x="0" y="48" class="node-title">UI_CompraRegistro</text>
+  </g>
+
+  <!-- 3. Control: CompraEquipoRegistroController -->
+  <g transform="translate(730, 420)">
+    
+  <circle cx="0" cy="0" r="24" fill="#ffffea" stroke="#475569" stroke-width="2" />
+  <path d="M -5 -24 L 4 -28 L 2 -24 C 11 -21 26 -2 24 6" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" />
+  <polygon points="-7,-24 4,-30 1,-19" fill="#475569" />
+
+    <text x="0" y="48" class="node-title">CompraEquipoRegistroController</text>
+  </g>
+
+  <!-- 4. Entity: Compra -->
+  <g transform="translate(1110, 420)">
+    
+  <circle cx="0" cy="0" r="24" fill="#ffffea" stroke="#475569" stroke-width="2" />
+  <line x1="-24" y1="28" x2="24" y2="28" stroke="#475569" stroke-width="2.5" />
+
+    <text x="0" y="48" class="node-title">Compra</text>
+  </g>
+
+  <!-- 5. Entity: Proveedor -->
+  <g transform="translate(500, 160)">
+    
+  <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
+  <line x1="-22" y1="26" x2="22" y2="26" stroke="#475569" stroke-width="2.5" />
+
+    <text x="0" y="44" class="node-title">Proveedor</text>
+  </g>
+
+  <!-- 6. Entity: ProductoEquipo -->
+  <g transform="translate(960, 160)">
+    
+  <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
+  <line x1="-22" y1="26" x2="22" y2="26" stroke="#475569" stroke-width="2.5" />
+
+    <text x="0" y="44" class="node-title">ProductoEquipo</text>
+  </g>
+
+  <!-- 7. Entity: DetalleCompra -->
+  <g transform="translate(520, 710)">
+    
+  <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
+  <line x1="-22" y1="26" x2="22" y2="26" stroke="#475569" stroke-width="2.5" />
+
+    <text x="0" y="44" class="node-title">DetalleCompra</text>
+  </g>
+
+  <!-- 8. Entity: Inventario -->
+  <g transform="translate(730, 710)">
+    
+  <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
+  <line x1="-22" y1="26" x2="22" y2="26" stroke="#475569" stroke-width="2.5" />
+
+    <text x="0" y="44" class="node-title">Inventario</text>
+  </g>
+
+  <!-- 9. Entity: Bitacora -->
+  <g transform="translate(1000, 710)">
+    
+  <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
+  <line x1="-22" y1="26" x2="22" y2="26" stroke="#475569" stroke-width="2.5" />
+
+    <text x="0" y="44" class="node-title">Bitacora</text>
+  </g>
+
+  <!-- MENSAJES Y LLAMADAS -->
+  <!-- Actor a UI -->
+  <g transform="translate(140, 320)">
+    <text x="0" y="0" class="flow-1">1: consultarCompras(filtros) &rarr;</text>
+    <text x="0" y="18" class="flow-2">2: cargarFormularioCompra() &rarr;</text>
+    <text x="0" y="36" class="flow-3">3: registrarOrdenCompra(cabecera, items) &rarr;</text>
+    <text x="0" y="54" class="flow-4">4: verDetalleCompra(id) &rarr;</text>
+  </g>
+
+  <!-- UI a Controller -->
+  <g transform="translate(420, 320)">
+    <text x="0" y="0" class="flow-1">1.1: index(Request $request) &rarr;</text>
+    <text x="0" y="18" class="flow-2">2.1: proveedores(), productos() &rarr;</text>
+    <text x="0" y="36" class="flow-3">3.1: store(Request $request) &rarr;</text>
+    <text x="0" y="54" class="flow-4">4.1: show(int $id) &rarr;</text>
+  </g>
+
+  <!-- Controller a Proveedor -->
+  <g transform="translate(470, 250)">
+    <text x="0" y="0" class="flow-2">2.2: where('estado', true)->get() &rarr;</text>
+    <text x="0" y="16" class="flow-3">3.2: exists:Proveedor,idProveedor &rarr;</text>
+  </g>
+
+  <!-- Controller a ProductoEquipo -->
+  <g transform="translate(860, 250)">
+    <text x="0" y="0" class="flow-2">2.3: with('inventarios')->get() &rarr;</text>
+  </g>
+
+  <!-- Controller a Compra -->
+  <g transform="translate(770, 345)">
+    <text x="0" y="0" class="flow-1">1.2: with(['proveedor','detalles'])->get() &rarr;</text>
+    <text x="0" y="18" class="flow-3">3.3: DB::transaction() { Compra::create() } &rarr;</text>
+    <text x="0" y="36" class="flow-3">3.7: update(['montoTotal' => $total]) &rarr;</text>
+    <text x="0" y="54" class="flow-4">4.2: find($id) con relaciones &rarr;</text>
+  </g>
+
+  <!-- Controller a DetalleCompra -->
+  <g transform="translate(400, 580)">
+    <text x="0" y="0" class="flow-3">3.4: create([idCompra, idProducto, cant, pUnit]) &rarr;</text>
+  </g>
+
+  <!-- Controller a Inventario -->
+  <g transform="translate(740, 580)">
+    <text x="0" y="0" class="flow-3">3.5: increment('stockActual', cant) &rarr;</text>
+    <text x="0" y="18" class="flow-3">3.6: syncEstadoDisponibilidad() &rarr;</text>
+  </g>
+
+  <!-- Controller a Bitacora -->
+  <g transform="translate(880, 580)">
+    <text x="0" y="0" class="flow-3">3.8: log('CU25', 'REGISTRAR_COMPRA', detalle) &rarr;</text>
+  </g>
+
+  <!-- LEYENDA INFERIOR -->
+  <g transform="translate(50, 870)">
+    <rect x="0" y="0" width="1580" height="42" fill="#f8fafc" stroke="#cbd5e1" rx="4" />
+    <text x="20" y="26" font-size="11" font-weight="bold" fill="#0f172a">Convención de Flujos:</text>
+    <text x="170" y="26" class="flow-1">&bull; Flujo 1: Consulta y filtrado de compras</text>
+    <text x="460" y="26" class="flow-2">&bull; Flujo 2: Precarga de proveedores activos y catálogo de productos</text>
+    <text x="960" y="26" class="flow-3">&bull; Flujo 3: Registro atómico con DB::transaction, detalle e incremento de stock</text>
+    <text x="1440" y="26" class="flow-4">&bull; Flujo 4: Consulta detallada</text>
+  </g>
+</svg>

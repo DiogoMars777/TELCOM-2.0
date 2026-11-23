@@ -2173,6 +2173,100 @@ frame "sd Diagrama de análisis de clases - CU23 Registrar resultado, costo e in
 }
 @enduml
 
+@startuml cu24_analisis_gestionar_proveedores
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de análisis de clases - CU24 Gestionar proveedores" {
+    actor "Administrador / Almacén" as AdminActor
+
+    class UI_Proveedor <<boundary>> {
+        + listarProveedores(): void
+        + filtrarPorTexto(buscar: string): void
+        + filtrarPorEstado(activo: bool): void
+        + abrirFormularioCrear(): void
+        + submitRegistrar(datos: array): void
+        + submitActualizar(id: int, datos: array): void
+        + confirmarCambioEstado(id: int): void
+    }
+
+    class ProveedorController <<control>> {
+        + index(request: Request): JsonResponse
+        + show(proveedor: int): JsonResponse
+        + store(request: Request): JsonResponse
+        + update(request: Request, proveedor: int): JsonResponse
+        + activar(proveedor: int): JsonResponse
+        + desactivar(proveedor: int): JsonResponse
+        - validarProveedor(request: Request): array
+        - auditar(prov: Proveedor, accion: string): void
+    }
+
+    class Proveedor <<entity>> {
+        - idProveedor: int
+        - razonSocial: string
+        - nit: string
+        - telefono: string
+        - correo: string
+        - direccion: string
+        - estado: boolean
+        - created_at: timestamp
+        - updated_at: timestamp
+        --
+        + compras(): HasMany
+        + scopeActivos(query: Builder): Builder
+        + scopeWhereLike(query: Builder, col: string, val: string): Builder
+    }
+
+    class Compra <<entity>> {
+        - idCompra: int
+        - nroComprobante: string
+        - fechaCompra: date
+        - montoTotal: decimal
+        - idProveedor: int
+        --
+        + proveedor(): BelongsTo
+        + detalles(): HasMany
+    }
+
+    class Bitacora <<entity>> {
+        - idBitacora: int
+        - casoUso: string = 'CU24'
+        - accion: string
+        - detalles: text
+        - ip: string
+        - idUsuario: int
+        - fechaHora: timestamp
+        --
+        + create(datos: array): Bitacora
+    }
+
+    AdminActor -right- UI_Proveedor
+    UI_Proveedor -right- ProveedorController : invoca >
+    ProveedorController "1" -right- "0..*" Proveedor : gestiona >
+    ProveedorController "1" -down- "0..*" Bitacora : registra auditoría >
+    Proveedor "1" -right- "0..*" Compra : suministra >
+}
+@enduml
+
 @startuml cu25_analisis_registrar_compra_equipo
 allowmixing
 
@@ -2429,5 +2523,374 @@ frame "sd Diagrama de análisis de clases - CU26 Visualizar Dashboard administra
     Cliente "1" -down- "1..*" ServicioInternet : posee >
     ServicioInternet "1" -up- "0..*" Mensualidad : genera >
     Mensualidad "1" -left- "0..1" Pago : cancela con >
+}
+@enduml
+@startuml cu27_analisis_generar_exportar_reportes_tradicionales
+allowmixing
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+frame "sd Diagrama de análisis de clases - CU27 Generar y exportar reportes tradicionales" {
+    actor "Administrador / Gerencia" as AdminActor
+
+    class UI_ReporteTradicional <<boundary>> {
+        + consultarCatalogo(): void
+        + seleccionarTipoReporte(): void
+        + cambiarFiltro(): void
+        + handleGenerarReporte(): void
+        + handleExportarExcel(): void
+        + handleExportarPdf(): void
+    }
+
+    class ReporteTradicionalController <<control>> {
+        + catalogo(): JsonResponse
+        + parametros(): JsonResponse
+        + generar(request: Request): JsonResponse
+        + exportarExcel(request: Request): StreamedResponse
+        + exportarPdf(request: Request): JsonResponse
+    }
+
+    class ReporteTradicional <<entity>> {
+        + TIPO_CLIENTES_ZONA: string
+        + TIPO_INGRESOS_PAGOS: string
+        + TIPO_MOROSIDAD_CORTES: string
+        + TIPO_EQUIPOS_INSTAL: string
+        --
+        + catalogo(): array
+        + generar(tipo: string, filtros: array): array
+    }
+
+    class Cliente <<entity>> {
+        - idCliente: int
+        - codigoCliente: string
+        - nombreCompleto: string
+        - estadoCliente: string
+        - idZona: int
+    }
+
+    class Pago <<entity>> {
+        - idPago: int
+        - fechaHora: timestamp
+        - montoTotal: decimal
+        - idMetodoPago: int
+    }
+
+    class Mensualidad <<entity>> {
+        - idMensualidad: int
+        - periodo: string
+        - monto: decimal
+        - estado: string
+    }
+
+    class Bitacora <<entity>> {
+        - idBitacora: int
+        - casoUso: string = 'CU27'
+        - accion: string
+        - detalles: text
+    }
+
+    AdminActor -right- UI_ReporteTradicional
+    UI_ReporteTradicional -right- ReporteTradicionalController
+    ReporteTradicionalController "1" -right- "1" ReporteTradicional : invoca >
+    ReporteTradicionalController "1" -down- "0..*" Bitacora : registra auditoría >
+    ReporteTradicional "1" -right- "0..*" Cliente : consolida >
+    ReporteTradicional "1" -right- "0..*" Pago : consolida >
+    ReporteTradicional "1" -down- "0..*" Mensualidad : evalúa mora >
+}
+@enduml
+
+@startuml cu28_analisis_generar_restaurar_copias_seguridad
+allowmixing
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+frame "sd Diagrama de análisis de clases - CU28 Generar y restaurar copias de seguridad" {
+    actor "Administrador del Sistema" as AdminActor
+
+    class UI_CopiasSeguridad <<boundary>> {
+        + listarCopiasSeguridad(): void
+        + submitGenerarBackup(tipo: string, desc: string): void
+        + descargarCopia(id: int): void
+        + ejecutarRestauracion(id: int): void
+        + eliminarCopia(id: int): void
+    }
+
+    class CopiasSeguridadController <<control>> {
+        + index(): JsonResponse
+        + store(request: Request): JsonResponse
+        + download(id: int): BinaryFileResponse
+        + restore(id: int): JsonResponse
+        + destroy(id: int): JsonResponse
+        - resolverBinario(binario: string): ?string
+    }
+
+    class CopiaSeguridad <<entity>> {
+        - idCopiaSeguridad: int
+        - nombreArchivo: string
+        - ruta: string
+        - tamanoBytes: bigint
+        - tamanoLegible: string
+        - idUsuario: int
+        - descripcion: string
+        - tipo: string
+        - estado: string
+        --
+        + usuario(): BelongsTo
+        + existeFisicamente(): bool
+    }
+
+    class Usuario <<entity>> {
+        - idUsuario: int
+        - nombreCompleto: string
+        - email: string
+    }
+
+    class Bitacora <<entity>> {
+        - idBitacora: int
+        - casoUso: string = 'CU28'
+        - accion: string
+        - detalles: text
+    }
+
+    AdminActor -right- UI_CopiasSeguridad
+    UI_CopiasSeguridad -right- CopiasSeguridadController
+    CopiasSeguridadController "1" -right- "0..*" CopiaSeguridad : administra >
+    CopiasSeguridadController "1" -up- "1" Usuario : autentica >
+    CopiasSeguridadController "1" -down- "0..*" Bitacora : registra auditoría >
+}
+@enduml
+
+@startuml cu29_analisis_capturar_transcribir_comandos_voz
+allowmixing
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+frame "sd Diagrama de análisis de clases - CU29 Capturar y transcribir comandos de voz" {
+    actor "Usuario / Operador" as UserActor
+
+    class UI_ComandoVoz <<boundary>> {
+        + iniciarGrabacionMicrofono(): void
+        + detenerGrabacionYEnviar(): void
+        + reproducirAudioGrabado(): void
+        + listarHistorial(pagina: int): void
+        + mostrarResultadoTranscripcion(): void
+    }
+
+    class ComandoVozController <<control>> {
+        + transcribir(request: Request): JsonResponse
+        + historial(request: Request): JsonResponse
+        + ejemplos(): JsonResponse
+        - clasificarIntencion(txt: string): array
+    }
+
+    class ComandoVoz <<entity>> {
+        - idComando: int
+        - idUsuario: int
+        - audioRuta: string
+        - textoDictado: text
+        - intencionDetectada: string
+        - reporteSugerido: string
+        - parametros: json
+        - confianza: decimal
+        - procesadoExitoso: bool
+        --
+        + usuario(): BelongsTo
+    }
+
+    class Zona <<entity>> {
+        - idZona: int
+        - nombreZona: string
+    }
+
+    class Bitacora <<entity>> {
+        - idBitacora: int
+        - casoUso: string = 'CU29'
+        - accion: string = 'TRANSCRIBIR_VOZ'
+        - detalles: text
+    }
+
+    UserActor -right- UI_ComandoVoz
+    UI_ComandoVoz -right- ComandoVozController
+    ComandoVozController "1" -right- "0..*" ComandoVoz : persiste >
+    ComandoVozController "1" -up- "0..*" Zona : consulta contexto >
+    ComandoVozController "1" -down- "0..*" Bitacora : registra auditoría >
+}
+@enduml
+
+@startuml cu30_analisis_procesar_intencion_voz_ia
+allowmixing
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+frame "sd Diagrama de análisis de clases - CU30 Procesar intención de voz con IA (NLP)" {
+    actor "Operador / Asistente" as OperadorActor
+
+    class UI_IntencionVoz <<boundary>> {
+        + escucharVozDictada(): void
+        + enviarTextoComando(txt: string): void
+        + listarHistorialNLP(): void
+        + renderizarRespuestaAsistente(): void
+        + mostrarWidgetsDatosEnVivo(): void
+        + navegarAccionSugerida(url: string): void
+    }
+
+    class IntencionVozController <<control>> {
+        + procesar(request: Request): JsonResponse
+        + historial(request: Request): JsonResponse
+        + intenciones(): JsonResponse
+        + ejemplos(): JsonResponse
+    }
+
+    class NlpIntencionService <<control>> {
+        + procesar(texto: string): array
+        - clasificarIntencion(txt: string): array
+        - extraerEntidades(txt: string): array
+        - generarRespuesta(intencion: string, ent: array): string
+        - obtenerDatosEnVivo(intencion: string, ent: array): array
+    }
+
+    class IntencionVozIA <<entity>> {
+        - idIntencion: int
+        - idUsuario: int
+        - textoEntrada: text
+        - intencionCanonica: string
+        - categoria: string
+        - confianza: decimal
+        - motor: string
+        - entidadesExtraidas: json
+        - accionSugerida: json
+        - datosEnVivo: json
+        --
+        + usuario(): BelongsTo
+    }
+
+    class Bitacora <<entity>> {
+        - idBitacora: int
+        - casoUso: string = 'CU30'
+        - accion: string = 'PROCESAR_INTENCION_NLP'
+        - detalles: text
+    }
+
+    OperadorActor -right- UI_IntencionVoz
+    UI_IntencionVoz -right- IntencionVozController
+    IntencionVozController "1" -right- "1" NlpIntencionService : delega a >
+    NlpIntencionService "1" -right- "0..*" IntencionVozIA : persiste >
+    IntencionVozController "1" -down- "0..*" Bitacora : registra auditoría >
+}
+@enduml
+
+@startuml cu31_analisis_generar_reporte_inteligente_voz
+allowmixing
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+frame "sd Diagrama de análisis de clases - CU31 Generar reporte inteligente vía comando de voz" {
+    actor "Administrador / Gerencia" as AdminActor
+
+    class UI_ReporteInteligente <<boundary>> {
+        + dictarComandoReporte(): void
+        + enviarComandoTexto(texto: string): void
+        + previsualizarInterpretacion(): void
+        + renderizarTablaReporteIA(): void
+        + renderizarResumenKPIs(): void
+    }
+
+    class ReporteInteligenteController <<control>> {
+        + generar(request: Request, gemini: GeminiIntencionService, catalogo: CatalogoReportesService): JsonResponse
+    }
+
+    class GeminiIntencionService <<control>> {
+        + interpretar(comando: string): array
+    }
+
+    class CatalogoReportesService <<control>> {
+        + generar(intencion: array): array
+    }
+
+    class Cliente <<entity>> {
+        - idCliente: int
+        - codigoCliente: string
+        - idZona: int
+    }
+
+    class Mensualidad <<entity>> {
+        - idMensualidad: int
+        - monto: decimal
+        - estado: string
+    }
+
+    class Bitacora <<entity>> {
+        - idBitacora: int
+        - casoUso: string = 'CU31'
+        - accion: string = 'GENERAR_REPORTE_INTELIGENTE'
+    }
+
+    AdminActor -right- UI_ReporteInteligente
+    UI_ReporteInteligente -right- ReporteInteligenteController
+    ReporteInteligenteController "1" -up- "1" GeminiIntencionService : interpreta con >
+    ReporteInteligenteController "1" -right- "1" CatalogoReportesService : consulta catálogo >
+    CatalogoReportesService "1" -right- "0..*" Cliente : lee >
+    CatalogoReportesService "1" -down- "0..*" Mensualidad : lee >
+    ReporteInteligenteController "1" -down- "0..*" Bitacora : registra auditoría >
 }
 @enduml

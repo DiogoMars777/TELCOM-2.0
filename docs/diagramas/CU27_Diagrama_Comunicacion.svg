@@ -1,25 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1650 920" width="1650" height="920" style="background:#ffffff; font-family: Arial, Helvetica, sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1650 920" width="1650" height="920" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
   <defs>
     <style>
-      .tab-title { font-size: 10px; font-weight: bold; fill: #1e293b; }
+      .tab-title { font-size: 11px; font-weight: bold; fill: #1e293b; }
       .node-title { font-size: 12px; font-weight: bold; fill: #0f172a; text-anchor: middle; }
       .link-line { stroke: #64748b; stroke-width: 1.2; fill: none; }
-      .flow-1 { fill: #0f172a; font-size: 10.5px; font-weight: bold; font-family: Arial, sans-serif; }
-      .flow-2 { fill: #b91c1c; font-size: 10.5px; font-weight: bold; font-family: Arial, sans-serif; }
-      .flow-3 { fill: #15803d; font-size: 10.5px; font-weight: bold; font-family: Arial, sans-serif; }
-      .flow-4 { fill: #1d4ed8; font-size: 10.5px; font-weight: bold; font-family: Arial, sans-serif; }
-      .sub-msg { font-size: 9.5px; font-weight: normal; fill: #475569; }
+      .flow-1 { fill: #0f172a; font-size: 10.5px; font-weight: bold; }
+      .flow-2 { fill: #b91c1c; font-size: 10.5px; font-weight: bold; }
+      .flow-3 { fill: #15803d; font-size: 10.5px; font-weight: bold; }
+      .flow-4 { fill: #1d4ed8; font-size: 10.5px; font-weight: bold; }
     </style>
   </defs>
 
-  <!-- Pestaña de Diagrama EA -->
   <path d="M 20,45 L 20,24 L 420,24 L 436,45 Z" fill="#ffffff" stroke="#64748b" stroke-width="1" />
   <text x="30" y="38" class="tab-title">sd CU27 Generar y exportar reportes tradicionales</text>
 
-  <!-- Marco Exterior -->
   <rect x="20" y="45" width="1610" height="855" fill="#ffffff" stroke="#64748b" stroke-width="1" />
 
-  <!-- Marcas de agua -->
   <g opacity="0.45">
     
     <text x="30" y="95" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
@@ -78,35 +74,18 @@
     </text>
   </g>
 
-  <!-- LÍNEAS DE ENLACE ENTRE INSTANCIAS -->
-  <!-- Admin a UI -->
+  <!-- LÍNEAS DE ENLACE -->
   <line x1="105" y1="360" x2="330" y2="360" class="link-line" />
-
-  <!-- UI a Controller -->
   <line x1="370" y1="360" x2="680" y2="360" class="link-line" />
-
-  <!-- Controller a ReporteTradicional (Servicio de Dominio) -->
   <line x1="720" y1="360" x2="1140" y2="360" class="link-line" />
-
-  <!-- Controller a Bitacora (Vertical hacia abajo) -->
   <line x1="700" y1="400" x2="700" y2="650" class="link-line" />
-
-  <!-- Controller a Zona (Diagonal hacia arriba) -->
   <line x1="700" y1="320" x2="700" y2="150" class="link-line" />
-
-  <!-- ReporteTradicional a Cliente (Diagonal hacia arriba-derecha) -->
   <line x1="1160" y1="320" x2="1160" y2="150" class="link-line" />
-
-  <!-- ReporteTradicional a Pago (Diagonal hacia abajo-derecha) -->
   <line x1="1160" y1="400" x2="1160" y2="650" class="link-line" />
+  <line x1="1190" y1="360" x2="1470" y2="360" class="link-line" />
 
-  <!-- ReporteTradicional a Mensualidad -->
-  <line x1="1185" y1="360" x2="1480" y2="360" class="link-line" />
-
-  <!-- NODOS / INSTANCIAS -->
-
-  <!-- 1. Actor: Administrador -->
-  <g transform="translate(100, 360)">
+  <!-- INSTANCIAS ROBUSTEZ BCE -->
+  <g transform="translate(80, 360)">
     
   <circle cx="0" cy="-26" r="8.5" fill="#ffffea" stroke="#1e293b" stroke-width="1.8" />
   <line x1="0" y1="-17.5" x2="0" y2="5" stroke="#1e293b" stroke-width="2" />
@@ -114,10 +93,9 @@
   <line x1="0" y1="5" x2="-12" y2="25" stroke="#1e293b" stroke-width="2" />
   <line x1="0" y1="5" x2="12" y2="25" stroke="#1e293b" stroke-width="2" />
 
-    <text x="0" y="48" class="node-title">Administrador</text>
+    <text x="0" y="45" class="node-title">Administrador / Gerencia</text>
   </g>
 
-  <!-- 2. Boundary: UI_ReporteTradicional -->
   <g transform="translate(350, 360)">
     
   <line x1="-29" y1="-24" x2="-29" y2="24" stroke="#475569" stroke-width="2.5" />
@@ -127,7 +105,6 @@
     <text x="0" y="48" class="node-title">UI_ReporteTradicional</text>
   </g>
 
-  <!-- 3. Control: ReporteTradicionalController -->
   <g transform="translate(700, 360)">
     
   <circle cx="0" cy="0" r="24" fill="#ffffea" stroke="#475569" stroke-width="2" />
@@ -137,7 +114,6 @@
     <text x="0" y="48" class="node-title">ReporteTradicionalController</text>
   </g>
 
-  <!-- 4. Dominio: ReporteTradicional -->
   <g transform="translate(1160, 360)">
     
   <circle cx="0" cy="0" r="24" fill="#ffffea" stroke="#475569" stroke-width="2" />
@@ -146,7 +122,6 @@
     <text x="0" y="48" class="node-title">ReporteTradicional</text>
   </g>
 
-  <!-- 5. Entity: Zona -->
   <g transform="translate(700, 130)">
     
   <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
@@ -155,7 +130,6 @@
     <text x="0" y="44" class="node-title">Zona</text>
   </g>
 
-  <!-- 6. Entity: Bitacora -->
   <g transform="translate(700, 670)">
     
   <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
@@ -164,7 +138,6 @@
     <text x="0" y="44" class="node-title">Bitacora</text>
   </g>
 
-  <!-- 7. Entity: Cliente -->
   <g transform="translate(1160, 130)">
     
   <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
@@ -173,7 +146,6 @@
     <text x="0" y="44" class="node-title">Cliente</text>
   </g>
 
-  <!-- 8. Entity: Pago -->
   <g transform="translate(1160, 670)">
     
   <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
@@ -182,7 +154,6 @@
     <text x="0" y="44" class="node-title">Pago</text>
   </g>
 
-  <!-- 9. Entity: Mensualidad -->
   <g transform="translate(1500, 360)">
     
   <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
@@ -191,9 +162,7 @@
     <text x="0" y="44" class="node-title">Mensualidad</text>
   </g>
 
-  <!-- ================= MENSAJES Y LLAMADAS DE COMUNICACIÓN ================= -->
-
-  <!-- Mensajes entre Administrador y UI -->
+  <!-- MENSAJES Y LLAMADAS -->
   <g transform="translate(125, 275)">
     <text x="0" y="0" class="flow-1">1: consultarCatalogoReportes() &rarr;</text>
     <text x="0" y="16" class="flow-1">1.3: cargarParametrosFiltros() &rarr;</text>
@@ -202,7 +171,6 @@
     <text x="0" y="64" class="flow-4">4: exportarAPdf() &rarr;</text>
   </g>
 
-  <!-- Mensajes entre UI y Controller -->
   <g transform="translate(385, 260)">
     <text x="0" y="0" class="flow-1">1.1: catalogo() &rarr;</text>
     <text x="0" y="15" class="flow-1">1.4: parametros() &rarr;</text>
@@ -211,12 +179,10 @@
     <text x="0" y="60" class="flow-4">4.1: exportarPdf(Request) &rarr;</text>
   </g>
 
-  <!-- Mensajes entre Controller y Zona -->
   <g transform="translate(710, 210)">
-    <text x="0" y="0" class="flow-1">1.5: query()-&gt;select(['idZona', 'nombreZona', 'codigo'])-&gt;get() &rarr;</text>
+    <text x="0" y="0" class="flow-1">1.5: query()->select(['idZona', 'nombreZona'])->get() &rarr;</text>
   </g>
 
-  <!-- Mensajes entre Controller y ReporteTradicional -->
   <g transform="translate(740, 260)">
     <text x="0" y="0" class="flow-1">1.2: catalogo() &rarr;</text>
     <text x="0" y="18" class="flow-2">2.2: generar(tipo, filtros) &rarr;</text>
@@ -224,26 +190,22 @@
     <text x="0" y="54" class="flow-4">4.2: generar(tipo, filtros) &rarr;</text>
   </g>
 
-  <!-- Mensajes entre Controller y Bitacora -->
   <g transform="translate(710, 480)">
     <text x="0" y="0" class="flow-2">2.4: log('CU27', 'GENERAR_REPORTE', detalle) &rarr;</text>
     <text x="0" y="20" class="flow-3">3.3: log('CU27', 'EXPORTAR_EXCEL', detalle) &rarr;</text>
     <text x="0" y="40" class="flow-4">4.3: log('CU27', 'EXPORTAR_PDF', detalle) &rarr;</text>
   </g>
 
-  <!-- Mensajes entre ReporteTradicional y Cliente -->
   <g transform="translate(1170, 210)">
-    <text x="0" y="0" class="flow-2">2.3.1: table('Cliente')-&gt;leftJoin('Zona')-&gt;leftJoin('ServicioInternet')-&gt;get() &rarr;</text>
+    <text x="0" y="0" class="flow-2">2.3.1: table('Cliente')->leftJoin('Zona')->get() &rarr;</text>
   </g>
 
-  <!-- Mensajes entre ReporteTradicional y Pago -->
   <g transform="translate(1170, 490)">
-    <text x="0" y="0" class="flow-2">2.3.2: table('Pago')-&gt;join('MetodoPago')-&gt;whereBetween()-&gt;get() &rarr;</text>
+    <text x="0" y="0" class="flow-2">2.3.2: table('Pago')->join('MetodoPago')->whereBetween()->get() &rarr;</text>
   </g>
 
-  <!-- Mensajes entre ReporteTradicional y Mensualidad -->
   <g transform="translate(1210, 345)">
-    <text x="0" y="0" class="flow-2">2.3.3: table('Mensualidad')-&gt;whereIn('estado', ['PENDIENTE','VENCIDA'])-&gt;get() &rarr;</text>
+    <text x="0" y="0" class="flow-2">2.3.3: table('Mensualidad')->whereIn('estado', ['PENDIENTE','VENCIDA'])->get() &rarr;</text>
   </g>
 
   <!-- LEYENDA INFERIOR -->
@@ -252,7 +214,7 @@
     <text x="20" y="26" font-size="11" font-weight="bold" fill="#0f172a">Convención de Flujos:</text>
     <text x="170" y="26" class="flow-1">&bull; Flujo 1: Consultar catálogo de reportes y parámetros de filtrado</text>
     <text x="580" y="26" class="flow-2">&bull; Flujo 2: Generar consulta consolidada y auditoría</text>
-    <text x="940" y="26" class="flow-3">&bull; Flujo 3: Exportar reporte a Excel (CSV con BOM)</text>
+    <text x="940" y="26" class="flow-3">&bull; Flujo 3: Exportar reporte a Excel (CSV con BOM UTF-8)</text>
     <text x="1270" y="26" class="flow-4">&bull; Flujo 4: Exportar reporte a PDF oficial</text>
   </g>
 </svg>

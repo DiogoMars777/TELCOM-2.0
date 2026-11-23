@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>CU29: Diagrama de Comunicación - Capturar y Transcribir Comandos de Voz</title>
+  <title>CU29 Diagrama de Comunicación - Capturar y Transcribir Comandos de Voz</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -21,27 +21,24 @@
   </style>
 </head>
 <body>
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1650 900" width="1650" height="900" style="background:#ffffff; font-family: Arial, Helvetica, sans-serif;">
+  
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
   <defs>
     <style>
-      .tab-title { font-size: 10px; font-weight: bold; fill: #1e293b; }
+      .tab-title { font-size: 11px; font-weight: bold; fill: #1e293b; }
       .node-title { font-size: 12px; font-weight: bold; fill: #0f172a; text-anchor: middle; }
-      .link-line { stroke: #64748b; stroke-width: 1.2; fill: none; }
+      .link-line { stroke: #64748b; stroke-width: 1.3; fill: none; }
       .flow-1 { fill: #0f172a; font-size: 10.5px; font-weight: bold; }
       .flow-2 { fill: #b91c1c; font-size: 10.5px; font-weight: bold; }
-      .flow-3 { fill: #1d4ed8; font-size: 10.5px; font-weight: bold; }
-      .flow-4 { fill: #15803d; font-size: 10.5px; font-weight: bold; }
+      .flow-3 { fill: #15803d; font-size: 10.5px; font-weight: bold; }
     </style>
   </defs>
 
-  <!-- Pestaña de Diagrama EA -->
   <path d="M 20,45 L 20,24 L 420,24 L 436,45 Z" fill="#ffffff" stroke="#64748b" stroke-width="1" />
   <text x="30" y="38" class="tab-title">sd CU29 Capturar y transcribir comandos de voz</text>
 
-  <!-- Marco Exterior -->
-  <rect x="20" y="45" width="1610" height="835" fill="#ffffff" stroke="#64748b" stroke-width="1" />
+  <rect x="20" y="45" width="1560" height="835" fill="#ffffff" stroke="#64748b" stroke-width="1" />
 
-  <!-- Marcas de agua -->
   <g opacity="0.45">
     
     <text x="30" y="95" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
@@ -97,32 +94,15 @@
     </text>
   </g>
 
-  <!-- LÍNEAS DE ENLACE ENTRE INSTANCIAS -->
-  <!-- Admin a UI_ComandoVoz -->
-  <line x1="105" y1="360" x2="310" y2="360" class="link-line" />
+  <!-- LÍNEAS DE ENLACE -->
+  <line x1="140" y1="360" x2="380" y2="360" class="link-line" />
+  <line x1="420" y1="360" x2="710" y2="360" class="link-line" />
+  <line x1="750" y1="360" x2="1140" y2="360" class="link-line" />
+  <line x1="730" y1="320" x2="730" y2="150" class="link-line" />
+  <line x1="730" y1="400" x2="730" y2="650" class="link-line" />
 
-  <!-- UI_ComandoVoz a Controller -->
-  <line x1="360" y1="360" x2="680" y2="360" class="link-line" />
-
-  <!-- Controller a ComandoVoz (Entidad/NLP) -->
-  <line x1="725" y1="360" x2="1140" y2="360" class="link-line" />
-
-  <!-- ComandoVoz a Zona (Vertical hacia arriba) -->
-  <line x1="1160" y1="320" x2="1160" y2="150" class="link-line" />
-
-  <!-- Controller a Bitacora (Vertical hacia abajo) -->
-  <line x1="700" y1="400" x2="700" y2="650" class="link-line" />
-
-  <!-- UI_ComandoVoz a UI_ReporteTradicional (Handoff cruzado) -->
-  <line x1="335" y1="400" x2="335" y2="650" class="link-line" />
-
-  <!-- Controller a Usuario (Diagonal) -->
-  <line x1="720" y1="400" x2="1140" y2="650" class="link-line" />
-
-  <!-- NODOS / INSTANCIAS -->
-
-  <!-- Actor: Administrador -->
-  <g transform="translate(100, 360)">
+  <!-- INSTANCIAS ROBUSTEZ BCE -->
+  <g transform="translate(110, 360)">
     
   <circle cx="0" cy="-26" r="8.5" fill="#ffffea" stroke="#1e293b" stroke-width="1.8" />
   <line x1="0" y1="-17.5" x2="0" y2="5" stroke="#1e293b" stroke-width="2" />
@@ -130,11 +110,10 @@
   <line x1="0" y1="5" x2="-12" y2="25" stroke="#1e293b" stroke-width="2" />
   <line x1="0" y1="5" x2="12" y2="25" stroke="#1e293b" stroke-width="2" />
 
-    <text x="0" y="48" class="node-title">Administrador</text>
+    <text x="0" y="45" class="node-title">Usuario / Operador</text>
   </g>
 
-  <!-- Boundary: UI_ComandoVoz -->
-  <g transform="translate(335, 360)">
+  <g transform="translate(400, 360)">
     
   <line x1="-29" y1="-24" x2="-29" y2="24" stroke="#475569" stroke-width="2.5" />
   <line x1="-29" y1="0" x2="-24" y2="0" stroke="#475569" stroke-width="2" />
@@ -143,8 +122,7 @@
     <text x="0" y="48" class="node-title">UI_ComandoVoz</text>
   </g>
 
-  <!-- Control: ComandoVozController -->
-  <g transform="translate(700, 360)">
+  <g transform="translate(730, 360)">
     
   <circle cx="0" cy="0" r="24" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <path d="M -5 -24 L 4 -28 L 2 -24 C 11 -21 26 -2 24 6" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" />
@@ -153,7 +131,6 @@
     <text x="0" y="48" class="node-title">ComandoVozController</text>
   </g>
 
-  <!-- Entity / NLP: ComandoVoz -->
   <g transform="translate(1160, 360)">
     
   <circle cx="0" cy="0" r="24" fill="#ffffea" stroke="#475569" stroke-width="2" />
@@ -162,8 +139,7 @@
     <text x="0" y="48" class="node-title">ComandoVoz</text>
   </g>
 
-  <!-- Entity: Zona -->
-  <g transform="translate(1160, 130)">
+  <g transform="translate(730, 130)">
     
   <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <line x1="-22" y1="26" x2="22" y2="26" stroke="#475569" stroke-width="2.5" />
@@ -171,8 +147,7 @@
     <text x="0" y="44" class="node-title">Zona</text>
   </g>
 
-  <!-- Entity: Bitacora -->
-  <g transform="translate(700, 670)">
+  <g transform="translate(730, 670)">
     
   <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <line x1="-22" y1="26" x2="22" y2="26" stroke="#475569" stroke-width="2.5" />
@@ -180,77 +155,39 @@
     <text x="0" y="44" class="node-title">Bitacora</text>
   </g>
 
-  <!-- Boundary: UI_ReporteTradicional -->
-  <g transform="translate(335, 670)">
-    
-  <line x1="-27" y1="-22" x2="-27" y2="22" stroke="#475569" stroke-width="2.5" />
-  <line x1="-27" y1="0" x2="-22" y2="0" stroke="#475569" stroke-width="2" />
-  <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
-
-    <text x="0" y="44" class="node-title">UI_ReporteTradicional</text>
-  </g>
-
-  <!-- Entity: Usuario -->
-  <g transform="translate(1160, 670)">
-    
-  <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
-  <line x1="-22" y1="26" x2="22" y2="26" stroke="#475569" stroke-width="2.5" />
-
-    <text x="0" y="44" class="node-title">Usuario</text>
-  </g>
-
   <!-- MENSAJES Y LLAMADAS -->
-
-  <!-- Entre Admin y UI_ComandoVoz -->
-  <g transform="translate(125, 275)">
-    <text x="0" y="0" class="flow-1">1: activarMicrofonoYDictar() &rarr;</text>
-    <text x="0" y="16" class="flow-2">2: confirmarComando(id, textoAjustado) &rarr;</text>
-    <text x="0" y="32" class="flow-3">3: listarHistorialComandos() &rarr;</text>
-    <text x="0" y="48" class="flow-4">4: seleccionarComandoEjemplo() &rarr;</text>
+  <g transform="translate(150, 275)">
+    <text x="0" y="0" class="flow-1">1: cargarEjemplosComandos() &rarr;</text>
+    <text x="0" y="18" class="flow-2">2: enviarAudioComando(blobAudio) &rarr;</text>
+    <text x="0" y="36" class="flow-3">3: consultarHistorialVoz() &rarr;</text>
   </g>
 
-  <!-- Entre UI_ComandoVoz y Controller -->
-  <g transform="translate(370, 270)">
-    <text x="0" y="0" class="flow-1">1.2: transcribir(Request $request) &rarr;</text>
-    <text x="0" y="20" class="flow-2">2.1: confirmar(Request $request) &rarr;</text>
-    <text x="0" y="40" class="flow-3">3.1: historial() &rarr;</text>
-    <text x="0" y="60" class="flow-4">4.1: ejemplos() &rarr;</text>
+  <g transform="translate(425, 260)">
+    <text x="0" y="0" class="flow-1">1.1: ejemplos() &rarr;</text>
+    <text x="0" y="18" class="flow-2">2.1: transcribir(Request $request) &rarr;</text>
+    <text x="0" y="36" class="flow-3">3.1: historial(Request $request) &rarr;</text>
   </g>
 
-  <!-- Entre Controller y ComandoVoz (NLP & Eloquent) -->
-  <g transform="translate(735, 270)">
-    <text x="0" y="0" class="flow-1">1.3: interpretar(texto): array &rarr;</text>
-    <text x="0" y="16" class="flow-1">1.5: create([idUsuario, textoDictado, intencion, parametros, ...]) &rarr;</text>
-    <text x="0" y="34" class="flow-2">2.2: find($idComando) &rarr;</text>
-    <text x="0" y="50" class="flow-2">2.3: update(['textoDictado', 'intencion', 'estado'=&gt;'CONFIRMADO']) &rarr;</text>
-    <text x="0" y="66" class="flow-3">3.2: with('usuario')-&gt;orderByDesc()-&gt;take(15)-&gt;get() &rarr;</text>
+  <g transform="translate(745, 220)">
+    <text x="0" y="0" class="flow-2">2.2: Zona::pluck('nombreZona') [contexto geográfico] &rarr;</text>
   </g>
 
-  <!-- Entre ComandoVoz y Zona -->
-  <g transform="translate(1170, 210)">
-    <text x="0" y="0" class="flow-1">1.4: table('Zona')-&gt;where('codigo', 'ilike', ...)-&gt;first() &rarr;</text>
+  <g transform="translate(775, 335)">
+    <text x="0" y="0" class="flow-2">2.3: create([audioRuta, textoDictado, intencion, confianza]) &rarr;</text>
+    <text x="0" y="20" class="flow-3">3.2: with('usuario')->orderByDesc('idComando')->paginate() &rarr;</text>
   </g>
 
-  <!-- Entre Controller y Bitacora -->
-  <g transform="translate(710, 500)">
-    <text x="0" y="0" class="flow-1">1.6: log('CU29', 'TRANSCRIBIR_VOZ', detalle) &rarr;</text>
-    <text x="0" y="22" class="flow-2">2.4: log('CU29', 'CONFIRMAR_COMANDO', detalle) &rarr;</text>
-  </g>
-
-  <!-- Entre UI_ComandoVoz y UI_ReporteTradicional -->
-  <g transform="translate(140, 520)">
-    <text x="0" y="0" class="flow-2">2.5: onIrAReporteTradicional(reporteSugerido, parametros) &rarr;</text>
-    <text x="0" y="18" font-size="9.5px" fill="#64748b">(Carga automática de filtros en CU27)</text>
+  <g transform="translate(745, 520)">
+    <text x="0" y="0" class="flow-2">2.4: log('CU29', 'TRANSCRIBIR_VOZ', texto, idComando) &rarr;</text>
   </g>
 
   <!-- LEYENDA INFERIOR -->
-  <g transform="translate(50, 815)">
-    <rect x="0" y="0" width="1550" height="42" fill="#f8fafc" stroke="#cbd5e1" rx="4" />
+  <g transform="translate(50, 810)">
+    <rect x="0" y="0" width="1500" height="42" fill="#f8fafc" stroke="#cbd5e1" rx="4" />
     <text x="20" y="26" font-size="11" font-weight="bold" fill="#0f172a">Convención de Flujos:</text>
-    <text x="170" y="26" class="flow-1">&bull; Flujo 1: Captura de voz, Speech-to-Text y procesamiento NLP</text>
-    <text x="610" y="26" class="flow-2">&bull; Flujo 2: Confirmación/Ajuste de comando y handoff a CU27</text>
-    <text x="1040" y="26" class="flow-3">&bull; Flujo 3: Consulta de historial auditado</text>
-    <text x="1330" y="26" class="flow-4">&bull; Flujo 4: Catálogo de comandos de ejemplo</text>
+    <text x="170" y="26" class="flow-1">&bull; Flujo 1: Sugerencias y catálogo de ejemplos auditivos</text>
+    <text x="580" y="26" class="flow-2">&bull; Flujo 2: Captura en navegador, persistencia de audio WAV y transcripción NLP</text>
+    <text x="1150" y="26" class="flow-3">&bull; Flujo 3: Historial paginado con trazabilidad</text>
   </g>
 </svg>
 </body>

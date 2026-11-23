@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>CU29: Análisis de Clases - Capturar y Transcribir Comandos de Voz</title>
+  <title>CU29 Análisis de Clases - Capturar y Transcribir Comandos de Voz</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -21,7 +21,8 @@
   </style>
 </head>
 <body>
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 940" width="1680" height="940" style="background:#ffffff; font-family: Arial, Helvetica, sans-serif;">
+  
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 920" width="1680" height="920" style="background:#ffffff; font-family: Arial, Helvetica, sans-serif;">
   <defs>
     <style>
       .tab-title { font-size: 10px; font-weight: bold; fill: #1e293b; }
@@ -36,14 +37,11 @@
     </style>
   </defs>
 
-  <!-- Pestaña de Diagrama EA -->
   <path d="M 20,45 L 20,24 L 420,24 L 436,45 Z" fill="#ffffff" stroke="#606060" stroke-width="1" />
   <text x="30" y="38" class="tab-title">class CU29 Capturar y transcribir comandos de voz</text>
 
-  <!-- Marco Exterior -->
-  <rect x="20" y="45" width="1640" height="875" fill="#ffffff" stroke="#606060" stroke-width="1" />
+  <rect x="20" y="45" width="1640" height="855" fill="#ffffff" stroke="#606060" stroke-width="1" />
 
-  <!-- Marcas de agua -->
   <g opacity="0.45">
     
     <text x="30" y="95" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
@@ -102,43 +100,24 @@
     </text>
   </g>
 
-  <!-- LÍNEAS DE ASOCIACIÓN -->
-  <!-- Actor a UI -->
+  <!-- ASOCIACIONES -->
   <line x1="85" y1="280" x2="130" y2="280" class="ea-line" />
+  <line x1="390" y1="280" x2="470" y2="280" class="ea-line" />
+  <text x="410" y="272" class="assoc-text">invoca</text>
 
-  <!-- UI a Controller -->
-  <line x1="360" y1="280" x2="420" y2="280" class="ea-line" />
-  <text x="375" y="272" class="assoc-text">invoca</text>
+  <line x1="770" y1="280" x2="850" y2="280" class="ea-line" />
+  <text x="790" y="272" class="assoc-text">persiste</text>
+  <text x="780" y="295" class="mult-text">1</text>
+  <text x="830" y="295" class="mult-text">0..*</text>
 
-  <!-- Controller a ComandoVoz -->
-  <line x1="680" y1="280" x2="740" y2="280" class="ea-line" />
-  <text x="690" y="272" class="assoc-text">gestiona</text>
+  <line x1="620" y1="390" x2="620" y2="560" class="ea-line" />
+  <text x="630" y="475" class="assoc-text">registra auditoría</text>
 
-  <!-- ComandoVoz a Zona (Vertical hacia arriba) -->
-  <line x1="880" y1="170" x2="880" y2="120" class="ea-line" />
-  <text x="890" y="145" class="assoc-text">resuelve entidad</text>
-  <text x="890" y="165" class="mult-text">0..*</text>
-  <text x="890" y="130" class="mult-text">0..1</text>
+  <line x1="620" y1="160" x2="620" y2="100" class="ea-line" />
+  <line x1="620" y1="100" x2="860" y2="100" class="ea-line" />
+  <text x="720" y="92" class="assoc-text">consulta zonas</text>
 
-  <!-- Controller a Bitacora (Vertical hacia abajo) -->
-  <line x1="550" y1="380" x2="550" y2="580" class="ea-line" />
-  <text x="560" y="480" class="assoc-text">registra auditoría</text>
-  <text x="560" y="405" class="mult-text">1</text>
-  <text x="560" y="565" class="mult-text">0..*</text>
-
-  <!-- ComandoVoz a Usuario (Hacia abajo-derecha) -->
-  <line x1="880" y1="410" x2="880" y2="580" class="ea-line" />
-  <text x="890" y="490" class="assoc-text">pertenece a</text>
-  <text x="890" y="430" class="mult-text">0..*</text>
-  <text x="890" y="565" class="mult-text">1</text>
-
-  <!-- UI_ComandoVoz a UI_ReporteTradicional -->
-  <line x1="245" y1="400" x2="245" y2="580" class="ea-line" />
-  <text x="255" y="490" class="assoc-text">redirige con filtros</text>
-
-  <!-- CLASES / CAJAS EA -->
-
-  <!-- Actor: Administrador -->
+  <!-- CAJAS EA -->
   <g transform="translate(60, 280)">
     
   <circle cx="0" cy="-26" r="8.5" fill="#ffffea" stroke="#1e293b" stroke-width="1.8" />
@@ -147,110 +126,72 @@
   <line x1="0" y1="5" x2="-12" y2="25" stroke="#1e293b" stroke-width="2" />
   <line x1="0" y1="5" x2="12" y2="25" stroke="#1e293b" stroke-width="2" />
 
-    <text x="0" y="45" class="class-title">Administrador</text>
+    <text x="0" y="45" class="class-title">Usuario / Operador</text>
   </g>
 
-  <!-- Boundary: UI_ComandoVoz -->
   <g transform="translate(130, 160)">
-    <rect x="0" y="0" width="230" height="240" class="class-box" />
-    <text x="115" y="20" class="class-title">UI_ComandoVoz</text>
-    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
-    <!-- Métodos -->
-    <text x="10" y="48" class="method-text">+ iniciarDictado(): void</text>
-    <text x="10" y="70" class="method-text">+ detenerDictado(): void</text>
-    <text x="10" y="92" class="method-text">+ handleTextoChange(): void</text>
-    <text x="10" y="114" class="method-text">+ handleConfirmarComando(): void</text>
-    <text x="10" y="136" class="method-text">+ handleSeleccionarEjemplo(): void</text>
-    <text x="10" y="158" class="method-text">+ listarHistorial(): void</text>
-    <text x="10" y="180" class="method-text">+ alternarModoManual(): void</text>
-    <text x="10" y="202" class="method-text">+ limpiar(): void</text>
-  </g>
-
-  <!-- Control: ComandoVozController -->
-  <g transform="translate(420, 180)">
-    <rect x="0" y="0" width="260" height="200" class="class-box" />
-    <text x="130" y="20" class="class-title">ComandoVozController</text>
+    <rect x="0" y="0" width="260" height="230" class="class-box" />
+    <text x="130" y="20" class="class-title">UI_ComandoVoz</text>
     <line x1="0" y1="28" x2="260" y2="28" class="divider" />
-    <!-- Métodos -->
-    <text x="10" y="55" class="method-text">+ transcribir(Request): JsonResponse</text>
-    <text x="10" y="85" class="method-text">+ historial(Request): JsonResponse</text>
-    <text x="10" y="115" class="method-text">+ confirmar(Request): JsonResponse</text>
-    <text x="10" y="145" class="method-text">+ ejemplos(): JsonResponse</text>
+    <text x="10" y="48" class="method-text">+ iniciarGrabacionMicrofono(): void</text>
+    <text x="10" y="70" class="method-text">+ detenerGrabacionYEnviar(): void</text>
+    <text x="10" y="92" class="method-text">+ reproducirAudioGrabado(): void</text>
+    <text x="10" y="114" class="method-text">+ cargarEjemplos(): void</text>
+    <text x="10" y="136" class="method-text">+ seleccionarEjemplo(texto): void</text>
+    <text x="10" y="158" class="method-text">+ listarHistorial(pagina): void</text>
+    <text x="10" y="180" class="method-text">+ mostrarResultadoTranscripcion(): void</text>
+    <text x="10" y="202" class="method-text">+ ejecutarAccionSugerida(): void</text>
   </g>
 
-  <!-- Entity / NLP: ComandoVoz -->
-  <g transform="translate(740, 170)">
-    <rect x="0" y="0" width="280" height="240" class="class-box" />
+  <g transform="translate(470, 160)">
+    <rect x="0" y="0" width="300" height="230" class="class-box" />
+    <text x="150" y="20" class="class-title">ComandoVozController</text>
+    <line x1="0" y1="28" x2="300" y2="28" class="divider" />
+    <text x="10" y="48" class="method-text">+ transcribir(Request $request): JsonResponse</text>
+    <text x="10" y="72" class="method-text">+ historial(Request $request): JsonResponse</text>
+    <text x="10" y="96" class="method-text">+ ejemplos(): JsonResponse</text>
+    <text x="10" y="120" class="method-text">- clasificarIntencion(string $txt): array</text>
+    <text x="10" y="144" class="method-text">- extraerParametros(string $txt): array</text>
+    <text x="10" y="168" class="method-text">- almacenarAudioEnDisco($file): string</text>
+    <text x="10" y="192" class="method-text">- auditarComando(id, txt): void</text>
+  </g>
+
+  <g transform="translate(850, 160)">
+    <rect x="0" y="0" width="280" height="260" class="class-box" />
     <text x="140" y="20" class="class-title">ComandoVoz</text>
     <line x1="0" y1="28" x2="280" y2="28" class="divider" />
-    <!-- Atributos -->
-    <text x="10" y="44" class="attr-text">- idComandoVoz: int</text>
-    <text x="10" y="60" class="attr-text">- idUsuario: int</text>
-    <text x="10" y="76" class="attr-text">- textoDictado: string</text>
-    <text x="10" y="92" class="attr-text">- intencion: string</text>
-    <text x="10" y="108" class="attr-text">- parametros: array</text>
-    <text x="10" y="124" class="attr-text">- confianza: float</text>
-    <text x="10" y="140" class="attr-text">- estado: string</text>
-    <text x="10" y="156" class="attr-text">- duracionSegundos: float</text>
-    <line x1="0" y1="164" x2="280" y2="164" class="divider" />
-    <!-- Métodos -->
-    <text x="10" y="180" class="method-text">+ create(): ComandoVoz</text>
-    <text x="10" y="196" class="method-text">+ find(): ?ComandoVoz</text>
-    <text x="10" y="212" class="method-text">+ update(): bool</text>
-    <text x="10" y="228" class="method-text">+ interpretar(texto): array</text>
+    <text x="10" y="46" class="attr-text">- idComando: int</text>
+    <text x="10" y="64" class="attr-text">- idUsuario: int</text>
+    <text x="10" y="82" class="attr-text">- audioRuta: string</text>
+    <text x="10" y="100" class="attr-text">- textoDictado: text</text>
+    <text x="10" y="118" class="attr-text">- intencionDetectada: string</text>
+    <text x="10" y="136" class="attr-text">- reporteSugerido: string</text>
+    <text x="10" y="154" class="attr-text">- parametros: json</text>
+    <text x="10" y="172" class="attr-text">- confianza: decimal</text>
+    <text x="10" y="190" class="attr-text">- procesadoExitoso: bool</text>
+    <line x1="0" y1="198" x2="280" y2="198" class="divider" />
+    <text x="10" y="218" class="method-text">+ usuario(): BelongsTo</text>
+    <text x="10" y="238" class="method-text">+ scopeExitosos(query): Builder</text>
   </g>
 
-  <!-- Entity: Zona -->
-  <g transform="translate(760, 20)">
-    <rect x="0" y="0" width="240" height="100" class="class-box" />
-    <text x="120" y="18" class="class-title">Zona</text>
-    <line x1="0" y1="24" x2="240" y2="24" class="divider" />
-    <text x="10" y="40" class="attr-text">- idZona: int</text>
-    <text x="10" y="56" class="attr-text">- nombreZona: string</text>
-    <text x="10" y="72" class="attr-text">- codigo: string</text>
-    <line x1="0" y1="78" x2="240" y2="78" class="divider" />
-    <text x="10" y="94" class="method-text">+ where(): void  + first(): void</text>
-  </g>
-
-  <!-- Entity: Bitacora -->
-  <g transform="translate(440, 580)">
-    <rect x="0" y="0" width="220" height="180" class="class-box" />
-    <text x="110" y="18" class="class-title">Bitacora</text>
+  <g transform="translate(860, 40)">
+    <rect x="0" y="0" width="220" height="100" class="class-box" />
+    <text x="110" y="18" class="class-title">Zona</text>
     <line x1="0" y1="24" x2="220" y2="24" class="divider" />
-    <text x="10" y="40" class="attr-text">- idBitacora: int</text>
-    <text x="10" y="56" class="attr-text">- fechaHora: timestamp</text>
-    <text x="10" y="72" class="attr-text">- accion: string</text>
-    <text x="10" y="88" class="attr-text">- modulo: string</text>
-    <text x="10" y="104" class="attr-text">- descripcion: string</text>
-    <text x="10" y="120" class="attr-text">- idUsuario: int</text>
-    <line x1="0" y1="128" x2="220" y2="128" class="divider" />
-    <text x="10" y="148" class="method-text">+ create(): void</text>
-    <text x="10" y="166" class="method-text">+ log(): void</text>
+    <text x="10" y="40" class="attr-text">- idZona: int   - nombreZona: string</text>
+    <line x1="0" y1="50" x2="220" y2="50" class="divider" />
+    <text x="10" y="70" class="method-text">+ pluck('nombreZona'): array</text>
   </g>
 
-  <!-- Entity: Usuario -->
-  <g transform="translate(760, 580)">
-    <rect x="0" y="0" width="240" height="180" class="class-box" />
-    <text x="120" y="18" class="class-title">Usuario</text>
+  <g transform="translate(500, 560)">
+    <rect x="0" y="0" width="240" height="160" class="class-box" />
+    <text x="120" y="18" class="class-title">Bitacora</text>
     <line x1="0" y1="24" x2="240" y2="24" class="divider" />
-    <text x="10" y="40" class="attr-text">- idUsuario: int</text>
-    <text x="10" y="56" class="attr-text">- nombreUsuario: string</text>
-    <text x="10" y="72" class="attr-text">- nombreCompleto: string</text>
-    <text x="10" y="88" class="attr-text">- correo: string</text>
-    <text x="10" y="104" class="attr-text">- activo: boolean</text>
-    <line x1="0" y1="112" x2="240" y2="112" class="divider" />
-    <text x="10" y="132" class="method-text">+ find(): void</text>
-    <text x="10" y="152" class="method-text">+ belongsTo(): void</text>
-  </g>
-
-  <!-- Boundary Receptor: UI_ReporteTradicional -->
-  <g transform="translate(130, 580)">
-    <rect x="0" y="0" width="230" height="140" class="class-box" />
-    <text x="115" y="20" class="class-title">UI_ReporteTradicional</text>
-    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
-    <text x="10" y="48" class="method-text">+ seleccionarTipoReporte(): void</text>
-    <text x="10" y="70" class="method-text">+ aplicarFiltros(filtros): void</text>
-    <text x="10" y="92" class="method-text">+ handleGenerarReporte(): void</text>
+    <text x="10" y="40" class="attr-text">- idBitacora: int   - casoUso: 'CU29'</text>
+    <text x="10" y="56" class="attr-text">- accion: 'TRANSCRIBIR_VOZ'</text>
+    <text x="10" y="72" class="attr-text">- detalles: text</text>
+    <line x1="0" y1="80" x2="240" y2="80" class="divider" />
+    <text x="10" y="100" class="method-text">+ create(array $datos): Bitacora</text>
   </g>
 </svg>
 </body>

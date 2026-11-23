@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 1120" width="1680" height="1120" style="background:#ffffff; font-family: Arial, Helvetica, sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" width="1600" height="1100" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
   <defs>
     <style>
-      .tab-title { font-size: 10px; font-weight: bold; fill: #1e293b; }
+      .tab-title { font-size: 11px; font-weight: bold; fill: #1e293b; }
       .life-title { font-size: 11.5px; font-weight: bold; fill: #0f172a; text-anchor: middle; }
       .life-line { stroke: #94a3b8; stroke-width: 1; stroke-dasharray: 4,4; fill: none; }
       .act-bar { fill: #ffffff; stroke: #475569; stroke-width: 1.2; }
@@ -15,14 +15,11 @@
     </style>
   </defs>
 
-  <!-- Pestaña de Diagrama EA -->
   <path d="M 20,45 L 20,24 L 420,24 L 436,45 Z" fill="#ffffff" stroke="#64748b" stroke-width="1" />
   <text x="30" y="38" class="tab-title">sd CU29 Capturar y transcribir comandos de voz</text>
 
-  <!-- Marco Exterior -->
-  <rect x="20" y="45" width="1640" height="1055" fill="#ffffff" stroke="#64748b" stroke-width="1" />
+  <rect x="20" y="45" width="1560" height="1035" fill="#ffffff" stroke="#64748b" stroke-width="1" />
 
-  <!-- Marcas de agua -->
   <g opacity="0.4">
     
     <text x="30" y="95" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
@@ -93,14 +90,12 @@
     </text>
   </g>
 
-  <!-- LÍNEAS DE VIDA VERTICALES -->
-  <line x1="90" y1="130" x2="90" y2="1070" class="life-line" />
-  <line x1="320" y1="130" x2="320" y2="1070" class="life-line" />
-  <line x1="640" y1="130" x2="640" y2="1070" class="life-line" />
-  <line x1="980" y1="130" x2="980" y2="1070" class="life-line" />
-  <line x1="1260" y1="130" x2="1260" y2="1070" class="life-line" />
-  <line x1="1440" y1="130" x2="1440" y2="1070" class="life-line" />
-  <line x1="1580" y1="130" x2="1580" y2="1070" class="life-line" />
+  <!-- LÍNEAS DE VIDA -->
+  <line x1="90" y1="130" x2="90" y2="1050" class="life-line" />
+  <line x1="330" y1="130" x2="330" y2="1050" class="life-line" />
+  <line x1="680" y1="130" x2="680" y2="1050" class="life-line" />
+  <line x1="1080" y1="130" x2="1080" y2="1050" class="life-line" />
+  <line x1="1420" y1="130" x2="1420" y2="1050" class="life-line" />
 
   <!-- CABECERAS -->
   <g transform="translate(90, 90)">
@@ -111,10 +106,9 @@
   <line x1="0" y1="5" x2="-12" y2="25" stroke="#1e293b" stroke-width="2" />
   <line x1="0" y1="5" x2="12" y2="25" stroke="#1e293b" stroke-width="2" />
 
-    <text x="0" y="40" class="life-title">Administrador</text>
+    <text x="0" y="40" class="life-title">Usuario / Operador</text>
   </g>
-
-  <g transform="translate(320, 90)">
+  <g transform="translate(330, 90)">
     
   <line x1="-25" y1="-20" x2="-25" y2="20" stroke="#475569" stroke-width="2.5" />
   <line x1="-25" y1="0" x2="-20" y2="0" stroke="#475569" stroke-width="2" />
@@ -122,8 +116,7 @@
 
     <text x="0" y="36" class="life-title">UI_ComandoVoz</text>
   </g>
-
-  <g transform="translate(640, 90)">
+  <g transform="translate(680, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <path d="M -5 -20 L 4 -24 L 2 -20 C 11 -17 22 -2 20 6" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" />
@@ -131,24 +124,14 @@
 
     <text x="0" y="36" class="life-title">ComandoVozController</text>
   </g>
-
-  <g transform="translate(980, 90)">
+  <g transform="translate(1080, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
 
-    <text x="0" y="36" class="life-title">ComandoVoz (NLP)</text>
+    <text x="0" y="36" class="life-title">ComandoVoz</text>
   </g>
-
-  <g transform="translate(1260, 90)">
-    
-  <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
-  <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
-
-    <text x="0" y="36" class="life-title">Zona</text>
-  </g>
-
-  <g transform="translate(1440, 90)">
+  <g transform="translate(1420, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
@@ -156,156 +139,73 @@
     <text x="0" y="36" class="life-title">Bitacora</text>
   </g>
 
-  <g transform="translate(1580, 90)">
-    
-  <line x1="-25" y1="-20" x2="-25" y2="20" stroke="#475569" stroke-width="2.5" />
-  <line x1="-25" y1="0" x2="-20" y2="0" stroke="#475569" stroke-width="2" />
-  <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
+  <!-- BLOQUE 1: TRANSCRIBIR VOZ -->
+  <rect x="35" y="150" width="1530" height="280" class="frame-box" />
+  <path d="M 35,170 L 35,150 L 370,150 L 382,170 Z" class="frame-tab" />
+  <text x="45" y="164" class="frame-title">alt Flujo 1: Grabar audio, procesar y transcribir comando</text>
 
-    <text x="0" y="36" class="life-title">UI_ReporteTradicional</text>
-  </g>
+  <rect x="85" y="175" width="10" height="235" class="act-bar" />
+  <rect x="325" y="175" width="10" height="230" class="act-bar" />
+  <rect x="675" y="185" width="10" height="205" class="act-bar" />
 
-  <!-- ================= BLOQUE 1: CAPTURA Y TRANSCRIPCIÓN ================= -->
-  <rect x="35" y="150" width="1610" height="320" class="frame-box" />
-  <path d="M 35,170 L 35,150 L 360,150 L 372,170 Z" class="frame-tab" />
-  <text x="45" y="164" class="frame-title">alt Flujo 1: Captura de voz, Speech-to-Text y procesamiento NLP</text>
+  <line x1="95" y1="180" x2="325" y2="180" class="msg-call" />
+  <polygon points="325,180 319,177 319,183" fill="#1e293b" />
+  <text x="130" y="175" class="call-text">1: enviarAudioComando(blobWav, textoDictado)</text>
 
-  <rect x="85" y="175" width="10" height="275" class="act-bar" />
-  <rect x="315" y="175" width="10" height="270" class="act-bar" />
-  <rect x="635" y="225" width="10" height="205" class="act-bar" />
-  <rect x="975" y="250" width="10" height="135" class="act-bar" />
+  <line x1="335" y1="195" x2="675" y2="195" class="msg-call" />
+  <polygon points="675,195 669,192 669,198" fill="#1e293b" />
+  <text x="380" y="190" class="call-text">1.1: transcribir(Request $request)</text>
 
-  <!-- 1: activarMicrofonoYDictar -->
-  <line x1="95" y1="180" x2="315" y2="180" class="msg-call" />
-  <polygon points="315,180 309,177 309,183" fill="#1e293b" />
-  <text x="110" y="175" class="call-text">1: activarMicrofonoYDictar("Mostrar ingresos de la Zona Norte...")</text>
+  <line x1="685" y1="215" x2="715" y2="215" class="msg-call" />
+  <line x1="715" y1="215" x2="715" y2="230" class="msg-call" />
+  <line x1="715" y1="230" x2="685" y2="230" class="msg-call" />
+  <polygon points="685,230 691,227 691,233" fill="#1e293b" />
+  <text x="720" y="226" class="call-text">clasificarIntencion() & extraerParametros()</text>
 
-  <!-- Self-call reconocimiento Web Speech -->
-  <path d="M 325,195 L 345,195 L 345,210 L 325,210" fill="none" stroke="#1e293b" stroke-width="1.1" />
-  <polygon points="325,210 331,207 331,213" fill="#1e293b" />
-  <text x="350" y="205" class="call-text">webkitSpeechRecognition.start() -&gt; onresult(textoTranscrito)</text>
+  <line x1="685" y1="255" x2="1075" y2="255" class="msg-call" />
+  <polygon points="1075,255 1069,252 1069,258" fill="#1e293b" />
+  <text x="730" y="250" class="call-text">1.2: ComandoVoz::create([textoDictado, intencion, reporteSugerido, confianza])</text>
 
-  <!-- 1.1: transcribir() a Controller -->
-  <line x1="325" y1="230" x2="635" y2="230" class="msg-call" />
-  <polygon points="635,230 629,227 629,233" fill="#1e293b" />
-  <text x="380" y="225" class="call-text">1.1: transcribir(Request {texto_dictado, duracion_segundos})</text>
+  <line x1="1075" y1="280" x2="685" y2="280" class="msg-ret" />
+  <text x="780" y="275" class="ret-text">($comandoGuardado)</text>
 
-  <!-- 1.2: interpretar() a ComandoVoz NLP -->
-  <line x1="645" y1="255" x2="975" y2="255" class="msg-call" />
-  <polygon points="975,255 969,252 969,258" fill="#1e293b" />
-  <text x="690" y="250" class="call-text">1.2: interpretar($texto): array</text>
+  <line x1="685" y1="305" x2="1415" y2="305" class="msg-call" />
+  <polygon points="1415,305 1409,302 1409,308" fill="#1e293b" />
+  <text x="1100" y="300" class="call-text">1.3: AuditLogger::log('CU29', 'TRANSCRIBIR_VOZ', textoDictado)</text>
 
-  <!-- 1.3: Detección dinámica de Zona en BD -->
-  <line x1="985" y1="280" x2="1255" y2="280" class="msg-call" />
-  <polygon points="1255,280 1249,277 1249,283" fill="#1e293b" />
-  <text x="1030" y="275" class="call-text">1.3: table('Zona')-&gt;where('codigo', 'ilike', '%SCZ-NORTE%')-&gt;first()</text>
+  <line x1="675" y1="335" x2="335" y2="335" class="msg-ret" />
+  <text x="400" y="330" class="ret-text">success({transcripcion, intencion, accion_sugerida})</text>
 
-  <!-- Retorno zona -->
-  <line x1="1255" y1="305" x2="985" y2="305" class="msg-ret" />
-  <text x="1050" y="300" class="ret-text">($zonaEncontrada: idZona 3)</text>
+  <line x1="325" y1="360" x2="95" y2="360" class="msg-ret" />
+  <text x="130" y="355" class="ret-text">mostrarTextoInterpretadoYModalAccion()</text>
 
-  <!-- Retorno interpretación -->
-  <line x1="975" y1="335" x2="645" y2="335" class="msg-ret" />
-  <text x="700" y="330" class="ret-text">{intencion: 'REPORTE_INGRESOS', parametros: {zona_id: 3, ...}}</text>
+  <!-- BLOQUE 2: HISTORIAL -->
+  <rect x="35" y="460" width="1530" height="220" class="frame-box" />
+  <path d="M 35,480 L 35,460 L 310,460 L 322,480 Z" class="frame-tab" />
+  <text x="45" y="474" class="frame-title">alt Flujo 2: Consultar historial de transcripciones</text>
 
-  <!-- 1.4: create() persistencia -->
-  <line x1="645" y1="360" x2="975" y2="360" class="msg-call" />
-  <polygon points="975,360 969,357 969,363" fill="#1e293b" />
-  <text x="690" y="355" class="call-text">1.4: create([idUsuario, textoDictado, intencion, parametros, ...])</text>
+  <rect x="85" y="485" width="10" height="175" class="act-bar" />
+  <rect x="325" y="485" width="10" height="170" class="act-bar" />
+  <rect x="675" y="495" width="10" height="145" class="act-bar" />
 
-  <!-- 1.5: Bitacora de auditoria -->
-  <line x1="645" y1="385" x2="1435" y2="385" class="msg-call" />
-  <polygon points="1435,385 1429,382 1429,388" fill="#1e293b" />
-  <text x="800" y="380" class="call-text">1.5: AuditLogger::log('CU29', 'TRANSCRIBIR_VOZ', ...)</text>
+  <line x1="95" y1="490" x2="325" y2="490" class="msg-call" />
+  <polygon points="325,490 319,487 319,493" fill="#1e293b" />
+  <text x="130" y="485" class="call-text">2: consultarHistorialVoz(filtro)</text>
 
-  <!-- Retorno JSON a UI -->
-  <line x1="635" y1="410" x2="325" y2="410" class="msg-ret" />
-  <text x="390" y="405" class="ret-text">success({idComando, textoDictado, intencion, parametros, resumen})</text>
+  <line x1="335" y1="510" x2="675" y2="510" class="msg-call" />
+  <polygon points="675,510 669,507 669,513" fill="#1e293b" />
+  <text x="380" y="505" class="call-text">2.1: historial(Request $request)</text>
 
-  <!-- Visualización en UI -->
-  <line x1="315" y1="435" x2="95" y2="435" class="msg-ret" />
-  <text x="110" y="430" class="ret-text">mostrarTranscripcionYInterpretacionVisual()</text>
+  <line x1="685" y1="535" x2="1075" y2="535" class="msg-call" />
+  <polygon points="1075,535 1069,532 1069,538" fill="#1e293b" />
+  <text x="730" y="530" class="call-text">2.2: ComandoVoz::with('usuario')->orderByDesc('idComando')->paginate()</text>
 
-  <!-- ================= BLOQUE 2: CONFIRMAR Y EJECUTAR REPORTE ================= -->
-  <rect x="35" y="490" width="1610" height="320" class="frame-box" />
-  <path d="M 35,510 L 35,490 L 380,490 L 392,510 Z" class="frame-tab" />
-  <text x="45" y="504" class="frame-title">alt Flujo 2: Confirmar o ajustar texto transcrito y ejecutar reporte</text>
+  <line x1="1075" y1="560" x2="685" y2="560" class="msg-ret" />
+  <text x="780" y="555" class="ret-text">($historialPaginado)</text>
 
-  <rect x="85" y="520" width="10" height="270" class="act-bar" />
-  <rect x="315" y="520" width="10" height="265" class="act-bar" />
-  <rect x="635" y="540" width="10" height="175" class="act-bar" />
+  <line x1="675" y1="585" x2="335" y2="585" class="msg-ret" />
+  <text x="400" y="580" class="ret-text">success({historial: $historialPaginado})</text>
 
-  <!-- 2: confirmarComando -->
-  <line x1="95" y1="530" x2="315" y2="530" class="msg-call" />
-  <polygon points="315,530 309,527 309,533" fill="#1e293b" />
-  <text x="110" y="525" class="call-text">2: confirmarComando(idComando, textoAjustado)</text>
-
-  <!-- 2.1: confirmar(Request) -->
-  <line x1="325" y1="550" x2="635" y2="550" class="msg-call" />
-  <polygon points="635,550 629,547 629,553" fill="#1e293b" />
-  <text x="380" y="545" class="call-text">2.1: confirmar(Request {id_comando, texto_ajustado})</text>
-
-  <!-- 2.2: find() y update() -->
-  <line x1="645" y1="575" x2="975" y2="575" class="msg-call" />
-  <polygon points="975,575 969,572 969,578" fill="#1e293b" />
-  <text x="690" y="570" class="call-text">2.2: find($id)-&gt;update(['estado'=&gt;'CONFIRMADO', 'textoDictado'=&gt;...])</text>
-
-  <!-- Retorno update -->
-  <line x1="975" y1="600" x2="645" y2="600" class="msg-ret" />
-  <text x="750" y="595" class="ret-text">(comandoActualizado)</text>
-
-  <!-- 2.3: Bitacora de confirmación -->
-  <line x1="645" y1="625" x2="1435" y2="625" class="msg-call" />
-  <polygon points="1435,625 1429,622 1429,628" fill="#1e293b" />
-  <text x="800" y="620" class="call-text">2.3: AuditLogger::log('CU29', 'CONFIRMAR_COMANDO', ...)</text>
-
-  <!-- Retorno confirmación -->
-  <line x1="635" y1="660" x2="325" y2="660" class="msg-ret" />
-  <text x="390" y="655" class="ret-text">success({textoConfirmado, interpretacion})</text>
-
-  <!-- 2.4: Handoff cruzado hacia CU27 con filtros precargados -->
-  <line x1="325" y1="695" x2="1575" y2="695" class="msg-call" />
-  <polygon points="1575,695 1569,692 1569,698" fill="#1e293b" />
-  <text x="750" y="690" class="call-text">2.4: onIrAReporteTradicional('ingresos_pagos', {zona_id: 3, fecha_desde: ...})</text>
-
-  <!-- Notificación al usuario y redirección de vista -->
-  <line x1="315" y1="740" x2="95" y2="740" class="msg-ret" />
-  <text x="110" y="735" class="ret-text">abrirModuloCU27ConResultadosPrecargados()</text>
-
-  <!-- ================= BLOQUE 3: HISTORIAL DE COMANDOS ================= -->
-  <rect x="35" y="830" width="1610" height="220" class="frame-box" />
-  <path d="M 35,850 L 35,830 L 330,830 L 342,850 Z" class="frame-tab" />
-  <text x="45" y="844" class="frame-title">alt Flujo 3: Consultar historial de comandos dictados</text>
-
-  <rect x="85" y="860" width="10" height="170" class="act-bar" />
-  <rect x="315" y="860" width="10" height="165" class="act-bar" />
-  <rect x="635" y="875" width="10" height="130" class="act-bar" />
-
-  <!-- 3: listarHistorial -->
-  <line x1="95" y1="875" x2="315" y2="875" class="msg-call" />
-  <polygon points="315,875 309,872 309,878" fill="#1e293b" />
-  <text x="120" y="870" class="call-text">3: listarHistorialComandos()</text>
-
-  <!-- 3.1: historial() -->
-  <line x1="325" y1="895" x2="635" y2="895" class="msg-call" />
-  <polygon points="635,895 629,892 629,898" fill="#1e293b" />
-  <text x="390" y="890" class="call-text">3.1: historial()</text>
-
-  <!-- 3.2: with('usuario')->take(15)->get() -->
-  <line x1="645" y1="920" x2="975" y2="920" class="msg-call" />
-  <polygon points="975,920 969,917 969,923" fill="#1e293b" />
-  <text x="690" y="915" class="call-text">3.2: with('usuario')-&gt;orderByDesc('created_at')-&gt;take(15)-&gt;get()</text>
-
-  <!-- Retorno historial -->
-  <line x1="975" y1="950" x2="645" y2="950" class="msg-ret" />
-  <text x="750" y="945" class="ret-text">($coleccionComandos)</text>
-
-  <!-- Respuesta JSON -->
-  <line x1="635" y1="980" x2="325" y2="980" class="msg-ret" />
-  <text x="390" y="975" class="ret-text">success($historialMapeado, 'Historial obtenido.')</text>
-
-  <!-- Renderizado historial en UI -->
-  <line x1="315" y1="1010" x2="95" y2="1010" class="msg-ret" />
-  <text x="120" y="1005" class="ret-text">mostrarListaHistorialConChipsDeEstado()</text>
-
+  <line x1="325" y1="610" x2="95" y2="610" class="msg-ret" />
+  <text x="130" y="605" class="ret-text">renderizarTablaHistorialComandos()</text>
 </svg>
