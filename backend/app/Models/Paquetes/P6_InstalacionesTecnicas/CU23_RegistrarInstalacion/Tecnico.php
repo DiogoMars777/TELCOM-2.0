@@ -19,6 +19,7 @@ class Tecnico extends Model
         'nombreCompleto',
         'telefono',
         'especialidad',
+        'domicilio',
         'activo',
         // alias
         'nombre_completo',

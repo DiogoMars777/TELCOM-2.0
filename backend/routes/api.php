@@ -46,6 +46,8 @@ use App\Http\Controllers\Paquetes\P5_EquiposProveedoresInventario\CU18_Registrar
 use App\Http\Controllers\Paquetes\P5_EquiposProveedoresInventario\CU19_AsignarEquipoComodato\AsignacionEquipoComodatoController;
 // CU20: Reemplazar o retirar equipo de un servicio
 use App\Http\Controllers\Paquetes\P5_EquiposProveedoresInventario\CU20_ReemplazarRetirarEquipo\EquipoReemplazoRetiroController;
+// CU25: Registrar compra de equipo y actualizar stock
+use App\Http\Controllers\Paquetes\P5_EquiposProveedoresInventario\CU25_RegistrarCompraEquipo\CompraEquipoRegistroController;
 // CU21: Registrar solicitud de instalación (entidad UML SolicitudInstalacion)
 use App\Http\Controllers\Paquetes\P6_InstalacionesTecnicas\CU21_RegistrarSolicitudInstalacion\SolicitudInstalacionController;
 // CU22: Programar instalación y asignar técnico
@@ -351,6 +353,31 @@ Route::prefix('cu20')->middleware('auth:sanctum')->group(function () {
         ->middleware('permission:equipos.assign');
     Route::post('/servicios/{servicio}/equipo/retirar', [EquipoReemplazoRetiroController::class, 'retirar'])
         ->middleware('permission:equipos.assign');
+});
+
+/*
+|--------------------------------------------------------------------------
+| CU25 - REGISTRAR COMPRA DE EQUIPO Y ACTUALIZAR STOCK
+|--------------------------------------------------------------------------
+| Permite registrar órdenes de compra a proveedores de hardware e insumos,
+| generando las líneas de detalle, calculando subtotales y actualizando
+| automáticamente las existencias en la tabla Inventario y unidades Equipo.
+|--------------------------------------------------------------------------
+*/
+Route::prefix('cu25/compras')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [CompraEquipoRegistroController::class, 'index'])
+        ->middleware('permission:compras.manage');
+    Route::get('/proveedores', [CompraEquipoRegistroController::class, 'proveedores'])
+        ->middleware('permission:compras.manage');
+    Route::get('/productos', [CompraEquipoRegistroController::class, 'productos'])
+        ->middleware('permission:compras.manage');
+    Route::get('/estados', [CompraEquipoRegistroController::class, 'estados'])
+        ->middleware('permission:compras.manage');
+    Route::post('/', [CompraEquipoRegistroController::class, 'store'])
+        ->middleware('permission:compras.manage');
+    Route::get('/{id}', [CompraEquipoRegistroController::class, 'show'])
+        ->whereNumber('id')
+        ->middleware('permission:compras.manage');
 });
 
 /*

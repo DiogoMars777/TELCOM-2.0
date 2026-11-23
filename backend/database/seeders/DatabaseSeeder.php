@@ -624,6 +624,7 @@ class DatabaseSeeder extends Seeder
             'nombreZona'      => 'Zona Norte - Equipetrol / Sirari',
             'ciudad'          => 'Santa Cruz de la Sierra',
             'barrio'          => 'Equipetrol Norte / Sirari',
+            'sector'          => 'Sector Empresarial Norte',
             'tecnologia'      => 'FTTH GPON',
             'capacidadNodos'  => 500,
             'estado'          => true,
@@ -637,6 +638,7 @@ class DatabaseSeeder extends Seeder
             'nombreZona'      => 'Zona Este - Villa 1ro de Mayo / Plan 3000',
             'ciudad'          => 'Santa Cruz de la Sierra',
             'barrio'          => 'Villa 1ro de Mayo / Plan 3000',
+            'sector'          => 'Sector Comercial Este',
             'tecnologia'      => 'FTTH GPON',
             'capacidadNodos'  => 800,
             'estado'          => true,
@@ -650,6 +652,7 @@ class DatabaseSeeder extends Seeder
             'nombreZona'      => 'Zona Sur - Casco Viejo / Santos Dumont',
             'ciudad'          => 'Santa Cruz de la Sierra',
             'barrio'          => 'Casco Viejo / Santos Dumont',
+            'sector'          => 'Sector Residencial Sur',
             'tecnologia'      => 'FTTH GPON',
             'capacidadNodos'  => 600,
             'estado'          => true,
@@ -664,6 +667,7 @@ class DatabaseSeeder extends Seeder
             'nombreZona'      => 'Zona Norte - Troncal Tradicional',
             'ciudad'          => 'Santa Cruz de la Sierra',
             'barrio'          => 'Radial 26 / 4to Anillo',
+            'sector'          => 'Sector Troncal Periférica',
             'tecnologia'      => 'FTTH GPON',
             'capacidadNodos'  => 500,
             'estado'          => true,
@@ -681,6 +685,7 @@ class DatabaseSeeder extends Seeder
             'nombreCompleto' => 'Ing. Roberto Justiniano Suárez',
             'telefono'       => '+591 74055667',
             'especialidad'   => 'Fibra Óptica FTTH y Empalmes por Fusión',
+            'domicilio'      => 'Av. San Martín #450, Barrio Equipetrol',
             'activo'         => true,
         ], 'idTecnico');
 
@@ -688,6 +693,7 @@ class DatabaseSeeder extends Seeder
             'nombreCompleto' => 'Téc. Marco Antonio Vaca Céspedes',
             'telefono'       => '+591 75066778',
             'especialidad'   => 'Instalaciones Domiciliarias y Configuración ONT',
+            'domicilio'      => 'Calle René Moreno #230, Casco Viejo',
             'activo'         => true,
         ], 'idTecnico');
 
@@ -695,6 +701,7 @@ class DatabaseSeeder extends Seeder
             'nombreCompleto' => 'Téc. Fernando Aguilera Roca',
             'telefono'       => '+591 76077889',
             'especialidad'   => 'Mantenimiento de Red y Cortes Técnicos',
+            'domicilio'      => 'Av. Santos Dumont 4to Anillo #120',
             'activo'         => true,
         ], 'idTecnico');
 

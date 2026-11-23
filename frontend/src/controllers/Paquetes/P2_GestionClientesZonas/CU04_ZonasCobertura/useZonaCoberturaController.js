@@ -10,6 +10,7 @@ const emptyZona = {
   nombre: '',
   ciudad: 'La Paz',
   barrio: '',
+  sector: '',
   tecnologia: 'FTTH GPON',
   estado_cobertura: '',
   capacidad_nodos: 100,
@@ -23,6 +24,7 @@ function zonaAFormulario(z) {
     nombre: z.nombre ?? '',
     ciudad: z.ciudad ?? 'La Paz',
     barrio: z.barrio ?? '',
+    sector: z.sector ?? '',
     tecnologia: z.tecnologia ?? 'FTTH GPON',
     // Los registros antiguos pueden no tener estado: se deja vacío para que
     // el usuario lo complete; no se inventa un valor.
@@ -36,12 +38,14 @@ function zonaAFormulario(z) {
 function normalizarPayload(form) {
   const texto = (valor) => (typeof valor === 'string' ? valor.trim() : valor);
   const barrio = texto(form.barrio);
+  const sector = texto(form.sector);
 
   return {
     codigo: texto(form.codigo),
     nombre: texto(form.nombre),
     ciudad: texto(form.ciudad),
     barrio: barrio ? barrio : null,
+    sector: sector ? sector : null,
     tecnologia: form.tecnologia,
     estado_cobertura: form.estado_cobertura ? form.estado_cobertura : null,
     capacidad_nodos: Number(form.capacidad_nodos) || 0,

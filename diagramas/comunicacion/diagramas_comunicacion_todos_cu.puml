@@ -851,6 +851,45 @@ frame "sd CU23 Registrar y gestionar órdenes de instalación técnica" {
 }
 @enduml
 
+@startuml cu25_comunicacion_registrar_compra_equipo
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 10
+skinparam actorBackgroundColor #FFF2E6
+skinparam actorBorderColor #A80036
+skinparam boundaryBackgroundColor #CCEEFF
+skinparam boundaryBorderColor #0088CC
+skinparam controlBackgroundColor #CCEEFF
+skinparam controlBorderColor #0088CC
+skinparam entityBackgroundColor #CCEEFF
+skinparam entityBorderColor #0088CC
+
+frame "sd CU25 Registrar compra de equipo y actualizar stock" {
+    () " " as spacer
+    actor "Administrador / Almacén" as AdminActor
+    boundary UI_CompraRegistro
+    control CompraEquipoRegistroController
+    entity Compra
+    entity DetalleCompra
+    entity Inventario
+    entity Proveedor
+
+    spacer -[hidden]down- AdminActor
+
+    AdminActor -right- UI_CompraRegistro : <font color=#000000>1: listarCompras(filtros) →</font>\n<font color=#800000>2: abrirFormularioCompra() →</font>\n<font color=#008000>3: registrarCompraEquipo(datos, items) →</font>\n<font color=#000080>4: consultarDetalleCompra(id) →</font>
+
+    UI_CompraRegistro -right- CompraEquipoRegistroController : <font color=#000000>1.1: index(Request) →</font>\n<font color=#800000>2.1: proveedores(), productos() →</font>\n<font color=#008000>3.1: store(Request) →</font>\n<font color=#000080>4.1: show(id) →</font>
+
+    CompraEquipoRegistroController -right- Compra : <font color=#000000>1.2: with(['proveedor', 'detalles'])->get() →</font>\n<font color=#008000>3.2: create(cabeceraCompra) →</font>\n<font color=#008000>3.5: update(['montoTotal' => total]) →</font>\n<font color=#000080>4.2: with(['proveedor', 'detalles.inventario'])->find(id) →</font>
+
+    CompraEquipoRegistroController -up- Proveedor : <font color=#800000>2.2: where('estado', true)->get() →</font>\n<font color=#008000>3.3: exists:Proveedor,idProveedor →</font>
+
+    CompraEquipoRegistroController -down- DetalleCompra : <font color=#008000>3.4: create(detalles) →</font>
+
+    CompraEquipoRegistroController -down- Inventario : <font color=#008000>3.6: increment('stockActual', cant) →</font>
+}
+@enduml
+
 @startuml cu26_visualizar_dashboard_admin_financiero
 skinparam backgroundColor white
 skinparam defaultFontName "Segoe UI"
