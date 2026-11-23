@@ -1,0 +1,132 @@
+/*
+ * CU28 - Copias de Seguridad (Backup / Restore)
+ * Estilos específicos basados en Vanilla CSS y variables globales del proyecto.
+ */
+
+.cu28-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cu28-actions-header {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* En celdas de Estado y Acciones en escritorio, no permitir quiebres de línea */
+.col-nowrap,
+.col-status,
+.col-actions {
+  white-space: nowrap;
+}
+
+.backup-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.backup-file-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.backup-file-name {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  word-break: break-all;
+}
+
+.backup-desc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.backup-confirm-info {
+  background: var(--bg-hover, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md, 8px);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.backup-user-cell {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.backup-user-cell strong {
+  color: var(--text-primary);
+  font-size: 0.825rem;
+}
+
+.backup-user-cell small {
+  color: var(--text-secondary);
+  font-size: 0.725rem;
+}
+
+.badge-tipo-manual {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.badge-tipo-subida {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.badge-tipo-automatica {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.badge-estado-completado {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+}
+
+.badge-estado-restaurado {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
+}
+
+.badge-estado-fallido {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+/* Ajustes responsivos para tarjeta móvil */
+.user-card .user-card-id {
+  font-family: monospace;
+  word-break: break-all;
+  font-size: 0.825rem;
+}
+
+@media (max-width: 768px) {
+  .cu28-actions-header {
+    width: 100%;
+  }
+
+  .cu28-actions-header .btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
