@@ -92,10 +92,11 @@
 
   <!-- LÍNEAS DE VIDA -->
   <line x1="90" y1="130" x2="90" y2="1050" class="life-line" />
-  <line x1="330" y1="130" x2="330" y2="1050" class="life-line" />
-  <line x1="680" y1="130" x2="680" y2="1050" class="life-line" />
-  <line x1="1080" y1="130" x2="1080" y2="1050" class="life-line" />
-  <line x1="1420" y1="130" x2="1420" y2="1050" class="life-line" />
+  <line x1="300" y1="130" x2="300" y2="1050" class="life-line" />
+  <line x1="570" y1="130" x2="570" y2="1050" class="life-line" />
+  <line x1="860" y1="130" x2="860" y2="1050" class="life-line" />
+  <line x1="1140" y1="130" x2="1140" y2="1050" class="life-line" />
+  <line x1="1440" y1="130" x2="1440" y2="1050" class="life-line" />
 
   <!-- CABECERAS -->
   <g transform="translate(90, 90)">
@@ -108,7 +109,7 @@
 
     <text x="0" y="40" class="life-title">Usuario / Operador</text>
   </g>
-  <g transform="translate(330, 90)">
+  <g transform="translate(300, 90)">
     
   <line x1="-25" y1="-20" x2="-25" y2="20" stroke="#475569" stroke-width="2.5" />
   <line x1="-25" y1="0" x2="-20" y2="0" stroke="#475569" stroke-width="2" />
@@ -116,7 +117,7 @@
 
     <text x="0" y="36" class="life-title">UI_ComandoVoz</text>
   </g>
-  <g transform="translate(680, 90)">
+  <g transform="translate(570, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <path d="M -5 -20 L 4 -24 L 2 -20 C 11 -17 22 -2 20 6" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" />
@@ -124,14 +125,21 @@
 
     <text x="0" y="36" class="life-title">ComandoVozController</text>
   </g>
-  <g transform="translate(1080, 90)">
+  <g transform="translate(860, 90)">
+    
+  <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
+  <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
+
+    <text x="0" y="36" class="life-title">Zona</text>
+  </g>
+  <g transform="translate(1140, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
 
     <text x="0" y="36" class="life-title">ComandoVoz</text>
   </g>
-  <g transform="translate(1420, 90)">
+  <g transform="translate(1440, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
@@ -145,38 +153,39 @@
   <text x="45" y="164" class="frame-title">alt Flujo 1: Grabar audio, procesar y transcribir comando</text>
 
   <rect x="85" y="175" width="10" height="235" class="act-bar" />
-  <rect x="325" y="175" width="10" height="230" class="act-bar" />
-  <rect x="675" y="185" width="10" height="205" class="act-bar" />
+  <rect x="295" y="175" width="10" height="230" class="act-bar" />
+  <rect x="565" y="185" width="10" height="205" class="act-bar" />
 
-  <line x1="95" y1="180" x2="325" y2="180" class="msg-call" />
-  <polygon points="325,180 319,177 319,183" fill="#1e293b" />
+  <line x1="95" y1="180" x2="295" y2="180" class="msg-call" />
+  <polygon points="295,180 289,177 289,183" fill="#1e293b" />
   <text x="130" y="175" class="call-text">1: enviarAudioComando(blobWav, textoDictado)</text>
 
-  <line x1="335" y1="195" x2="675" y2="195" class="msg-call" />
-  <polygon points="675,195 669,192 669,198" fill="#1e293b" />
-  <text x="380" y="190" class="call-text">1.1: transcribir(Request $request)</text>
+  <line x1="305" y1="195" x2="565" y2="195" class="msg-call" />
+  <polygon points="565,195 559,192 559,198" fill="#1e293b" />
+  <text x="350" y="190" class="call-text">1.1: transcribir(Request $request)</text>
 
-  <line x1="685" y1="215" x2="715" y2="215" class="msg-call" />
-  <line x1="715" y1="215" x2="715" y2="230" class="msg-call" />
-  <line x1="715" y1="230" x2="685" y2="230" class="msg-call" />
-  <polygon points="685,230 691,227 691,233" fill="#1e293b" />
-  <text x="720" y="226" class="call-text">clasificarIntencion() & extraerParametros()</text>
+  <line x1="575" y1="215" x2="855" y2="215" class="msg-call" />
+  <polygon points="855,215 849,212 849,218" fill="#1e293b" />
+  <text x="590" y="210" class="call-text">1.2: Zona::pluck('nombreZona') [contexto geográfico]</text>
 
-  <line x1="685" y1="255" x2="1075" y2="255" class="msg-call" />
-  <polygon points="1075,255 1069,252 1069,258" fill="#1e293b" />
-  <text x="730" y="250" class="call-text">1.2: ComandoVoz::create([textoDictado, intencion, reporteSugerido, confianza])</text>
+  <line x1="855" y1="235" x2="575" y2="235" class="msg-ret" />
+  <text x="640" y="230" class="ret-text">($zonasContexto)</text>
 
-  <line x1="1075" y1="280" x2="685" y2="280" class="msg-ret" />
-  <text x="780" y="275" class="ret-text">($comandoGuardado)</text>
+  <line x1="575" y1="255" x2="1135" y2="255" class="msg-call" />
+  <polygon points="1135,255 1129,252 1129,258" fill="#1e293b" />
+  <text x="590" y="250" class="call-text">1.3: ComandoVoz::create([textoDictado, intencion, reporteSugerido, confianza])</text>
 
-  <line x1="685" y1="305" x2="1415" y2="305" class="msg-call" />
-  <polygon points="1415,305 1409,302 1409,308" fill="#1e293b" />
-  <text x="1100" y="300" class="call-text">1.3: AuditLogger::log('CU29', 'TRANSCRIBIR_VOZ', textoDictado)</text>
+  <line x1="1135" y1="280" x2="575" y2="280" class="msg-ret" />
+  <text x="820" y="275" class="ret-text">($comandoGuardado)</text>
 
-  <line x1="675" y1="335" x2="335" y2="335" class="msg-ret" />
-  <text x="400" y="330" class="ret-text">success({transcripcion, intencion, accion_sugerida})</text>
+  <line x1="575" y1="305" x2="1435" y2="305" class="msg-call" />
+  <polygon points="1435,305 1429,302 1429,308" fill="#1e293b" />
+  <text x="960" y="300" class="call-text">1.4: AuditLogger::log('CU29', 'TRANSCRIBIR_VOZ', textoDictado)</text>
 
-  <line x1="325" y1="360" x2="95" y2="360" class="msg-ret" />
+  <line x1="565" y1="335" x2="305" y2="335" class="msg-ret" />
+  <text x="360" y="330" class="ret-text">success({transcripcion, intencion, accion_sugerida})</text>
+
+  <line x1="295" y1="360" x2="95" y2="360" class="msg-ret" />
   <text x="130" y="355" class="ret-text">mostrarTextoInterpretadoYModalAccion()</text>
 
   <!-- BLOQUE 2: HISTORIAL -->
@@ -185,27 +194,27 @@
   <text x="45" y="474" class="frame-title">alt Flujo 2: Consultar historial de transcripciones</text>
 
   <rect x="85" y="485" width="10" height="175" class="act-bar" />
-  <rect x="325" y="485" width="10" height="170" class="act-bar" />
-  <rect x="675" y="495" width="10" height="145" class="act-bar" />
+  <rect x="295" y="485" width="10" height="170" class="act-bar" />
+  <rect x="565" y="495" width="10" height="145" class="act-bar" />
 
-  <line x1="95" y1="490" x2="325" y2="490" class="msg-call" />
-  <polygon points="325,490 319,487 319,493" fill="#1e293b" />
+  <line x1="95" y1="490" x2="295" y2="490" class="msg-call" />
+  <polygon points="295,490 289,487 289,493" fill="#1e293b" />
   <text x="130" y="485" class="call-text">2: consultarHistorialVoz(filtro)</text>
 
-  <line x1="335" y1="510" x2="675" y2="510" class="msg-call" />
-  <polygon points="675,510 669,507 669,513" fill="#1e293b" />
-  <text x="380" y="505" class="call-text">2.1: historial(Request $request)</text>
+  <line x1="305" y1="510" x2="565" y2="510" class="msg-call" />
+  <polygon points="565,510 559,507 559,513" fill="#1e293b" />
+  <text x="350" y="505" class="call-text">2.1: historial(Request $request)</text>
 
-  <line x1="685" y1="535" x2="1075" y2="535" class="msg-call" />
-  <polygon points="1075,535 1069,532 1069,538" fill="#1e293b" />
-  <text x="730" y="530" class="call-text">2.2: ComandoVoz::with('usuario')->orderByDesc('idComando')->paginate()</text>
+  <line x1="575" y1="535" x2="1135" y2="535" class="msg-call" />
+  <polygon points="1135,535 1129,532 1129,538" fill="#1e293b" />
+  <text x="600" y="530" class="call-text">2.2: ComandoVoz::with('usuario')->orderByDesc('idComando')->paginate()</text>
 
-  <line x1="1075" y1="560" x2="685" y2="560" class="msg-ret" />
-  <text x="780" y="555" class="ret-text">($historialPaginado)</text>
+  <line x1="1135" y1="560" x2="575" y2="560" class="msg-ret" />
+  <text x="820" y="555" class="ret-text">($historialPaginado)</text>
 
-  <line x1="675" y1="585" x2="335" y2="585" class="msg-ret" />
-  <text x="400" y="580" class="ret-text">success({historial: $historialPaginado})</text>
+  <line x1="565" y1="585" x2="305" y2="585" class="msg-ret" />
+  <text x="360" y="580" class="ret-text">success({historial: $historialPaginado})</text>
 
-  <line x1="325" y1="610" x2="95" y2="610" class="msg-ret" />
+  <line x1="295" y1="610" x2="95" y2="610" class="msg-ret" />
   <text x="130" y="605" class="ret-text">renderizarTablaHistorialComandos()</text>
 </svg>

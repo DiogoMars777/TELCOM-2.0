@@ -7,9 +7,9 @@ const pumlSecuencia = path.join(rootDir, 'secuencia', 'diagramas_secuencia_todos
 const pumlAnalisis = path.join(rootDir, 'analisis_clases', 'diagramas_analisis_clases_todos_cu.puml');
 
 // =========================================================================
-// 1. PLANTUML COMUNICACIÓN CU24, CU27 - CU31
+// 1. PLANTUML COMUNICACIÓN CICLO 4 (CU24 A CU31)
 // =========================================================================
-const pumlCU24Com = `
+const pumlCiclo4Com = `
 @startuml cu24_gestionar_proveedores
 skinparam backgroundColor white
 skinparam defaultFontName "Segoe UI"
@@ -32,7 +32,6 @@ frame "sd CU24 Gestionar proveedores" {
     control ProveedorController
     entity Proveedor
     entity Bitacora
-    entity Compra
 
     spacer -[hidden]down- AdminActor
 
@@ -42,14 +41,101 @@ frame "sd CU24 Gestionar proveedores" {
 
     ProveedorController -right- Proveedor : <font color=#000000>1.2: query()->whereLike()->get() →</font>\\n<font color=#800000>2.2: create([...datos, estado: true]) →</font>\\n<font color=#008000>3.2: findOrFail(id)->update(datos) →</font>\\n<font color=#000080>4.2: findOrFail(id)->update(['estado' => bool]) →</font>
 
-    ProveedorController -down- Bitacora : <font color=#800000>2.3: log('CU24', 'CREAR_PROVEEDOR') →</font>\\n<font color=#008000>3.3: log('CU24', 'ACTUALIZAR_PROVEEDOR') →</font>\\n<font color=#000080>4.4: log('CU24', 'ESTADO_PROVEEDOR') →</font>
-
-    Proveedor -up- Compra : <font color=#000080>4.3: compras()->exists() [integridad referencial] →</font>
+    ProveedorController -down- Bitacora : <font color=#800000>2.3: log('CU24', 'CREAR_PROVEEDOR') →</font>\\n<font color=#008000>3.3: log('CU24', 'ACTUALIZAR_PROVEEDOR') →</font>\\n<font color=#000080>4.3: log('CU24', 'ESTADO_PROVEEDOR') →</font>
 }
 @enduml
-`;
 
-const pumlCU27to31Com = `
+@startuml cu25_comunicacion_registrar_compra_equipo
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 10
+skinparam actorBackgroundColor #FFF2E6
+skinparam actorBorderColor #A80036
+skinparam boundaryBackgroundColor #CCEEFF
+skinparam boundaryBorderColor #0088CC
+skinparam controlBackgroundColor #CCEEFF
+skinparam controlBorderColor #0088CC
+skinparam entityBackgroundColor #CCEEFF
+skinparam entityBorderColor #0088CC
+
+frame "sd CU25 Registrar compra de equipo y actualizar stock" {
+    () " " as spacer
+    actor "Administrador / Almacén" as AdminActor
+    boundary UI_CompraRegistro
+    control CompraEquipoRegistroController
+    entity Compra
+    entity DetalleCompra
+    entity Inventario
+    entity Proveedor
+
+    spacer -[hidden]down- AdminActor
+
+    AdminActor -right- UI_CompraRegistro : <font color=#000000>1: listarCompras(filtros) →</font>\\n<font color=#800000>2: abrirFormularioCompra() →</font>\\n<font color=#008000>3: registrarCompraEquipo(datos, items) →</font>\\n<font color=#000080>4: consultarDetalleCompra(id) →</font>
+
+    UI_CompraRegistro -right- CompraEquipoRegistroController : <font color=#000000>1.1: index(Request) →</font>\\n<font color=#800000>2.1: proveedores(), productos() →</font>\\n<font color=#008000>3.1: store(Request) →</font>\\n<font color=#000080>4.1: show(id) →</font>
+
+    CompraEquipoRegistroController -right- Compra : <font color=#000000>1.2: with(['proveedor', 'detalles'])->get() →</font>\\n<font color=#008000>3.2: create(cabeceraCompra) →</font>\\n<font color=#008000>3.5: update(['montoTotal' => total]) →</font>\\n<font color=#000080>4.2: with(['proveedor', 'detalles.inventario'])->find(id) →</font>
+
+    CompraEquipoRegistroController -up- Proveedor : <font color=#800000>2.2: where('estado', true)->get() →</font>\\n<font color=#008000>3.3: exists:Proveedor,idProveedor →</font>
+
+    CompraEquipoRegistroController -down- DetalleCompra : <font color=#008000>3.4: create(detalles) →</font>
+
+    CompraEquipoRegistroController -down- Inventario : <font color=#008000>3.6: increment('stockActual', cant) →</font>
+}
+@enduml
+
+@startuml cu26_visualizar_dashboard_admin_financiero
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam interfaceBackgroundColor transparent
+skinparam interfaceBorderColor transparent
+skinparam roundCorner 10
+skinparam Shadowing false
+skinparam ArrowThickness 1.2
+
+skinparam boundaryBackgroundColor #D0EBF5
+skinparam boundaryBorderColor #0088CC
+skinparam controlBackgroundColor #D0EBF5
+skinparam controlBorderColor #0088CC
+skinparam entityBackgroundColor #D0EBF5
+skinparam entityBorderColor #0088CC
+
+frame "sd CU26 Visualizar Dashboard administrativo y financiero" {
+    () " " as spacer
+    actor "Administrador / Secretaría" as AdminActor
+    boundary UI_DashboardAdminFinanciero
+    control DashboardAdminFinancieroController
+    entity Pago
+    entity Mensualidad
+    entity Cliente
+    entity ServicioInternet
+    entity PlanInternet
+    entity Zona
+    entity Bitacora
+
+    spacer -[hidden]down- AdminActor
+
+    AdminActor -right- UI_DashboardAdminFinanciero : <font color=#000000>1: consultarDashboard(periodo) →</font>\\n<font color=#800000>2: filtrarFinanciero(periodo) →</font>\\n<font color=#008000>3: consultarAlertasMorosidad() →</font>
+
+    UI_DashboardAdminFinanciero -right- DashboardAdminFinancieroController : <font color=#000000>1.1: index(Request) →</font>\\n<font color=#800000>2.1: financiero(Request) →</font>\\n<font color=#008000>3.1: alertas() →</font>
+
+    DashboardAdminFinancieroController -up- Pago : <font color=#000000>1.3: sum('montoTotal'), count(*) [recaudación] →</font>\\n<font color=#800000>2.2: leftJoin('MetodoPago')->groupBy() [canales QR/Efectivo] →</font>
+
+    DashboardAdminFinancieroController -up- Mensualidad : <font color=#000000>1.4: where('estado','PENDIENTE')->sum('monto') [cartera vencida] →</font>\\n<font color=#800000>2.3: selectRaw('sum(monto)')->groupBy('periodo') [evolución semestral] →</font>\\n<font color=#008000>3.2: join('Cliente')->where('estado','PENDIENTE')->orderByDesc('mora') →</font>
+
+    DashboardAdminFinancieroController -right- Cliente : <font color=#000000>1.5: where('estadoCliente','ACTIVO')->count() [clientes activos] →</font>\\n<font color=#008000>3.3: findOrFail(idCliente) [contacto/deuda] →</font>
+
+    DashboardAdminFinancieroController -down- ServicioInternet : <font color=#000000>1.6: leftJoin('EstadoServicio')->groupBy('estado') [servicios activos/cortes] →</font>
+
+    DashboardAdminFinancieroController -down- PlanInternet : <font color=#000000>1.7: withCount(['asignaciones' => whereNull('fechaFin')]) [abonados por plan] →</font>
+
+    DashboardAdminFinancieroController -down- Zona : <font color=#000000>1.8: select('capacidadNodos')->withCount('servicios') [saturación red] →</font>
+
+    DashboardAdminFinancieroController -left- Bitacora : <font color=#000000>1.9: log('CU26', 'CONSULTA_DASHBOARD', 'user_id', ip) →</font>
+}
+@enduml
+
 @startuml cu27_generar_exportar_reportes_tradicionales
 skinparam backgroundColor white
 skinparam defaultFontName "Segoe UI"
@@ -158,6 +244,7 @@ frame "sd CU29 Capturar y transcribir comandos de voz" {
     control ComandoVozController
     entity ComandoVoz
     entity Zona
+    entity Usuario
     entity Bitacora
 
     spacer -[hidden]down- UserActor
@@ -169,6 +256,8 @@ frame "sd CU29 Capturar y transcribir comandos de voz" {
     ComandoVozController -right- ComandoVoz : <font color=#800000>2.3: create([audioRuta, textoDictado, intencion, confianza]) →</font>\\n<font color=#008000>3.2: with('usuario')->orderByDesc('idComando')->paginate() →</font>
 
     ComandoVozController -up- Zona : <font color=#800000>2.2: Zona::pluck('nombreZona') [contexto geográfico] →</font>
+
+    ComandoVoz -up- Usuario : <font color=#008000>3.3: with('usuario') →</font>
 
     ComandoVozController -down- Bitacora : <font color=#800000>2.4: log('CU29', 'TRANSCRIBIR_VOZ') →</font>
 }
@@ -196,7 +285,9 @@ frame "sd CU30 Procesar intención de voz con IA (NLP)" {
     control IntencionVozController
     control NlpIntencionService
     entity IntencionVozIA
-    entity "Cliente / Zona / Pago" as DominioEnVivo
+    entity Usuario
+    entity Cliente
+    entity Zona
     entity Bitacora
 
     spacer -[hidden]down- OperadorActor
@@ -207,9 +298,13 @@ frame "sd CU30 Procesar intención de voz con IA (NLP)" {
 
     IntencionVozController -right- NlpIntencionService : <font color=#000000>1.2: procesar($textoDictado): array →</font>
 
-    NlpIntencionService -up- DominioEnVivo : <font color=#000000>1.3: extraerEntidades() -> consultarDatosEnVivo() →</font>
+    NlpIntencionService -up- Cliente : <font color=#000000>1.3: where('estadoCliente','ACTIVO')->where('idZona', $idZona)->count() →</font>
 
-    NlpIntencionService -right- IntencionVozIA : <font color=#000000>1.4: create([intencion, confianza, entidades, datosEnVivo]) →</font>\\n<font color=#800000>2.2: with('usuario')->orderByDesc()->paginate() →</font>
+    Cliente -right- Zona : <font color=#000000>1.3.1: whereLike('nombreZona', $zonaNombre)->first() →</font>
+
+    NlpIntencionService -right- IntencionVozIA : <font color=#000000>1.4: create([intencion, confianza, entidades, datosEnVivo]) →</font>\\n<font color=#800000>2.3: orderByDesc()->paginate() →</font>
+
+    IntencionVozIA -up- Usuario : <font color=#800000>2.2: with('usuario') →</font>
 
     IntencionVozController -down- Bitacora : <font color=#000000>1.5: log('CU30', 'PROCESAR_INTENCION_NLP') →</font>
 }
@@ -237,7 +332,11 @@ frame "sd CU31 Generar reporte inteligente vía comando de voz" {
     control ReporteInteligenteController
     control GeminiIntencionService
     control CatalogoReportesService
-    entity "Cliente / Pago / Mensualidad" as EntidadesDominio
+    entity ReporteInteligente
+    entity Cliente
+    entity Zona
+    entity Mensualidad
+    entity Pago
     entity Bitacora
 
     spacer -[hidden]down- AdminActor
@@ -250,9 +349,17 @@ frame "sd CU31 Generar reporte inteligente vía comando de voz" {
 
     ReporteInteligenteController -right- CatalogoReportesService : <font color=#000000>1.3: generar($intencionEstructurada): array →</font>
 
-    CatalogoReportesService -right- EntidadesDominio : <font color=#000000>1.4: DB::table(entidades)->select()->where()->get() →</font>
+    CatalogoReportesService -right- Mensualidad : <font color=#000000>1.4: whereIn('estado', ['PENDIENTE','VENCIDA'])->get() →</font>
 
-    ReporteInteligenteController -down- Bitacora : <font color=#000000>1.5: log('CU31', 'GENERAR_REPORTE_INTELIGENTE') →</font>
+    CatalogoReportesService -up- Cliente : <font color=#000000>1.5: where('estadoCliente', 'ACTIVO')->get() →</font>
+
+    Cliente -right- Zona : <font color=#000000>1.5.1: belongsTo(Zona) →</font>
+
+    Mensualidad -down- Pago : <font color=#000000>1.4.1: hasMany(Pago) →</font>
+
+    ReporteInteligenteController -down- ReporteInteligente : <font color=#000000>1.6: create([tipo, comando, filtros, filas]) →</font>
+
+    ReporteInteligenteController -down- Bitacora : <font color=#000000>1.7: log('CU31', 'GENERAR_REPORTE_INTELIGENTE') →</font>
 }
 @enduml
 `;
@@ -349,33 +456,52 @@ skinparam actor {
 frame "sd Diagrama de análisis de clases - CU25 Registrar compra de equipos y actualización de stock" {
     actor "Administrador / Almacén" as AdminActor
 
-    class UI_CompraRegistro {
+    class UI_CompraEquipoRegistro {
         + listarCompras(): void
-        + abrirModalRegistro(): void
-        + agregarItemDetalle(): void
-        + registrarCompraEquipo(): void
-        + verDetalleCompra(): void
+        + abrirFormulario(): void
+        + agregarItem(): void
+        + guardarCompra(): void
+        + mostrarDetalleCompra(): void
     }
 
     class CompraEquipoRegistroController {
         + index(): void
+        + store(): void
         + show(): void
         + proveedores(): void
         + productos(): void
-        + estados(): void
-        + store(): void
     }
 
     class Compra {
         - idCompra: int
-        - nroComprobante: string
+        - numeroComprobante: string
         - fechaCompra: date
         - montoTotal: decimal
         - idProveedor: int
-        - idEstadoCompra: int
+        - idUsuario: int
         --
         + create(): void
-        + update(): void
+        + with(): void
+    }
+
+    class DetalleCompra {
+        - idDetalleCompra: int
+        - idCompra: int
+        - idProducto: int
+        - cantidad: int
+        - precioUnitario: decimal
+        - subtotal: decimal
+        --
+        + create(): void
+    }
+
+    class Inventario {
+        - idInventario: int
+        - codigoProducto: string
+        - nombreProducto: string
+        - stockActual: int
+        --
+        + increment(): void
     }
 
     class Proveedor {
@@ -383,56 +509,20 @@ frame "sd Diagrama de análisis de clases - CU25 Registrar compra de equipos y a
         - razonSocial: string
         - nit: string
         --
-        + find(): void
+        + where(): void
     }
 
-    class EstadoCompra {
-        - idEstadoCompra: int
-        - nombreEstado: string
-        --
-        + find(): void
-    }
-
-    class DetalleCompra {
-        - idDetalleCompra: int
-        - cantidad: int
-        - precioUnitario: decimal
-        - subtotal: decimal
-        - idCompra: int
-        - idInventario: int
-        --
-        + create(): void
-    }
-
-    class Inventario {
-        - idInventario: int
-        - stockActual: int
-        - idProducto: int
-        --
-        + increment(): void
-    }
-
-    class ProductoEquipo {
-        - idProducto: int
-        - nombreProducto: string
-        - tipoEquipo: string
-        --
-        + find(): void
-    }
-
-    AdminActor -right- UI_CompraRegistro
-    UI_CompraRegistro -right- CompraEquipoRegistroController
+    AdminActor -right- UI_CompraEquipoRegistro
+    UI_CompraEquipoRegistro -right- CompraEquipoRegistroController
     CompraEquipoRegistroController -right- Compra
 
-    Compra "0..*" -up- "1" Proveedor
-    Compra "0..*" -down- "1" EstadoCompra
     Compra "1" -right- "1..*" DetalleCompra
-    DetalleCompra "0..*" -right- "1" Inventario
-    Inventario "1" -down- "1" ProductoEquipo
+    DetalleCompra "0..*" -down- "1" Inventario
+    Compra "0..*" -up- "1" Proveedor
 }
 @enduml
 
-@startuml cu26_analisis_dashboard_admin_financiero
+@startuml cu26_analisis_visualizar_dashboard_admin_financiero
 allowmixing
 
 skinparam backgroundColor white
@@ -578,8 +668,8 @@ frame "sd Diagrama de análisis de clases - CU27 Generar y exportar reportes tra
         + consultarCatalogo(): void
         + seleccionarTipoReporte(): void
         + handleGenerarReporte(): void
-        + handleExportarExcel(): void
-        + handleExportarPdf(): void
+        + exportarExcel(): void
+        + exportarPdf(): void
     }
 
     class ReporteTradicionalController {
@@ -591,23 +681,12 @@ frame "sd Diagrama de análisis de clases - CU27 Generar y exportar reportes tra
     }
 
     class ReporteTradicional {
-        + TIPO_CLIENTES_ZONA: string
-        + TIPO_INGRESOS_PAGOS: string
-        + TIPO_MOROSIDAD_CORTES: string
-        + TIPO_EQUIPOS_INSTAL: string
+        - tipoReporte: string
+        - titulo: string
+        - columnas: array
         --
         + catalogo(): void
         + generar(): void
-    }
-
-    class Cliente {
-        - idCliente: int
-        - codigoCliente: string
-        - nombreCompleto: string
-        - estadoCliente: string
-        - idZona: int
-        --
-        + find(): void
     }
 
     class Zona {
@@ -616,6 +695,27 @@ frame "sd Diagrama de análisis de clases - CU27 Generar y exportar reportes tra
         - codigo: string
         --
         + select(): void
+        + get(): void
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - nombreCompleto: string
+        - idZona: int
+        - estadoCliente: string
+        --
+        + leftJoin(): void
+    }
+
+    class Pago {
+        - idPago: int
+        - fechaHora: timestamp
+        - montoTotal: decimal
+        - idMetodoPago: int
+        --
+        + join(): void
+        + whereBetween(): void
     }
 
     class Mensualidad {
@@ -627,32 +727,14 @@ frame "sd Diagrama de análisis de clases - CU27 Generar y exportar reportes tra
         + whereIn(): void
     }
 
-    class Pago {
-        - idPago: int
-        - fechaHora: timestamp
-        - montoTotal: decimal
-        - idMetodoPago: int
-        --
-        + whereBetween(): void
-    }
-
-    class MetodoPago {
-        - idMetodoPago: int
-        - nombreMetodo: string
-        - descripcion: string
-        --
-        + find(): void
-    }
-
     AdminActor -right- UI_ReporteTradicional
     UI_ReporteTradicional -right- ReporteTradicionalController
     ReporteTradicionalController -right- ReporteTradicional
 
-    ReporteTradicional "1" -up- "0..*" Cliente
-    Cliente "0..*" -right- "1" Zona
-    ReporteTradicional "1" -down- "0..*" Mensualidad
-    ReporteTradicional "1" -right- "0..*" Pago
-    Pago "0..*" -down- "1" MetodoPago
+    ReporteTradicional "1" -up- "0..*" Zona
+    Zona "1" -right- "0..*" Cliente
+    ReporteTradicional "1" -down- "0..*" Pago
+    Pago "1" -right- "0..*" Mensualidad
 }
 @enduml
 
@@ -683,20 +765,19 @@ frame "sd Diagrama de análisis de clases - CU28 Generar y restaurar copias de s
     actor "Administrador del Sistema" as AdminActor
 
     class UI_CopiasSeguridad {
-        + listarCopiasSeguridad(): void
-        + submitGenerarBackup(): void
-        + descargarCopia(): void
-        + ejecutarRestauracion(): void
-        + eliminarCopia(): void
+        + listarBackups(): void
+        + abrirModalCrearBackup(): void
+        + confirmarRestauracion(): void
+        + descargarBackup(): void
     }
 
     class CopiasSeguridadController {
         + index(): void
         + store(): void
-        + download(): void
         + restore(): void
+        + download(): void
         + destroy(): void
-        - resolverBinario(): void
+        - ejecutarDump(): void
     }
 
     class CopiaSeguridad {
@@ -704,23 +785,22 @@ frame "sd Diagrama de análisis de clases - CU28 Generar y restaurar copias de s
         - nombreArchivo: string
         - ruta: string
         - tamanoBytes: bigint
-        - idUsuario: int
-        - descripcion: string
-        - tipo: string
+        - tipoCopia: string
         - estado: string
+        - idUsuario: int
+        - fechaCreacion: timestamp
         --
         + create(): void
         + findOrFail(): void
+        + delete(): void
     }
 
     class Usuario {
         - idUsuario: int
         - nombreCompleto: string
-        - email: string
         - nombreUsuario: string
         --
         + find(): void
-        + with(): void
     }
 
     AdminActor -right- UI_CopiasSeguridad
@@ -759,33 +839,31 @@ frame "sd Diagrama de análisis de clases - CU29 Capturar y transcribir comandos
 
     class UI_ComandoVoz {
         + iniciarGrabacion(): void
-        + detenerGrabacionYEnviar(): void
-        + reproducirAudioGrabado(): void
-        + listarHistorial(): void
+        + detenerGrabacion(): void
+        + enviarAudio(): void
         + mostrarTranscripcion(): void
+        + ejecutarAccionSugerida(): void
     }
 
     class ComandoVozController {
         + transcribir(): void
         + historial(): void
         + ejemplos(): void
-        - clasificarIntencion(): void
         - extraerParametros(): void
-        - almacenarAudio(): void
     }
 
     class ComandoVoz {
-        - idComandoVoz: int
+        - idComando: int
         - idUsuario: int
+        - audioRuta: string
         - textoDictado: text
-        - intencion: string
-        - parametros: json
+        - intencionDetectada: string
+        - reporteSugerido: string
         - confianza: float
-        - estado: string
-        - duracionSegundos: float
+        - estadoProcesamiento: string
         --
         + create(): void
-        + interpretar(): void
+        + paginate(): void
     }
 
     class Usuario {
@@ -1010,7 +1088,7 @@ frame "sd Diagrama de análisis de clases - CU31 Generar reporte inteligente ví
 `;
 
 // =========================================================================
-// 3. PLANTUML SECUENCIA CU24 A CU31
+// 3. PLANTUML SECUENCIA CICLO 4 (CU24 A CU31)
 // =========================================================================
 const pumlCU24to31Sec = `
 @startuml cu24_secuencia_gestionar_proveedores
@@ -1150,7 +1228,9 @@ actor "Administrador / Secretaría" as AdminActor
 boundary UI_DashboardAdminFinanciero
 control DashboardAdminFinancieroController
 control DashboardMetricasService
-entity "Pago / Mensualidad" as Facturacion
+entity Pago
+entity Mensualidad
+entity Cliente
 entity Bitacora
 
 == Flujo 1: Consultar Dashboard general y métricas operativas ==
@@ -1160,13 +1240,21 @@ UI_DashboardAdminFinanciero -> DashboardAdminFinancieroController: 1.1: index(Re
 activate DashboardAdminFinancieroController
 DashboardAdminFinancieroController -> DashboardMetricasService: 1.2: obtenerMetricasGenerales(periodo)
 activate DashboardMetricasService
-DashboardMetricasService -> Facturacion: 1.3: Pago::sum('montoTotal'), Mensualidad::where('estado','PENDIENTE')->sum()
-activate Facturacion
-Facturacion --> DashboardMetricasService: $kpisRecaudacion, $carteraVencida
-deactivate Facturacion
+DashboardMetricasService -> Pago: 1.3: sum('montoTotal')
+activate Pago
+Pago --> DashboardMetricasService: $recaudacionTotal
+deactivate Pago
+DashboardMetricasService -> Mensualidad: 1.4: where('estado','PENDIENTE')->sum('monto')
+activate Mensualidad
+Mensualidad --> DashboardMetricasService: $carteraVencida
+deactivate Mensualidad
+DashboardMetricasService -> Cliente: 1.5: count()
+activate Cliente
+Cliente --> DashboardMetricasService: $totalClientes
+deactivate Cliente
 DashboardMetricasService --> DashboardAdminFinancieroController: $metricasConsolidadas
 deactivate DashboardMetricasService
-DashboardAdminFinancieroController -> Bitacora: 1.4: log('CU26', 'CONSULTA_DASHBOARD', ip)
+DashboardAdminFinancieroController -> Bitacora: 1.6: log('CU26', 'CONSULTA_DASHBOARD', ip)
 activate Bitacora
 Bitacora --> DashboardAdminFinancieroController: ok
 deactivate Bitacora
@@ -1180,10 +1268,10 @@ AdminActor -> UI_DashboardAdminFinanciero: 2: consultarAlertasMorosidad()
 activate UI_DashboardAdminFinanciero
 UI_DashboardAdminFinanciero -> DashboardAdminFinancieroController: 2.1: alertas()
 activate DashboardAdminFinancieroController
-DashboardAdminFinancieroController -> Facturacion: 2.2: Mensualidad::where('estado','VENCIDA')->with('servicio.cliente')->get()
-activate Facturacion
-Facturacion --> DashboardAdminFinancieroController: $morososCriticos
-deactivate Facturacion
+DashboardAdminFinancieroController -> Mensualidad: 2.2: where('estado','VENCIDA')->with('servicio.cliente')->get()
+activate Mensualidad
+Mensualidad --> DashboardAdminFinancieroController: $morososCriticos
+deactivate Mensualidad
 DashboardAdminFinancieroController --> UI_DashboardAdminFinanciero: success({alertas: $morososCriticos})
 deactivate DashboardAdminFinancieroController
 UI_DashboardAdminFinanciero --> AdminActor: desplegarBandejaAlertasMora()
@@ -1202,7 +1290,10 @@ actor "Administrador / Gerencia" as AdminActor
 boundary UI_ReporteTradicional
 control ReporteTradicionalController
 entity ReporteTradicional
-entity "Cliente / Pago / Mensualidad" as Entidades
+entity Zona
+entity Cliente
+entity Pago
+entity Mensualidad
 entity Bitacora
 
 == Flujo 1: Consultar catálogo y parámetros ==
@@ -1226,13 +1317,25 @@ UI_ReporteTradicional -> ReporteTradicionalController: 2.1: generar(Request)
 activate ReporteTradicionalController
 ReporteTradicionalController -> ReporteTradicional: 2.2: generar($tipo, $filtros)
 activate ReporteTradicional
-ReporteTradicional -> Entidades: 2.3: DB::table(entidades)->where(filtros)->get()
-activate Entidades
-Entidades --> ReporteTradicional: $filas, $totales
-deactivate Entidades
+ReporteTradicional -> Zona: 2.3: select(['idZona', 'nombreZona'])->get()
+activate Zona
+Zona --> ReporteTradicional: $zonas
+deactivate Zona
+ReporteTradicional -> Cliente: 2.4: table('Cliente')->leftJoin('Zona')->get()
+activate Cliente
+Cliente --> ReporteTradicional: $clientes
+deactivate Cliente
+ReporteTradicional -> Pago: 2.5: table('Pago')->join('MetodoPago')->whereBetween()->get()
+activate Pago
+Pago --> ReporteTradicional: $pagos
+deactivate Pago
+ReporteTradicional -> Mensualidad: 2.6: table('Mensualidad')->whereIn('estado', ['PENDIENTE','VENCIDA'])->get()
+activate Mensualidad
+Mensualidad --> ReporteTradicional: $mensualidades
+deactivate Mensualidad
 ReporteTradicional --> ReporteTradicionalController: $reporteConsolidado
 deactivate ReporteTradicional
-ReporteTradicionalController -> Bitacora: 2.4: log('CU27', 'GENERAR_REPORTE', detalle)
+ReporteTradicionalController -> Bitacora: 2.7: log('CU27', 'GENERAR_REPORTE', detalle)
 activate Bitacora
 Bitacora --> ReporteTradicionalController: ok
 deactivate Bitacora
@@ -1320,6 +1423,7 @@ skinparam roundcorner 6
 actor "Usuario / Operador" as UserActor
 boundary UI_ComandoVoz
 control ComandoVozController
+entity Zona
 entity ComandoVoz
 entity Bitacora
 
@@ -1328,12 +1432,16 @@ UserActor -> UI_ComandoVoz: 1: enviarAudioComando(blobWav, textoDictado)
 activate UI_ComandoVoz
 UI_ComandoVoz -> ComandoVozController: 1.1: transcribir(Request $request)
 activate ComandoVozController
+ComandoVozController -> Zona: 1.2: pluck('nombreZona')
+activate Zona
+Zona --> ComandoVozController: $zonasDisponibles
+deactivate Zona
 ComandoVozController -> ComandoVozController: clasificarIntencion() & extraerParametros()
-ComandoVozController -> ComandoVoz: 1.2: create([textoDictado, intencion, reporteSugerido, confianza])
+ComandoVozController -> ComandoVoz: 1.3: create([textoDictado, intencion, reporteSugerido, confianza])
 activate ComandoVoz
 ComandoVoz --> ComandoVozController: $comandoGuardado
 deactivate ComandoVoz
-ComandoVozController -> Bitacora: 1.3: log('CU29', 'TRANSCRIBIR_VOZ', textoDictado)
+ComandoVozController -> Bitacora: 1.4: log('CU29', 'TRANSCRIBIR_VOZ', textoDictado)
 activate Bitacora
 Bitacora --> ComandoVozController: ok
 deactivate Bitacora
@@ -1355,6 +1463,8 @@ actor "Operador / Asistente" as OperadorActor
 boundary UI_IntencionVoz
 control IntencionVozController
 control NlpIntencionService
+entity Zona
+entity Cliente
 entity IntencionVozIA
 entity Bitacora
 
@@ -1366,14 +1476,21 @@ activate IntencionVozController
 IntencionVozController -> NlpIntencionService: 1.2: procesar($textoDictado): array
 activate NlpIntencionService
 NlpIntencionService -> NlpIntencionService: clasificarIntencion() & extraerEntidades()
-NlpIntencionService -> NlpIntencionService: obtenerDatosEnVivo()
+NlpIntencionService -> Zona: 1.3: whereLike('nombreZona', $zonaNombre)->first()
+activate Zona
+Zona --> NlpIntencionService: $zona
+deactivate Zona
+NlpIntencionService -> Cliente: 1.4: where('estadoCliente','ACTIVO')->where('idZona', $idZona)->count()
+activate Cliente
+Cliente --> NlpIntencionService: $conteoClientesActivos
+deactivate Cliente
 NlpIntencionService --> IntencionVozController: $resultadoNLP
 deactivate NlpIntencionService
-IntencionVozController -> IntencionVozIA: 1.3: create([textoEntrada, intencion, entidades, respuesta])
+IntencionVozController -> IntencionVozIA: 1.5: create([textoEntrada, intencion, entidades, respuesta])
 activate IntencionVozIA
 IntencionVozIA --> IntencionVozController: $registroPersistido
 deactivate IntencionVozIA
-IntencionVozController -> Bitacora: 1.4: log('CU30', 'PROCESAR_INTENCION_NLP', detalle)
+IntencionVozController -> Bitacora: 1.6: log('CU30', 'PROCESAR_INTENCION_NLP', detalle)
 activate Bitacora
 Bitacora --> IntencionVozController: ok
 deactivate Bitacora
@@ -1396,6 +1513,9 @@ boundary UI_ReporteInteligente
 control ReporteInteligenteController
 control GeminiIntencionService
 control CatalogoReportesService
+entity Mensualidad
+entity Cliente
+entity ReporteInteligente
 entity Bitacora
 
 == Flujo 1: Interpretar con Gemini y consultar catálogo de reportes ==
@@ -1409,9 +1529,21 @@ GeminiIntencionService --> ReporteInteligenteController: $intencionEstructurada:
 deactivate GeminiIntencionService
 ReporteInteligenteController -> CatalogoReportesService: 1.3: generar($intencionEstructurada)
 activate CatalogoReportesService
+CatalogoReportesService -> Mensualidad: 1.4: whereIn('estado', ['PENDIENTE','VENCIDA'])->get()
+activate Mensualidad
+Mensualidad --> CatalogoReportesService: $morosidades
+deactivate Mensualidad
+CatalogoReportesService -> Cliente: 1.5: where('estadoCliente','ACTIVO')->get()
+activate Cliente
+Cliente --> CatalogoReportesService: $clientesActivos
+deactivate Cliente
 CatalogoReportesService --> ReporteInteligenteController: $reporteGenerado: {tipo, filas, columnas, resumen}
 deactivate CatalogoReportesService
-ReporteInteligenteController -> Bitacora: 1.4: log('CU31', 'GENERAR_REPORTE_INTELIGENTE', detalle)
+ReporteInteligenteController -> ReporteInteligente: 1.6: create([tipo, comando, filtros, filas])
+activate ReporteInteligente
+ReporteInteligente --> ReporteInteligenteController: $reporteGuardado
+deactivate ReporteInteligente
+ReporteInteligenteController -> Bitacora: 1.7: log('CU31', 'GENERAR_REPORTE_INTELIGENTE', detalle)
 activate Bitacora
 Bitacora --> ReporteInteligenteController: ok
 deactivate Bitacora
@@ -1428,37 +1560,33 @@ deactivate UI_ReporteInteligente
 
 // 1. Actualizar Comunicacion
 let comContent = fs.readFileSync(pumlComunicacion, 'utf8');
-if (!comContent.includes('@startuml cu24_gestionar_proveedores')) {
-  // Insertar CU24 antes de CU25
-  const cu25Index = comContent.indexOf('@startuml cu25_comunicacion_registrar_compra_equipo');
-  if (cu25Index !== -1) {
-    comContent = comContent.slice(0, cu25Index) + pumlCU24Com.trim() + '\n\n' + comContent.slice(cu25Index);
-  } else {
-    comContent += '\n' + pumlCU24Com.trim();
-  }
-}
-if (!comContent.includes('@startuml cu27_generar_exportar_reportes_tradicionales')) {
-  comContent = comContent.trim() + '\n' + pumlCU27to31Com.trim() + '\n';
+const cu24ComIndex = comContent.indexOf('@startuml cu24_gestionar_proveedores');
+if (cu24ComIndex !== -1) {
+  comContent = comContent.slice(0, cu24ComIndex).trim() + '\n\n' + pumlCiclo4Com.trim() + '\n';
+} else {
+  comContent = comContent.trim() + '\n\n' + pumlCiclo4Com.trim() + '\n';
 }
 fs.writeFileSync(pumlComunicacion, comContent, 'utf8');
 console.log('diagramas_comunicacion_todos_cu.puml actualizado exitosamente.');
 
 // 2. Actualizar Secuencia
 let secContent = fs.readFileSync(pumlSecuencia, 'utf8');
-if (!secContent.includes('@startuml cu24_secuencia_gestionar_proveedores')) {
-  secContent = secContent.trim() + '\n' + pumlCU24to31Sec.trim() + '\n';
+const cu24SecIndex = secContent.indexOf('@startuml cu24_secuencia_gestionar_proveedores');
+if (cu24SecIndex !== -1) {
+  secContent = secContent.slice(0, cu24SecIndex).trim() + '\n\n' + pumlCU24to31Sec.trim() + '\n';
+} else {
+  secContent = secContent.trim() + '\n\n' + pumlCU24to31Sec.trim() + '\n';
 }
 fs.writeFileSync(pumlSecuencia, secContent, 'utf8');
 console.log('diagramas_secuencia_todos_cu.puml actualizado exitosamente.');
 
 // 3. Actualizar Analisis de Clases (CU24 - CU31)
 let anaContent = fs.readFileSync(pumlAnalisis, 'utf8');
-const cu24Index = anaContent.indexOf('@startuml cu24_analisis_gestionar_proveedores');
-if (cu24Index !== -1) {
-  anaContent = anaContent.slice(0, cu24Index) + pumlCiclo4Ana.trim() + '\n';
+const cu24AnaIndex = anaContent.indexOf('@startuml cu24_analisis_gestionar_proveedores');
+if (cu24AnaIndex !== -1) {
+  anaContent = anaContent.slice(0, cu24AnaIndex).trim() + '\n\n' + pumlCiclo4Ana.trim() + '\n';
 } else {
   anaContent = anaContent.trim() + '\n\n' + pumlCiclo4Ana.trim() + '\n';
 }
 fs.writeFileSync(pumlAnalisis, anaContent, 'utf8');
 console.log('diagramas_analisis_clases_todos_cu.puml actualizado exitosamente.');
-

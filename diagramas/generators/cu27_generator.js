@@ -326,14 +326,17 @@ function buildCU27ClassAnalysis() {
 function buildCU27Sequence() {
   const width = 1680;
   const height = 1180;
-  const tabW = 440;
+  const tabW = 460;
 
-  const xAdmin = 90;
-  const xUI = 320;
-  const xCtrl = 640;
-  const xDom = 1000;
-  const xEnt = 1320;
-  const xBit = 1540;
+  const xAdmin = 70;
+  const xUI = 240;
+  const xCtrl = 440;
+  const xDom = 650;
+  const xZona = 840;
+  const xCli = 1030;
+  const xPago = 1220;
+  const xMens = 1410;
+  const xBit = 1590;
 
   return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
@@ -367,7 +370,10 @@ function buildCU27Sequence() {
   <line x1="${xUI}" y1="130" x2="${xUI}" y2="${height - 50}" class="life-line" />
   <line x1="${xCtrl}" y1="130" x2="${xCtrl}" y2="${height - 50}" class="life-line" />
   <line x1="${xDom}" y1="130" x2="${xDom}" y2="${height - 50}" class="life-line" />
-  <line x1="${xEnt}" y1="130" x2="${xEnt}" y2="${height - 50}" class="life-line" />
+  <line x1="${xZona}" y1="130" x2="${xZona}" y2="${height - 50}" class="life-line" />
+  <line x1="${xCli}" y1="130" x2="${xCli}" y2="${height - 50}" class="life-line" />
+  <line x1="${xPago}" y1="130" x2="${xPago}" y2="${height - 50}" class="life-line" />
+  <line x1="${xMens}" y1="130" x2="${xMens}" y2="${height - 50}" class="life-line" />
   <line x1="${xBit}" y1="130" x2="${xBit}" y2="${height - 50}" class="life-line" />
 
   <!-- CABECERAS -->
@@ -387,9 +393,21 @@ function buildCU27Sequence() {
     ${entityIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">ReporteTradicional</text>
   </g>
-  <g transform="translate(${xEnt}, 90)">
+  <g transform="translate(${xZona}, 90)">
     ${entityIcon(0, 0, 20)}
-    <text x="0" y="36" class="life-title">Cliente / Pago / Mensualidad</text>
+    <text x="0" y="36" class="life-title">Zona</text>
+  </g>
+  <g transform="translate(${xCli}, 90)">
+    ${entityIcon(0, 0, 20)}
+    <text x="0" y="36" class="life-title">Cliente</text>
+  </g>
+  <g transform="translate(${xPago}, 90)">
+    ${entityIcon(0, 0, 20)}
+    <text x="0" y="36" class="life-title">Pago</text>
+  </g>
+  <g transform="translate(${xMens}, 90)">
+    ${entityIcon(0, 0, 20)}
+    <text x="0" y="36" class="life-title">Mensualidad</text>
   </g>
   <g transform="translate(${xBit}, 90)">
     ${entityIcon(0, 0, 20)}
@@ -397,109 +415,126 @@ function buildCU27Sequence() {
   </g>
 
   <!-- BLOQUE 1 -->
-  <rect x="35" y="150" width="${width - 70}" height="195" class="frame-box" />
+  <rect x="35" y="150" width="${width - 70}" height="205" class="frame-box" />
   <path d="M 35,170 L 35,150 L 360,150 L 372,170 Z" class="frame-tab" />
   <text x="45" y="164" class="frame-title">alt Flujo 1: Consultar catálogo y parámetros de filtrado</text>
 
-  <rect x="${xAdmin - 5}" y="175" width="10" height="150" class="act-bar" />
-  <rect x="${xUI - 5}" y="175" width="10" height="145" class="act-bar" />
-  <rect x="${xCtrl - 5}" y="185" width="10" height="120" class="act-bar" />
+  <rect x="${xAdmin - 5}" y="175" width="10" height="160" class="act-bar" />
+  <rect x="${xUI - 5}" y="175" width="10" height="155" class="act-bar" />
+  <rect x="${xCtrl - 5}" y="185" width="10" height="130" class="act-bar" />
 
   <line x1="${xAdmin + 5}" y1="180" x2="${xUI - 5}" y2="180" class="msg-call" />
   <polygon points="${xUI - 5},180 ${xUI - 11},177 ${xUI - 11},183" fill="#1e293b" />
-  <text x="130" y="175" class="call-text">1: consultarCatalogoReportes()</text>
+  <text x="100" y="175" class="call-text">1: consultarCatalogoReportes()</text>
 
   <line x1="${xUI + 5}" y1="195" x2="${xCtrl - 5}" y2="195" class="msg-call" />
   <polygon points="${xCtrl - 5},195 ${xCtrl - 11},192 ${xCtrl - 11},198" fill="#1e293b" />
-  <text x="410" y="190" class="call-text">1.1: catalogo()</text>
+  <text x="270" y="190" class="call-text">1.1: catalogo(), parametros()</text>
 
   <line x1="${xCtrl + 5}" y1="210" x2="${xDom - 5}" y2="210" class="msg-call" />
   <polygon points="${xDom - 5},210 ${xDom - 11},207 ${xDom - 11},213" fill="#1e293b" />
-  <text x="730" y="205" class="call-text">1.2: catalogo(): array</text>
+  <text x="460" y="205" class="call-text">1.2: catalogo(): array</text>
 
   <line x1="${xDom - 5}" y1="225" x2="${xCtrl + 5}" y2="225" class="msg-ret" />
-  <text x="750" y="222" class="ret-text">($catalogoDisponibles)</text>
+  <text x="490" y="222" class="ret-text">($catalogoDisponibles)</text>
 
-  <line x1="${xCtrl + 5}" y1="245" x2="${xEnt - 5}" y2="245" class="msg-call" />
-  <polygon points="${xEnt - 5},245 ${xEnt - 11},242 ${xEnt - 11},248" fill="#1e293b" />
-  <text x="730" y="240" class="call-text">1.3: Zona::select()->get(), MetodoPago::select()->get()</text>
+  <line x1="${xCtrl + 5}" y1="245" x2="${xZona - 5}" y2="245" class="msg-call" />
+  <polygon points="${xZona - 5},245 ${xZona - 11},242 ${xZona - 11},248" fill="#1e293b" />
+  <text x="500" y="240" class="call-text">1.3: Zona::query()->select(['idZona', 'nombreZona'])->get()</text>
 
-  <line x1="${xEnt - 5}" y1="260" x2="${xCtrl + 5}" y2="260" class="msg-ret" />
-  <text x="960" y="256" class="ret-text">($zonas, $metodos, $estados)</text>
+  <line x1="${xZona - 5}" y1="265" x2="${xCtrl + 5}" y2="265" class="msg-ret" />
+  <text x="600" y="260" class="ret-text">($zonasParametros)</text>
 
-  <line x1="${xCtrl - 5}" y1="285" x2="${xUI + 5}" y2="285" class="msg-ret" />
-  <text x="410" y="280" class="ret-text">success({catalogo, parametros})</text>
+  <line x1="${xCtrl - 5}" y1="290" x2="${xUI + 5}" y2="290" class="msg-ret" />
+  <text x="270" y="285" class="ret-text">success({catalogo, parametros})</text>
 
-  <line x1="${xUI - 5}" y1="305" x2="${xAdmin + 5}" y2="305" class="msg-ret" />
-  <text x="130" y="300" class="ret-text">renderizarFormularioFiltros()</text>
+  <line x1="${xUI - 5}" y1="315" x2="${xAdmin + 5}" y2="315" class="msg-ret" />
+  <text x="100" y="310" class="ret-text">renderizarFormularioFiltros()</text>
 
   <!-- BLOQUE 2 -->
-  <rect x="35" y="360" width="${width - 70}" height="260" class="frame-box" />
-  <path d="M 35,380 L 35,360 L 370,360 L 382,380 Z" class="frame-tab" />
-  <text x="45" y="374" class="frame-title">alt Flujo 2: Generar consulta consolidada y auditoría</text>
+  <rect x="35" y="370" width="${width - 70}" height="280" class="frame-box" />
+  <path d="M 35,390 L 35,370 L 370,370 L 382,390 Z" class="frame-tab" />
+  <text x="45" y="384" class="frame-title">alt Flujo 2: Generar consulta consolidada y auditoría</text>
 
-  <rect x="${xAdmin - 5}" y="385" width="10" height="215" class="act-bar" />
-  <rect x="${xUI - 5}" y="385" width="10" height="210" class="act-bar" />
-  <rect x="${xCtrl - 5}" y="395" width="10" height="185" class="act-bar" />
+  <rect x="${xAdmin - 5}" y="395" width="10" height="235" class="act-bar" />
+  <rect x="${xUI - 5}" y="395" width="10" height="230" class="act-bar" />
+  <rect x="${xCtrl - 5}" y="405" width="10" height="205" class="act-bar" />
 
-  <line x1="${xAdmin + 5}" y1="390" x2="${xUI - 5}" y2="390" class="msg-call" />
-  <polygon points="${xUI - 5},390 ${xUI - 11},387 ${xUI - 11},393" fill="#1e293b" />
-  <text x="130" y="385" class="call-text">2: generarReporte(tipo, filtros)</text>
+  <line x1="${xAdmin + 5}" y1="400" x2="${xUI - 5}" y2="400" class="msg-call" />
+  <polygon points="${xUI - 5},400 ${xUI - 11},397 ${xUI - 11},403" fill="#1e293b" />
+  <text x="100" y="395" class="call-text">2: generarReporte(tipo, filtros)</text>
 
-  <line x1="${xUI + 5}" y1="410" x2="${xCtrl - 5}" y2="410" class="msg-call" />
-  <polygon points="${xCtrl - 5},410 ${xCtrl - 11},407 ${xCtrl - 11},413" fill="#1e293b" />
-  <text x="410" y="405" class="call-text">2.1: generar(Request $request)</text>
+  <line x1="${xUI + 5}" y1="420" x2="${xCtrl - 5}" y2="420" class="msg-call" />
+  <polygon points="${xCtrl - 5},420 ${xCtrl - 11},417 ${xCtrl - 11},423" fill="#1e293b" />
+  <text x="270" y="415" class="call-text">2.1: generar(Request $request)</text>
 
-  <line x1="${xCtrl + 5}" y1="430" x2="${xDom - 5}" y2="430" class="msg-call" />
-  <polygon points="${xDom - 5},430 ${xDom - 11},427 ${xDom - 11},433" fill="#1e293b" />
-  <text x="730" y="425" class="call-text">2.2: generar($tipo, $filtros): array</text>
+  <line x1="${xCtrl + 5}" y1="440" x2="${xDom - 5}" y2="440" class="msg-call" />
+  <polygon points="${xDom - 5},440 ${xDom - 11},437 ${xDom - 11},443" fill="#1e293b" />
+  <text x="460" y="435" class="call-text">2.2: generar($tipo, $filtros): array</text>
 
-  <line x1="${xDom + 5}" y1="450" x2="${xEnt - 5}" y2="450" class="msg-call" />
-  <polygon points="${xEnt - 5},450 ${xEnt - 11},447 ${xEnt - 11},453" fill="#1e293b" />
-  <text x="1040" y="445" class="call-text">2.3: DB::table(entidades)->where(filtros)->get()</text>
+  <!-- Query Cliente -->
+  <line x1="${xDom + 5}" y1="460" x2="${xCli - 5}" y2="460" class="msg-call" />
+  <polygon points="${xCli - 5},460 ${xCli - 11},457 ${xCli - 11},463" fill="#1e293b" />
+  <text x="680" y="455" class="call-text">2.3.1: table('Cliente')->leftJoin('Zona')->get()</text>
 
-  <line x1="${xEnt - 5}" y1="475" x2="${xDom + 5}" y2="475" class="msg-ret" />
-  <text x="1080" y="470" class="ret-text">($filas, $totales)</text>
+  <line x1="${xCli - 5}" y1="480" x2="${xDom + 5}" y2="480" class="msg-ret" />
+  <text x="740" y="475" class="ret-text">($clientes)</text>
 
-  <line x1="${xDom - 5}" y1="495" x2="${xCtrl + 5}" y2="495" class="msg-ret" />
-  <text x="750" y="490" class="ret-text">($reporteConsolidado)</text>
+  <!-- Query Pago -->
+  <line x1="${xDom + 5}" y1="500" x2="${xPago - 5}" y2="500" class="msg-call" />
+  <polygon points="${xPago - 5},500 ${xPago - 11},497 ${xPago - 11},503" fill="#1e293b" />
+  <text x="680" y="495" class="call-text">2.3.2: table('Pago')->join('MetodoPago')->get()</text>
 
-  <line x1="${xCtrl + 5}" y1="520" x2="${xBit - 5}" y2="520" class="msg-call" />
-  <polygon points="${xBit - 5},520 ${xBit - 11},317 ${xBit - 11},523" fill="#1e293b" />
-  <text x="1040" y="515" class="call-text">2.4: AuditLogger::log('CU27', 'GENERAR_REPORTE', detalle)</text>
+  <line x1="${xPago - 5}" y1="520" x2="${xDom + 5}" y2="520" class="msg-ret" />
+  <text x="740" y="515" class="ret-text">($pagos)</text>
 
-  <line x1="${xCtrl - 5}" y1="545" x2="${xUI + 5}" y2="545" class="msg-ret" />
-  <text x="410" y="540" class="ret-text">success({reporte: $reporteConsolidado})</text>
+  <!-- Query Mensualidad -->
+  <line x1="${xDom + 5}" y1="540" x2="${xMens - 5}" y2="540" class="msg-call" />
+  <polygon points="${xMens - 5},540 ${xMens - 11},537 ${xMens - 11},543" fill="#1e293b" />
+  <text x="680" y="535" class="call-text">2.3.3: table('Mensualidad')->whereIn('estado', ['PENDIENTE','VENCIDA'])->get()</text>
 
-  <line x1="${xUI - 5}" y1="570" x2="${xAdmin + 5}" y2="570" class="msg-ret" />
-  <text x="130" y="565" class="ret-text">mostrarTablaReporteConKPIs()</text>
+  <line x1="${xMens - 5}" y1="560" x2="${xDom + 5}" y2="560" class="msg-ret" />
+  <text x="740" y="555" class="ret-text">($mensualidades)</text>
+
+  <line x1="${xDom - 5}" y1="580" x2="${xCtrl + 5}" y2="580" class="msg-ret" />
+  <text x="490" y="575" class="ret-text">($reporteConsolidado)</text>
+
+  <line x1="${xCtrl + 5}" y1="595" x2="${xBit - 5}" y2="595" class="msg-call" />
+  <polygon points="${xBit - 5},595 ${xBit - 11},592 ${xBit - 11},598" fill="#1e293b" />
+  <text x="1100" y="590" class="call-text">2.4: AuditLogger::log('CU27', 'GENERAR_REPORTE', detalle)</text>
+
+  <line x1="${xCtrl - 5}" y1="610" x2="${xUI + 5}" y2="610" class="msg-ret" />
+  <text x="270" y="605" class="ret-text">success({reporte: $reporteConsolidado})</text>
+
+  <line x1="${xUI - 5}" y1="625" x2="${xAdmin + 5}" y2="625" class="msg-ret" />
+  <text x="100" y="620" class="ret-text">mostrarTablaReporteConKPIs()</text>
 
   <!-- BLOQUE 3 -->
-  <rect x="35" y="640" width="${width - 70}" height="220" class="frame-box" />
-  <path d="M 35,660 L 35,640 L 330,640 L 342,660 Z" class="frame-tab" />
-  <text x="45" y="654" class="frame-title">alt Flujo 3: Exportar reporte a Excel</text>
+  <rect x="35" y="670" width="${width - 70}" height="200" class="frame-box" />
+  <path d="M 35,690 L 35,670 L 330,670 L 342,690 Z" class="frame-tab" />
+  <text x="45" y="684" class="frame-title">alt Flujo 3: Exportar reporte a Excel</text>
 
-  <rect x="${xAdmin - 5}" y="665" width="10" height="175" class="act-bar" />
-  <rect x="${xUI - 5}" y="665" width="10" height="170" class="act-bar" />
-  <rect x="${xCtrl - 5}" y="675" width="10" height="145" class="act-bar" />
+  <rect x="${xAdmin - 5}" y="695" width="10" height="155" class="act-bar" />
+  <rect x="${xUI - 5}" y="695" width="10" height="150" class="act-bar" />
+  <rect x="${xCtrl - 5}" y="705" width="10" height="125" class="act-bar" />
 
-  <line x1="${xAdmin + 5}" y1="670" x2="${xUI - 5}" y2="670" class="msg-call" />
-  <polygon points="${xUI - 5},670 ${xUI - 11},667 ${xUI - 11},673" fill="#1e293b" />
-  <text x="130" y="665" class="call-text">3: exportarExcel(tipo, filtros)</text>
+  <line x1="${xAdmin + 5}" y1="700" x2="${xUI - 5}" y2="700" class="msg-call" />
+  <polygon points="${xUI - 5},700 ${xUI - 11},697 ${xUI - 11},703" fill="#1e293b" />
+  <text x="100" y="695" class="call-text">3: exportarExcel(tipo, filtros)</text>
 
-  <line x1="${xUI + 5}" y1="690" x2="${xCtrl - 5}" y2="690" class="msg-call" />
-  <polygon points="${xCtrl - 5},690 ${xCtrl - 11},687 ${xCtrl - 11},693" fill="#1e293b" />
-  <text x="410" y="685" class="call-text">3.1: exportarExcel(Request)</text>
+  <line x1="${xUI + 5}" y1="720" x2="${xCtrl - 5}" y2="720" class="msg-call" />
+  <polygon points="${xCtrl - 5},720 ${xCtrl - 11},717 ${xCtrl - 11},723" fill="#1e293b" />
+  <text x="270" y="715" class="call-text">3.1: exportarExcel(Request)</text>
 
-  <line x1="${xCtrl + 5}" y1="715" x2="${xBit - 5}" y2="715" class="msg-call" />
-  <polygon points="${xBit - 5},715 ${xBit - 11},712 ${xBit - 11},718" fill="#1e293b" />
-  <text x="1040" y="710" class="call-text">3.2: AuditLogger::log('CU27', 'EXPORTAR_ARCHIVO')</text>
+  <line x1="${xCtrl + 5}" y1="740" x2="${xBit - 5}" y2="740" class="msg-call" />
+  <polygon points="${xBit - 5},740 ${xBit - 11},737 ${xBit - 11},743" fill="#1e293b" />
+  <text x="1100" y="735" class="call-text">3.2: AuditLogger::log('CU27', 'EXPORTAR_ARCHIVO')</text>
 
-  <line x1="${xCtrl - 5}" y1="745" x2="${xUI + 5}" y2="745" class="msg-ret" />
-  <text x="410" y="740" class="ret-text">response()->streamDownload()</text>
+  <line x1="${xCtrl - 5}" y1="765" x2="${xUI + 5}" y2="765" class="msg-ret" />
+  <text x="270" y="760" class="ret-text">response()->streamDownload()</text>
 
-  <line x1="${xUI - 5}" y1="770" x2="${xAdmin + 5}" y2="770" class="msg-ret" />
-  <text x="130" y="765" class="ret-text">descargarArchivoBlob()</text>
+  <line x1="${xUI - 5}" y1="790" x2="${xAdmin + 5}" y2="790" class="msg-ret" />
+  <text x="100" y="785" class="ret-text">descargarArchivoBlob()</text>
 </svg>`;
 }
 

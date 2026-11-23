@@ -39,9 +39,11 @@ function buildCU30Communication() {
   <!-- LÍNEAS DE ENLACE -->
   <line x1="150" y1="420" x2="380" y2="420" class="link-line" />
   <line x1="430" y1="420" x2="680" y2="420" class="link-line" />
-  <line x1="730" y1="420" x2="1000" y2="420" class="link-line" />
-  <line x1="1050" y1="420" x2="1320" y2="420" class="link-line" />
-  <line x1="1020" y1="380" x2="1020" y2="180" class="link-line" />
+  <line x1="730" y1="420" x2="980" y2="420" class="link-line" />
+  <line x1="1040" y1="420" x2="1340" y2="420" class="link-line" />
+  <line x1="1010" y1="380" x2="1010" y2="180" class="link-line" />
+  <line x1="1040" y1="150" x2="1200" y2="150" class="link-line" />
+  <line x1="1380" y1="380" x2="1380" y2="180" class="link-line" />
   <line x1="710" y1="460" x2="710" y2="690" class="link-line" />
 
   <!-- INSTANCIAS ROBUSTEZ BCE -->
@@ -60,19 +62,29 @@ function buildCU30Communication() {
     <text x="0" y="48" class="node-title">IntencionVozController</text>
   </g>
 
-  <g transform="translate(1020, 420)">
+  <g transform="translate(1010, 420)">
     ${controlIcon(0, 0, 24)}
     <text x="0" y="48" class="node-title">NlpIntencionService</text>
   </g>
 
-  <g transform="translate(1360, 420)">
+  <g transform="translate(1380, 420)">
     ${entityIcon(0, 0, 24)}
     <text x="0" y="48" class="node-title">IntencionVozIA</text>
   </g>
 
-  <g transform="translate(1020, 150)">
+  <g transform="translate(1010, 150)">
     ${entityIcon(0, 0, 22)}
-    <text x="0" y="44" class="node-title">Cliente / Zona / Pago</text>
+    <text x="0" y="44" class="node-title">Cliente</text>
+  </g>
+
+  <g transform="translate(1230, 150)">
+    ${entityIcon(0, 0, 22)}
+    <text x="0" y="44" class="node-title">Zona</text>
+  </g>
+
+  <g transform="translate(1380, 150)">
+    ${entityIcon(0, 0, 22)}
+    <text x="0" y="44" class="node-title">Usuario</text>
   </g>
 
   <g transform="translate(710, 720)">
@@ -93,18 +105,25 @@ function buildCU30Communication() {
     <text x="0" y="36" class="flow-3">3.1: intenciones(), ejemplos() &rarr;</text>
   </g>
 
-  <g transform="translate(745, 385)">
+  <g transform="translate(740, 385)">
     <text x="0" y="0" class="flow-1">1.2: procesar($textoDictado): array &rarr;</text>
   </g>
 
-  <g transform="translate(1035, 270)">
-    <text x="0" y="0" class="flow-1">1.3: extraerEntidades() -> consultarDatosEnVivo() &rarr;</text>
-    <text x="0" y="18" class="flow-1">1.4: generarRespuestaAsistente() &rarr;</text>
+  <g transform="translate(1020, 270)">
+    <text x="0" y="0" class="flow-1">1.3: Cliente::where('estadoCliente','ACTIVO')->count() &rarr;</text>
+  </g>
+
+  <g transform="translate(1080, 120)">
+    <text x="0" y="0" class="flow-1">1.4: Zona::pluck('nombreZona') &rarr;</text>
   </g>
 
   <g transform="translate(1070, 445)">
     <text x="0" y="0" class="flow-1">1.5: IntencionVozIA::create([intencion, confianza, entidades, datosEnVivo]) &rarr;</text>
     <text x="0" y="18" class="flow-2">2.2: with('usuario')->orderByDesc()->paginate() &rarr;</text>
+  </g>
+
+  <g transform="translate(1395, 270)">
+    <text x="0" y="0" class="flow-2">2.3: with('usuario') &rarr;</text>
   </g>
 
   <g transform="translate(725, 570)">
@@ -267,12 +286,14 @@ function buildCU30Sequence() {
   const height = 1150;
   const tabW = 460;
 
-  const xAdmin = 90;
-  const xUI = 320;
-  const xCtrl = 640;
-  const xNlp = 980;
-  const xEnt = 1320;
-  const xBit = 1550;
+  const xAdmin = 70;
+  const xUI = 250;
+  const xCtrl = 480;
+  const xNlp = 730;
+  const xZona = 960;
+  const xCli = 1170;
+  const xEnt = 1380;
+  const xBit = 1580;
 
   return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
@@ -306,6 +327,8 @@ function buildCU30Sequence() {
   <line x1="${xUI}" y1="130" x2="${xUI}" y2="${height - 50}" class="life-line" />
   <line x1="${xCtrl}" y1="130" x2="${xCtrl}" y2="${height - 50}" class="life-line" />
   <line x1="${xNlp}" y1="130" x2="${xNlp}" y2="${height - 50}" class="life-line" />
+  <line x1="${xZona}" y1="130" x2="${xZona}" y2="${height - 50}" class="life-line" />
+  <line x1="${xCli}" y1="130" x2="${xCli}" y2="${height - 50}" class="life-line" />
   <line x1="${xEnt}" y1="130" x2="${xEnt}" y2="${height - 50}" class="life-line" />
   <line x1="${xBit}" y1="130" x2="${xBit}" y2="${height - 50}" class="life-line" />
 
@@ -326,6 +349,14 @@ function buildCU30Sequence() {
     ${controlIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">NlpIntencionService</text>
   </g>
+  <g transform="translate(${xZona}, 90)">
+    ${entityIcon(0, 0, 20)}
+    <text x="0" y="36" class="life-title">Zona</text>
+  </g>
+  <g transform="translate(${xCli}, 90)">
+    ${entityIcon(0, 0, 20)}
+    <text x="0" y="36" class="life-title">Cliente</text>
+  </g>
   <g transform="translate(${xEnt}, 90)">
     ${entityIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">IntencionVozIA</text>
@@ -336,25 +367,25 @@ function buildCU30Sequence() {
   </g>
 
   <!-- BLOQUE 1: PROCESAMIENTO NLP -->
-  <rect x="35" y="150" width="${width - 70}" height="320" class="frame-box" />
+  <rect x="35" y="150" width="${width - 70}" height="350" class="frame-box" />
   <path d="M 35,170 L 35,150 L 380,150 L 392,170 Z" class="frame-tab" />
   <text x="45" y="164" class="frame-title">alt Flujo 1: Procesar intención con IA y generar datos en vivo</text>
 
-  <rect x="${xAdmin - 5}" y="175" width="10" height="275" class="act-bar" />
-  <rect x="${xUI - 5}" y="175" width="10" height="270" class="act-bar" />
-  <rect x="${xCtrl - 5}" y="185" width="10" height="245" class="act-bar" />
+  <rect x="${xAdmin - 5}" y="175" width="10" height="305" class="act-bar" />
+  <rect x="${xUI - 5}" y="175" width="10" height="300" class="act-bar" />
+  <rect x="${xCtrl - 5}" y="185" width="10" height="275" class="act-bar" />
 
   <line x1="${xAdmin + 5}" y1="180" x2="${xUI - 5}" y2="180" class="msg-call" />
   <polygon points="${xUI - 5},180 ${xUI - 11},177 ${xUI - 11},183" fill="#1e293b" />
-  <text x="130" y="175" class="call-text">1: enviarComandoTexto("Muéstrame las mensualidades vencidas en Plan 3000")</text>
+  <text x="100" y="175" class="call-text">1: enviarComandoTexto("¿Cuántos clientes activos tenemos en Plan 3000?")</text>
 
   <line x1="${xUI + 5}" y1="195" x2="${xCtrl - 5}" y2="195" class="msg-call" />
   <polygon points="${xCtrl - 5},195 ${xCtrl - 11},192 ${xCtrl - 11},198" fill="#1e293b" />
-  <text x="360" y="190" class="call-text">1.1: procesar(Request $request)</text>
+  <text x="280" y="190" class="call-text">1.1: procesar(Request $request)</text>
 
   <line x1="${xCtrl + 5}" y1="215" x2="${xNlp - 5}" y2="215" class="msg-call" />
   <polygon points="${xNlp - 5},215 ${xNlp - 11},212 ${xNlp - 11},218" fill="#1e293b" />
-  <text x="690" y="210" class="call-text">1.2: procesar($textoDictado): array</text>
+  <text x="510" y="210" class="call-text">1.2: procesar($textoDictado): array</text>
 
   <line x1="${xNlp + 5}" y1="235" x2="${xNlp + 35}" y2="235" class="msg-call" />
   <line x1="${xNlp + 35}" y1="235" x2="${xNlp + 35}" y2="250" class="msg-call" />
@@ -362,31 +393,41 @@ function buildCU30Sequence() {
   <polygon points="${xNlp + 5},250 ${xNlp + 11},247 ${xNlp + 11},253" fill="#1e293b" />
   <text x="${xNlp + 40}" y="246" class="call-text">clasificarIntencion() & extraerEntidades(['zona' => 'Plan 3000'])</text>
 
-  <line x1="${xNlp + 5}" y1="275" x2="${xNlp + 35}" y2="275" class="msg-call" />
-  <line x1="${xNlp + 35}" y1="275" x2="${xNlp + 35}" y2="290" class="msg-call" />
-  <line x1="${xNlp + 35}" y1="290" x2="${xNlp + 5}" y2="290" class="msg-call" />
-  <polygon points="${xNlp + 5},290 ${xNlp + 11},287 ${xNlp + 11},293" fill="#1e293b" />
-  <text x="${xNlp + 40}" y="286" class="call-text">obtenerDatosEnVivo() -> Mensualidad::where('estado','VENCIDA')->get()</text>
+  <!-- Consulta Zona -->
+  <line x1="${xNlp + 5}" y1="270" x2="${xZona - 5}" y2="270" class="msg-call" />
+  <polygon points="${xZona - 5},270 ${xZona - 11},267 ${xZona - 11},273" fill="#1e293b" />
+  <text x="750" y="265" class="call-text">1.3: whereLike('nombreZona','Plan 3000')->first()</text>
 
-  <line x1="${xNlp - 5}" y1="315" x2="${xCtrl + 5}" y2="315" class="msg-ret" />
-  <text x="730" y="310" class="ret-text">($resultadoNLP: {intencion, confianza, accion, respuesta, datosEnVivo})</text>
+  <line x1="${xZona - 5}" y1="290" x2="${xNlp + 5}" y2="290" class="msg-ret" />
+  <text x="810" y="285" class="ret-text">($zonaEncontrada: {idZona: 3})</text>
 
-  <line x1="${xCtrl + 5}" y1="340" x2="${xEnt - 5}" y2="340" class="msg-call" />
-  <polygon points="${xEnt - 5},340 ${xEnt - 11},337 ${xEnt - 11},343" fill="#1e293b" />
-  <text x="1020" y="335" class="call-text">1.3: IntencionVozIA::create([textoEntrada, intencion, entidades, respuesta])</text>
+  <!-- Consulta Cliente -->
+  <line x1="${xNlp + 5}" y1="315" x2="${xCli - 5}" y2="315" class="msg-call" />
+  <polygon points="${xCli - 5},315 ${xCli - 11},312 ${xCli - 11},318" fill="#1e293b" />
+  <text x="750" y="310" class="call-text">1.4: where('estadoCliente','ACTIVO')->where('idZona',3)->count()</text>
 
-  <line x1="${xEnt - 5}" y1="365" x2="${xCtrl + 5}" y2="365" class="msg-ret" />
-  <text x="1050" y="360" class="ret-text">($registroPersistido)</text>
+  <line x1="${xCli - 5}" y1="335" x2="${xNlp + 5}" y2="335" class="msg-ret" />
+  <text x="810" y="330" class="ret-text">($totalClientesZona: 142)</text>
 
-  <line x1="${xCtrl + 5}" y1="390" x2="${xBit - 5}" y2="390" class="msg-call" />
-  <polygon points="${xBit - 5},390 ${xBit - 11},387 ${xBit - 11},393" fill="#1e293b" />
-  <text x="1020" y="385" class="call-text">1.4: AuditLogger::log('CU30', 'PROCESAR_INTENCION_NLP', detalle)</text>
+  <line x1="${xNlp - 5}" y1="360" x2="${xCtrl + 5}" y2="360" class="msg-ret" />
+  <text x="510" y="355" class="ret-text">($resultadoNLP: {intencion, confianza, respuesta, datosEnVivo})</text>
 
-  <line x1="${xCtrl - 5}" y1="415" x2="${xUI + 5}" y2="415" class="msg-ret" />
-  <text x="390" y="410" class="ret-text">success($resultado, 'Intención de voz procesada exitosamente con IA')</text>
+  <line x1="${xCtrl + 5}" y1="385" x2="${xEnt - 5}" y2="385" class="msg-call" />
+  <polygon points="${xEnt - 5},385 ${xEnt - 11},382 ${xEnt - 11},388" fill="#1e293b" />
+  <text x="1100" y="380" class="call-text">1.5: IntencionVozIA::create([textoEntrada, intencion, entidades, respuesta])</text>
 
-  <line x1="${xUI - 5}" y1="440" x2="${xAdmin + 5}" y2="440" class="msg-ret" />
-  <text x="130" y="435" class="ret-text">renderizarRespuestaVozYDatosEnVivo()</text>
+  <line x1="${xEnt - 5}" y1="405" x2="${xCtrl + 5}" y2="405" class="msg-ret" />
+  <text x="1150" y="400" class="ret-text">($registroPersistido)</text>
+
+  <line x1="${xCtrl + 5}" y1="430" x2="${xBit - 5}" y2="430" class="msg-call" />
+  <polygon points="${xBit - 5},430 ${xBit - 11},427 ${xBit - 11},433" fill="#1e293b" />
+  <text x="1100" y="425" class="call-text">1.6: AuditLogger::log('CU30', 'PROCESAR_INTENCION_NLP', detalle)</text>
+
+  <line x1="${xCtrl - 5}" y1="455" x2="${xUI + 5}" y2="455" class="msg-ret" />
+  <text x="280" y="450" class="ret-text">success($resultado, 'Intención de voz procesada exitosamente con IA')</text>
+
+  <line x1="${xUI - 5}" y1="475" x2="${xAdmin + 5}" y2="475" class="msg-ret" />
+  <text x="100" y="470" class="ret-text">renderizarRespuestaVozYDatosEnVivo()</text>
 </svg>`;
 }
 

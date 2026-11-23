@@ -40,6 +40,7 @@ function buildCU29Communication() {
   <line x1="420" y1="360" x2="710" y2="360" class="link-line" />
   <line x1="750" y1="360" x2="1140" y2="360" class="link-line" />
   <line x1="730" y1="320" x2="730" y2="150" class="link-line" />
+  <line x1="1160" y1="320" x2="1160" y2="150" class="link-line" />
   <line x1="730" y1="400" x2="730" y2="650" class="link-line" />
 
   <!-- INSTANCIAS ROBUSTEZ BCE -->
@@ -68,6 +69,11 @@ function buildCU29Communication() {
     <text x="0" y="44" class="node-title">Zona</text>
   </g>
 
+  <g transform="translate(1160, 130)">
+    ${entityIcon(0, 0, 22)}
+    <text x="0" y="44" class="node-title">Usuario</text>
+  </g>
+
   <g transform="translate(730, 670)">
     ${entityIcon(0, 0, 22)}
     <text x="0" y="44" class="node-title">Bitacora</text>
@@ -93,6 +99,10 @@ function buildCU29Communication() {
   <g transform="translate(775, 335)">
     <text x="0" y="0" class="flow-2">2.3: create([audioRuta, textoDictado, intencion, confianza]) &rarr;</text>
     <text x="0" y="20" class="flow-3">3.2: with('usuario')->orderByDesc('idComando')->paginate() &rarr;</text>
+  </g>
+
+  <g transform="translate(1175, 220)">
+    <text x="0" y="0" class="flow-3">3.3: with('usuario') &rarr;</text>
   </g>
 
   <g transform="translate(745, 520)">
@@ -239,10 +249,11 @@ function buildCU29Sequence() {
   const tabW = 420;
 
   const xAdmin = 90;
-  const xUI = 330;
-  const xCtrl = 680;
-  const xEnt = 1080;
-  const xBit = 1420;
+  const xUI = 300;
+  const xCtrl = 570;
+  const xZona = 860;
+  const xEnt = 1140;
+  const xBit = 1440;
 
   return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
@@ -275,6 +286,7 @@ function buildCU29Sequence() {
   <line x1="${xAdmin}" y1="130" x2="${xAdmin}" y2="${height - 50}" class="life-line" />
   <line x1="${xUI}" y1="130" x2="${xUI}" y2="${height - 50}" class="life-line" />
   <line x1="${xCtrl}" y1="130" x2="${xCtrl}" y2="${height - 50}" class="life-line" />
+  <line x1="${xZona}" y1="130" x2="${xZona}" y2="${height - 50}" class="life-line" />
   <line x1="${xEnt}" y1="130" x2="${xEnt}" y2="${height - 50}" class="life-line" />
   <line x1="${xBit}" y1="130" x2="${xBit}" y2="${height - 50}" class="life-line" />
 
@@ -290,6 +302,10 @@ function buildCU29Sequence() {
   <g transform="translate(${xCtrl}, 90)">
     ${controlIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">ComandoVozController</text>
+  </g>
+  <g transform="translate(${xZona}, 90)">
+    ${entityIcon(0, 0, 20)}
+    <text x="0" y="36" class="life-title">Zona</text>
   </g>
   <g transform="translate(${xEnt}, 90)">
     ${entityIcon(0, 0, 20)}
@@ -315,27 +331,28 @@ function buildCU29Sequence() {
 
   <line x1="${xUI + 5}" y1="195" x2="${xCtrl - 5}" y2="195" class="msg-call" />
   <polygon points="${xCtrl - 5},195 ${xCtrl - 11},192 ${xCtrl - 11},198" fill="#1e293b" />
-  <text x="380" y="190" class="call-text">1.1: transcribir(Request $request)</text>
+  <text x="350" y="190" class="call-text">1.1: transcribir(Request $request)</text>
 
-  <line x1="${xCtrl + 5}" y1="215" x2="${xCtrl + 35}" y2="215" class="msg-call" />
-  <line x1="${xCtrl + 35}" y1="215" x2="${xCtrl + 35}" y2="230" class="msg-call" />
-  <line x1="${xCtrl + 35}" y1="230" x2="${xCtrl + 5}" y2="230" class="msg-call" />
-  <polygon points="${xCtrl + 5},230 ${xCtrl + 11},227 ${xCtrl + 11},233" fill="#1e293b" />
-  <text x="${xCtrl + 40}" y="226" class="call-text">clasificarIntencion() & extraerParametros()</text>
+  <line x1="${xCtrl + 5}" y1="215" x2="${xZona - 5}" y2="215" class="msg-call" />
+  <polygon points="${xZona - 5},215 ${xZona - 11},212 ${xZona - 11},218" fill="#1e293b" />
+  <text x="590" y="210" class="call-text">1.2: Zona::pluck('nombreZona') [contexto geográfico]</text>
+
+  <line x1="${xZona - 5}" y1="235" x2="${xCtrl + 5}" y2="235" class="msg-ret" />
+  <text x="640" y="230" class="ret-text">($zonasContexto)</text>
 
   <line x1="${xCtrl + 5}" y1="255" x2="${xEnt - 5}" y2="255" class="msg-call" />
   <polygon points="${xEnt - 5},255 ${xEnt - 11},252 ${xEnt - 11},258" fill="#1e293b" />
-  <text x="730" y="250" class="call-text">1.2: ComandoVoz::create([textoDictado, intencion, reporteSugerido, confianza])</text>
+  <text x="590" y="250" class="call-text">1.3: ComandoVoz::create([textoDictado, intencion, reporteSugerido, confianza])</text>
 
   <line x1="${xEnt - 5}" y1="280" x2="${xCtrl + 5}" y2="280" class="msg-ret" />
-  <text x="780" y="275" class="ret-text">($comandoGuardado)</text>
+  <text x="820" y="275" class="ret-text">($comandoGuardado)</text>
 
   <line x1="${xCtrl + 5}" y1="305" x2="${xBit - 5}" y2="305" class="msg-call" />
   <polygon points="${xBit - 5},305 ${xBit - 11},302 ${xBit - 11},308" fill="#1e293b" />
-  <text x="1100" y="300" class="call-text">1.3: AuditLogger::log('CU29', 'TRANSCRIBIR_VOZ', textoDictado)</text>
+  <text x="960" y="300" class="call-text">1.4: AuditLogger::log('CU29', 'TRANSCRIBIR_VOZ', textoDictado)</text>
 
   <line x1="${xCtrl - 5}" y1="335" x2="${xUI + 5}" y2="335" class="msg-ret" />
-  <text x="400" y="330" class="ret-text">success({transcripcion, intencion, accion_sugerida})</text>
+  <text x="360" y="330" class="ret-text">success({transcripcion, intencion, accion_sugerida})</text>
 
   <line x1="${xUI - 5}" y1="360" x2="${xAdmin + 5}" y2="360" class="msg-ret" />
   <text x="130" y="355" class="ret-text">mostrarTextoInterpretadoYModalAccion()</text>
@@ -355,17 +372,17 @@ function buildCU29Sequence() {
 
   <line x1="${xUI + 5}" y1="510" x2="${xCtrl - 5}" y2="510" class="msg-call" />
   <polygon points="${xCtrl - 5},510 ${xCtrl - 11},507 ${xCtrl - 11},513" fill="#1e293b" />
-  <text x="380" y="505" class="call-text">2.1: historial(Request $request)</text>
+  <text x="350" y="505" class="call-text">2.1: historial(Request $request)</text>
 
   <line x1="${xCtrl + 5}" y1="535" x2="${xEnt - 5}" y2="535" class="msg-call" />
   <polygon points="${xEnt - 5},535 ${xEnt - 11},532 ${xEnt - 11},538" fill="#1e293b" />
-  <text x="730" y="530" class="call-text">2.2: ComandoVoz::with('usuario')->orderByDesc('idComando')->paginate()</text>
+  <text x="600" y="530" class="call-text">2.2: ComandoVoz::with('usuario')->orderByDesc('idComando')->paginate()</text>
 
   <line x1="${xEnt - 5}" y1="560" x2="${xCtrl + 5}" y2="560" class="msg-ret" />
-  <text x="780" y="555" class="ret-text">($historialPaginado)</text>
+  <text x="820" y="555" class="ret-text">($historialPaginado)</text>
 
   <line x1="${xCtrl - 5}" y1="585" x2="${xUI + 5}" y2="585" class="msg-ret" />
-  <text x="400" y="580" class="ret-text">success({historial: $historialPaginado})</text>
+  <text x="360" y="580" class="ret-text">success({historial: $historialPaginado})</text>
 
   <line x1="${xUI - 5}" y1="610" x2="${xAdmin + 5}" y2="610" class="msg-ret" />
   <text x="130" y="605" class="ret-text">renderizarTablaHistorialComandos()</text>

@@ -355,11 +355,13 @@ function buildCU26Sequence() {
   const tabW = 460;
 
   const xAdmin = 90;
-  const xUI = 320;
-  const xCtrl = 640;
-  const xServ = 980;
-  const xEnt = 1320;
-  const xBit = 1550;
+  const xUI = 280;
+  const xCtrl = 510;
+  const xServ = 750;
+  const xPago = 1000;
+  const xMens = 1200;
+  const xCli = 1400;
+  const xBit = 1580;
 
   return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
@@ -393,7 +395,9 @@ function buildCU26Sequence() {
   <line x1="${xUI}" y1="130" x2="${xUI}" y2="${height - 50}" class="life-line" />
   <line x1="${xCtrl}" y1="130" x2="${xCtrl}" y2="${height - 50}" class="life-line" />
   <line x1="${xServ}" y1="130" x2="${xServ}" y2="${height - 50}" class="life-line" />
-  <line x1="${xEnt}" y1="130" x2="${xEnt}" y2="${height - 50}" class="life-line" />
+  <line x1="${xPago}" y1="130" x2="${xPago}" y2="${height - 50}" class="life-line" />
+  <line x1="${xMens}" y1="130" x2="${xMens}" y2="${height - 50}" class="life-line" />
+  <line x1="${xCli}" y1="130" x2="${xCli}" y2="${height - 50}" class="life-line" />
   <line x1="${xBit}" y1="130" x2="${xBit}" y2="${height - 50}" class="life-line" />
 
   <!-- CABECERAS -->
@@ -413,9 +417,17 @@ function buildCU26Sequence() {
     ${controlIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">DashboardMetricasService</text>
   </g>
-  <g transform="translate(${xEnt}, 90)">
+  <g transform="translate(${xPago}, 90)">
     ${entityIcon(0, 0, 20)}
-    <text x="0" y="36" class="life-title">Pago / Mensualidad / Cliente</text>
+    <text x="0" y="36" class="life-title">Pago</text>
+  </g>
+  <g transform="translate(${xMens}, 90)">
+    ${entityIcon(0, 0, 20)}
+    <text x="0" y="36" class="life-title">Mensualidad</text>
+  </g>
+  <g transform="translate(${xCli}, 90)">
+    ${entityIcon(0, 0, 20)}
+    <text x="0" y="36" class="life-title">Cliente</text>
   </g>
   <g transform="translate(${xBit}, 90)">
     ${entityIcon(0, 0, 20)}
@@ -423,13 +435,13 @@ function buildCU26Sequence() {
   </g>
 
   <!-- BLOQUE 1 -->
-  <rect x="35" y="150" width="${width - 70}" height="280" class="frame-box" />
+  <rect x="35" y="150" width="${width - 70}" height="320" class="frame-box" />
   <path d="M 35,170 L 35,150 L 390,150 L 402,170 Z" class="frame-tab" />
   <text x="45" y="164" class="frame-title">alt Flujo 1: Carga general de métricas operativas y financieras</text>
 
-  <rect x="${xAdmin - 5}" y="175" width="10" height="235" class="act-bar" />
-  <rect x="${xUI - 5}" y="175" width="10" height="230" class="act-bar" />
-  <rect x="${xCtrl - 5}" y="185" width="10" height="205" class="act-bar" />
+  <rect x="${xAdmin - 5}" y="175" width="10" height="275" class="act-bar" />
+  <rect x="${xUI - 5}" y="175" width="10" height="270" class="act-bar" />
+  <rect x="${xCtrl - 5}" y="185" width="10" height="245" class="act-bar" />
 
   <line x1="${xAdmin + 5}" y1="180" x2="${xUI - 5}" y2="180" class="msg-call" />
   <polygon points="${xUI - 5},180 ${xUI - 11},177 ${xUI - 11},183" fill="#1e293b" />
@@ -437,68 +449,78 @@ function buildCU26Sequence() {
 
   <line x1="${xUI + 5}" y1="195" x2="${xCtrl - 5}" y2="195" class="msg-call" />
   <polygon points="${xCtrl - 5},195 ${xCtrl - 11},192 ${xCtrl - 11},198" fill="#1e293b" />
-  <text x="360" y="190" class="call-text">1.1: index(Request $request)</text>
+  <text x="320" y="190" class="call-text">1.1: index(Request $request)</text>
 
   <line x1="${xCtrl + 5}" y1="215" x2="${xServ - 5}" y2="215" class="msg-call" />
   <polygon points="${xServ - 5},215 ${xServ - 11},212 ${xServ - 11},218" fill="#1e293b" />
-  <text x="690" y="210" class="call-text">1.2: obtenerMetricasGenerales(periodo)</text>
+  <text x="540" y="210" class="call-text">1.2: obtenerMetricasGenerales(periodo)</text>
 
-  <line x1="${xServ + 5}" y1="240" x2="${xEnt - 5}" y2="240" class="msg-call" />
-  <polygon points="${xEnt - 5},240 ${xEnt - 11},237 ${xEnt - 11},243" fill="#1e293b" />
-  <text x="1020" y="235" class="call-text">1.3: Pago::sum('montoTotal'), Mensualidad::where('estado','PENDIENTE')->sum()</text>
+  <!-- Consulta Pago -->
+  <line x1="${xServ + 5}" y1="235" x2="${xPago - 5}" y2="235" class="msg-call" />
+  <polygon points="${xPago - 5},235 ${xPago - 11},232 ${xPago - 11},238" fill="#1e293b" />
+  <text x="780" y="230" class="call-text">1.3: Pago::sum('montoTotal')</text>
 
-  <line x1="${xEnt - 5}" y1="270" x2="${xServ + 5}" y2="270" class="msg-ret" />
-  <text x="1050" y="265" class="ret-text">($kpisRecaudacion, $carteraVencida)</text>
+  <line x1="${xPago - 5}" y1="255" x2="${xServ + 5}" y2="255" class="msg-ret" />
+  <text x="820" y="250" class="ret-text">($totalRecaudado)</text>
 
-  <line x1="${xServ - 5}" y1="295" x2="${xEnt - 5}" y2="295" class="msg-call" />
-  <polygon points="${xEnt - 5},295 ${xEnt - 11},292 ${xEnt - 11},298" fill="#1e293b" />
-  <text x="1020" y="290" class="call-text">1.4: Cliente::count(), ServicioInternet::groupBy('estado')->count()</text>
+  <!-- Consulta Mensualidad -->
+  <line x1="${xServ + 5}" y1="280" x2="${xMens - 5}" y2="280" class="msg-call" />
+  <polygon points="${xMens - 5},280 ${xMens - 11},277 ${xMens - 11},283" fill="#1e293b" />
+  <text x="880" y="275" class="call-text">1.4: Mensualidad::where('estado','PENDIENTE')->sum('monto')</text>
 
-  <line x1="${xEnt - 5}" y1="320" x2="${xServ + 5}" y2="320" class="msg-ret" />
-  <text x="1050" y="315" class="ret-text">($abonados, $distribucionServicios)</text>
+  <line x1="${xMens - 5}" y1="300" x2="${xServ + 5}" y2="300" class="msg-ret" />
+  <text x="940" y="295" class="ret-text">($carteraVencida)</text>
 
-  <line x1="${xServ - 5}" y1="345" x2="${xCtrl + 5}" y2="345" class="msg-ret" />
-  <text x="730" y="340" class="ret-text">($metricasConsolidadas)</text>
+  <!-- Consulta Cliente -->
+  <line x1="${xServ + 5}" y1="325" x2="${xCli - 5}" y2="325" class="msg-call" />
+  <polygon points="${xCli - 5},325 ${xCli - 11},322 ${xCli - 11},328" fill="#1e293b" />
+  <text x="960" y="320" class="call-text">1.5: Cliente::where('estadoCliente','ACTIVO')->count()</text>
 
-  <line x1="${xCtrl + 5}" y1="365" x2="${xBit - 5}" y2="365" class="msg-call" />
-  <polygon points="${xBit - 5},365 ${xBit - 11},362 ${xBit - 11},368" fill="#1e293b" />
-  <text x="1020" y="360" class="call-text">1.5: AuditLogger::log('CU26', 'CONSULTA_DASHBOARD', ip)</text>
+  <line x1="${xCli - 5}" y1="345" x2="${xServ + 5}" y2="345" class="msg-ret" />
+  <text x="1040" y="340" class="ret-text">($totalAbonados)</text>
 
-  <line x1="${xCtrl - 5}" y1="385" x2="${xUI + 5}" y2="385" class="msg-ret" />
-  <text x="390" y="380" class="ret-text">success({metricas})</text>
+  <line x1="${xServ - 5}" y1="370" x2="${xCtrl + 5}" y2="370" class="msg-ret" />
+  <text x="560" y="365" class="ret-text">($metricasConsolidadas)</text>
 
-  <line x1="${xUI - 5}" y1="405" x2="${xAdmin + 5}" y2="405" class="msg-ret" />
-  <text x="130" y="400" class="ret-text">renderizarTarjetasKPIyGraficos()</text>
+  <line x1="${xCtrl + 5}" y1="390" x2="${xBit - 5}" y2="390" class="msg-call" />
+  <polygon points="${xBit - 5},390 ${xBit - 11},387 ${xBit - 11},393" fill="#1e293b" />
+  <text x="1100" y="385" class="call-text">1.6: AuditLogger::log('CU26', 'CONSULTA_DASHBOARD', ip)</text>
+
+  <line x1="${xCtrl - 5}" y1="415" x2="${xUI + 5}" y2="415" class="msg-ret" />
+  <text x="330" y="410" class="ret-text">success({metricas})</text>
+
+  <line x1="${xUI - 5}" y1="435" x2="${xAdmin + 5}" y2="435" class="msg-ret" />
+  <text x="130" y="430" class="ret-text">renderizarTarjetasKPIyGraficos()</text>
 
   <!-- BLOQUE 2 -->
-  <rect x="35" y="460" width="${width - 70}" height="240" class="frame-box" />
-  <path d="M 35,480 L 35,460 L 330,460 L 342,480 Z" class="frame-tab" />
-  <text x="45" y="474" class="frame-title">alt Flujo 2: Alertas tempranas de morosidad</text>
+  <rect x="35" y="490" width="${width - 70}" height="240" class="frame-box" />
+  <path d="M 35,510 L 35,490 L 330,490 L 342,510 Z" class="frame-tab" />
+  <text x="45" y="504" class="frame-title">alt Flujo 2: Alertas tempranas de morosidad</text>
 
-  <rect x="${xAdmin - 5}" y="485" width="10" height="195" class="act-bar" />
-  <rect x="${xUI - 5}" y="485" width="10" height="190" class="act-bar" />
-  <rect x="${xCtrl - 5}" y="495" width="10" height="165" class="act-bar" />
+  <rect x="${xAdmin - 5}" y="515" width="10" height="195" class="act-bar" />
+  <rect x="${xUI - 5}" y="515" width="10" height="190" class="act-bar" />
+  <rect x="${xCtrl - 5}" y="525" width="10" height="165" class="act-bar" />
 
-  <line x1="${xAdmin + 5}" y1="490" x2="${xUI - 5}" y2="490" class="msg-call" />
-  <polygon points="${xUI - 5},490 ${xUI - 11},487 ${xUI - 11},493" fill="#1e293b" />
-  <text x="130" y="485" class="call-text">2: consultarAlertasMorosidad()</text>
+  <line x1="${xAdmin + 5}" y1="520" x2="${xUI - 5}" y2="520" class="msg-call" />
+  <polygon points="${xUI - 5},520 ${xUI - 11},517 ${xUI - 11},523" fill="#1e293b" />
+  <text x="130" y="515" class="call-text">2: consultarAlertasMorosidad()</text>
 
-  <line x1="${xUI + 5}" y1="510" x2="${xCtrl - 5}" y2="510" class="msg-call" />
-  <polygon points="${xCtrl - 5},510 ${xCtrl - 11},507 ${xCtrl - 11},513" fill="#1e293b" />
-  <text x="360" y="505" class="call-text">2.1: alertas()</text>
+  <line x1="${xUI + 5}" y1="540" x2="${xCtrl - 5}" y2="540" class="msg-call" />
+  <polygon points="${xCtrl - 5},540 ${xCtrl - 11},537 ${xCtrl - 11},543" fill="#1e293b" />
+  <text x="320" y="535" class="call-text">2.1: alertas()</text>
 
-  <line x1="${xCtrl + 5}" y1="535" x2="${xEnt - 5}" y2="535" class="msg-call" />
-  <polygon points="${xEnt - 5},535 ${xEnt - 11},532 ${xEnt - 11},538" fill="#1e293b" />
-  <text x="730" y="530" class="call-text">2.2: Mensualidad::where('estado','VENCIDA')->with('servicio.cliente')->get()</text>
+  <line x1="${xCtrl + 5}" y1="565" x2="${xMens - 5}" y2="565" class="msg-call" />
+  <polygon points="${xMens - 5},565 ${xMens - 11},562 ${xMens - 11},568" fill="#1e293b" />
+  <text x="650" y="560" class="call-text">2.2: Mensualidad::where('estado','VENCIDA')->with('servicio.cliente')->get()</text>
 
-  <line x1="${xEnt - 5}" y1="565" x2="${xCtrl + 5}" y2="565" class="msg-ret" />
-  <text x="890" y="560" class="ret-text">($morososCriticos)</text>
+  <line x1="${xMens - 5}" y1="595" x2="${xCtrl + 5}" y2="595" class="msg-ret" />
+  <text x="750" y="590" class="ret-text">($morososCriticos)</text>
 
-  <line x1="${xCtrl - 5}" y1="610" x2="${xUI + 5}" y2="610" class="msg-ret" />
-  <text x="390" y="605" class="ret-text">success({alertas: $morososCriticos})</text>
+  <line x1="${xCtrl - 5}" y1="640" x2="${xUI + 5}" y2="640" class="msg-ret" />
+  <text x="330" y="635" class="ret-text">success({alertas: $morososCriticos})</text>
 
-  <line x1="${xUI - 5}" y1="640" x2="${xAdmin + 5}" y2="640" class="msg-ret" />
-  <text x="130" y="635" class="ret-text">desplegarBandejaAlertasMora()</text>
+  <line x1="${xUI - 5}" y1="670" x2="${xAdmin + 5}" y2="670" class="msg-ret" />
+  <text x="130" y="665" class="ret-text">desplegarBandejaAlertasMora()</text>
 </svg>`;
 }
 

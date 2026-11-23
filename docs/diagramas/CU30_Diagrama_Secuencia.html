@@ -118,15 +118,17 @@
   </g>
 
   <!-- LÍNEAS DE VIDA -->
-  <line x1="90" y1="130" x2="90" y2="1100" class="life-line" />
-  <line x1="320" y1="130" x2="320" y2="1100" class="life-line" />
-  <line x1="640" y1="130" x2="640" y2="1100" class="life-line" />
-  <line x1="980" y1="130" x2="980" y2="1100" class="life-line" />
-  <line x1="1320" y1="130" x2="1320" y2="1100" class="life-line" />
-  <line x1="1550" y1="130" x2="1550" y2="1100" class="life-line" />
+  <line x1="70" y1="130" x2="70" y2="1100" class="life-line" />
+  <line x1="250" y1="130" x2="250" y2="1100" class="life-line" />
+  <line x1="480" y1="130" x2="480" y2="1100" class="life-line" />
+  <line x1="730" y1="130" x2="730" y2="1100" class="life-line" />
+  <line x1="960" y1="130" x2="960" y2="1100" class="life-line" />
+  <line x1="1170" y1="130" x2="1170" y2="1100" class="life-line" />
+  <line x1="1380" y1="130" x2="1380" y2="1100" class="life-line" />
+  <line x1="1580" y1="130" x2="1580" y2="1100" class="life-line" />
 
   <!-- CABECERAS -->
-  <g transform="translate(90, 90)">
+  <g transform="translate(70, 90)">
     
   <circle cx="0" cy="-26" r="8.5" fill="#ffffea" stroke="#1e293b" stroke-width="1.8" />
   <line x1="0" y1="-17.5" x2="0" y2="5" stroke="#1e293b" stroke-width="2" />
@@ -136,7 +138,7 @@
 
     <text x="0" y="40" class="life-title">Operador / Asistente</text>
   </g>
-  <g transform="translate(320, 90)">
+  <g transform="translate(250, 90)">
     
   <line x1="-25" y1="-20" x2="-25" y2="20" stroke="#475569" stroke-width="2.5" />
   <line x1="-25" y1="0" x2="-20" y2="0" stroke="#475569" stroke-width="2" />
@@ -144,7 +146,7 @@
 
     <text x="0" y="36" class="life-title">UI_IntencionVoz</text>
   </g>
-  <g transform="translate(640, 90)">
+  <g transform="translate(480, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <path d="M -5 -20 L 4 -24 L 2 -20 C 11 -17 22 -2 20 6" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" />
@@ -152,7 +154,7 @@
 
     <text x="0" y="36" class="life-title">IntencionVozController</text>
   </g>
-  <g transform="translate(980, 90)">
+  <g transform="translate(730, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <path d="M -5 -20 L 4 -24 L 2 -20 C 11 -17 22 -2 20 6" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" />
@@ -160,14 +162,28 @@
 
     <text x="0" y="36" class="life-title">NlpIntencionService</text>
   </g>
-  <g transform="translate(1320, 90)">
+  <g transform="translate(960, 90)">
+    
+  <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
+  <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
+
+    <text x="0" y="36" class="life-title">Zona</text>
+  </g>
+  <g transform="translate(1170, 90)">
+    
+  <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
+  <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
+
+    <text x="0" y="36" class="life-title">Cliente</text>
+  </g>
+  <g transform="translate(1380, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
 
     <text x="0" y="36" class="life-title">IntencionVozIA</text>
   </g>
-  <g transform="translate(1550, 90)">
+  <g transform="translate(1580, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
@@ -176,57 +192,67 @@
   </g>
 
   <!-- BLOQUE 1: PROCESAMIENTO NLP -->
-  <rect x="35" y="150" width="1610" height="320" class="frame-box" />
+  <rect x="35" y="150" width="1610" height="350" class="frame-box" />
   <path d="M 35,170 L 35,150 L 380,150 L 392,170 Z" class="frame-tab" />
   <text x="45" y="164" class="frame-title">alt Flujo 1: Procesar intención con IA y generar datos en vivo</text>
 
-  <rect x="85" y="175" width="10" height="275" class="act-bar" />
-  <rect x="315" y="175" width="10" height="270" class="act-bar" />
-  <rect x="635" y="185" width="10" height="245" class="act-bar" />
+  <rect x="65" y="175" width="10" height="305" class="act-bar" />
+  <rect x="245" y="175" width="10" height="300" class="act-bar" />
+  <rect x="475" y="185" width="10" height="275" class="act-bar" />
 
-  <line x1="95" y1="180" x2="315" y2="180" class="msg-call" />
-  <polygon points="315,180 309,177 309,183" fill="#1e293b" />
-  <text x="130" y="175" class="call-text">1: enviarComandoTexto("Muéstrame las mensualidades vencidas en Plan 3000")</text>
+  <line x1="75" y1="180" x2="245" y2="180" class="msg-call" />
+  <polygon points="245,180 239,177 239,183" fill="#1e293b" />
+  <text x="100" y="175" class="call-text">1: enviarComandoTexto("¿Cuántos clientes activos tenemos en Plan 3000?")</text>
 
-  <line x1="325" y1="195" x2="635" y2="195" class="msg-call" />
-  <polygon points="635,195 629,192 629,198" fill="#1e293b" />
-  <text x="360" y="190" class="call-text">1.1: procesar(Request $request)</text>
+  <line x1="255" y1="195" x2="475" y2="195" class="msg-call" />
+  <polygon points="475,195 469,192 469,198" fill="#1e293b" />
+  <text x="280" y="190" class="call-text">1.1: procesar(Request $request)</text>
 
-  <line x1="645" y1="215" x2="975" y2="215" class="msg-call" />
-  <polygon points="975,215 969,212 969,218" fill="#1e293b" />
-  <text x="690" y="210" class="call-text">1.2: procesar($textoDictado): array</text>
+  <line x1="485" y1="215" x2="725" y2="215" class="msg-call" />
+  <polygon points="725,215 719,212 719,218" fill="#1e293b" />
+  <text x="510" y="210" class="call-text">1.2: procesar($textoDictado): array</text>
 
-  <line x1="985" y1="235" x2="1015" y2="235" class="msg-call" />
-  <line x1="1015" y1="235" x2="1015" y2="250" class="msg-call" />
-  <line x1="1015" y1="250" x2="985" y2="250" class="msg-call" />
-  <polygon points="985,250 991,247 991,253" fill="#1e293b" />
-  <text x="1020" y="246" class="call-text">clasificarIntencion() & extraerEntidades(['zona' => 'Plan 3000'])</text>
+  <line x1="735" y1="235" x2="765" y2="235" class="msg-call" />
+  <line x1="765" y1="235" x2="765" y2="250" class="msg-call" />
+  <line x1="765" y1="250" x2="735" y2="250" class="msg-call" />
+  <polygon points="735,250 741,247 741,253" fill="#1e293b" />
+  <text x="770" y="246" class="call-text">clasificarIntencion() & extraerEntidades(['zona' => 'Plan 3000'])</text>
 
-  <line x1="985" y1="275" x2="1015" y2="275" class="msg-call" />
-  <line x1="1015" y1="275" x2="1015" y2="290" class="msg-call" />
-  <line x1="1015" y1="290" x2="985" y2="290" class="msg-call" />
-  <polygon points="985,290 991,287 991,293" fill="#1e293b" />
-  <text x="1020" y="286" class="call-text">obtenerDatosEnVivo() -> Mensualidad::where('estado','VENCIDA')->get()</text>
+  <!-- Consulta Zona -->
+  <line x1="735" y1="270" x2="955" y2="270" class="msg-call" />
+  <polygon points="955,270 949,267 949,273" fill="#1e293b" />
+  <text x="750" y="265" class="call-text">1.3: whereLike('nombreZona','Plan 3000')->first()</text>
 
-  <line x1="975" y1="315" x2="645" y2="315" class="msg-ret" />
-  <text x="730" y="310" class="ret-text">($resultadoNLP: {intencion, confianza, accion, respuesta, datosEnVivo})</text>
+  <line x1="955" y1="290" x2="735" y2="290" class="msg-ret" />
+  <text x="810" y="285" class="ret-text">($zonaEncontrada: {idZona: 3})</text>
 
-  <line x1="645" y1="340" x2="1315" y2="340" class="msg-call" />
-  <polygon points="1315,340 1309,337 1309,343" fill="#1e293b" />
-  <text x="1020" y="335" class="call-text">1.3: IntencionVozIA::create([textoEntrada, intencion, entidades, respuesta])</text>
+  <!-- Consulta Cliente -->
+  <line x1="735" y1="315" x2="1165" y2="315" class="msg-call" />
+  <polygon points="1165,315 1159,312 1159,318" fill="#1e293b" />
+  <text x="750" y="310" class="call-text">1.4: where('estadoCliente','ACTIVO')->where('idZona',3)->count()</text>
 
-  <line x1="1315" y1="365" x2="645" y2="365" class="msg-ret" />
-  <text x="1050" y="360" class="ret-text">($registroPersistido)</text>
+  <line x1="1165" y1="335" x2="735" y2="335" class="msg-ret" />
+  <text x="810" y="330" class="ret-text">($totalClientesZona: 142)</text>
 
-  <line x1="645" y1="390" x2="1545" y2="390" class="msg-call" />
-  <polygon points="1545,390 1539,387 1539,393" fill="#1e293b" />
-  <text x="1020" y="385" class="call-text">1.4: AuditLogger::log('CU30', 'PROCESAR_INTENCION_NLP', detalle)</text>
+  <line x1="725" y1="360" x2="485" y2="360" class="msg-ret" />
+  <text x="510" y="355" class="ret-text">($resultadoNLP: {intencion, confianza, respuesta, datosEnVivo})</text>
 
-  <line x1="635" y1="415" x2="325" y2="415" class="msg-ret" />
-  <text x="390" y="410" class="ret-text">success($resultado, 'Intención de voz procesada exitosamente con IA')</text>
+  <line x1="485" y1="385" x2="1375" y2="385" class="msg-call" />
+  <polygon points="1375,385 1369,382 1369,388" fill="#1e293b" />
+  <text x="1100" y="380" class="call-text">1.5: IntencionVozIA::create([textoEntrada, intencion, entidades, respuesta])</text>
 
-  <line x1="315" y1="440" x2="95" y2="440" class="msg-ret" />
-  <text x="130" y="435" class="ret-text">renderizarRespuestaVozYDatosEnVivo()</text>
+  <line x1="1375" y1="405" x2="485" y2="405" class="msg-ret" />
+  <text x="1150" y="400" class="ret-text">($registroPersistido)</text>
+
+  <line x1="485" y1="430" x2="1575" y2="430" class="msg-call" />
+  <polygon points="1575,430 1569,427 1569,433" fill="#1e293b" />
+  <text x="1100" y="425" class="call-text">1.6: AuditLogger::log('CU30', 'PROCESAR_INTENCION_NLP', detalle)</text>
+
+  <line x1="475" y1="455" x2="255" y2="455" class="msg-ret" />
+  <text x="280" y="450" class="ret-text">success($resultado, 'Intención de voz procesada exitosamente con IA')</text>
+
+  <line x1="245" y1="475" x2="75" y2="475" class="msg-ret" />
+  <text x="100" y="470" class="ret-text">renderizarRespuestaVozYDatosEnVivo()</text>
 </svg>
 </body>
 </html>

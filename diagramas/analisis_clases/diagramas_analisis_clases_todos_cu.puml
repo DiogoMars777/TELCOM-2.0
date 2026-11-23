@@ -2261,33 +2261,52 @@ skinparam actor {
 frame "sd Diagrama de análisis de clases - CU25 Registrar compra de equipos y actualización de stock" {
     actor "Administrador / Almacén" as AdminActor
 
-    class UI_CompraRegistro {
+    class UI_CompraEquipoRegistro {
         + listarCompras(): void
-        + abrirModalRegistro(): void
-        + agregarItemDetalle(): void
-        + registrarCompraEquipo(): void
-        + verDetalleCompra(): void
+        + abrirFormulario(): void
+        + agregarItem(): void
+        + guardarCompra(): void
+        + mostrarDetalleCompra(): void
     }
 
     class CompraEquipoRegistroController {
         + index(): void
+        + store(): void
         + show(): void
         + proveedores(): void
         + productos(): void
-        + estados(): void
-        + store(): void
     }
 
     class Compra {
         - idCompra: int
-        - nroComprobante: string
+        - numeroComprobante: string
         - fechaCompra: date
         - montoTotal: decimal
         - idProveedor: int
-        - idEstadoCompra: int
+        - idUsuario: int
         --
         + create(): void
-        + update(): void
+        + with(): void
+    }
+
+    class DetalleCompra {
+        - idDetalleCompra: int
+        - idCompra: int
+        - idProducto: int
+        - cantidad: int
+        - precioUnitario: decimal
+        - subtotal: decimal
+        --
+        + create(): void
+    }
+
+    class Inventario {
+        - idInventario: int
+        - codigoProducto: string
+        - nombreProducto: string
+        - stockActual: int
+        --
+        + increment(): void
     }
 
     class Proveedor {
@@ -2295,56 +2314,20 @@ frame "sd Diagrama de análisis de clases - CU25 Registrar compra de equipos y a
         - razonSocial: string
         - nit: string
         --
-        + find(): void
+        + where(): void
     }
 
-    class EstadoCompra {
-        - idEstadoCompra: int
-        - nombreEstado: string
-        --
-        + find(): void
-    }
-
-    class DetalleCompra {
-        - idDetalleCompra: int
-        - cantidad: int
-        - precioUnitario: decimal
-        - subtotal: decimal
-        - idCompra: int
-        - idInventario: int
-        --
-        + create(): void
-    }
-
-    class Inventario {
-        - idInventario: int
-        - stockActual: int
-        - idProducto: int
-        --
-        + increment(): void
-    }
-
-    class ProductoEquipo {
-        - idProducto: int
-        - nombreProducto: string
-        - tipoEquipo: string
-        --
-        + find(): void
-    }
-
-    AdminActor -right- UI_CompraRegistro
-    UI_CompraRegistro -right- CompraEquipoRegistroController
+    AdminActor -right- UI_CompraEquipoRegistro
+    UI_CompraEquipoRegistro -right- CompraEquipoRegistroController
     CompraEquipoRegistroController -right- Compra
 
-    Compra "0..*" -up- "1" Proveedor
-    Compra "0..*" -down- "1" EstadoCompra
     Compra "1" -right- "1..*" DetalleCompra
-    DetalleCompra "0..*" -right- "1" Inventario
-    Inventario "1" -down- "1" ProductoEquipo
+    DetalleCompra "0..*" -down- "1" Inventario
+    Compra "0..*" -up- "1" Proveedor
 }
 @enduml
 
-@startuml cu26_analisis_dashboard_admin_financiero
+@startuml cu26_analisis_visualizar_dashboard_admin_financiero
 allowmixing
 
 skinparam backgroundColor white
@@ -2490,8 +2473,8 @@ frame "sd Diagrama de análisis de clases - CU27 Generar y exportar reportes tra
         + consultarCatalogo(): void
         + seleccionarTipoReporte(): void
         + handleGenerarReporte(): void
-        + handleExportarExcel(): void
-        + handleExportarPdf(): void
+        + exportarExcel(): void
+        + exportarPdf(): void
     }
 
     class ReporteTradicionalController {
@@ -2503,23 +2486,12 @@ frame "sd Diagrama de análisis de clases - CU27 Generar y exportar reportes tra
     }
 
     class ReporteTradicional {
-        + TIPO_CLIENTES_ZONA: string
-        + TIPO_INGRESOS_PAGOS: string
-        + TIPO_MOROSIDAD_CORTES: string
-        + TIPO_EQUIPOS_INSTAL: string
+        - tipoReporte: string
+        - titulo: string
+        - columnas: array
         --
         + catalogo(): void
         + generar(): void
-    }
-
-    class Cliente {
-        - idCliente: int
-        - codigoCliente: string
-        - nombreCompleto: string
-        - estadoCliente: string
-        - idZona: int
-        --
-        + find(): void
     }
 
     class Zona {
@@ -2528,6 +2500,27 @@ frame "sd Diagrama de análisis de clases - CU27 Generar y exportar reportes tra
         - codigo: string
         --
         + select(): void
+        + get(): void
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - nombreCompleto: string
+        - idZona: int
+        - estadoCliente: string
+        --
+        + leftJoin(): void
+    }
+
+    class Pago {
+        - idPago: int
+        - fechaHora: timestamp
+        - montoTotal: decimal
+        - idMetodoPago: int
+        --
+        + join(): void
+        + whereBetween(): void
     }
 
     class Mensualidad {
@@ -2539,32 +2532,14 @@ frame "sd Diagrama de análisis de clases - CU27 Generar y exportar reportes tra
         + whereIn(): void
     }
 
-    class Pago {
-        - idPago: int
-        - fechaHora: timestamp
-        - montoTotal: decimal
-        - idMetodoPago: int
-        --
-        + whereBetween(): void
-    }
-
-    class MetodoPago {
-        - idMetodoPago: int
-        - nombreMetodo: string
-        - descripcion: string
-        --
-        + find(): void
-    }
-
     AdminActor -right- UI_ReporteTradicional
     UI_ReporteTradicional -right- ReporteTradicionalController
     ReporteTradicionalController -right- ReporteTradicional
 
-    ReporteTradicional "1" -up- "0..*" Cliente
-    Cliente "0..*" -right- "1" Zona
-    ReporteTradicional "1" -down- "0..*" Mensualidad
-    ReporteTradicional "1" -right- "0..*" Pago
-    Pago "0..*" -down- "1" MetodoPago
+    ReporteTradicional "1" -up- "0..*" Zona
+    Zona "1" -right- "0..*" Cliente
+    ReporteTradicional "1" -down- "0..*" Pago
+    Pago "1" -right- "0..*" Mensualidad
 }
 @enduml
 
@@ -2595,20 +2570,19 @@ frame "sd Diagrama de análisis de clases - CU28 Generar y restaurar copias de s
     actor "Administrador del Sistema" as AdminActor
 
     class UI_CopiasSeguridad {
-        + listarCopiasSeguridad(): void
-        + submitGenerarBackup(): void
-        + descargarCopia(): void
-        + ejecutarRestauracion(): void
-        + eliminarCopia(): void
+        + listarBackups(): void
+        + abrirModalCrearBackup(): void
+        + confirmarRestauracion(): void
+        + descargarBackup(): void
     }
 
     class CopiasSeguridadController {
         + index(): void
         + store(): void
-        + download(): void
         + restore(): void
+        + download(): void
         + destroy(): void
-        - resolverBinario(): void
+        - ejecutarDump(): void
     }
 
     class CopiaSeguridad {
@@ -2616,23 +2590,22 @@ frame "sd Diagrama de análisis de clases - CU28 Generar y restaurar copias de s
         - nombreArchivo: string
         - ruta: string
         - tamanoBytes: bigint
-        - idUsuario: int
-        - descripcion: string
-        - tipo: string
+        - tipoCopia: string
         - estado: string
+        - idUsuario: int
+        - fechaCreacion: timestamp
         --
         + create(): void
         + findOrFail(): void
+        + delete(): void
     }
 
     class Usuario {
         - idUsuario: int
         - nombreCompleto: string
-        - email: string
         - nombreUsuario: string
         --
         + find(): void
-        + with(): void
     }
 
     AdminActor -right- UI_CopiasSeguridad
@@ -2671,33 +2644,31 @@ frame "sd Diagrama de análisis de clases - CU29 Capturar y transcribir comandos
 
     class UI_ComandoVoz {
         + iniciarGrabacion(): void
-        + detenerGrabacionYEnviar(): void
-        + reproducirAudioGrabado(): void
-        + listarHistorial(): void
+        + detenerGrabacion(): void
+        + enviarAudio(): void
         + mostrarTranscripcion(): void
+        + ejecutarAccionSugerida(): void
     }
 
     class ComandoVozController {
         + transcribir(): void
         + historial(): void
         + ejemplos(): void
-        - clasificarIntencion(): void
         - extraerParametros(): void
-        - almacenarAudio(): void
     }
 
     class ComandoVoz {
-        - idComandoVoz: int
+        - idComando: int
         - idUsuario: int
+        - audioRuta: string
         - textoDictado: text
-        - intencion: string
-        - parametros: json
+        - intencionDetectada: string
+        - reporteSugerido: string
         - confianza: float
-        - estado: string
-        - duracionSegundos: float
+        - estadoProcesamiento: string
         --
         + create(): void
-        + interpretar(): void
+        + paginate(): void
     }
 
     class Usuario {

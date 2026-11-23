@@ -873,7 +873,6 @@ frame "sd CU24 Gestionar proveedores" {
     control ProveedorController
     entity Proveedor
     entity Bitacora
-    entity Compra
 
     spacer -[hidden]down- AdminActor
 
@@ -883,9 +882,7 @@ frame "sd CU24 Gestionar proveedores" {
 
     ProveedorController -right- Proveedor : <font color=#000000>1.2: query()->whereLike()->get() →</font>\n<font color=#800000>2.2: create([...datos, estado: true]) →</font>\n<font color=#008000>3.2: findOrFail(id)->update(datos) →</font>\n<font color=#000080>4.2: findOrFail(id)->update(['estado' => bool]) →</font>
 
-    ProveedorController -down- Bitacora : <font color=#800000>2.3: log('CU24', 'CREAR_PROVEEDOR') →</font>\n<font color=#008000>3.3: log('CU24', 'ACTUALIZAR_PROVEEDOR') →</font>\n<font color=#000080>4.4: log('CU24', 'ESTADO_PROVEEDOR') →</font>
-
-    Proveedor -up- Compra : <font color=#000080>4.3: compras()->exists() [integridad referencial] →</font>
+    ProveedorController -down- Bitacora : <font color=#800000>2.3: log('CU24', 'CREAR_PROVEEDOR') →</font>\n<font color=#008000>3.3: log('CU24', 'ACTUALIZAR_PROVEEDOR') →</font>\n<font color=#000080>4.3: log('CU24', 'ESTADO_PROVEEDOR') →</font>
 }
 @enduml
 
@@ -979,6 +976,7 @@ frame "sd CU26 Visualizar Dashboard administrativo y financiero" {
     DashboardAdminFinancieroController -left- Bitacora : <font color=#000000>1.9: log('CU26', 'CONSULTA_DASHBOARD', 'user_id', ip) →</font>
 }
 @enduml
+
 @startuml cu27_generar_exportar_reportes_tradicionales
 skinparam backgroundColor white
 skinparam defaultFontName "Segoe UI"
@@ -1087,6 +1085,7 @@ frame "sd CU29 Capturar y transcribir comandos de voz" {
     control ComandoVozController
     entity ComandoVoz
     entity Zona
+    entity Usuario
     entity Bitacora
 
     spacer -[hidden]down- UserActor
@@ -1098,6 +1097,8 @@ frame "sd CU29 Capturar y transcribir comandos de voz" {
     ComandoVozController -right- ComandoVoz : <font color=#800000>2.3: create([audioRuta, textoDictado, intencion, confianza]) →</font>\n<font color=#008000>3.2: with('usuario')->orderByDesc('idComando')->paginate() →</font>
 
     ComandoVozController -up- Zona : <font color=#800000>2.2: Zona::pluck('nombreZona') [contexto geográfico] →</font>
+
+    ComandoVoz -up- Usuario : <font color=#008000>3.3: with('usuario') →</font>
 
     ComandoVozController -down- Bitacora : <font color=#800000>2.4: log('CU29', 'TRANSCRIBIR_VOZ') →</font>
 }
@@ -1125,7 +1126,9 @@ frame "sd CU30 Procesar intención de voz con IA (NLP)" {
     control IntencionVozController
     control NlpIntencionService
     entity IntencionVozIA
-    entity "Cliente / Zona / Pago" as DominioEnVivo
+    entity Usuario
+    entity Cliente
+    entity Zona
     entity Bitacora
 
     spacer -[hidden]down- OperadorActor
@@ -1136,9 +1139,13 @@ frame "sd CU30 Procesar intención de voz con IA (NLP)" {
 
     IntencionVozController -right- NlpIntencionService : <font color=#000000>1.2: procesar($textoDictado): array →</font>
 
-    NlpIntencionService -up- DominioEnVivo : <font color=#000000>1.3: extraerEntidades() -> consultarDatosEnVivo() →</font>
+    NlpIntencionService -up- Cliente : <font color=#000000>1.3: where('estadoCliente','ACTIVO')->where('idZona', $idZona)->count() →</font>
 
-    NlpIntencionService -right- IntencionVozIA : <font color=#000000>1.4: create([intencion, confianza, entidades, datosEnVivo]) →</font>\n<font color=#800000>2.2: with('usuario')->orderByDesc()->paginate() →</font>
+    Cliente -right- Zona : <font color=#000000>1.3.1: whereLike('nombreZona', $zonaNombre)->first() →</font>
+
+    NlpIntencionService -right- IntencionVozIA : <font color=#000000>1.4: create([intencion, confianza, entidades, datosEnVivo]) →</font>\n<font color=#800000>2.3: orderByDesc()->paginate() →</font>
+
+    IntencionVozIA -up- Usuario : <font color=#800000>2.2: with('usuario') →</font>
 
     IntencionVozController -down- Bitacora : <font color=#000000>1.5: log('CU30', 'PROCESAR_INTENCION_NLP') →</font>
 }
@@ -1166,7 +1173,11 @@ frame "sd CU31 Generar reporte inteligente vía comando de voz" {
     control ReporteInteligenteController
     control GeminiIntencionService
     control CatalogoReportesService
-    entity "Cliente / Pago / Mensualidad" as EntidadesDominio
+    entity ReporteInteligente
+    entity Cliente
+    entity Zona
+    entity Mensualidad
+    entity Pago
     entity Bitacora
 
     spacer -[hidden]down- AdminActor
@@ -1179,8 +1190,16 @@ frame "sd CU31 Generar reporte inteligente vía comando de voz" {
 
     ReporteInteligenteController -right- CatalogoReportesService : <font color=#000000>1.3: generar($intencionEstructurada): array →</font>
 
-    CatalogoReportesService -right- EntidadesDominio : <font color=#000000>1.4: DB::table(entidades)->select()->where()->get() →</font>
+    CatalogoReportesService -right- Mensualidad : <font color=#000000>1.4: whereIn('estado', ['PENDIENTE','VENCIDA'])->get() →</font>
 
-    ReporteInteligenteController -down- Bitacora : <font color=#000000>1.5: log('CU31', 'GENERAR_REPORTE_INTELIGENTE') →</font>
+    CatalogoReportesService -up- Cliente : <font color=#000000>1.5: where('estadoCliente', 'ACTIVO')->get() →</font>
+
+    Cliente -right- Zona : <font color=#000000>1.5.1: belongsTo(Zona) →</font>
+
+    Mensualidad -down- Pago : <font color=#000000>1.4.1: hasMany(Pago) →</font>
+
+    ReporteInteligenteController -down- ReporteInteligente : <font color=#000000>1.6: create([tipo, comando, filtros, filas]) →</font>
+
+    ReporteInteligenteController -down- Bitacora : <font color=#000000>1.7: log('CU31', 'GENERAR_REPORTE_INTELIGENTE') →</font>
 }
 @enduml

@@ -2202,6 +2202,7 @@ deactivate InstalacionRegistroController
 UI_Instalacion --> Admin: emitirActaEntregaServicio()
 deactivate UI_Instalacion
 @enduml
+
 @startuml cu24_secuencia_gestionar_proveedores
 autonumber
 skinparam backgroundColor white
@@ -2339,7 +2340,9 @@ actor "Administrador / Secretaría" as AdminActor
 boundary UI_DashboardAdminFinanciero
 control DashboardAdminFinancieroController
 control DashboardMetricasService
-entity "Pago / Mensualidad" as Facturacion
+entity Pago
+entity Mensualidad
+entity Cliente
 entity Bitacora
 
 == Flujo 1: Consultar Dashboard general y métricas operativas ==
@@ -2349,13 +2352,21 @@ UI_DashboardAdminFinanciero -> DashboardAdminFinancieroController: 1.1: index(Re
 activate DashboardAdminFinancieroController
 DashboardAdminFinancieroController -> DashboardMetricasService: 1.2: obtenerMetricasGenerales(periodo)
 activate DashboardMetricasService
-DashboardMetricasService -> Facturacion: 1.3: Pago::sum('montoTotal'), Mensualidad::where('estado','PENDIENTE')->sum()
-activate Facturacion
-Facturacion --> DashboardMetricasService: $kpisRecaudacion, $carteraVencida
-deactivate Facturacion
+DashboardMetricasService -> Pago: 1.3: sum('montoTotal')
+activate Pago
+Pago --> DashboardMetricasService: $recaudacionTotal
+deactivate Pago
+DashboardMetricasService -> Mensualidad: 1.4: where('estado','PENDIENTE')->sum('monto')
+activate Mensualidad
+Mensualidad --> DashboardMetricasService: $carteraVencida
+deactivate Mensualidad
+DashboardMetricasService -> Cliente: 1.5: count()
+activate Cliente
+Cliente --> DashboardMetricasService: $totalClientes
+deactivate Cliente
 DashboardMetricasService --> DashboardAdminFinancieroController: $metricasConsolidadas
 deactivate DashboardMetricasService
-DashboardAdminFinancieroController -> Bitacora: 1.4: log('CU26', 'CONSULTA_DASHBOARD', ip)
+DashboardAdminFinancieroController -> Bitacora: 1.6: log('CU26', 'CONSULTA_DASHBOARD', ip)
 activate Bitacora
 Bitacora --> DashboardAdminFinancieroController: ok
 deactivate Bitacora
@@ -2369,10 +2380,10 @@ AdminActor -> UI_DashboardAdminFinanciero: 2: consultarAlertasMorosidad()
 activate UI_DashboardAdminFinanciero
 UI_DashboardAdminFinanciero -> DashboardAdminFinancieroController: 2.1: alertas()
 activate DashboardAdminFinancieroController
-DashboardAdminFinancieroController -> Facturacion: 2.2: Mensualidad::where('estado','VENCIDA')->with('servicio.cliente')->get()
-activate Facturacion
-Facturacion --> DashboardAdminFinancieroController: $morososCriticos
-deactivate Facturacion
+DashboardAdminFinancieroController -> Mensualidad: 2.2: where('estado','VENCIDA')->with('servicio.cliente')->get()
+activate Mensualidad
+Mensualidad --> DashboardAdminFinancieroController: $morososCriticos
+deactivate Mensualidad
 DashboardAdminFinancieroController --> UI_DashboardAdminFinanciero: success({alertas: $morososCriticos})
 deactivate DashboardAdminFinancieroController
 UI_DashboardAdminFinanciero --> AdminActor: desplegarBandejaAlertasMora()
@@ -2391,7 +2402,10 @@ actor "Administrador / Gerencia" as AdminActor
 boundary UI_ReporteTradicional
 control ReporteTradicionalController
 entity ReporteTradicional
-entity "Cliente / Pago / Mensualidad" as Entidades
+entity Zona
+entity Cliente
+entity Pago
+entity Mensualidad
 entity Bitacora
 
 == Flujo 1: Consultar catálogo y parámetros ==
@@ -2415,13 +2429,25 @@ UI_ReporteTradicional -> ReporteTradicionalController: 2.1: generar(Request)
 activate ReporteTradicionalController
 ReporteTradicionalController -> ReporteTradicional: 2.2: generar($tipo, $filtros)
 activate ReporteTradicional
-ReporteTradicional -> Entidades: 2.3: DB::table(entidades)->where(filtros)->get()
-activate Entidades
-Entidades --> ReporteTradicional: $filas, $totales
-deactivate Entidades
+ReporteTradicional -> Zona: 2.3: select(['idZona', 'nombreZona'])->get()
+activate Zona
+Zona --> ReporteTradicional: $zonas
+deactivate Zona
+ReporteTradicional -> Cliente: 2.4: table('Cliente')->leftJoin('Zona')->get()
+activate Cliente
+Cliente --> ReporteTradicional: $clientes
+deactivate Cliente
+ReporteTradicional -> Pago: 2.5: table('Pago')->join('MetodoPago')->whereBetween()->get()
+activate Pago
+Pago --> ReporteTradicional: $pagos
+deactivate Pago
+ReporteTradicional -> Mensualidad: 2.6: table('Mensualidad')->whereIn('estado', ['PENDIENTE','VENCIDA'])->get()
+activate Mensualidad
+Mensualidad --> ReporteTradicional: $mensualidades
+deactivate Mensualidad
 ReporteTradicional --> ReporteTradicionalController: $reporteConsolidado
 deactivate ReporteTradicional
-ReporteTradicionalController -> Bitacora: 2.4: log('CU27', 'GENERAR_REPORTE', detalle)
+ReporteTradicionalController -> Bitacora: 2.7: log('CU27', 'GENERAR_REPORTE', detalle)
 activate Bitacora
 Bitacora --> ReporteTradicionalController: ok
 deactivate Bitacora
@@ -2509,6 +2535,7 @@ skinparam roundcorner 6
 actor "Usuario / Operador" as UserActor
 boundary UI_ComandoVoz
 control ComandoVozController
+entity Zona
 entity ComandoVoz
 entity Bitacora
 
@@ -2517,12 +2544,16 @@ UserActor -> UI_ComandoVoz: 1: enviarAudioComando(blobWav, textoDictado)
 activate UI_ComandoVoz
 UI_ComandoVoz -> ComandoVozController: 1.1: transcribir(Request $request)
 activate ComandoVozController
+ComandoVozController -> Zona: 1.2: pluck('nombreZona')
+activate Zona
+Zona --> ComandoVozController: $zonasDisponibles
+deactivate Zona
 ComandoVozController -> ComandoVozController: clasificarIntencion() & extraerParametros()
-ComandoVozController -> ComandoVoz: 1.2: create([textoDictado, intencion, reporteSugerido, confianza])
+ComandoVozController -> ComandoVoz: 1.3: create([textoDictado, intencion, reporteSugerido, confianza])
 activate ComandoVoz
 ComandoVoz --> ComandoVozController: $comandoGuardado
 deactivate ComandoVoz
-ComandoVozController -> Bitacora: 1.3: log('CU29', 'TRANSCRIBIR_VOZ', textoDictado)
+ComandoVozController -> Bitacora: 1.4: log('CU29', 'TRANSCRIBIR_VOZ', textoDictado)
 activate Bitacora
 Bitacora --> ComandoVozController: ok
 deactivate Bitacora
@@ -2544,6 +2575,8 @@ actor "Operador / Asistente" as OperadorActor
 boundary UI_IntencionVoz
 control IntencionVozController
 control NlpIntencionService
+entity Zona
+entity Cliente
 entity IntencionVozIA
 entity Bitacora
 
@@ -2555,14 +2588,21 @@ activate IntencionVozController
 IntencionVozController -> NlpIntencionService: 1.2: procesar($textoDictado): array
 activate NlpIntencionService
 NlpIntencionService -> NlpIntencionService: clasificarIntencion() & extraerEntidades()
-NlpIntencionService -> NlpIntencionService: obtenerDatosEnVivo()
+NlpIntencionService -> Zona: 1.3: whereLike('nombreZona', $zonaNombre)->first()
+activate Zona
+Zona --> NlpIntencionService: $zona
+deactivate Zona
+NlpIntencionService -> Cliente: 1.4: where('estadoCliente','ACTIVO')->where('idZona', $idZona)->count()
+activate Cliente
+Cliente --> NlpIntencionService: $conteoClientesActivos
+deactivate Cliente
 NlpIntencionService --> IntencionVozController: $resultadoNLP
 deactivate NlpIntencionService
-IntencionVozController -> IntencionVozIA: 1.3: create([textoEntrada, intencion, entidades, respuesta])
+IntencionVozController -> IntencionVozIA: 1.5: create([textoEntrada, intencion, entidades, respuesta])
 activate IntencionVozIA
 IntencionVozIA --> IntencionVozController: $registroPersistido
 deactivate IntencionVozIA
-IntencionVozController -> Bitacora: 1.4: log('CU30', 'PROCESAR_INTENCION_NLP', detalle)
+IntencionVozController -> Bitacora: 1.6: log('CU30', 'PROCESAR_INTENCION_NLP', detalle)
 activate Bitacora
 Bitacora --> IntencionVozController: ok
 deactivate Bitacora
@@ -2585,6 +2625,9 @@ boundary UI_ReporteInteligente
 control ReporteInteligenteController
 control GeminiIntencionService
 control CatalogoReportesService
+entity Mensualidad
+entity Cliente
+entity ReporteInteligente
 entity Bitacora
 
 == Flujo 1: Interpretar con Gemini y consultar catálogo de reportes ==
@@ -2598,9 +2641,21 @@ GeminiIntencionService --> ReporteInteligenteController: $intencionEstructurada:
 deactivate GeminiIntencionService
 ReporteInteligenteController -> CatalogoReportesService: 1.3: generar($intencionEstructurada)
 activate CatalogoReportesService
+CatalogoReportesService -> Mensualidad: 1.4: whereIn('estado', ['PENDIENTE','VENCIDA'])->get()
+activate Mensualidad
+Mensualidad --> CatalogoReportesService: $morosidades
+deactivate Mensualidad
+CatalogoReportesService -> Cliente: 1.5: where('estadoCliente','ACTIVO')->get()
+activate Cliente
+Cliente --> CatalogoReportesService: $clientesActivos
+deactivate Cliente
 CatalogoReportesService --> ReporteInteligenteController: $reporteGenerado: {tipo, filas, columnas, resumen}
 deactivate CatalogoReportesService
-ReporteInteligenteController -> Bitacora: 1.4: log('CU31', 'GENERAR_REPORTE_INTELIGENTE', detalle)
+ReporteInteligenteController -> ReporteInteligente: 1.6: create([tipo, comando, filtros, filas])
+activate ReporteInteligente
+ReporteInteligente --> ReporteInteligenteController: $reporteGuardado
+deactivate ReporteInteligente
+ReporteInteligenteController -> Bitacora: 1.7: log('CU31', 'GENERAR_REPORTE_INTELIGENTE', detalle)
 activate Bitacora
 Bitacora --> ReporteInteligenteController: ok
 deactivate Bitacora

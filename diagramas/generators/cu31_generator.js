@@ -39,8 +39,11 @@ function buildCU31Communication() {
   <line x1="150" y1="420" x2="380" y2="420" class="link-line" />
   <line x1="430" y1="420" x2="680" y2="420" class="link-line" />
   <line x1="710" y1="380" x2="710" y2="180" class="link-line" />
-  <line x1="740" y1="420" x2="1040" y2="420" class="link-line" />
-  <line x1="1100" y1="420" x2="1350" y2="420" class="link-line" />
+  <line x1="740" y1="420" x2="980" y2="420" class="link-line" />
+  <line x1="1040" y1="400" x2="1260" y2="260" class="link-line" />
+  <line x1="1340" y1="260" x2="1490" y2="260" class="link-line" />
+  <line x1="1040" y1="440" x2="1260" y2="560" class="link-line" />
+  <line x1="1340" y1="560" x2="1490" y2="560" class="link-line" />
   <line x1="710" y1="460" x2="710" y2="690" class="link-line" />
 
   <!-- INSTANCIAS ROBUSTEZ BCE -->
@@ -64,14 +67,29 @@ function buildCU31Communication() {
     <text x="0" y="44" class="node-title">GeminiIntencionService</text>
   </g>
 
-  <g transform="translate(1070, 420)">
+  <g transform="translate(1010, 420)">
     ${controlIcon(0, 0, 24)}
     <text x="0" y="48" class="node-title">CatalogoReportesService</text>
   </g>
 
-  <g transform="translate(1380, 420)">
-    ${entityIcon(0, 0, 24)}
-    <text x="0" y="48" class="node-title">Cliente / Pago / Mensualidad</text>
+  <g transform="translate(1300, 260)">
+    ${entityIcon(0, 0, 22)}
+    <text x="0" y="44" class="node-title">Cliente</text>
+  </g>
+
+  <g transform="translate(1520, 260)">
+    ${entityIcon(0, 0, 22)}
+    <text x="0" y="44" class="node-title">Zona</text>
+  </g>
+
+  <g transform="translate(1300, 560)">
+    ${entityIcon(0, 0, 22)}
+    <text x="0" y="44" class="node-title">Mensualidad</text>
+  </g>
+
+  <g transform="translate(1520, 560)">
+    ${entityIcon(0, 0, 22)}
+    <text x="0" y="44" class="node-title">Pago</text>
   </g>
 
   <g transform="translate(710, 720)">
@@ -93,12 +111,20 @@ function buildCU31Communication() {
     <text x="0" y="0" class="flow-1">1.2: interpretar($comando) [Gemini AI / LLM] &rarr;</text>
   </g>
 
-  <g transform="translate(755, 385)">
+  <g transform="translate(740, 385)">
     <text x="0" y="0" class="flow-1">1.3: generar($intencionEstructurada): array &rarr;</text>
   </g>
 
-  <g transform="translate(1105, 385)">
-    <text x="0" y="0" class="flow-1">1.4: DB::table(entidades)->select()->where()->get() &rarr;</text>
+  <g transform="translate(1045, 320)">
+    <text x="0" y="0" class="flow-1">1.4.1: table('Cliente')->leftJoin('Zona')->get() &rarr;</text>
+  </g>
+
+  <g transform="translate(1045, 510)">
+    <text x="0" y="0" class="flow-1">1.4.2: table('Mensualidad')->whereIn('estado')->get() &rarr;</text>
+  </g>
+
+  <g transform="translate(1350, 520)">
+    <text x="0" y="0" class="flow-1">1.4.3: table('Pago')->get() &rarr;</text>
   </g>
 
   <g transform="translate(725, 570)">
@@ -278,12 +304,15 @@ function buildCU31Sequence() {
   const height = 1150;
   const tabW = 480;
 
-  const xAdmin = 90;
-  const xUI = 320;
-  const xCtrl = 640;
-  const xGemini = 960;
-  const xCat = 1260;
-  const xBit = 1550;
+  const xAdmin = 70;
+  const xUI = 230;
+  const xCtrl = 420;
+  const xGemini = 630;
+  const xCat = 840;
+  const xCli = 1050;
+  const xMens = 1250;
+  const xPago = 1430;
+  const xBit = 1600;
 
   return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
@@ -318,6 +347,9 @@ function buildCU31Sequence() {
   <line x1="${xCtrl}" y1="130" x2="${xCtrl}" y2="${height - 50}" class="life-line" />
   <line x1="${xGemini}" y1="130" x2="${xGemini}" y2="${height - 50}" class="life-line" />
   <line x1="${xCat}" y1="130" x2="${xCat}" y2="${height - 50}" class="life-line" />
+  <line x1="${xCli}" y1="130" x2="${xCli}" y2="${height - 50}" class="life-line" />
+  <line x1="${xMens}" y1="130" x2="${xMens}" y2="${height - 50}" class="life-line" />
+  <line x1="${xPago}" y1="130" x2="${xPago}" y2="${height - 50}" class="life-line" />
   <line x1="${xBit}" y1="130" x2="${xBit}" y2="${height - 50}" class="life-line" />
 
   <!-- CABECERAS -->
@@ -341,6 +373,18 @@ function buildCU31Sequence() {
     ${controlIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">CatalogoReportesService</text>
   </g>
+  <g transform="translate(${xCli}, 90)">
+    ${entityIcon(0, 0, 20)}
+    <text x="0" y="36" class="life-title">Cliente</text>
+  </g>
+  <g transform="translate(${xMens}, 90)">
+    ${entityIcon(0, 0, 20)}
+    <text x="0" y="36" class="life-title">Mensualidad</text>
+  </g>
+  <g transform="translate(${xPago}, 90)">
+    ${entityIcon(0, 0, 20)}
+    <text x="0" y="36" class="life-title">Pago</text>
+  </g>
   <g transform="translate(${xBit}, 90)">
     ${entityIcon(0, 0, 20)}
     <text x="0" y="36" class="life-title">Bitacora</text>
@@ -357,35 +401,51 @@ function buildCU31Sequence() {
 
   <line x1="${xAdmin + 5}" y1="180" x2="${xUI - 5}" y2="180" class="msg-call" />
   <polygon points="${xUI - 5},180 ${xUI - 11},177 ${xUI - 11},183" fill="#1e293b" />
-  <text x="130" y="175" class="call-text">1: dictarComandoReporte("Genera un reporte de morosos de la Zona Norte")</text>
+  <text x="100" y="175" class="call-text">1: dictarComandoReporte("Genera un reporte de morosos de la Zona Norte")</text>
 
   <line x1="${xUI + 5}" y1="195" x2="${xCtrl - 5}" y2="195" class="msg-call" />
   <polygon points="${xCtrl - 5},195 ${xCtrl - 11},192 ${xCtrl - 11},198" fill="#1e293b" />
-  <text x="360" y="190" class="call-text">1.1: generar(Request $request)</text>
+  <text x="250" y="190" class="call-text">1.1: generar(Request $request)</text>
 
   <line x1="${xCtrl + 5}" y1="215" x2="${xGemini - 5}" y2="215" class="msg-call" />
   <polygon points="${xGemini - 5},215 ${xGemini - 11},212 ${xGemini - 11},218" fill="#1e293b" />
-  <text x="690" y="210" class="call-text">1.2: interpretar($comando): {tipo: 'morosidad_cortes', filtros: {zona: 'Norte'}}</text>
+  <text x="440" y="210" class="call-text">1.2: interpretar($comando): {tipo: 'morosidad_cortes', filtros: {zona: 'Norte'}}</text>
 
   <line x1="${xGemini - 5}" y1="240" x2="${xCtrl + 5}" y2="240" class="msg-ret" />
-  <text x="730" y="235" class="ret-text">($intencionEstructurada)</text>
+  <text x="480" y="235" class="ret-text">($intencionEstructurada)</text>
 
   <line x1="${xCtrl + 5}" y1="265" x2="${xCat - 5}" y2="265" class="msg-call" />
   <polygon points="${xCat - 5},265 ${xCat - 11},262 ${xCat - 11},268" fill="#1e293b" />
-  <text x="690" y="260" class="call-text">1.3: generar($intencion): DB::table('Mensualidad')->leftJoin('Cliente')->get()</text>
+  <text x="440" y="260" class="call-text">1.3: generar($intencionEstructurada)</text>
 
-  <line x1="${xCat - 5}" y1="290" x2="${xCtrl + 5}" y2="290" class="msg-ret" />
-  <text x="980" y="285" class="ret-text">($reporteGenerado: {tipo, filas, columnas, resumen, truncado})</text>
+  <!-- Query Mensualidad -->
+  <line x1="${xCat + 5}" y1="285" x2="${xMens - 5}" y2="285" class="msg-call" />
+  <polygon points="${xMens - 5},285 ${xMens - 11},282 ${xMens - 11},288" fill="#1e293b" />
+  <text x="860" y="280" class="call-text">1.4: whereIn('estado', ['PENDIENTE','VENCIDA'])->get()</text>
 
-  <line x1="${xCtrl + 5}" y1="320" x2="${xBit - 5}" y2="320" class="msg-call" />
-  <polygon points="${xBit - 5},320 ${xBit - 11},317 ${xBit - 11},323" fill="#1e293b" />
-  <text x="1100" y="315" class="call-text">1.4: AuditLogger::log('CU31', 'GENERAR_REPORTE_INTELIGENTE', detalle)</text>
+  <line x1="${xMens - 5}" y1="305" x2="${xCat + 5}" y2="305" class="msg-ret" />
+  <text x="920" y="300" class="ret-text">($mensualidadesVencidas)</text>
 
-  <line x1="${xCtrl - 5}" y1="350" x2="${xUI + 5}" y2="350" class="msg-ret" />
-  <text x="390" y="345" class="ret-text">success({interpretacion, reporte}, 'Reporte generado correctamente')</text>
+  <!-- Query Cliente -->
+  <line x1="${xCat + 5}" y1="330" x2="${xCli - 5}" y2="330" class="msg-call" />
+  <polygon points="${xCli - 5},330 ${xCli - 11},327 ${xCli - 11},333" fill="#1e293b" />
+  <text x="860" y="325" class="call-text">1.5: table('Cliente')->leftJoin('Zona')->get()</text>
 
-  <line x1="${xUI - 5}" y1="380" x2="${xAdmin + 5}" y2="380" class="msg-ret" />
-  <text x="130" y="375" class="ret-text">visualizarReporteConMetricasYExportar()</text>
+  <line x1="${xCli - 5}" y1="350" x2="${xCat + 5}" y2="350" class="msg-ret" />
+  <text x="920" y="345" class="ret-text">($clientesZona)</text>
+
+  <line x1="${xCat - 5}" y1="375" x2="${xCtrl + 5}" y2="375" class="msg-ret" />
+  <text x="500" y="370" class="ret-text">($reporteGenerado: {tipo, filas, columnas, resumen, truncado})</text>
+
+  <line x1="${xCtrl + 5}" y1="395" x2="${xBit - 5}" y2="395" class="msg-call" />
+  <polygon points="${xBit - 5},395 ${xBit - 11},392 ${xBit - 11},398" fill="#1e293b" />
+  <text x="1100" y="390" class="call-text">1.6: AuditLogger::log('CU31', 'GENERAR_REPORTE_INTELIGENTE', detalle)</text>
+
+  <line x1="${xCtrl - 5}" y1="420" x2="${xUI + 5}" y2="420" class="msg-ret" />
+  <text x="250" y="415" class="ret-text">success({interpretacion, reporte}, 'Reporte generado correctamente')</text>
+
+  <line x1="${xUI - 5}" y1="445" x2="${xAdmin + 5}" y2="445" class="msg-ret" />
+  <text x="100" y="440" class="ret-text">visualizarReporteConMetricasYExportar()</text>
 </svg>`;
 }
 

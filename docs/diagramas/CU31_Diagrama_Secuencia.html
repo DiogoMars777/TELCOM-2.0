@@ -118,15 +118,18 @@
   </g>
 
   <!-- LÍNEAS DE VIDA -->
-  <line x1="90" y1="130" x2="90" y2="1100" class="life-line" />
-  <line x1="320" y1="130" x2="320" y2="1100" class="life-line" />
-  <line x1="640" y1="130" x2="640" y2="1100" class="life-line" />
-  <line x1="960" y1="130" x2="960" y2="1100" class="life-line" />
-  <line x1="1260" y1="130" x2="1260" y2="1100" class="life-line" />
-  <line x1="1550" y1="130" x2="1550" y2="1100" class="life-line" />
+  <line x1="70" y1="130" x2="70" y2="1100" class="life-line" />
+  <line x1="230" y1="130" x2="230" y2="1100" class="life-line" />
+  <line x1="420" y1="130" x2="420" y2="1100" class="life-line" />
+  <line x1="630" y1="130" x2="630" y2="1100" class="life-line" />
+  <line x1="840" y1="130" x2="840" y2="1100" class="life-line" />
+  <line x1="1050" y1="130" x2="1050" y2="1100" class="life-line" />
+  <line x1="1250" y1="130" x2="1250" y2="1100" class="life-line" />
+  <line x1="1430" y1="130" x2="1430" y2="1100" class="life-line" />
+  <line x1="1600" y1="130" x2="1600" y2="1100" class="life-line" />
 
   <!-- CABECERAS -->
-  <g transform="translate(90, 90)">
+  <g transform="translate(70, 90)">
     
   <circle cx="0" cy="-26" r="8.5" fill="#ffffea" stroke="#1e293b" stroke-width="1.8" />
   <line x1="0" y1="-17.5" x2="0" y2="5" stroke="#1e293b" stroke-width="2" />
@@ -136,7 +139,7 @@
 
     <text x="0" y="40" class="life-title">Administrador / Gerencia</text>
   </g>
-  <g transform="translate(320, 90)">
+  <g transform="translate(230, 90)">
     
   <line x1="-25" y1="-20" x2="-25" y2="20" stroke="#475569" stroke-width="2.5" />
   <line x1="-25" y1="0" x2="-20" y2="0" stroke="#475569" stroke-width="2" />
@@ -144,7 +147,7 @@
 
     <text x="0" y="36" class="life-title">UI_ReporteInteligente</text>
   </g>
-  <g transform="translate(640, 90)">
+  <g transform="translate(420, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <path d="M -5 -20 L 4 -24 L 2 -20 C 11 -17 22 -2 20 6" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" />
@@ -152,7 +155,7 @@
 
     <text x="0" y="36" class="life-title">ReporteInteligenteController</text>
   </g>
-  <g transform="translate(960, 90)">
+  <g transform="translate(630, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <path d="M -5 -20 L 4 -24 L 2 -20 C 11 -17 22 -2 20 6" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" />
@@ -160,7 +163,7 @@
 
     <text x="0" y="36" class="life-title">GeminiIntencionService</text>
   </g>
-  <g transform="translate(1260, 90)">
+  <g transform="translate(840, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <path d="M -5 -20 L 4 -24 L 2 -20 C 11 -17 22 -2 20 6" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" />
@@ -168,7 +171,28 @@
 
     <text x="0" y="36" class="life-title">CatalogoReportesService</text>
   </g>
-  <g transform="translate(1550, 90)">
+  <g transform="translate(1050, 90)">
+    
+  <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
+  <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
+
+    <text x="0" y="36" class="life-title">Cliente</text>
+  </g>
+  <g transform="translate(1250, 90)">
+    
+  <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
+  <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
+
+    <text x="0" y="36" class="life-title">Mensualidad</text>
+  </g>
+  <g transform="translate(1430, 90)">
+    
+  <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
+  <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
+
+    <text x="0" y="36" class="life-title">Pago</text>
+  </g>
+  <g transform="translate(1600, 90)">
     
   <circle cx="0" cy="0" r="20" fill="#ffffea" stroke="#475569" stroke-width="2" />
   <line x1="-20" y1="24" x2="20" y2="24" stroke="#475569" stroke-width="2.5" />
@@ -181,41 +205,57 @@
   <path d="M 35,170 L 35,150 L 390,150 L 402,170 Z" class="frame-tab" />
   <text x="45" y="164" class="frame-title">alt Flujo 1: Interpretar con Gemini y consultar catálogo de reportes</text>
 
-  <rect x="85" y="175" width="10" height="305" class="act-bar" />
-  <rect x="315" y="175" width="10" height="300" class="act-bar" />
-  <rect x="635" y="185" width="10" height="275" class="act-bar" />
+  <rect x="65" y="175" width="10" height="305" class="act-bar" />
+  <rect x="225" y="175" width="10" height="300" class="act-bar" />
+  <rect x="415" y="185" width="10" height="275" class="act-bar" />
 
-  <line x1="95" y1="180" x2="315" y2="180" class="msg-call" />
-  <polygon points="315,180 309,177 309,183" fill="#1e293b" />
-  <text x="130" y="175" class="call-text">1: dictarComandoReporte("Genera un reporte de morosos de la Zona Norte")</text>
+  <line x1="75" y1="180" x2="225" y2="180" class="msg-call" />
+  <polygon points="225,180 219,177 219,183" fill="#1e293b" />
+  <text x="100" y="175" class="call-text">1: dictarComandoReporte("Genera un reporte de morosos de la Zona Norte")</text>
 
-  <line x1="325" y1="195" x2="635" y2="195" class="msg-call" />
-  <polygon points="635,195 629,192 629,198" fill="#1e293b" />
-  <text x="360" y="190" class="call-text">1.1: generar(Request $request)</text>
+  <line x1="235" y1="195" x2="415" y2="195" class="msg-call" />
+  <polygon points="415,195 409,192 409,198" fill="#1e293b" />
+  <text x="250" y="190" class="call-text">1.1: generar(Request $request)</text>
 
-  <line x1="645" y1="215" x2="955" y2="215" class="msg-call" />
-  <polygon points="955,215 949,212 949,218" fill="#1e293b" />
-  <text x="690" y="210" class="call-text">1.2: interpretar($comando): {tipo: 'morosidad_cortes', filtros: {zona: 'Norte'}}</text>
+  <line x1="425" y1="215" x2="625" y2="215" class="msg-call" />
+  <polygon points="625,215 619,212 619,218" fill="#1e293b" />
+  <text x="440" y="210" class="call-text">1.2: interpretar($comando): {tipo: 'morosidad_cortes', filtros: {zona: 'Norte'}}</text>
 
-  <line x1="955" y1="240" x2="645" y2="240" class="msg-ret" />
-  <text x="730" y="235" class="ret-text">($intencionEstructurada)</text>
+  <line x1="625" y1="240" x2="425" y2="240" class="msg-ret" />
+  <text x="480" y="235" class="ret-text">($intencionEstructurada)</text>
 
-  <line x1="645" y1="265" x2="1255" y2="265" class="msg-call" />
-  <polygon points="1255,265 1249,262 1249,268" fill="#1e293b" />
-  <text x="690" y="260" class="call-text">1.3: generar($intencion): DB::table('Mensualidad')->leftJoin('Cliente')->get()</text>
+  <line x1="425" y1="265" x2="835" y2="265" class="msg-call" />
+  <polygon points="835,265 829,262 829,268" fill="#1e293b" />
+  <text x="440" y="260" class="call-text">1.3: generar($intencionEstructurada)</text>
 
-  <line x1="1255" y1="290" x2="645" y2="290" class="msg-ret" />
-  <text x="980" y="285" class="ret-text">($reporteGenerado: {tipo, filas, columnas, resumen, truncado})</text>
+  <!-- Query Mensualidad -->
+  <line x1="845" y1="285" x2="1245" y2="285" class="msg-call" />
+  <polygon points="1245,285 1239,282 1239,288" fill="#1e293b" />
+  <text x="860" y="280" class="call-text">1.4: whereIn('estado', ['PENDIENTE','VENCIDA'])->get()</text>
 
-  <line x1="645" y1="320" x2="1545" y2="320" class="msg-call" />
-  <polygon points="1545,320 1539,317 1539,323" fill="#1e293b" />
-  <text x="1100" y="315" class="call-text">1.4: AuditLogger::log('CU31', 'GENERAR_REPORTE_INTELIGENTE', detalle)</text>
+  <line x1="1245" y1="305" x2="845" y2="305" class="msg-ret" />
+  <text x="920" y="300" class="ret-text">($mensualidadesVencidas)</text>
 
-  <line x1="635" y1="350" x2="325" y2="350" class="msg-ret" />
-  <text x="390" y="345" class="ret-text">success({interpretacion, reporte}, 'Reporte generado correctamente')</text>
+  <!-- Query Cliente -->
+  <line x1="845" y1="330" x2="1045" y2="330" class="msg-call" />
+  <polygon points="1045,330 1039,327 1039,333" fill="#1e293b" />
+  <text x="860" y="325" class="call-text">1.5: table('Cliente')->leftJoin('Zona')->get()</text>
 
-  <line x1="315" y1="380" x2="95" y2="380" class="msg-ret" />
-  <text x="130" y="375" class="ret-text">visualizarReporteConMetricasYExportar()</text>
+  <line x1="1045" y1="350" x2="845" y2="350" class="msg-ret" />
+  <text x="920" y="345" class="ret-text">($clientesZona)</text>
+
+  <line x1="835" y1="375" x2="425" y2="375" class="msg-ret" />
+  <text x="500" y="370" class="ret-text">($reporteGenerado: {tipo, filas, columnas, resumen, truncado})</text>
+
+  <line x1="425" y1="395" x2="1595" y2="395" class="msg-call" />
+  <polygon points="1595,395 1589,392 1589,398" fill="#1e293b" />
+  <text x="1100" y="390" class="call-text">1.6: AuditLogger::log('CU31', 'GENERAR_REPORTE_INTELIGENTE', detalle)</text>
+
+  <line x1="415" y1="420" x2="235" y2="420" class="msg-ret" />
+  <text x="250" y="415" class="ret-text">success({interpretacion, reporte}, 'Reporte generado correctamente')</text>
+
+  <line x1="225" y1="445" x2="75" y2="445" class="msg-ret" />
+  <text x="100" y="440" class="ret-text">visualizarReporteConMetricasYExportar()</text>
 </svg>
 </body>
 </html>
