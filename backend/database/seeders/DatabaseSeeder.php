@@ -42,6 +42,7 @@ class DatabaseSeeder extends Seeder
     private function runUnitTestsFixture(): void
     {
         $tablasLimpieza = [
+            'CopiaSeguridad',
             'IntencionVozIA',
             'DetallePago', 'Pago', 'Mensualidad', 'AsignacionEquipo', 'Instalacion',
             'SolicitudInstalacion', 'HistorialEstadoServicio', 'AccionServicio',
@@ -109,6 +110,7 @@ class DatabaseSeeder extends Seeder
             ['slug' => 'compras.manage', 'nombre' => 'Gestionar Compras', 'modulo' => 'COMPRAS', 'descripcion' => 'Gestión de compras.'],
             ['slug' => 'reportes.view', 'nombre' => 'Ver Reportes Gerenciales', 'modulo' => 'REPORTES', 'descripcion' => 'Reportes e indicadores.'],
             ['slug' => 'voz.nlp', 'nombre' => 'Procesar Intenciones de Voz con IA (NLP)', 'modulo' => 'INTELIGENCIA_VOZ', 'descripcion' => 'Permite procesar comandos de voz y texto con el motor NLP e Inteligencia Artificial (CU30).'],
+            ['slug' => 'backups.manage', 'nombre' => 'Gestionar Copias de Seguridad', 'modulo' => 'CU28', 'descripcion' => 'Generar, descargar y restaurar copias de seguridad de la base de datos.'],
         ];
 
         $permisosIds = [];
@@ -283,6 +285,8 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Limpieza en orden inverso de claves foráneas para evitar conflictos
         $tablasLimpieza = [
+            'CopiaSeguridad',
+            'IntencionVozIA',
             'DetallePago',
             'Pago',
             'Mensualidad',
@@ -377,6 +381,7 @@ class DatabaseSeeder extends Seeder
             ['slug' => 'compras.manage', 'nombre' => 'Gestionar Compras', 'modulo' => 'COMPRAS', 'descripcion' => 'Órdenes de compra e ingreso de insumos.'],
             ['slug' => 'reportes.view', 'nombre' => 'Ver Reportes Gerenciales', 'modulo' => 'REPORTES', 'descripcion' => 'Métricas e inteligencia de negocio.'],
             ['slug' => 'voz.nlp', 'nombre' => 'Procesar Intenciones de Voz con IA (NLP)', 'modulo' => 'INTELIGENCIA_VOZ', 'descripcion' => 'Permite procesar comandos de voz y texto con el motor NLP e Inteligencia Artificial (CU30).'],
+            ['slug' => 'backups.manage', 'nombre' => 'Gestionar Copias de Seguridad', 'modulo' => 'CU28', 'descripcion' => 'Generar, descargar y restaurar copias de seguridad de la base de datos.'],
         ];
 
         $permisosIds = [];

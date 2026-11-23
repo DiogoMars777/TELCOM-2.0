@@ -29,6 +29,7 @@ import ProgramarInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/
 import InstalacionesView from './views/Paquetes/P6_InstalacionesTecnicas/CU23_RegistrarInstalacion/InstalacionesView';
 import IntencionVozView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU30_ProcesarIntencionVozIA/IntencionVozView';
 import DashboardAdminFinancieroView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU26_VisualizarDashboardAdminFinanciero/DashboardAdminFinancieroView';
+import CopiasSeguridadView from './views/Paquetes/P1_SeguridadAdministracion/CU28_GenerarRestaurarCopiasSeguridad/CopiasSeguridadView';
 
 // Iconos de cada módulo del panel
 import {
@@ -36,7 +37,7 @@ import {
   Wifi, Calendar,
   CreditCard, Clock, AlertTriangle, Scissors, RefreshCw, Lock,
   Router, ArrowRightLeft, Package, Wrench, HardDrive, ClipboardList,
-  Sparkles, Brain, LayoutDashboard,
+  Sparkles, Brain, LayoutDashboard, Database,
 } from 'lucide-react';
 
 import { authService } from './models/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/authModel';
@@ -209,6 +210,7 @@ export default function App() {
       items: [
         { id: 'CU02', label: 'Bitácora de Auditoría', icon: History },
         { id: 'CU03', label: 'Usuarios, Roles y Permisos', icon: Users },
+        { id: 'CU28', label: 'Copias de Seguridad (Backup)', icon: Database },
       ],
     },
     {
@@ -301,6 +303,8 @@ export default function App() {
         return <AuditoriaView />;
       case 'CU03':
         return <UsuariosView user={currentUser} onPermissionsUpdated={refreshCurrentUser} />;
+      case 'CU28':
+        return <CopiasSeguridadView user={currentUser} />;
       case 'CU04':
         return <ZonasCoberturaView user={currentUser} />;
       case 'CU05':

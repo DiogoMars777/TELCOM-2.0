@@ -10,6 +10,8 @@ use App\Http\Controllers\Paquetes\P1_SeguridadAdministracion\CU02_BitacoraAudito
 // CU03: Gestionar usuarios internos, roles y permisos
 use App\Http\Controllers\Paquetes\P1_SeguridadAdministracion\CU03_UsuariosRolesPermisos\UsuarioController;
 use App\Http\Controllers\Paquetes\P1_SeguridadAdministracion\CU03_UsuariosRolesPermisos\RolController;
+// CU28: Generar y restaurar copias de seguridad (Backup / Restore)
+use App\Http\Controllers\Paquetes\P1_SeguridadAdministracion\CU28_GenerarRestaurarCopiasSeguridad\CopiasSeguridadController;
 // CU04: Gestionar zonas de cobertura
 use App\Http\Controllers\Paquetes\P2_GestionClientesZonas\CU04_ZonasCobertura\ZonaCoberturaController;
 // CU05: Registrar nuevo cliente
@@ -111,6 +113,16 @@ Route::prefix('cu03')->middleware(['auth:sanctum', 'permission:usuarios.manage']
     // Matriz editable de roles -> permisos.
     Route::get('/roles', [RolController::class, 'index']);
     Route::put('/roles/{id}/permisos', [RolController::class, 'updatePermisos'])->whereNumber('id');
+});
+
+// CU28: Generar y restaurar copias de seguridad (solo administrador)
+Route::prefix('cu28')->middleware(['auth:sanctum', 'permission:backups.manage'])->group(function () {
+    Route::get('/backups', [CopiasSeguridadController::class, 'index']);
+    Route::post('/backups', [CopiasSeguridadController::class, 'store']);
+    Route::get('/backups/{id}/download', [CopiasSeguridadController::class, 'download'])->whereNumber('id');
+    Route::post('/backups/{id}/restore', [CopiasSeguridadController::class, 'restore'])->whereNumber('id');
+    Route::post('/backups/restore-upload', [CopiasSeguridadController::class, 'restoreUpload']);
+    Route::delete('/backups/{id}', [CopiasSeguridadController::class, 'destroy'])->whereNumber('id');
 });
 
 // CU04: Gestionar zonas de cobertura (solo administrador)

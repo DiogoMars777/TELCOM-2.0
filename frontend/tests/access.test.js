@@ -31,7 +31,7 @@ const PERMISOS_ADMIN = [
   'equipos.view', 'equipos.manage', 'equipos.assign',
   'instalaciones.view', 'instalaciones.schedule', 'instalaciones.execute',
   'proveedores.manage', 'compras.manage', 'reportes.view',
-  'voz.nlp',
+  'voz.nlp', 'backups.manage',
 ];
 
 const PERMISOS_SECRETARIA = [
@@ -153,6 +153,14 @@ test('hasPermission exige el permiso exacto', () => {
   assert.equal(hasPermission(secretaria, 'usuarios.manage'), false);
   assert.equal(hasPermission(secretaria, null), true); // sin permiso requerido
   assert.equal(hasPermission(null, 'clientes.view'), false);
+});
+
+test('CU28 es exclusivo del Administrador (backups.manage)', () => {
+  assert.equal(canAccessCu(admin, 'CU28'), true);
+  assert.equal(canAccessCu(secretaria, 'CU28'), false);
+  assert.equal(canAccessCu(tecnico, 'CU28'), false);
+  assert.equal(canAccessCu(sinPermisos, 'CU28'), false);
+  assert.equal(CU_PERMISSIONS.CU28, 'backups.manage');
 });
 
 test('El módulo inicial es el primero permitido del orden preferido', () => {

@@ -76,12 +76,17 @@ class AuthorizationRbacTest extends TestCase
         $secretaria = Rol::where('slug', 'secretaria')->firstOrFail();
         $tecnico = Rol::where('slug', 'tecnico')->firstOrFail();
 
-        $this->assertSame(30, $admin->permisos()->count(), 'El administrador debe tener todos los permisos.');
+        $this->assertSame(31, $admin->permisos()->count(), 'El administrador debe tener todos los permisos.');
         $this->assertSame(20, $secretaria->permisos()->count());
         $this->assertSame(8, $tecnico->permisos()->count());
 
         // El rol antiguo ya no existe.
         $this->assertFalse(Rol::where('slug', 'cajero')->exists());
+
+        // CU28 (gestionar copias de seguridad) es EXCLUSIVO del administrador.
+        $this->assertTrue($admin->permisos()->where('permisos.slug', 'backups.manage')->exists());
+        $this->assertFalse($secretaria->permisos()->where('permisos.slug', 'backups.manage')->exists());
+        $this->assertFalse($tecnico->permisos()->where('permisos.slug', 'backups.manage')->exists());
 
         // CU16 (gestionar catálogo de planes) es EXCLUSIVO del administrador.
         $this->assertTrue($admin->permisos()->where('permisos.slug', 'planes.manage')->exists());
