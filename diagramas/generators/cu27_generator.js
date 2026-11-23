@@ -2,10 +2,14 @@ const { generateWatermarks, boundaryIcon, controlIcon, entityIcon, actorIcon } =
 
 // =========================================================================
 // CU27 - GENERAR Y EXPORTAR REPORTES TRADICIONALES (Daniel Candia - P7)
-// Controller: ReporteTradicionalController (catalogo, parametros, generar, exportarExcel, exportarPdf)
-// Boundary: UI_ReporteTradicional
-// Domain Service / Entity: ReporteTradicional
-// Entities: Cliente, Zona, Pago, Mensualidad, Equipo, Bitacora
+// Análisis de Clases:
+// Actor -> UI_ReporteTradicional -> ReporteTradicionalController -> ReporteTradicional
+// A partir de ReporteTradicional:
+// ReporteTradicional "1" -up- "0..*" Cliente
+// Cliente "0..*" -right- "1" Zona
+// ReporteTradicional "1" -down- "0..*" Mensualidad
+// ReporteTradicional "1" -right- "0..*" Pago
+// Pago "0..*" -down- "1" MetodoPago
 // =========================================================================
 
 function buildCU27Communication() {
@@ -46,7 +50,7 @@ function buildCU27Communication() {
   <line x1="1160" y1="400" x2="1160" y2="650" class="link-line" />
   <line x1="1190" y1="360" x2="1470" y2="360" class="link-line" />
 
-  <!-- INSTANCIAS ROBUSTEZ BCE -->
+  <!-- INSTANCIAS -->
   <g transform="translate(80, 360)">
     ${actorIcon(0, 0)}
     <text x="0" y="45" class="node-title">Administrador / Gerencia</text>
@@ -92,7 +96,7 @@ function buildCU27Communication() {
     <text x="0" y="44" class="node-title">Mensualidad</text>
   </g>
 
-  <!-- MENSAJES Y LLAMADAS -->
+  <!-- MENSAJES -->
   <g transform="translate(125, 275)">
     <text x="0" y="0" class="flow-1">1: consultarCatalogoReportes() &rarr;</text>
     <text x="0" y="16" class="flow-1">1.3: cargarParametrosFiltros() &rarr;</text>
@@ -117,13 +121,11 @@ function buildCU27Communication() {
     <text x="0" y="0" class="flow-1">1.2: catalogo() &rarr;</text>
     <text x="0" y="18" class="flow-2">2.2: generar(tipo, filtros) &rarr;</text>
     <text x="0" y="36" class="flow-3">3.2: generar(tipo, filtros) &rarr;</text>
-    <text x="0" y="54" class="flow-4">4.2: generar(tipo, filtros) &rarr;</text>
   </g>
 
   <g transform="translate(710, 480)">
-    <text x="0" y="0" class="flow-2">2.4: log('CU27', 'GENERAR_REPORTE', detalle) &rarr;</text>
-    <text x="0" y="20" class="flow-3">3.3: log('CU27', 'EXPORTAR_EXCEL', detalle) &rarr;</text>
-    <text x="0" y="40" class="flow-4">4.3: log('CU27', 'EXPORTAR_PDF', detalle) &rarr;</text>
+    <text x="0" y="0" class="flow-2">2.4: log('CU27', 'GENERAR_REPORTE') &rarr;</text>
+    <text x="0" y="20" class="flow-3">3.3: log('CU27', 'EXPORTAR_EXCEL') &rarr;</text>
   </g>
 
   <g transform="translate(1170, 210)">
@@ -138,166 +140,185 @@ function buildCU27Communication() {
     <text x="0" y="0" class="flow-2">2.3.3: table('Mensualidad')->whereIn('estado', ['PENDIENTE','VENCIDA'])->get() &rarr;</text>
   </g>
 
-  <!-- LEYENDA INFERIOR -->
   <g transform="translate(50, 830)">
     <rect x="0" y="0" width="1550" height="42" fill="#f8fafc" stroke="#cbd5e1" rx="4" />
     <text x="20" y="26" font-size="11" font-weight="bold" fill="#0f172a">Convención de Flujos:</text>
-    <text x="170" y="26" class="flow-1">&bull; Flujo 1: Consultar catálogo de reportes y parámetros de filtrado</text>
-    <text x="580" y="26" class="flow-2">&bull; Flujo 2: Generar consulta consolidada y auditoría</text>
-    <text x="940" y="26" class="flow-3">&bull; Flujo 3: Exportar reporte a Excel (CSV con BOM UTF-8)</text>
-    <text x="1270" y="26" class="flow-4">&bull; Flujo 4: Exportar reporte a PDF oficial</text>
+    <text x="170" y="26" class="flow-1">&bull; Flujo 1: Consultar catálogo de reportes</text>
+    <text x="560" y="26" class="flow-2">&bull; Flujo 2: Generar consulta consolidada</text>
+    <text x="940" y="26" class="flow-3">&bull; Flujo 3: Exportar reporte a Excel (CSV)</text>
+    <text x="1270" y="26" class="flow-4">&bull; Flujo 4: Exportar reporte a PDF</text>
   </g>
 </svg>`;
 }
 
 function buildCU27ClassAnalysis() {
-  const width = 1780;
-  const height = 980;
-  const tabW = 440;
+  const width = 1750;
+  const height = 750;
+  const tabW = 540;
 
   return `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: Arial, Helvetica, sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
   <defs>
     <style>
-      .tab-title { font-size: 10px; font-weight: bold; fill: #1e293b; }
-      .class-box { fill: #ffffea; stroke: #606060; stroke-width: 1; }
+      .tab-title { font-size: 11px; font-weight: bold; fill: #000000; }
+      .class-box { fill: #FFF2E6; stroke: #8A4B38; stroke-width: 1; rx: 6; ry: 6; }
       .class-title { font-size: 12px; font-weight: bold; fill: #000000; text-anchor: middle; }
-      .attr-text { font-size: 10.5px; fill: #000000; font-family: monospace, Arial; }
-      .method-text { font-size: 10.5px; fill: #000000; font-family: monospace, Arial; }
-      .assoc-text { font-size: 10.5px; fill: #334155; font-style: italic; }
+      .attr-text { font-size: 11px; fill: #000000; font-family: 'Segoe UI', Arial, sans-serif; }
+      .method-text { font-size: 11px; fill: #000000; font-family: 'Segoe UI', Arial, sans-serif; }
       .mult-text { font-size: 11px; fill: #000000; font-weight: bold; }
-      .ea-line { stroke: #505050; stroke-width: 1; fill: none; }
-      .divider { stroke: #707070; stroke-width: 0.8; }
+      .link-line { stroke: #000000; stroke-width: 1; fill: none; }
+      .divider { stroke: #8A4B38; stroke-width: 0.8; }
     </style>
   </defs>
 
-  <path d="M 20,45 L 20,24 L ${tabW},24 L ${tabW + 16},45 Z" fill="#ffffff" stroke="#606060" stroke-width="1" />
-  <text x="30" y="38" class="tab-title">class CU27 Generar y exportar reportes tradicionales</text>
+  <path d="M 10,35 L 10,18 L ${tabW},18 L ${tabW + 14},35 Z" fill="#ffffff" stroke="#000000" stroke-width="1" />
+  <text x="18" y="30" class="tab-title">sd Diagrama de análisis de clases - CU27 Generar y exportar reportes tradicionales</text>
 
-  <rect x="20" y="45" width="${width - 40}" height="${height - 65}" fill="#ffffff" stroke="#606060" stroke-width="1" />
-
-  <g opacity="0.45">
-    ${generateWatermarks(width, height)}
-  </g>
+  <rect x="10" y="35" width="${width - 20}" height="${height - 45}" fill="#ffffff" stroke="#000000" stroke-width="1" />
 
   <!-- LÍNEAS DE ASOCIACIÓN -->
-  <line x1="85" y1="280" x2="130" y2="280" class="ea-line" />
-  <line x1="360" y1="280" x2="420" y2="280" class="ea-line" />
-  <text x="375" y="272" class="assoc-text">invoca</text>
+  <!-- Actor a UI -->
+  <line x1="110" y1="360" x2="160" y2="360" class="link-line" />
 
-  <line x1="680" y1="280" x2="740" y2="280" class="ea-line" />
-  <text x="690" y="272" class="assoc-text">genera</text>
+  <!-- UI a Controller -->
+  <line x1="390" y1="360" x2="450" y2="360" class="link-line" />
 
-  <line x1="550" y1="390" x2="550" y2="600" class="ea-line" />
-  <text x="560" y="500" class="assoc-text">registra auditoría</text>
+  <!-- Controller a Entidad Principal (SOLO A REPORTETRADICIONAL!) -->
+  <line x1="730" y1="360" x2="800" y2="360" class="link-line" />
 
-  <line x1="1020" y1="230" x2="1110" y2="230" class="ea-line" />
-  <text x="1035" y="222" class="assoc-text">consulta</text>
+  <!-- ReporteTradicional a Cliente (Arriba) -->
+  <line x1="910" y1="260" x2="910" y2="170" class="link-line" />
+  <text x="920" y="245" class="mult-text">1</text>
+  <text x="920" y="185" class="mult-text">0..*</text>
 
-  <line x1="1020" y1="360" x2="1110" y2="480" class="ea-line" />
-  <text x="1040" y="410" class="assoc-text">consolida</text>
+  <!-- Cliente a Zona (Arriba a la derecha) -->
+  <line x1="1020" y1="110" x2="1100" y2="110" class="link-line" />
+  <text x="1035" y="100" class="mult-text">0..*</text>
+  <text x="1080" y="100" class="mult-text">1</text>
 
-  <line x1="950" y1="410" x2="950" y2="600" class="ea-line" />
-  <text x="960" y="510" class="assoc-text">evalúa mora</text>
+  <!-- ReporteTradicional a Mensualidad (Abajo) -->
+  <line x1="910" y1="460" x2="910" y2="550" class="link-line" />
+  <text x="920" y="480" class="mult-text">1</text>
+  <text x="920" y="535" class="mult-text">0..*</text>
 
-  <!-- CAJAS -->
-  <g transform="translate(60, 280)">
+  <!-- ReporteTradicional a Pago (Derecha) -->
+  <line x1="1020" y1="360" x2="1100" y2="360" class="link-line" />
+  <text x="1035" y="350" class="mult-text">1</text>
+  <text x="1080" y="350" class="mult-text">0..*</text>
+
+  <!-- Pago a MetodoPago (Abajo de Pago) -->
+  <line x1="1205" y1="440" x2="1205" y2="550" class="link-line" />
+  <text x="1215" y="465" class="mult-text">0..*</text>
+  <text x="1215" y="535" class="mult-text">1</text>
+
+  <!-- 1. ACTOR -->
+  <g transform="translate(60, 360)">
     ${actorIcon(0, 0)}
     <text x="0" y="45" class="class-title">Administrador / Gerencia</text>
   </g>
 
-  <g transform="translate(130, 160)">
-    <rect x="0" y="0" width="230" height="240" class="class-box" />
+  <!-- 2. BOUNDARY -->
+  <g transform="translate(160, 275)">
+    <rect x="0" y="0" width="230" height="170" class="class-box" />
     <text x="115" y="20" class="class-title">UI_ReporteTradicional</text>
     <line x1="0" y1="28" x2="230" y2="28" class="divider" />
     <text x="10" y="48" class="method-text">+ consultarCatalogo(): void</text>
     <text x="10" y="70" class="method-text">+ seleccionarTipoReporte(): void</text>
-    <text x="10" y="92" class="method-text">+ cambiarFiltro(): void</text>
-    <text x="10" y="114" class="method-text">+ limpiarFiltros(): void</text>
-    <text x="10" y="136" class="method-text">+ handleGenerarReporte(): void</text>
-    <text x="10" y="158" class="method-text">+ handleExportarExcel(): void</text>
-    <text x="10" y="180" class="method-text">+ handleExportarPdf(): void</text>
-    <text x="10" y="202" class="method-text">+ previsualizarImpresion(): void</text>
+    <text x="10" y="92" class="method-text">+ handleGenerarReporte(): void</text>
+    <text x="10" y="114" class="method-text">+ handleExportarExcel(): void</text>
+    <line x1="0" y1="124" x2="230" y2="124" class="divider" />
+    <text x="10" y="146" class="method-text">+ handleExportarPdf(): void</text>
   </g>
 
-  <g transform="translate(420, 180)">
-    <rect x="0" y="0" width="260" height="200" class="class-box" />
-    <text x="130" y="20" class="class-title">ReporteTradicionalController</text>
-    <line x1="0" y1="28" x2="260" y2="28" class="divider" />
-    <text x="10" y="55" class="method-text">+ catalogo(): JsonResponse</text>
-    <text x="10" y="85" class="method-text">+ parametros(): JsonResponse</text>
-    <text x="10" y="115" class="method-text">+ generar(Request): JsonResponse</text>
-    <text x="10" y="145" class="method-text">+ exportarExcel(Request): Streamed</text>
-    <text x="10" y="175" class="method-text">+ exportarPdf(Request): JsonResponse</text>
-  </g>
-
-  <g transform="translate(740, 160)">
-    <rect x="0" y="0" width="280" height="240" class="class-box" />
-    <text x="140" y="20" class="class-title">ReporteTradicional</text>
+  <!-- 3. CONTROL -->
+  <g transform="translate(450, 270)">
+    <rect x="0" y="0" width="280" height="180" class="class-box" />
+    <text x="140" y="20" class="class-title">ReporteTradicionalController</text>
     <line x1="0" y1="28" x2="280" y2="28" class="divider" />
-    <text x="10" y="46" class="attr-text">+ TIPO_CLIENTES_ZONA: string</text>
-    <text x="10" y="64" class="attr-text">+ TIPO_INGRESOS_PAGOS: string</text>
-    <text x="10" y="82" class="attr-text">+ TIPO_MOROSIDAD_CORTES: string</text>
-    <text x="10" y="100" class="attr-text">+ TIPO_EQUIPOS_INSTAL: string</text>
-    <line x1="0" y1="108" x2="280" y2="108" class="divider" />
-    <text x="10" y="126" class="method-text">+ catalogo(): array</text>
-    <text x="10" y="146" class="method-text">+ generar(tipo, filtros): array</text>
-    <text x="10" y="166" class="method-text">- generarClientesZona(filtros): array</text>
-    <text x="10" y="186" class="method-text">- generarIngresosPagos(filtros): array</text>
-    <text x="10" y="206" class="method-text">- generarMorosidadCortes(f): array</text>
+    <text x="10" y="50" class="method-text">+ catalogo(): void</text>
+    <text x="10" y="72" class="method-text">+ parametros(): void</text>
+    <text x="10" y="94" class="method-text">+ generar(): void</text>
+    <text x="10" y="116" class="method-text">+ exportarExcel(): void</text>
+    <line x1="0" y1="126" x2="280" y2="126" class="divider" />
+    <text x="10" y="148" class="method-text">+ exportarPdf(): void</text>
   </g>
 
-  <g transform="translate(1110, 130)">
-    <rect x="0" y="0" width="240" height="200" class="class-box" />
-    <text x="120" y="18" class="class-title">Cliente</text>
-    <line x1="0" y1="24" x2="240" y2="24" class="divider" />
-    <text x="10" y="42" class="attr-text">- idCliente: int</text>
-    <text x="10" y="58" class="attr-text">- codigoCliente: string</text>
-    <text x="10" y="74" class="attr-text">- nombreCompleto: string</text>
-    <text x="10" y="90" class="attr-text">- telefonoPrincipal: string</text>
-    <text x="10" y="106" class="attr-text">- email: string</text>
-    <text x="10" y="122" class="attr-text">- estadoCliente: string</text>
-    <text x="10" y="138" class="attr-text">- idZona: int</text>
-    <line x1="0" y1="146" x2="240" y2="146" class="divider" />
-    <text x="10" y="166" class="method-text">+ leftJoin(): Builder   + get(): void</text>
+  <!-- 4. TABLA PRINCIPAL: ReporteTradicional -->
+  <g transform="translate(800, 260)">
+    <rect x="0" y="0" width="220" height="200" class="class-box" />
+    <text x="110" y="20" class="class-title">ReporteTradicional</text>
+    <line x1="0" y1="28" x2="220" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- tipoReporte: string</text>
+    <text x="10" y="64" class="attr-text">- fechaDesde: date</text>
+    <text x="10" y="82" class="attr-text">- fechaHasta: date</text>
+    <text x="10" y="100" class="attr-text">- filtros: json</text>
+    <text x="10" y="118" class="attr-text">- formatoSalida: string</text>
+    <line x1="0" y1="126" x2="220" y2="126" class="divider" />
+    <text x="10" y="146" class="method-text">+ catalogo(): void</text>
+    <text x="10" y="166" class="method-text">+ generar(): void</text>
   </g>
 
-  <g transform="translate(1110, 420)">
-    <rect x="0" y="0" width="230" height="170" class="class-box" />
-    <text x="115" y="18" class="class-title">Pago</text>
-    <line x1="0" y1="24" x2="230" y2="24" class="divider" />
-    <text x="10" y="40" class="attr-text">- idPago: int</text>
-    <text x="10" y="56" class="attr-text">- fechaHora: timestamp</text>
-    <text x="10" y="72" class="attr-text">- montoTotal: decimal</text>
-    <text x="10" y="88" class="attr-text">- numeroComprobante: string</text>
-    <text x="10" y="104" class="attr-text">- idMetodoPago: int</text>
-    <line x1="0" y1="112" x2="230" y2="112" class="divider" />
-    <text x="10" y="132" class="method-text">+ whereBetween(): Builder</text>
+  <!-- 5. ENTIDAD: Cliente (Arriba) -->
+  <g transform="translate(800, 50)">
+    <rect x="0" y="0" width="220" height="120" class="class-box" />
+    <text x="110" y="20" class="class-title">Cliente</text>
+    <line x1="0" y1="28" x2="220" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idCliente: int</text>
+    <text x="10" y="64" class="attr-text">- nombreCompleto: string</text>
+    <text x="10" y="82" class="attr-text">- idZona: int</text>
+    <line x1="0" y1="90" x2="220" y2="90" class="divider" />
+    <text x="10" y="108" class="method-text">+ get(): void</text>
   </g>
 
-  <g transform="translate(850, 600)">
-    <rect x="0" y="0" width="220" height="170" class="class-box" />
-    <text x="110" y="18" class="class-title">Mensualidad</text>
-    <line x1="0" y1="24" x2="220" y2="24" class="divider" />
-    <text x="10" y="40" class="attr-text">- idMensualidad: int</text>
-    <text x="10" y="56" class="attr-text">- periodo: string</text>
-    <text x="10" y="72" class="attr-text">- fechaVencimiento: date</text>
-    <text x="10" y="88" class="attr-text">- monto: decimal</text>
-    <text x="10" y="104" class="attr-text">- estado: string</text>
-    <line x1="0" y1="112" x2="220" y2="112" class="divider" />
-    <text x="10" y="132" class="method-text">+ whereIn(): Builder</text>
+  <!-- 6. ENTIDAD: Zona (Arriba Derecha de Cliente) -->
+  <g transform="translate(1100, 50)">
+    <rect x="0" y="0" width="210" height="120" class="class-box" />
+    <text x="105" y="20" class="class-title">Zona</text>
+    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idZona: int</text>
+    <text x="10" y="64" class="attr-text">- nombreZona: string</text>
+    <text x="10" y="82" class="attr-text">- codigo: string</text>
+    <line x1="0" y1="90" x2="210" y2="90" class="divider" />
+    <text x="10" y="108" class="method-text">+ select(): void</text>
   </g>
 
-  <g transform="translate(440, 600)">
-    <rect x="0" y="0" width="220" height="170" class="class-box" />
-    <text x="110" y="18" class="class-title">Bitacora</text>
-    <line x1="0" y1="24" x2="220" y2="24" class="divider" />
-    <text x="10" y="40" class="attr-text">- idBitacora: int</text>
-    <text x="10" y="56" class="attr-text">- accion: string</text>
-    <text x="10" y="72" class="attr-text">- detalles: text</text>
-    <text x="10" y="88" class="attr-text">- idUsuario: int</text>
-    <line x1="0" y1="96" x2="220" y2="96" class="divider" />
-    <text x="10" y="116" class="method-text">+ create(): void</text>
+  <!-- 7. ENTIDAD: Mensualidad (Abajo) -->
+  <g transform="translate(800, 550)">
+    <rect x="0" y="0" width="220" height="130" class="class-box" />
+    <text x="110" y="20" class="class-title">Mensualidad</text>
+    <line x1="0" y1="28" x2="220" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idMensualidad: int</text>
+    <text x="10" y="64" class="attr-text">- periodo: string</text>
+    <text x="10" y="82" class="attr-text">- estado: string</text>
+    <text x="10" y="100" class="attr-text">- monto: decimal</text>
+    <line x1="0" y1="108" x2="220" y2="108" class="divider" />
+    <text x="10" y="124" class="method-text">+ whereIn(): void</text>
+  </g>
+
+  <!-- 8. ENTIDAD: Pago (Derecha de ReporteTradicional) -->
+  <g transform="translate(1100, 275)">
+    <rect x="0" y="0" width="210" height="165" class="class-box" />
+    <text x="105" y="20" class="class-title">Pago</text>
+    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idPago: int</text>
+    <text x="10" y="64" class="attr-text">- fechaPago: date</text>
+    <text x="10" y="82" class="attr-text">- montoTotal: decimal</text>
+    <text x="10" y="100" class="attr-text">- idMetodoPago: int</text>
+    <line x1="0" y1="108" x2="210" y2="108" class="divider" />
+    <text x="10" y="128" class="method-text">+ whereBetween(): void</text>
+    <text x="10" y="146" class="method-text">+ sum(): void</text>
+  </g>
+
+  <!-- 9. ENTIDAD: MetodoPago (Abajo de Pago) -->
+  <g transform="translate(1100, 550)">
+    <rect x="0" y="0" width="210" height="120" class="class-box" />
+    <text x="105" y="20" class="class-title">MetodoPago</text>
+    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idMetodoPago: int</text>
+    <text x="10" y="64" class="attr-text">- nombreMetodo: string</text>
+    <text x="10" y="82" class="attr-text">- estado: string</text>
+    <line x1="0" y1="90" x2="210" y2="90" class="divider" />
+    <text x="10" y="108" class="method-text">+ get(): void</text>
   </g>
 </svg>`;
 }
@@ -375,7 +396,7 @@ function buildCU27Sequence() {
     <text x="0" y="36" class="life-title">Bitacora</text>
   </g>
 
-  <!-- BLOQUE 1: CATÁLOGO Y PARÁMETROS -->
+  <!-- BLOQUE 1 -->
   <rect x="35" y="150" width="${width - 70}" height="195" class="frame-box" />
   <path d="M 35,170 L 35,150 L 360,150 L 372,170 Z" class="frame-tab" />
   <text x="45" y="164" class="frame-title">alt Flujo 1: Consultar catálogo y parámetros de filtrado</text>
@@ -412,7 +433,7 @@ function buildCU27Sequence() {
   <line x1="${xUI - 5}" y1="305" x2="${xAdmin + 5}" y2="305" class="msg-ret" />
   <text x="130" y="300" class="ret-text">renderizarFormularioFiltros()</text>
 
-  <!-- BLOQUE 2: GENERAR Y AUDITAR -->
+  <!-- BLOQUE 2 -->
   <rect x="35" y="360" width="${width - 70}" height="260" class="frame-box" />
   <path d="M 35,380 L 35,360 L 370,360 L 382,380 Z" class="frame-tab" />
   <text x="45" y="374" class="frame-title">alt Flujo 2: Generar consulta consolidada y auditoría</text>
@@ -444,7 +465,7 @@ function buildCU27Sequence() {
   <text x="750" y="490" class="ret-text">($reporteConsolidado)</text>
 
   <line x1="${xCtrl + 5}" y1="520" x2="${xBit - 5}" y2="520" class="msg-call" />
-  <polygon points="${xBit - 5},520 ${xBit - 11},517 ${xBit - 11},523" fill="#1e293b" />
+  <polygon points="${xBit - 5},520 ${xBit - 11},317 ${xBit - 11},523" fill="#1e293b" />
   <text x="1040" y="515" class="call-text">2.4: AuditLogger::log('CU27', 'GENERAR_REPORTE', detalle)</text>
 
   <line x1="${xCtrl - 5}" y1="545" x2="${xUI + 5}" y2="545" class="msg-ret" />
@@ -453,10 +474,10 @@ function buildCU27Sequence() {
   <line x1="${xUI - 5}" y1="570" x2="${xAdmin + 5}" y2="570" class="msg-ret" />
   <text x="130" y="565" class="ret-text">mostrarTablaReporteConKPIs()</text>
 
-  <!-- BLOQUE 3: EXPORTACIÓN -->
+  <!-- BLOQUE 3 -->
   <rect x="35" y="640" width="${width - 70}" height="220" class="frame-box" />
   <path d="M 35,660 L 35,640 L 330,640 L 342,660 Z" class="frame-tab" />
-  <text x="45" y="654" class="frame-title">alt Flujo 3 y 4: Exportación a Excel y PDF oficial</text>
+  <text x="45" y="654" class="frame-title">alt Flujo 3: Exportar reporte a Excel</text>
 
   <rect x="${xAdmin - 5}" y="665" width="10" height="175" class="act-bar" />
   <rect x="${xUI - 5}" y="665" width="10" height="170" class="act-bar" />
@@ -464,21 +485,21 @@ function buildCU27Sequence() {
 
   <line x1="${xAdmin + 5}" y1="670" x2="${xUI - 5}" y2="670" class="msg-call" />
   <polygon points="${xUI - 5},670 ${xUI - 11},667 ${xUI - 11},673" fill="#1e293b" />
-  <text x="130" y="665" class="call-text">3: exportarExcel(tipo, filtros) / exportarPdf()</text>
+  <text x="130" y="665" class="call-text">3: exportarExcel(tipo, filtros)</text>
 
   <line x1="${xUI + 5}" y1="690" x2="${xCtrl - 5}" y2="690" class="msg-call" />
   <polygon points="${xCtrl - 5},690 ${xCtrl - 11},687 ${xCtrl - 11},693" fill="#1e293b" />
-  <text x="410" y="685" class="call-text">3.1: exportarExcel(Request) / exportarPdf(Request)</text>
+  <text x="410" y="685" class="call-text">3.1: exportarExcel(Request)</text>
 
   <line x1="${xCtrl + 5}" y1="715" x2="${xBit - 5}" y2="715" class="msg-call" />
   <polygon points="${xBit - 5},715 ${xBit - 11},712 ${xBit - 11},718" fill="#1e293b" />
-  <text x="1040" y="710" class="call-text">3.2: AuditLogger::log('CU27', 'EXPORTAR_ARCHIVO', detalle)</text>
+  <text x="1040" y="710" class="call-text">3.2: AuditLogger::log('CU27', 'EXPORTAR_ARCHIVO')</text>
 
   <line x1="${xCtrl - 5}" y1="745" x2="${xUI + 5}" y2="745" class="msg-ret" />
-  <text x="410" y="740" class="ret-text">response()->streamDownload() / JsonResponse base64</text>
+  <text x="410" y="740" class="ret-text">response()->streamDownload()</text>
 
   <line x1="${xUI - 5}" y1="770" x2="${xAdmin + 5}" y2="770" class="msg-ret" />
-  <text x="130" y="765" class="ret-text">descargarArchivoBlobOImpresion()</text>
+  <text x="130" y="765" class="ret-text">descargarArchivoBlob()</text>
 </svg>`;
 }
 
@@ -487,4 +508,3 @@ module.exports = {
   buildCU27ClassAnalysis,
   buildCU27Sequence,
 };
-

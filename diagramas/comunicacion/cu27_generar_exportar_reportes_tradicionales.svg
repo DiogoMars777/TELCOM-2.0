@@ -84,7 +84,7 @@
   <line x1="1160" y1="400" x2="1160" y2="650" class="link-line" />
   <line x1="1190" y1="360" x2="1470" y2="360" class="link-line" />
 
-  <!-- INSTANCIAS ROBUSTEZ BCE -->
+  <!-- INSTANCIAS -->
   <g transform="translate(80, 360)">
     
   <circle cx="0" cy="-26" r="8.5" fill="#ffffea" stroke="#1e293b" stroke-width="1.8" />
@@ -162,7 +162,7 @@
     <text x="0" y="44" class="node-title">Mensualidad</text>
   </g>
 
-  <!-- MENSAJES Y LLAMADAS -->
+  <!-- MENSAJES -->
   <g transform="translate(125, 275)">
     <text x="0" y="0" class="flow-1">1: consultarCatalogoReportes() &rarr;</text>
     <text x="0" y="16" class="flow-1">1.3: cargarParametrosFiltros() &rarr;</text>
@@ -187,13 +187,11 @@
     <text x="0" y="0" class="flow-1">1.2: catalogo() &rarr;</text>
     <text x="0" y="18" class="flow-2">2.2: generar(tipo, filtros) &rarr;</text>
     <text x="0" y="36" class="flow-3">3.2: generar(tipo, filtros) &rarr;</text>
-    <text x="0" y="54" class="flow-4">4.2: generar(tipo, filtros) &rarr;</text>
   </g>
 
   <g transform="translate(710, 480)">
-    <text x="0" y="0" class="flow-2">2.4: log('CU27', 'GENERAR_REPORTE', detalle) &rarr;</text>
-    <text x="0" y="20" class="flow-3">3.3: log('CU27', 'EXPORTAR_EXCEL', detalle) &rarr;</text>
-    <text x="0" y="40" class="flow-4">4.3: log('CU27', 'EXPORTAR_PDF', detalle) &rarr;</text>
+    <text x="0" y="0" class="flow-2">2.4: log('CU27', 'GENERAR_REPORTE') &rarr;</text>
+    <text x="0" y="20" class="flow-3">3.3: log('CU27', 'EXPORTAR_EXCEL') &rarr;</text>
   </g>
 
   <g transform="translate(1170, 210)">
@@ -208,13 +206,12 @@
     <text x="0" y="0" class="flow-2">2.3.3: table('Mensualidad')->whereIn('estado', ['PENDIENTE','VENCIDA'])->get() &rarr;</text>
   </g>
 
-  <!-- LEYENDA INFERIOR -->
   <g transform="translate(50, 830)">
     <rect x="0" y="0" width="1550" height="42" fill="#f8fafc" stroke="#cbd5e1" rx="4" />
     <text x="20" y="26" font-size="11" font-weight="bold" fill="#0f172a">Convención de Flujos:</text>
-    <text x="170" y="26" class="flow-1">&bull; Flujo 1: Consultar catálogo de reportes y parámetros de filtrado</text>
-    <text x="580" y="26" class="flow-2">&bull; Flujo 2: Generar consulta consolidada y auditoría</text>
-    <text x="940" y="26" class="flow-3">&bull; Flujo 3: Exportar reporte a Excel (CSV con BOM UTF-8)</text>
-    <text x="1270" y="26" class="flow-4">&bull; Flujo 4: Exportar reporte a PDF oficial</text>
+    <text x="170" y="26" class="flow-1">&bull; Flujo 1: Consultar catálogo de reportes</text>
+    <text x="560" y="26" class="flow-2">&bull; Flujo 2: Generar consulta consolidada</text>
+    <text x="940" y="26" class="flow-3">&bull; Flujo 3: Exportar reporte a Excel (CSV)</text>
+    <text x="1270" y="26" class="flow-4">&bull; Flujo 4: Exportar reporte a PDF</text>
   </g>
 </svg>

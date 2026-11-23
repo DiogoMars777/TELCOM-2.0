@@ -7,7 +7,6 @@
       .flow-1 { fill: #0f172a; font-size: 10.5px; font-weight: bold; }
       .flow-2 { fill: #b91c1c; font-size: 10.5px; font-weight: bold; }
       .flow-3 { fill: #15803d; font-size: 10.5px; font-weight: bold; }
-      .sub-msg { font-size: 9.5px; font-weight: normal; fill: #475569; }
     </style>
   </defs>
 
@@ -88,7 +87,7 @@
   <line x1="780" y1="490" x2="970" y2="730" class="link-line" />
   <line x1="740" y1="440" x2="680" y2="330" class="link-line" />
 
-  <!-- INSTANCIAS ROBUSTEZ BCE -->
+  <!-- INSTANCIAS -->
   <g transform="translate(130, 460)">
     
   <circle cx="0" cy="-26" r="8.5" fill="#ffffea" stroke="#1e293b" stroke-width="1.8" />
@@ -174,7 +173,7 @@
     <text x="0" y="40" class="node-title">Bitacora</text>
   </g>
 
-  <!-- MENSAJES Y LLAMADAS -->
+  <!-- MENSAJES -->
   <g transform="translate(150, 380)">
     <text x="0" y="0" class="flow-1">1: consultarDashboard(periodo) &rarr;</text>
     <text x="0" y="18" class="flow-2">2: filtrarFinanciero(periodo) &rarr;</text>
@@ -189,42 +188,40 @@
 
   <g transform="translate(500, 260)">
     <text x="0" y="0" class="flow-1">1.3: sum('montoTotal'), count(*) [recaudación] &rarr;</text>
-    <text x="0" y="16" class="flow-2">2.2: leftJoin('MetodoPago')->groupBy() [canales QR/Efectivo] &rarr;</text>
+    <text x="0" y="16" class="flow-2">2.2: leftJoin('MetodoPago')->groupBy() &rarr;</text>
   </g>
 
   <g transform="translate(860, 260)">
-    <text x="0" y="0" class="flow-1">1.4: where('estado','PENDIENTE')->sum('monto') [cartera vencida] &rarr;</text>
-    <text x="0" y="16" class="flow-2">2.3: selectRaw('sum(monto)')->groupBy('periodo') [evolución semestral] &rarr;</text>
-    <text x="0" y="32" class="flow-3">3.2: join('Cliente')->where('estado','PENDIENTE')->orderByDesc('mora') &rarr;</text>
+    <text x="0" y="0" class="flow-1">1.4: where('estado','PENDIENTE')->sum('monto') &rarr;</text>
+    <text x="0" y="16" class="flow-2">2.3: selectRaw('sum(monto)')->groupBy('periodo') &rarr;</text>
+    <text x="0" y="32" class="flow-3">3.2: join('Cliente')->where('estado','PENDIENTE') &rarr;</text>
   </g>
 
   <g transform="translate(800, 435)">
-    <text x="0" y="0" class="flow-1">1.5: where('estadoCliente','ACTIVO')->count() [clientes activos] &rarr;</text>
-    <text x="0" y="18" class="flow-3">3.3: findOrFail(idCliente) [contacto/deuda] &rarr;</text>
+    <text x="0" y="0" class="flow-1">1.5: where('estadoCliente','ACTIVO')->count() &rarr;</text>
   </g>
 
   <g transform="translate(410, 620)">
-    <text x="0" y="0" class="flow-1">1.6: leftJoin('EstadoServicio')->groupBy('estado') [servicios activos/cortes] &rarr;</text>
+    <text x="0" y="0" class="flow-1">1.6: leftJoin('EstadoServicio')->groupBy('estado') &rarr;</text>
   </g>
 
   <g transform="translate(775, 620)">
-    <text x="0" y="0" class="flow-1">1.7: withCount(['asignaciones' => whereNull('fechaFin')]) [abonados por plan] &rarr;</text>
+    <text x="0" y="0" class="flow-1">1.7: withCount(['asignaciones' => whereNull('fechaFin')]) &rarr;</text>
   </g>
 
   <g transform="translate(900, 645)">
-    <text x="0" y="0" class="flow-1">1.8: select('capacidadNodos')->withCount('servicios') [saturación red] &rarr;</text>
+    <text x="0" y="0" class="flow-1">1.8: select('capacidadNodos')->withCount('servicios') &rarr;</text>
   </g>
 
   <g transform="translate(550, 340)">
-    <text x="0" y="0" class="flow-1">1.9: log('CU26', 'CONSULTA_DASHBOARD', ip) &rarr;</text>
+    <text x="0" y="0" class="flow-1">1.9: log('CU26', 'CONSULTA_DASHBOARD') &rarr;</text>
   </g>
 
-  <!-- LEYENDA INFERIOR -->
   <g transform="translate(50, 890)">
     <rect x="0" y="0" width="1580" height="42" fill="#f8fafc" stroke="#cbd5e1" rx="4" />
     <text x="20" y="26" font-size="11" font-weight="bold" fill="#0f172a">Convención de Flujos:</text>
-    <text x="170" y="26" class="flow-1">&bull; Flujo 1: Carga general de métricas operativas y financieras (Tarjetas KPI)</text>
-    <text x="730" y="26" class="flow-2">&bull; Flujo 2: Consulta analítica financiera (Gráficos evolutivos y métodos)</text>
-    <text x="1230" y="26" class="flow-3">&bull; Flujo 3: Alertas tempranas de morosidad</text>
+    <text x="170" y="26" class="flow-1">&bull; Flujo 1: Métricas operativas y financieras</text>
+    <text x="650" y="26" class="flow-2">&bull; Flujo 2: Desglose financiero</text>
+    <text x="1050" y="26" class="flow-3">&bull; Flujo 3: Alertas de morosidad</text>
   </g>
 </svg>

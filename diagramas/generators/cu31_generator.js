@@ -117,120 +117,176 @@ function buildCU31Communication() {
 
 function buildCU31ClassAnalysis() {
   const width = 1750;
-  const height = 980;
-  const tabW = 480;
+  const height = 750;
+  const tabW = 540;
 
   return `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: Arial, Helvetica, sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
   <defs>
     <style>
-      .tab-title { font-size: 10px; font-weight: bold; fill: #1e293b; }
-      .class-box { fill: #ffffea; stroke: #606060; stroke-width: 1; }
+      .tab-title { font-size: 11px; font-weight: bold; fill: #000000; }
+      .class-box { fill: #FFF2E6; stroke: #8A4B38; stroke-width: 1; rx: 6; ry: 6; }
       .class-title { font-size: 12px; font-weight: bold; fill: #000000; text-anchor: middle; }
-      .attr-text { font-size: 10.5px; fill: #000000; font-family: monospace, Arial; }
-      .method-text { font-size: 10.5px; fill: #000000; font-family: monospace, Arial; }
-      .assoc-text { font-size: 10.5px; fill: #334155; font-style: italic; }
+      .attr-text { font-size: 11px; fill: #000000; font-family: 'Segoe UI', Arial, sans-serif; }
+      .method-text { font-size: 11px; fill: #000000; font-family: 'Segoe UI', Arial, sans-serif; }
       .mult-text { font-size: 11px; fill: #000000; font-weight: bold; }
-      .ea-line { stroke: #505050; stroke-width: 1; fill: none; }
-      .divider { stroke: #707070; stroke-width: 0.8; }
+      .link-line { stroke: #000000; stroke-width: 1; fill: none; }
+      .divider { stroke: #8A4B38; stroke-width: 0.8; }
     </style>
   </defs>
 
-  <path d="M 20,45 L 20,24 L ${tabW},24 L ${tabW + 16},45 Z" fill="#ffffff" stroke="#606060" stroke-width="1" />
-  <text x="30" y="38" class="tab-title">class CU31 Generar reporte inteligente vía comando de voz</text>
+  <path d="M 10,35 L 10,18 L ${tabW},18 L ${tabW + 14},35 Z" fill="#ffffff" stroke="#000000" stroke-width="1" />
+  <text x="18" y="30" class="tab-title">sd Diagrama de análisis de clases - CU31 Generar reporte inteligente vía comando de voz</text>
 
-  <rect x="20" y="45" width="${width - 40}" height="${height - 65}" fill="#ffffff" stroke="#606060" stroke-width="1" />
+  <rect x="10" y="35" width="${width - 20}" height="${height - 45}" fill="#ffffff" stroke="#000000" stroke-width="1" />
 
-  <g opacity="0.45">
-    ${generateWatermarks(width, height)}
-  </g>
+  <!-- LÍNEAS DE ASOCIACIÓN -->
+  <!-- Actor a UI -->
+  <line x1="110" y1="360" x2="160" y2="360" class="link-line" />
 
-  <!-- ASOCIACIONES -->
-  <line x1="85" y1="280" x2="130" y2="280" class="ea-line" />
-  <line x1="390" y1="280" x2="470" y2="280" class="ea-line" />
-  <text x="410" y="272" class="assoc-text">invoca</text>
+  <!-- UI a Controller -->
+  <line x1="380" y1="360" x2="440" y2="360" class="link-line" />
 
-  <line x1="620" y1="170" x2="620" y2="110" class="ea-line" />
-  <text x="630" y="145" class="assoc-text">interpreta con</text>
+  <!-- Controller a Entidad Principal (SOLO A REPORTEINTELIGENTE!) -->
+  <line x1="720" y1="360" x2="790" y2="360" class="link-line" />
 
-  <line x1="770" y1="280" x2="850" y2="280" class="ea-line" />
-  <text x="790" y="272" class="assoc-text">consulta catálogo</text>
+  <!-- ReporteInteligente a Usuario (Arriba) -->
+  <line x1="905" y1="250" x2="905" y2="170" class="link-line" />
+  <text x="915" y="235" class="mult-text">0..*</text>
+  <text x="915" y="185" class="mult-text">1</text>
 
-  <line x1="1130" y1="280" x2="1210" y2="280" class="ea-line" />
-  <text x="1150" y="272" class="assoc-text">lee entidades</text>
+  <!-- ReporteInteligente a IntencionVozIA (Abajo) -->
+  <line x1="905" y1="470" x2="905" y2="550" class="link-line" />
+  <text x="915" y="485" class="mult-text">0..*</text>
+  <text x="915" y="535" class="mult-text">1</text>
 
-  <line x1="620" y1="390" x2="620" y2="560" class="ea-line" />
-  <text x="630" y="475" class="assoc-text">registra auditoría</text>
+  <!-- ReporteInteligente a Cliente (Derecha) -->
+  <line x1="1020" y1="360" x2="1100" y2="360" class="link-line" />
+  <text x="1035" y="350" class="mult-text">1</text>
+  <text x="1080" y="350" class="mult-text">0..*</text>
 
-  <!-- CAJAS EA -->
-  <g transform="translate(60, 280)">
+  <!-- Cliente a Mensualidad (Derecha) -->
+  <line x1="1310" y1="360" x2="1390" y2="360" class="link-line" />
+  <text x="1325" y="350" class="mult-text">1</text>
+  <text x="1370" y="350" class="mult-text">0..*</text>
+
+  <!-- Mensualidad a Pago (Abajo) -->
+  <line x1="1495" y1="440" x2="1495" y2="550" class="link-line" />
+  <text x="1505" y="460" class="mult-text">1</text>
+  <text x="1505" y="535" class="mult-text">0..1</text>
+
+  <!-- 1. ACTOR -->
+  <g transform="translate(60, 360)">
     ${actorIcon(0, 0)}
     <text x="0" y="45" class="class-title">Administrador / Gerencia</text>
   </g>
 
-  <g transform="translate(130, 160)">
-    <rect x="0" y="0" width="260" height="230" class="class-box" />
-    <text x="130" y="20" class="class-title">UI_ReporteInteligente</text>
-    <line x1="0" y1="28" x2="260" y2="28" class="divider" />
+  <!-- 2. BOUNDARY -->
+  <g transform="translate(160, 275)">
+    <rect x="0" y="0" width="220" height="170" class="class-box" />
+    <text x="110" y="20" class="class-title">UI_ReporteInteligente</text>
+    <line x1="0" y1="28" x2="220" y2="28" class="divider" />
     <text x="10" y="48" class="method-text">+ dictarComandoReporte(): void</text>
-    <text x="10" y="70" class="method-text">+ enviarComandoTexto(texto): void</text>
+    <text x="10" y="70" class="method-text">+ enviarComandoTexto(): void</text>
     <text x="10" y="92" class="method-text">+ previsualizarInterpretacion(): void</text>
     <text x="10" y="114" class="method-text">+ renderizarTablaReporteIA(): void</text>
-    <text x="10" y="136" class="method-text">+ renderizarResumenKPIs(): void</text>
-    <text x="10" y="158" class="method-text">+ exportarAExcel(): void</text>
-    <text x="10" y="180" class="method-text">+ exportarAPdf(): void</text>
+    <line x1="0" y1="124" x2="220" y2="124" class="divider" />
+    <text x="10" y="146" class="method-text">+ exportarReporte(): void</text>
   </g>
 
-  <g transform="translate(470, 170)">
-    <rect x="0" y="0" width="300" height="210" class="class-box" />
-    <text x="150" y="20" class="class-title">ReporteInteligenteController</text>
-    <line x1="0" y1="28" x2="300" y2="28" class="divider" />
-    <text x="10" y="55" class="method-text">+ generar(Request, Gemini, Catalogo): Json</text>
-    <text x="10" y="85" class="method-text">- validarEntrada(Request $request): array</text>
-    <text x="10" y="115" class="method-text">- auditarReporte(tipo, filas, origen): void</text>
-  </g>
-
-  <g transform="translate(490, 10)">
-    <rect x="0" y="0" width="260" height="100" class="class-box" />
-    <text x="130" y="18" class="class-title">GeminiIntencionService</text>
-    <line x1="0" y1="24" x2="260" y2="24" class="divider" />
-    <text x="10" y="45" class="method-text">+ interpretar(string $comando): array</text>
-    <text x="10" y="70" class="method-text">- promptSistema(): string</text>
-  </g>
-
-  <g transform="translate(850, 170)">
-    <rect x="0" y="0" width="280" height="230" class="class-box" />
-    <text x="140" y="20" class="class-title">CatalogoReportesService</text>
+  <!-- 3. CONTROL -->
+  <g transform="translate(440, 265)">
+    <rect x="0" y="0" width="280" height="190" class="class-box" />
+    <text x="140" y="20" class="class-title">ReporteInteligenteController</text>
     <line x1="0" y1="28" x2="280" y2="28" class="divider" />
-    <text x="10" y="48" class="method-text">+ generar(array $intencion): array</text>
-    <text x="10" y="70" class="method-text">- reporteClientesPorZona(filtros): array</text>
-    <text x="10" y="92" class="method-text">- reporteMorosidad(filtros): array</text>
-    <text x="10" y="114" class="method-text">- reporteIngresos(filtros): array</text>
-    <text x="10" y="136" class="method-text">- reporteInstalaciones(filtros): array</text>
+    <text x="10" y="48" class="method-text">+ generar(): void</text>
+    <text x="10" y="72" class="method-text">- validarEntrada(): void</text>
+    <text x="10" y="96" class="method-text">- auditarReporte(): void</text>
+    <line x1="0" y1="108" x2="280" y2="108" class="divider" />
+    <text x="10" y="130" class="method-text">- resolverIntencion(): void</text>
+    <text x="10" y="152" class="method-text">- ejecutarConsulta(): void</text>
   </g>
 
-  <g transform="translate(1210, 160)">
-    <rect x="0" y="0" width="260" height="240" class="class-box" />
-    <text x="130" y="20" class="class-title">Entidades del Dominio</text>
-    <line x1="0" y1="28" x2="260" y2="28" class="divider" />
-    <text x="10" y="48" class="attr-text">- Cliente (idCliente, idZona, estado)</text>
-    <text x="10" y="70" class="attr-text">- Mensualidad (monto, estado, periodo)</text>
-    <text x="10" y="92" class="attr-text">- Pago (montoTotal, fechaPago)</text>
-    <text x="10" y="114" class="attr-text">- ServicioInternet (idPlan, estado)</text>
-    <line x1="0" y1="124" x2="260" y2="124" class="divider" />
-    <text x="10" y="146" class="method-text">+ join(), where(), get()</text>
-    <text x="10" y="168" class="method-text">+ sum(), count(), avg()</text>
+  <!-- 4. TABLA PRINCIPAL: ReporteInteligente -->
+  <g transform="translate(790, 250)">
+    <rect x="0" y="0" width="230" height="220" class="class-box" />
+    <text x="115" y="20" class="class-title">ReporteInteligente</text>
+    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idReporte: int</text>
+    <text x="10" y="64" class="attr-text">- tipoReporte: string</text>
+    <text x="10" y="82" class="attr-text">- comandoOrigen: text</text>
+    <text x="10" y="100" class="attr-text">- filtrosAplicados: json</text>
+    <text x="10" y="118" class="attr-text">- filasDevueltas: int</text>
+    <text x="10" y="136" class="attr-text">- idUsuario: int</text>
+    <text x="10" y="154" class="attr-text">- fechaGeneracion: timestamp</text>
+    <line x1="0" y1="162" x2="230" y2="162" class="divider" />
+    <text x="10" y="182" class="method-text">+ generar(): void</text>
+    <text x="10" y="200" class="method-text">+ estructurarKPIs(): void</text>
   </g>
 
-  <g transform="translate(500, 560)">
-    <rect x="0" y="0" width="240" height="160" class="class-box" />
-    <text x="120" y="18" class="class-title">Bitacora</text>
-    <line x1="0" y1="24" x2="240" y2="24" class="divider" />
-    <text x="10" y="40" class="attr-text">- idBitacora: int   - casoUso: 'CU31'</text>
-    <text x="10" y="56" class="attr-text">- accion: 'GENERAR_REPORTE'</text>
-    <text x="10" y="72" class="attr-text">- detalles: text</text>
-    <line x1="0" y1="80" x2="240" y2="80" class="divider" />
-    <text x="10" y="100" class="method-text">+ create(array $datos): Bitacora</text>
+  <!-- 5. ENTIDAD RELACIONADA (ARRIBA): Usuario -->
+  <g transform="translate(790, 50)">
+    <rect x="0" y="0" width="230" height="120" class="class-box" />
+    <text x="115" y="20" class="class-title">Usuario</text>
+    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idUsuario: int</text>
+    <text x="10" y="64" class="attr-text">- nombreCompleto: string</text>
+    <text x="10" y="82" class="attr-text">- email: string</text>
+    <line x1="0" y1="90" x2="230" y2="90" class="divider" />
+    <text x="10" y="108" class="method-text">+ find(): void</text>
+  </g>
+
+  <!-- 6. ENTIDAD RELACIONADA (ABAJO): IntencionVozIA -->
+  <g transform="translate(790, 550)">
+    <rect x="0" y="0" width="230" height="150" class="class-box" />
+    <text x="115" y="20" class="class-title">IntencionVozIA</text>
+    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idIntencion: int</text>
+    <text x="10" y="64" class="attr-text">- intencionCanonica: string</text>
+    <text x="10" y="82" class="attr-text">- motor: string</text>
+    <text x="10" y="100" class="attr-text">- entidadesExtraidas: json</text>
+    <line x1="0" y1="108" x2="230" y2="108" class="divider" />
+    <text x="10" y="128" class="method-text">+ find(): void</text>
+  </g>
+
+  <!-- 7. ENTIDAD RELACIONADA (DERECHA): Cliente -->
+  <g transform="translate(1100, 275)">
+    <rect x="0" y="0" width="210" height="170" class="class-box" />
+    <text x="105" y="20" class="class-title">Cliente</text>
+    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idCliente: int</text>
+    <text x="10" y="64" class="attr-text">- codigoCliente: string</text>
+    <text x="10" y="82" class="attr-text">- idZona: int</text>
+    <text x="10" y="100" class="attr-text">- estadoCliente: string</text>
+    <line x1="0" y1="108" x2="210" y2="108" class="divider" />
+    <text x="10" y="128" class="method-text">+ find(): void</text>
+    <text x="10" y="146" class="method-text">+ get(): void</text>
+  </g>
+
+  <!-- 8. ENTIDAD RELACIONADA (DERECHA): Mensualidad -->
+  <g transform="translate(1390, 280)">
+    <rect x="0" y="0" width="210" height="160" class="class-box" />
+    <text x="105" y="20" class="class-title">Mensualidad</text>
+    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idMensualidad: int</text>
+    <text x="10" y="64" class="attr-text">- periodo: string</text>
+    <text x="10" y="82" class="attr-text">- monto: decimal</text>
+    <text x="10" y="100" class="attr-text">- estado: string</text>
+    <line x1="0" y1="108" x2="210" y2="108" class="divider" />
+    <text x="10" y="128" class="method-text">+ where(): void</text>
+  </g>
+
+  <!-- 9. ENTIDAD RELACIONADA (ABAJO DE MENSUALIDAD): Pago -->
+  <g transform="translate(1390, 550)">
+    <rect x="0" y="0" width="210" height="150" class="class-box" />
+    <text x="105" y="20" class="class-title">Pago</text>
+    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idPago: int</text>
+    <text x="10" y="64" class="attr-text">- fechaHora: timestamp</text>
+    <text x="10" y="82" class="attr-text">- montoTotal: decimal</text>
+    <text x="10" y="100" class="attr-text">- idMetodoPago: int</text>
+    <line x1="0" y1="108" x2="210" y2="108" class="divider" />
+    <text x="10" y="128" class="method-text">+ find(): void</text>
   </g>
 </svg>`;
 }

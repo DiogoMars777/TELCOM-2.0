@@ -258,9 +258,9 @@ frame "sd CU31 Generar reporte inteligente vía comando de voz" {
 `;
 
 // =========================================================================
-// 2. PLANTUML ANÁLISIS DE CLASES CU24, CU27 - CU31
+// 2. PLANTUML ANÁLISIS DE CLASES CICLO 4 (CU24 A CU31)
 // =========================================================================
-const pumlCU24Ana = `
+const pumlCiclo4Ana = `
 @startuml cu24_analisis_gestionar_proveedores
 allowmixing
 
@@ -287,28 +287,24 @@ skinparam actor {
 frame "sd Diagrama de análisis de clases - CU24 Gestionar proveedores" {
     actor "Administrador / Almacén" as AdminActor
 
-    class UI_Proveedor <<boundary>> {
+    class UI_Proveedor {
         + listarProveedores(): void
-        + filtrarPorTexto(buscar: string): void
-        + filtrarPorEstado(activo: bool): void
-        + abrirFormularioCrear(): void
-        + submitRegistrar(datos: array): void
-        + submitActualizar(id: int, datos: array): void
-        + confirmarCambioEstado(id: int): void
+        + registrarProveedor(): void
+        + actualizarProveedor(): void
+        + cambiarEstado(): void
+        + mostrarDetalle(): void
     }
 
-    class ProveedorController <<control>> {
-        + index(request: Request): JsonResponse
-        + show(proveedor: int): JsonResponse
-        + store(request: Request): JsonResponse
-        + update(request: Request, proveedor: int): JsonResponse
-        + activar(proveedor: int): JsonResponse
-        + desactivar(proveedor: int): JsonResponse
-        - validarProveedor(request: Request): array
-        - auditar(prov: Proveedor, accion: string): void
+    class ProveedorController {
+        + index(): void
+        + show(): void
+        + store(): void
+        + update(): void
+        + activar(): void
+        + desactivar(): void
     }
 
-    class Proveedor <<entity>> {
+    class Proveedor {
         - idProveedor: int
         - razonSocial: string
         - nit: string
@@ -316,49 +312,54 @@ frame "sd Diagrama de análisis de clases - CU24 Gestionar proveedores" {
         - correo: string
         - direccion: string
         - estado: boolean
-        - created_at: timestamp
-        - updated_at: timestamp
         --
-        + compras(): HasMany
-        + scopeActivos(query: Builder): Builder
-        + scopeWhereLike(query: Builder, col: string, val: string): Builder
+        + create(): void
+        + update(): void
     }
 
-    class Compra <<entity>> {
+    class Usuario {
+        - idUsuario: int
+        - nombreCompleto: string
+        - nombreUsuario: string
+        --
+        + find(): void
+    }
+
+    class Compra {
         - idCompra: int
         - nroComprobante: string
         - fechaCompra: date
         - montoTotal: decimal
         - idProveedor: int
         --
-        + proveedor(): BelongsTo
-        + detalles(): HasMany
+        + find(): void
+        + where(): void
     }
 
-    class Bitacora <<entity>> {
-        - idBitacora: int
-        - casoUso: string = 'CU24'
-        - accion: string
-        - detalles: text
-        - ip: string
-        - idUsuario: int
-        - fechaHora: timestamp
+    class DetalleCompra {
+        - idDetalleCompra: int
+        - cantidad: int
+        - precioUnitario: decimal
+        - subtotal: decimal
+        - idCompra: int
+        - idProducto: int
         --
-        + create(datos: array): Bitacora
+        + create(): void
     }
 
     AdminActor -right- UI_Proveedor
-    UI_Proveedor -right- ProveedorController : invoca >
-    ProveedorController "1" -right- "0..*" Proveedor : gestiona >
-    ProveedorController "1" -down- "0..*" Bitacora : registra auditoría >
-    Proveedor "1" -right- "0..*" Compra : suministra >
+    UI_Proveedor -right- ProveedorController
+    ProveedorController -right- Proveedor
+
+    Proveedor "0..*" -up- "1" Usuario
+    Proveedor "1" -right- "0..*" Compra
+    Compra "1" -right- "1..*" DetalleCompra
 }
 @enduml
-`;
 
-const pumlCU27to31Ana = `
-@startuml cu27_analisis_generar_exportar_reportes_tradicionales
+@startuml cu25_analisis_registrar_compra_equipo
 allowmixing
+
 skinparam backgroundColor white
 skinparam defaultFontName "Segoe UI"
 skinparam defaultFontSize 11
@@ -372,79 +373,326 @@ skinparam class {
     RoundCorner 6
     HeaderBackgroundColor #FFF2E6
     ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de análisis de clases - CU25 Registrar compra de equipos y actualización de stock" {
+    actor "Administrador / Almacén" as AdminActor
+
+    class UI_CompraRegistro {
+        + listarCompras(): void
+        + abrirModalRegistro(): void
+        + agregarItemDetalle(): void
+        + registrarCompraEquipo(): void
+        + verDetalleCompra(): void
+    }
+
+    class CompraEquipoRegistroController {
+        + index(): void
+        + show(): void
+        + proveedores(): void
+        + productos(): void
+        + estados(): void
+        + store(): void
+    }
+
+    class Compra {
+        - idCompra: int
+        - nroComprobante: string
+        - fechaCompra: date
+        - montoTotal: decimal
+        - idProveedor: int
+        - idEstadoCompra: int
+        --
+        + create(): void
+        + update(): void
+    }
+
+    class Proveedor {
+        - idProveedor: int
+        - razonSocial: string
+        - nit: string
+        --
+        + find(): void
+    }
+
+    class EstadoCompra {
+        - idEstadoCompra: int
+        - nombreEstado: string
+        --
+        + find(): void
+    }
+
+    class DetalleCompra {
+        - idDetalleCompra: int
+        - cantidad: int
+        - precioUnitario: decimal
+        - subtotal: decimal
+        - idCompra: int
+        - idInventario: int
+        --
+        + create(): void
+    }
+
+    class Inventario {
+        - idInventario: int
+        - stockActual: int
+        - idProducto: int
+        --
+        + increment(): void
+    }
+
+    class ProductoEquipo {
+        - idProducto: int
+        - nombreProducto: string
+        - tipoEquipo: string
+        --
+        + find(): void
+    }
+
+    AdminActor -right- UI_CompraRegistro
+    UI_CompraRegistro -right- CompraEquipoRegistroController
+    CompraEquipoRegistroController -right- Compra
+
+    Compra "0..*" -up- "1" Proveedor
+    Compra "0..*" -down- "1" EstadoCompra
+    Compra "1" -right- "1..*" DetalleCompra
+    DetalleCompra "0..*" -right- "1" Inventario
+    Inventario "1" -down- "1" ProductoEquipo
+}
+@enduml
+
+@startuml cu26_analisis_dashboard_admin_financiero
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
+frame "sd Diagrama de análisis de clases - CU26 Visualizar Dashboard administrativo y financiero" {
+    actor "Administrador / Secretaría" as AdminActor
+
+    class UI_DashboardAdminFinanciero {
+        + consultarDashboard(): void
+        + filtrarFinanciero(): void
+        + consultarAlertas(): void
+        + renderizarKPIs(): void
+        + exportarResumen(): void
+    }
+
+    class DashboardAdminFinancieroController {
+        + index(): void
+        + financiero(): void
+        + alertas(): void
+        + operativo(): void
+    }
+
+    class ServicioInternet {
+        - idServicio: int
+        - codigoServicio: string
+        - idCliente: int
+        - idPlan: int
+        - estadoServicio: string
+        --
+        + where(): void
+        + count(): void
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - nombreCompleto: string
+        - idZona: int
+        --
+        + find(): void
+    }
+
+    class Zona {
+        - idZona: int
+        - nombreZona: string
+        --
+        + select(): void
+    }
+
+    class PlanInternet {
+        - idPlan: int
+        - nombrePlan: string
+        - precioMensual: decimal
+        --
+        + find(): void
+    }
+
+    class Mensualidad {
+        - idMensualidad: int
+        - periodo: string
+        - monto: decimal
+        - estado: string
+        - idServicio: int
+        --
+        + where(): void
+        + sum(): void
+    }
+
+    class Pago {
+        - idPago: int
+        - montoTotal: decimal
+        - fechaHora: timestamp
+        - idMetodoPago: int
+        --
+        + sum(): void
+    }
+
+    class MetodoPago {
+        - idMetodoPago: int
+        - nombreMetodo: string
+        --
+        + find(): void
+    }
+
+    AdminActor -right- UI_DashboardAdminFinanciero
+    UI_DashboardAdminFinanciero -right- DashboardAdminFinancieroController
+    DashboardAdminFinancieroController -right- ServicioInternet
+
+    ServicioInternet "0..*" -up- "1" Cliente
+    Cliente "0..*" -right- "1" Zona
+    ServicioInternet "0..*" -down- "1" PlanInternet
+    ServicioInternet "1" -right- "0..*" Mensualidad
+    Mensualidad "1" -right- "0..1" Pago
+    Pago "0..*" -down- "1" MetodoPago
+}
+@enduml
+
+@startuml cu27_analisis_generar_exportar_reportes_tradicionales
+allowmixing
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+hide circle
+
+skinparam class {
+    BackgroundColor #FFF2E6
+    BorderColor #8A4B38
+    RoundCorner 6
+    HeaderBackgroundColor #FFF2E6
+    ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
 }
 
 frame "sd Diagrama de análisis de clases - CU27 Generar y exportar reportes tradicionales" {
     actor "Administrador / Gerencia" as AdminActor
 
-    class UI_ReporteTradicional <<boundary>> {
+    class UI_ReporteTradicional {
         + consultarCatalogo(): void
         + seleccionarTipoReporte(): void
-        + cambiarFiltro(): void
         + handleGenerarReporte(): void
         + handleExportarExcel(): void
         + handleExportarPdf(): void
     }
 
-    class ReporteTradicionalController <<control>> {
-        + catalogo(): JsonResponse
-        + parametros(): JsonResponse
-        + generar(request: Request): JsonResponse
-        + exportarExcel(request: Request): StreamedResponse
-        + exportarPdf(request: Request): JsonResponse
+    class ReporteTradicionalController {
+        + catalogo(): void
+        + parametros(): void
+        + generar(): void
+        + exportarExcel(): void
+        + exportarPdf(): void
     }
 
-    class ReporteTradicional <<entity>> {
+    class ReporteTradicional {
         + TIPO_CLIENTES_ZONA: string
         + TIPO_INGRESOS_PAGOS: string
         + TIPO_MOROSIDAD_CORTES: string
         + TIPO_EQUIPOS_INSTAL: string
         --
-        + catalogo(): array
-        + generar(tipo: string, filtros: array): array
+        + catalogo(): void
+        + generar(): void
     }
 
-    class Cliente <<entity>> {
+    class Cliente {
         - idCliente: int
         - codigoCliente: string
         - nombreCompleto: string
         - estadoCliente: string
         - idZona: int
+        --
+        + find(): void
     }
 
-    class Pago <<entity>> {
-        - idPago: int
-        - fechaHora: timestamp
-        - montoTotal: decimal
-        - idMetodoPago: int
+    class Zona {
+        - idZona: int
+        - nombreZona: string
+        - codigo: string
+        --
+        + select(): void
     }
 
-    class Mensualidad <<entity>> {
+    class Mensualidad {
         - idMensualidad: int
         - periodo: string
         - monto: decimal
         - estado: string
+        --
+        + whereIn(): void
     }
 
-    class Bitacora <<entity>> {
-        - idBitacora: int
-        - casoUso: string = 'CU27'
-        - accion: string
-        - detalles: text
+    class Pago {
+        - idPago: int
+        - fechaHora: timestamp
+        - montoTotal: decimal
+        - idMetodoPago: int
+        --
+        + whereBetween(): void
+    }
+
+    class MetodoPago {
+        - idMetodoPago: int
+        - nombreMetodo: string
+        - descripcion: string
+        --
+        + find(): void
     }
 
     AdminActor -right- UI_ReporteTradicional
     UI_ReporteTradicional -right- ReporteTradicionalController
-    ReporteTradicionalController "1" -right- "1" ReporteTradicional : invoca >
-    ReporteTradicionalController "1" -down- "0..*" Bitacora : registra auditoría >
-    ReporteTradicional "1" -right- "0..*" Cliente : consolida >
-    ReporteTradicional "1" -right- "0..*" Pago : consolida >
-    ReporteTradicional "1" -down- "0..*" Mensualidad : evalúa mora >
+    ReporteTradicionalController -right- ReporteTradicional
+
+    ReporteTradicional "1" -up- "0..*" Cliente
+    Cliente "0..*" -right- "1" Zona
+    ReporteTradicional "1" -down- "0..*" Mensualidad
+    ReporteTradicional "1" -right- "0..*" Pago
+    Pago "0..*" -down- "1" MetodoPago
 }
 @enduml
 
 @startuml cu28_analisis_generar_restaurar_copias_seguridad
 allowmixing
+
 skinparam backgroundColor white
 skinparam defaultFontName "Segoe UI"
 skinparam defaultFontSize 11
@@ -458,66 +706,97 @@ skinparam class {
     RoundCorner 6
     HeaderBackgroundColor #FFF2E6
     ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
 }
 
 frame "sd Diagrama de análisis de clases - CU28 Generar y restaurar copias de seguridad" {
     actor "Administrador del Sistema" as AdminActor
 
-    class UI_CopiasSeguridad <<boundary>> {
+    class UI_CopiasSeguridad {
         + listarCopiasSeguridad(): void
-        + submitGenerarBackup(tipo: string, desc: string): void
-        + descargarCopia(id: int): void
-        + ejecutarRestauracion(id: int): void
-        + eliminarCopia(id: int): void
+        + submitGenerarBackup(): void
+        + descargarCopia(): void
+        + ejecutarRestauracion(): void
+        + eliminarCopia(): void
     }
 
-    class CopiasSeguridadController <<control>> {
-        + index(): JsonResponse
-        + store(request: Request): JsonResponse
-        + download(id: int): BinaryFileResponse
-        + restore(id: int): JsonResponse
-        + destroy(id: int): JsonResponse
-        - resolverBinario(binario: string): ?string
+    class CopiasSeguridadController {
+        + index(): void
+        + store(): void
+        + download(): void
+        + restore(): void
+        + destroy(): void
+        - resolverBinario(): void
     }
 
-    class CopiaSeguridad <<entity>> {
+    class CopiaSeguridad {
         - idCopiaSeguridad: int
         - nombreArchivo: string
         - ruta: string
         - tamanoBytes: bigint
-        - tamanoLegible: string
         - idUsuario: int
         - descripcion: string
         - tipo: string
         - estado: string
         --
-        + usuario(): BelongsTo
-        + existeFisicamente(): bool
+        + create(): void
+        + findOrFail(): void
     }
 
-    class Usuario <<entity>> {
+    class Usuario {
         - idUsuario: int
         - nombreCompleto: string
-        - email: string
+        - idRol: int
+        --
+        + find(): void
     }
 
-    class Bitacora <<entity>> {
-        - idBitacora: int
-        - casoUso: string = 'CU28'
-        - accion: string
-        - detalles: text
+    class Rol {
+        - idRol: int
+        - nombreRol: string
+        - descripcion: string
+        --
+        + find(): void
+    }
+
+    class ConfiguracionBackup {
+        - idConfiguracion: int
+        - frecuencia: string
+        - retencionDias: int
+        - rutaDestino: string
+        --
+        + first(): void
+    }
+
+    class RestauracionBackup {
+        - idRestauracion: int
+        - idCopiaSeguridad: int
+        - fechaRestauracion: timestamp
+        - estado: string
+        - logSalida: text
+        --
+        + create(): void
+        + find(): void
     }
 
     AdminActor -right- UI_CopiasSeguridad
     UI_CopiasSeguridad -right- CopiasSeguridadController
-    CopiasSeguridadController "1" -right- "0..*" CopiaSeguridad : administra >
-    CopiasSeguridadController "1" -up- "1" Usuario : autentica >
-    CopiasSeguridadController "1" -down- "0..*" Bitacora : registra auditoría >
+    CopiasSeguridadController -right- CopiaSeguridad
+
+    CopiaSeguridad "0..*" -up- "1" Usuario
+    Usuario "0..*" -right- "1" Rol
+    CopiaSeguridad "0..*" -down- "1" ConfiguracionBackup
+    CopiaSeguridad "1" -right- "0..*" RestauracionBackup
 }
 @enduml
 
 @startuml cu29_analisis_capturar_transcribir_comandos_voz
 allowmixing
+
 skinparam backgroundColor white
 skinparam defaultFontName "Segoe UI"
 skinparam defaultFontSize 11
@@ -531,62 +810,97 @@ skinparam class {
     RoundCorner 6
     HeaderBackgroundColor #FFF2E6
     ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
 }
 
 frame "sd Diagrama de análisis de clases - CU29 Capturar y transcribir comandos de voz" {
     actor "Usuario / Operador" as UserActor
 
-    class UI_ComandoVoz <<boundary>> {
-        + iniciarGrabacionMicrofono(): void
+    class UI_ComandoVoz {
+        + iniciarGrabacion(): void
         + detenerGrabacionYEnviar(): void
         + reproducirAudioGrabado(): void
-        + listarHistorial(pagina: int): void
-        + mostrarResultadoTranscripcion(): void
+        + listarHistorial(): void
+        + mostrarTranscripcion(): void
     }
 
-    class ComandoVozController <<control>> {
-        + transcribir(request: Request): JsonResponse
-        + historial(request: Request): JsonResponse
-        + ejemplos(): JsonResponse
-        - clasificarIntencion(txt: string): array
+    class ComandoVozController {
+        + transcribir(): void
+        + historial(): void
+        + ejemplos(): void
+        - clasificarIntencion(): void
+        - extraerParametros(): void
+        - almacenarAudio(): void
     }
 
-    class ComandoVoz <<entity>> {
-        - idComando: int
+    class ComandoVoz {
+        - idComandoVoz: int
         - idUsuario: int
-        - audioRuta: string
         - textoDictado: text
-        - intencionDetectada: string
-        - reporteSugerido: string
+        - intencion: string
         - parametros: json
-        - confianza: decimal
-        - procesadoExitoso: bool
+        - confianza: float
+        - estado: string
+        - duracionSegundos: float
         --
-        + usuario(): BelongsTo
+        + create(): void
+        + interpretar(): void
     }
 
-    class Zona <<entity>> {
+    class Usuario {
+        - idUsuario: int
+        - nombreCompleto: string
+        - nombreUsuario: string
+        --
+        + find(): void
+    }
+
+    class Zona {
         - idZona: int
         - nombreZona: string
+        - codigo: string
+        --
+        + pluck(): void
     }
 
-    class Bitacora <<entity>> {
-        - idBitacora: int
-        - casoUso: string = 'CU29'
-        - accion: string = 'TRANSCRIBIR_VOZ'
-        - detalles: text
+    class ReporteTradicional {
+        + TIPO_CLIENTES_ZONA: str
+        + TIPO_INGRESOS_PAGOS: str
+        + TIPO_MOROSIDAD_CORTES: str
+        + TIPO_EQUIPOS_INSTAL: str
+        --
+        + catalogo(): void
+        + generar(): void
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - nombreCompleto: string
+        - estadoCliente: string
+        --
+        + find(): void
+        + where(): void
     }
 
     UserActor -right- UI_ComandoVoz
     UI_ComandoVoz -right- ComandoVozController
-    ComandoVozController "1" -right- "0..*" ComandoVoz : persiste >
-    ComandoVozController "1" -up- "0..*" Zona : consulta contexto >
-    ComandoVozController "1" -down- "0..*" Bitacora : registra auditoría >
+    ComandoVozController -right- ComandoVoz
+
+    ComandoVoz "0..*" -up- "1" Usuario
+    ComandoVoz "0..*" -down- "0..1" Zona
+    ComandoVoz "0..*" -right- "0..1" ReporteTradicional
+    ReporteTradicional "1" -right- "0..*" Cliente
 }
 @enduml
 
 @startuml cu30_analisis_procesar_intencion_voz_ia
 allowmixing
+
 skinparam backgroundColor white
 skinparam defaultFontName "Segoe UI"
 skinparam defaultFontSize 11
@@ -600,67 +914,106 @@ skinparam class {
     RoundCorner 6
     HeaderBackgroundColor #FFF2E6
     ArrowColor black
+}
+
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
 }
 
 frame "sd Diagrama de análisis de clases - CU30 Procesar intención de voz con IA (NLP)" {
     actor "Operador / Asistente" as OperadorActor
 
-    class UI_IntencionVoz <<boundary>> {
-        + escucharVozDictada(): void
-        + enviarTextoComando(txt: string): void
+    class UI_IntencionVoz {
+        + escucharVoz(): void
+        + enviarTextoComando(): void
         + listarHistorialNLP(): void
-        + renderizarRespuestaAsistente(): void
-        + mostrarWidgetsDatosEnVivo(): void
-        + navegarAccionSugerida(url: string): void
+        + renderizarRespuesta(): void
+        + mostrarDatosEnVivo(): void
     }
 
-    class IntencionVozController <<control>> {
-        + procesar(request: Request): JsonResponse
-        + historial(request: Request): JsonResponse
-        + intenciones(): JsonResponse
-        + ejemplos(): JsonResponse
+    class IntencionVozController {
+        + procesar(): void
+        + historial(): void
+        + intenciones(): void
+        + ejemplos(): void
+        - clasificarSemantica(): void
+        - auditarIntencion(): void
     }
 
-    class NlpIntencionService <<control>> {
-        + procesar(texto: string): array
-        - clasificarIntencion(txt: string): array
-        - extraerEntidades(txt: string): array
-        - generarRespuesta(intencion: string, ent: array): string
-        - obtenerDatosEnVivo(intencion: string, ent: array): array
-    }
-
-    class IntencionVozIA <<entity>> {
+    class IntencionVozIA {
         - idIntencion: int
         - idUsuario: int
         - textoEntrada: text
         - intencionCanonica: string
         - categoria: string
-        - confianza: decimal
-        - motor: string
+        - confianza: float
         - entidadesExtraidas: json
-        - accionSugerida: json
         - datosEnVivo: json
         --
-        + usuario(): BelongsTo
+        + create(): void
+        + findOrFail(): void
     }
 
-    class Bitacora <<entity>> {
-        - idBitacora: int
-        - casoUso: string = 'CU30'
-        - accion: string = 'PROCESAR_INTENCION_NLP'
-        - detalles: text
+    class Usuario {
+        - idUsuario: int
+        - nombreCompleto: string
+        - nombreUsuario: string
+        --
+        + find(): void
+    }
+
+    class ComandoVoz {
+        - idComandoVoz: int
+        - textoDictado: text
+        - intencion: string
+        - estado: string
+        --
+        + find(): void
+    }
+
+    class Mensualidad {
+        - idMensualidad: int
+        - periodo: string
+        - monto: decimal
+        - estado: string
+        --
+        + where(): void
+        + sum(): void
+    }
+
+    class Cliente {
+        - idCliente: int
+        - codigoCliente: string
+        - nombreCompleto: string
+        - idZona: int
+        --
+        + find(): void
+        + count(): void
+    }
+
+    class Zona {
+        - idZona: int
+        - nombreZona: string
+        --
+        + pluck(): void
     }
 
     OperadorActor -right- UI_IntencionVoz
     UI_IntencionVoz -right- IntencionVozController
-    IntencionVozController "1" -right- "1" NlpIntencionService : delega a >
-    NlpIntencionService "1" -right- "0..*" IntencionVozIA : persiste >
-    IntencionVozController "1" -down- "0..*" Bitacora : registra auditoría >
+    IntencionVozController -right- IntencionVozIA
+
+    IntencionVozIA "0..*" -up- "1" Usuario
+    IntencionVozIA "0..*" -down- "0..1" ComandoVoz
+    IntencionVozIA "1" -right- "0..*" Mensualidad
+    Mensualidad "0..*" -right- "1" Cliente
+    Cliente "0..*" -down- "1" Zona
 }
 @enduml
 
 @startuml cu31_analisis_generar_reporte_inteligente_voz
 allowmixing
+
 skinparam backgroundColor white
 skinparam defaultFontName "Segoe UI"
 skinparam defaultFontSize 11
@@ -676,54 +1029,97 @@ skinparam class {
     ArrowColor black
 }
 
+skinparam actor {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+}
+
 frame "sd Diagrama de análisis de clases - CU31 Generar reporte inteligente vía comando de voz" {
     actor "Administrador / Gerencia" as AdminActor
 
-    class UI_ReporteInteligente <<boundary>> {
+    class UI_ReporteInteligente {
         + dictarComandoReporte(): void
-        + enviarComandoTexto(texto: string): void
+        + enviarComandoTexto(): void
         + previsualizarInterpretacion(): void
         + renderizarTablaReporteIA(): void
-        + renderizarResumenKPIs(): void
+        + exportarReporte(): void
     }
 
-    class ReporteInteligenteController <<control>> {
-        + generar(request: Request, gemini: GeminiIntencionService, catalogo: CatalogoReportesService): JsonResponse
+    class ReporteInteligenteController {
+        + generar(): void
+        - validarEntrada(): void
+        - auditarReporte(): void
+        - resolverIntencion(): void
+        - ejecutarConsulta(): void
     }
 
-    class GeminiIntencionService <<control>> {
-        + interpretar(comando: string): array
+    class ReporteInteligente {
+        - idReporte: int
+        - tipoReporte: string
+        - comandoOrigen: text
+        - filtrosAplicados: json
+        - filasDevueltas: int
+        - idUsuario: int
+        - fechaGeneracion: timestamp
+        --
+        + generar(): void
+        + estructurarKPIs(): void
     }
 
-    class CatalogoReportesService <<control>> {
-        + generar(intencion: array): array
+    class Usuario {
+        - idUsuario: int
+        - nombreCompleto: string
+        - email: string
+        --
+        + find(): void
     }
 
-    class Cliente <<entity>> {
+    class IntencionVozIA {
+        - idIntencion: int
+        - intencionCanonica: string
+        - motor: string
+        - entidadesExtraidas: json
+        --
+        + find(): void
+    }
+
+    class Cliente {
         - idCliente: int
         - codigoCliente: string
         - idZona: int
+        - estadoCliente: string
+        --
+        + find(): void
+        + get(): void
     }
 
-    class Mensualidad <<entity>> {
+    class Mensualidad {
         - idMensualidad: int
+        - periodo: string
         - monto: decimal
         - estado: string
+        --
+        + where(): void
     }
 
-    class Bitacora <<entity>> {
-        - idBitacora: int
-        - casoUso: string = 'CU31'
-        - accion: string = 'GENERAR_REPORTE_INTELIGENTE'
+    class Pago {
+        - idPago: int
+        - fechaHora: timestamp
+        - montoTotal: decimal
+        - idMetodoPago: int
+        --
+        + find(): void
     }
 
     AdminActor -right- UI_ReporteInteligente
     UI_ReporteInteligente -right- ReporteInteligenteController
-    ReporteInteligenteController "1" -up- "1" GeminiIntencionService : interpreta con >
-    ReporteInteligenteController "1" -right- "1" CatalogoReportesService : consulta catálogo >
-    CatalogoReportesService "1" -right- "0..*" Cliente : lee >
-    CatalogoReportesService "1" -down- "0..*" Mensualidad : lee >
-    ReporteInteligenteController "1" -down- "0..*" Bitacora : registra auditoría >
+    ReporteInteligenteController -right- ReporteInteligente
+
+    ReporteInteligente "0..*" -up- "1" Usuario
+    ReporteInteligente "0..*" -down- "1" IntencionVozIA
+    ReporteInteligente "1" -right- "0..*" Cliente
+    Cliente "1" -right- "0..*" Mensualidad
+    Mensualidad "1" -down- "0..1" Pago
 }
 @enduml
 `;
@@ -1170,20 +1566,13 @@ if (!secContent.includes('@startuml cu24_secuencia_gestionar_proveedores')) {
 fs.writeFileSync(pumlSecuencia, secContent, 'utf8');
 console.log('diagramas_secuencia_todos_cu.puml actualizado exitosamente.');
 
-// 3. Actualizar Analisis de Clases
+// 3. Actualizar Analisis de Clases (CU24 - CU31)
 let anaContent = fs.readFileSync(pumlAnalisis, 'utf8');
-if (!anaContent.includes('@startuml cu24_analisis_gestionar_proveedores')) {
-  // Insertar CU24 antes de CU25
-  const cu25Index = anaContent.indexOf('frame "sd Diagrama de an\\u00e1lisis de clases - CU25 Registrar compra de equipo');
-  const cu25StartUml = anaContent.lastIndexOf('@startuml cu25', cu25Index !== -1 ? cu25Index : undefined);
-  if (cu25StartUml !== -1) {
-    anaContent = anaContent.slice(0, cu25StartUml) + pumlCU24Ana.trim() + '\n\n' + anaContent.slice(cu25StartUml);
-  } else {
-    anaContent += '\n' + pumlCU24Ana.trim();
-  }
-}
-if (!anaContent.includes('@startuml cu27_analisis_generar_exportar_reportes_tradicionales')) {
-  anaContent = anaContent.trim() + '\n' + pumlCU27to31Ana.trim() + '\n';
+const cu24Index = anaContent.indexOf('@startuml cu24_analisis_gestionar_proveedores');
+if (cu24Index !== -1) {
+  anaContent = anaContent.slice(0, cu24Index) + pumlCiclo4Ana.trim() + '\n';
+} else {
+  anaContent = anaContent.trim() + '\n\n' + pumlCiclo4Ana.trim() + '\n';
 }
 fs.writeFileSync(pumlAnalisis, anaContent, 'utf8');
 console.log('diagramas_analisis_clases_todos_cu.puml actualizado exitosamente.');

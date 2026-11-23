@@ -11,14 +11,11 @@
     </style>
   </defs>
 
-  <!-- Pestaña de Diagrama EA -->
   <path d="M 20,45 L 20,24 L 380,24 L 396,45 Z" fill="#ffffff" stroke="#64748b" stroke-width="1" />
   <text x="30" y="38" class="tab-title">sd CU24 Gestionar proveedores</text>
 
-  <!-- Marco Exterior -->
   <rect x="20" y="45" width="1560" height="835" fill="#ffffff" stroke="#64748b" stroke-width="1" />
 
-  <!-- Marcas de agua EA Trial -->
   <g opacity="0.45">
     
     <text x="30" y="95" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
@@ -75,23 +72,13 @@
   </g>
 
   <!-- LÍNEAS DE ENLACE -->
-  <!-- Actor -> Boundary -->
   <line x1="150" y1="360" x2="380" y2="360" class="link-line" />
-
-  <!-- Boundary -> Controller -->
   <line x1="420" y1="360" x2="730" y2="360" class="link-line" />
-
-  <!-- Controller -> Proveedor (Principal) -->
   <line x1="770" y1="360" x2="1160" y2="360" class="link-line" />
-
-  <!-- Controller -> Bitacora (Auditoría abajo) -->
   <line x1="750" y1="400" x2="750" y2="650" class="link-line" />
-
-  <!-- Proveedor -> Compra (Relación arriba a la derecha) -->
   <line x1="1200" y1="330" x2="1200" y2="170" class="link-line" />
 
   <!-- INSTANCIAS DEL PATRÓN ROBUSTEZ BCE -->
-  <!-- 1. Actor -->
   <g transform="translate(120, 360)">
     
   <circle cx="0" cy="-26" r="8.5" fill="#ffffea" stroke="#1e293b" stroke-width="1.8" />
@@ -103,7 +90,6 @@
     <text x="0" y="45" class="node-title">Administrador / Almacén</text>
   </g>
 
-  <!-- 2. Boundary: UI_Proveedor -->
   <g transform="translate(400, 360)">
     
   <line x1="-29" y1="-24" x2="-29" y2="24" stroke="#475569" stroke-width="2.5" />
@@ -113,7 +99,6 @@
     <text x="0" y="48" class="node-title">UI_Proveedor</text>
   </g>
 
-  <!-- 3. Control: ProveedorController -->
   <g transform="translate(750, 360)">
     
   <circle cx="0" cy="0" r="24" fill="#ffffea" stroke="#475569" stroke-width="2" />
@@ -123,7 +108,6 @@
     <text x="0" y="48" class="node-title">ProveedorController</text>
   </g>
 
-  <!-- 4. Entity: Proveedor -->
   <g transform="translate(1180, 360)">
     
   <circle cx="0" cy="0" r="24" fill="#ffffea" stroke="#475569" stroke-width="2" />
@@ -132,7 +116,6 @@
     <text x="0" y="48" class="node-title">Proveedor</text>
   </g>
 
-  <!-- 5. Entity: Bitacora -->
   <g transform="translate(750, 680)">
     
   <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
@@ -141,7 +124,6 @@
     <text x="0" y="44" class="node-title">Bitacora</text>
   </g>
 
-  <!-- 6. Entity: Compra -->
   <g transform="translate(1200, 140)">
     
   <circle cx="0" cy="0" r="22" fill="#ffffea" stroke="#475569" stroke-width="2" />
@@ -150,8 +132,7 @@
     <text x="0" y="44" class="node-title">Compra</text>
   </g>
 
-  <!-- MENSAJES Y LLAMADAS DE COMUNICACIÓN -->
-  <!-- Entre Actor y UI -->
+  <!-- MENSAJES -->
   <g transform="translate(150, 260)">
     <text x="0" y="0" class="flow-1">1: consultarProveedores(buscar, estado) &rarr;</text>
     <text x="0" y="18" class="flow-2">2: registrarProveedor(datos) &rarr;</text>
@@ -159,7 +140,6 @@
     <text x="0" y="54" class="flow-4">4: cambiarEstadoProveedor(id, estado) &rarr;</text>
   </g>
 
-  <!-- Entre UI y Controller -->
   <g transform="translate(430, 260)">
     <text x="0" y="0" class="flow-1">1.1: index(Request $request) &rarr;</text>
     <text x="0" y="18" class="flow-2">2.1: store(Request $request) &rarr;</text>
@@ -167,7 +147,6 @@
     <text x="0" y="54" class="flow-4">4.1: activar(id) / desactivar(id) &rarr;</text>
   </g>
 
-  <!-- Entre Controller y Proveedor -->
   <g transform="translate(790, 260)">
     <text x="0" y="0" class="flow-1">1.2: query()-&gt;whereLike()-&gt;orderBy()-&gt;get() &rarr;</text>
     <text x="0" y="18" class="flow-2">2.2: create([...datos, estado: true]) &rarr;</text>
@@ -175,25 +154,22 @@
     <text x="0" y="54" class="flow-4">4.2: findOrFail(id)-&gt;update(['estado' =&gt; bool]) &rarr;</text>
   </g>
 
-  <!-- Entre Proveedor y Compra -->
   <g transform="translate(1215, 240)">
-    <text x="0" y="0" class="flow-4">4.3: compras()-&gt;exists() [valida integridad histórica] &rarr;</text>
+    <text x="0" y="0" class="flow-4">4.3: compras()-&gt;exists() &rarr;</text>
   </g>
 
-  <!-- Entre Controller y Bitacora -->
   <g transform="translate(765, 520)">
-    <text x="0" y="0" class="flow-2">2.3: log('CU24', 'CREAR_PROVEEDOR', detalle) &rarr;</text>
-    <text x="0" y="20" class="flow-3">3.3: log('CU24', 'ACTUALIZAR_PROVEEDOR', prev, nuevos) &rarr;</text>
-    <text x="0" y="40" class="flow-4">4.4: log('CU24', 'ESTADO_PROVEEDOR', resultado) &rarr;</text>
+    <text x="0" y="0" class="flow-2">2.3: log('CU24', 'CREAR_PROVEEDOR') &rarr;</text>
+    <text x="0" y="20" class="flow-3">3.3: log('CU24', 'ACTUALIZAR_PROVEEDOR') &rarr;</text>
+    <text x="0" y="40" class="flow-4">4.4: log('CU24', 'ESTADO_PROVEEDOR') &rarr;</text>
   </g>
 
-  <!-- LEYENDA INFERIOR -->
   <g transform="translate(50, 810)">
     <rect x="0" y="0" width="1500" height="42" fill="#f8fafc" stroke="#cbd5e1" rx="4" />
     <text x="20" y="26" font-size="11" font-weight="bold" fill="#0f172a">Convención de Flujos:</text>
-    <text x="170" y="26" class="flow-1">&bull; Flujo 1: Búsqueda y listado filtrado de proveedores (ILIKE y estado)</text>
-    <text x="640" y="26" class="flow-2">&bull; Flujo 2: Registro con validación NIT único y auditoría</text>
-    <text x="1000" y="26" class="flow-3">&bull; Flujo 3: Actualización de datos</text>
-    <text x="1200" y="26" class="flow-4">&bull; Flujo 4: Baja lógica conservando compras</text>
+    <text x="170" y="26" class="flow-1">&bull; Flujo 1: Búsqueda y listado filtrado</text>
+    <text x="560" y="26" class="flow-2">&bull; Flujo 2: Registro de proveedor</text>
+    <text x="890" y="26" class="flow-3">&bull; Flujo 3: Actualización de datos</text>
+    <text x="1190" y="26" class="flow-4">&bull; Flujo 4: Cambio de estado</text>
   </g>
 </svg>

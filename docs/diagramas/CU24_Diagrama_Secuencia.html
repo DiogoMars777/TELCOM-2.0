@@ -39,14 +39,11 @@
     </style>
   </defs>
 
-  <!-- Pestaña de Diagrama EA -->
   <path d="M 20,45 L 20,24 L 380,24 L 396,45 Z" fill="#ffffff" stroke="#64748b" stroke-width="1" />
   <text x="30" y="38" class="tab-title">sd CU24 Gestionar proveedores</text>
 
-  <!-- Marco Exterior -->
   <rect x="20" y="45" width="1560" height="1035" fill="#ffffff" stroke="#64748b" stroke-width="1" />
 
-  <!-- Marcas de agua -->
   <g opacity="0.4">
     
     <text x="30" y="95" fill="#d5dae2" font-family="Arial, sans-serif" font-size="11.5" letter-spacing="1">
@@ -117,7 +114,7 @@
     </text>
   </g>
 
-  <!-- LÍNEAS DE VIDA VERTICALES -->
+  <!-- LÍNEAS DE VIDA -->
   <line x1="90" y1="130" x2="90" y2="1050" class="life-line" />
   <line x1="330" y1="130" x2="330" y2="1050" class="life-line" />
   <line x1="680" y1="130" x2="680" y2="1050" class="life-line" />
@@ -166,7 +163,7 @@
     <text x="0" y="36" class="life-title">Bitacora</text>
   </g>
 
-  <!-- BLOQUE 1: LISTADO -->
+  <!-- BLOQUE 1 -->
   <rect x="35" y="150" width="1530" height="180" class="frame-box" />
   <path d="M 35,170 L 35,150 L 360,150 L 372,170 Z" class="frame-tab" />
   <text x="45" y="164" class="frame-title">alt Flujo 1: Consultar y buscar proveedores con filtros</text>
@@ -191,12 +188,12 @@
   <text x="780" y="230" class="ret-text">($proveedores)</text>
 
   <line x1="675" y1="265" x2="335" y2="265" class="msg-ret" />
-  <text x="420" y="260" class="ret-text">success({proveedores}, 'Proveedores obtenidos exitosamente')</text>
+  <text x="420" y="260" class="ret-text">success({proveedores})</text>
 
   <line x1="325" y1="290" x2="95" y2="290" class="msg-ret" />
   <text x="130" y="285" class="ret-text">renderizarTablaProveedores()</text>
 
-  <!-- BLOQUE 2: REGISTRO -->
+  <!-- BLOQUE 2 -->
   <rect x="35" y="350" width="1530" height="220" class="frame-box" />
   <path d="M 35,370 L 35,350 L 320,350 L 332,370 Z" class="frame-tab" />
   <text x="45" y="364" class="frame-title">alt Flujo 2: Registrar nuevo proveedor</text>
@@ -207,7 +204,7 @@
 
   <line x1="95" y1="380" x2="325" y2="380" class="msg-call" />
   <polygon points="325,380 319,177 319,383" fill="#1e293b" />
-  <text x="130" y="375" class="call-text">2: registrarProveedor(razonSocial, nit, telefono, correo, direccion)</text>
+  <text x="130" y="375" class="call-text">2: registrarProveedor(razonSocial, nit, telefono)</text>
 
   <line x1="335" y1="395" x2="675" y2="395" class="msg-call" />
   <polygon points="675,395 669,392 669,398" fill="#1e293b" />
@@ -217,7 +214,7 @@
   <line x1="715" y1="415" x2="715" y2="430" class="msg-call" />
   <line x1="715" y1="430" x2="685" y2="430" class="msg-call" />
   <polygon points="685,430 691,427 691,433" fill="#1e293b" />
-  <text x="720" y="426" class="call-text">validarProveedor() [NIT único, campos requeridos]</text>
+  <text x="720" y="426" class="call-text">validarProveedor()</text>
 
   <line x1="685" y1="450" x2="1075" y2="450" class="msg-call" />
   <polygon points="1075,450 1069,447 1069,453" fill="#1e293b" />
@@ -228,15 +225,15 @@
 
   <line x1="685" y1="490" x2="1415" y2="490" class="msg-call" />
   <polygon points="1415,490 1409,487 1409,493" fill="#1e293b" />
-  <text x="1100" y="485" class="call-text">2.3: log('CU24', 'CREAR_PROVEEDOR', detalle)</text>
+  <text x="1100" y="485" class="call-text">2.3: log('CU24', 'CREAR_PROVEEDOR')</text>
 
   <line x1="675" y1="520" x2="335" y2="520" class="msg-ret" />
-  <text x="420" y="515" class="ret-text">success({proveedor}, 'Proveedor registrado exitosamente.', 201)</text>
+  <text x="420" y="515" class="ret-text">success({proveedor}, 201)</text>
 
-  <!-- BLOQUE 3: ACTUALIZAR Y CAMBIAR ESTADO -->
+  <!-- BLOQUE 3 -->
   <rect x="35" y="590" width="1530" height="220" class="frame-box" />
   <path d="M 35,610 L 35,590 L 360,590 L 372,610 Z" class="frame-tab" />
-  <text x="45" y="604" class="frame-title">alt Flujo 3 y 4: Actualización y cambio de estado (Baja lógica)</text>
+  <text x="45" y="604" class="frame-title">alt Flujo 3: Desactivar proveedor (Baja lógica)</text>
 
   <rect x="85" y="615" width="10" height="175" class="act-bar" />
   <rect x="325" y="615" width="10" height="170" class="act-bar" />
@@ -244,11 +241,11 @@
 
   <line x1="95" y1="620" x2="325" y2="620" class="msg-call" />
   <polygon points="325,620 319,617 319,623" fill="#1e293b" />
-  <text x="130" y="615" class="call-text">3: desactivarProveedor(id) / actualizarProveedor(id, datos)</text>
+  <text x="130" y="615" class="call-text">3: desactivarProveedor(id)</text>
 
   <line x1="335" y1="640" x2="675" y2="640" class="msg-call" />
   <polygon points="675,640 669,637 669,643" fill="#1e293b" />
-  <text x="380" y="635" class="call-text">3.1: desactivar(id) / update(Request $request, id)</text>
+  <text x="380" y="635" class="call-text">3.1: desactivar(id)</text>
 
   <line x1="685" y1="660" x2="1075" y2="660" class="msg-call" />
   <polygon points="1075,660 1069,657 1069,663" fill="#1e293b" />
@@ -259,13 +256,13 @@
 
   <line x1="685" y1="700" x2="1415" y2="700" class="msg-call" />
   <polygon points="1415,700 1409,697 1409,703" fill="#1e293b" />
-  <text x="1100" y="695" class="call-text">3.3: log('CU24', 'DESACTIVAR_PROVEEDOR', detalle)</text>
+  <text x="1100" y="695" class="call-text">3.3: log('CU24', 'DESACTIVAR_PROVEEDOR')</text>
 
   <line x1="675" y1="730" x2="335" y2="730" class="msg-ret" />
-  <text x="420" y="725" class="ret-text">success({proveedor}, 'Proveedor desactivado exitosamente.')</text>
+  <text x="420" y="725" class="ret-text">success({proveedor}, 'Proveedor desactivado')</text>
 
   <line x1="325" y1="755" x2="95" y2="755" class="msg-ret" />
-  <text x="130" y="750" class="ret-text">actualizarVistaYMostrarAlerta()</text>
+  <text x="130" y="750" class="ret-text">actualizarVista()</text>
 </svg>
 </body>
 </html>

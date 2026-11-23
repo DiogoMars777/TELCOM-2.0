@@ -175,7 +175,7 @@
     <text x="0" y="36" class="life-title">Bitacora</text>
   </g>
 
-  <!-- BLOQUE 1: INDEX KPIS -->
+  <!-- BLOQUE 1 -->
   <rect x="35" y="150" width="1610" height="280" class="frame-box" />
   <path d="M 35,170 L 35,150 L 390,150 L 402,170 Z" class="frame-tab" />
   <text x="45" y="164" class="frame-title">alt Flujo 1: Carga general de métricas operativas y financieras</text>
@@ -203,7 +203,7 @@
   <line x1="1315" y1="270" x2="985" y2="270" class="msg-ret" />
   <text x="1050" y="265" class="ret-text">($kpisRecaudacion, $carteraVencida)</text>
 
-  <line x1="985" y1="295" x2="1315" y2="295" class="msg-call" />
+  <line x1="975" y1="295" x2="1315" y2="295" class="msg-call" />
   <polygon points="1315,295 1309,292 1309,298" fill="#1e293b" />
   <text x="1020" y="290" class="call-text">1.4: Cliente::count(), ServicioInternet::groupBy('estado')->count()</text>
 
@@ -218,15 +218,15 @@
   <text x="1020" y="360" class="call-text">1.5: AuditLogger::log('CU26', 'CONSULTA_DASHBOARD', ip)</text>
 
   <line x1="635" y1="385" x2="325" y2="385" class="msg-ret" />
-  <text x="390" y="380" class="ret-text">success({metricas}, 'Dashboard obtenido exitosamente')</text>
+  <text x="390" y="380" class="ret-text">success({metricas})</text>
 
   <line x1="315" y1="405" x2="95" y2="405" class="msg-ret" />
   <text x="130" y="400" class="ret-text">renderizarTarjetasKPIyGraficos()</text>
 
-  <!-- BLOQUE 2: ALERTAS DE MOROSIDAD -->
+  <!-- BLOQUE 2 -->
   <rect x="35" y="460" width="1610" height="240" class="frame-box" />
   <path d="M 35,480 L 35,460 L 330,460 L 342,480 Z" class="frame-tab" />
-  <text x="45" y="474" class="frame-title">alt Flujo 3: Alertas tempranas de morosidad</text>
+  <text x="45" y="474" class="frame-title">alt Flujo 2: Alertas tempranas de morosidad</text>
 
   <rect x="85" y="485" width="10" height="195" class="act-bar" />
   <rect x="315" y="485" width="10" height="190" class="act-bar" />
@@ -242,7 +242,7 @@
 
   <line x1="645" y1="535" x2="1315" y2="535" class="msg-call" />
   <polygon points="1315,535 1309,532 1309,538" fill="#1e293b" />
-  <text x="730" y="530" class="call-text">2.2: Mensualidad::where('estado','VENCIDA')->with('servicio.cliente')->orderByDesc('mora')->get()</text>
+  <text x="730" y="530" class="call-text">2.2: Mensualidad::where('estado','VENCIDA')->with('servicio.cliente')->get()</text>
 
   <line x1="1315" y1="565" x2="645" y2="565" class="msg-ret" />
   <text x="890" y="560" class="ret-text">($morososCriticos)</text>

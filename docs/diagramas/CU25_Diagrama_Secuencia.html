@@ -185,7 +185,7 @@
     <text x="0" y="36" class="life-title">Bitacora</text>
   </g>
 
-  <!-- BLOQUE 1: CARGA DE FORMULARIO -->
+  <!-- BLOQUE 1 -->
   <rect x="35" y="150" width="1610" height="190" class="frame-box" />
   <path d="M 35,170 L 35,150 L 360,150 L 372,170 Z" class="frame-tab" />
   <text x="45" y="164" class="frame-title">alt Flujo 1: Cargar proveedores y catálogo de equipos</text>
@@ -215,7 +215,7 @@
   <line x1="315" y1="290" x2="95" y2="290" class="msg-ret" />
   <text x="130" y="285" class="ret-text">renderizarFormularioConSelectores()</text>
 
-  <!-- BLOQUE 2: REGISTRO DE COMPRA ATÓMICO -->
+  <!-- BLOQUE 2 -->
   <rect x="35" y="360" width="1610" height="420" class="frame-box" />
   <path d="M 35,380 L 35,360 L 400,360 L 412,380 Z" class="frame-tab" />
   <text x="45" y="374" class="frame-title">alt Flujo 2: Registrar compra y actualizar stock (Transacción DB)</text>
@@ -226,7 +226,7 @@
 
   <line x1="95" y1="390" x2="315" y2="390" class="msg-call" />
   <polygon points="315,390 309,387 309,393" fill="#1e293b" />
-  <text x="130" y="385" class="call-text">2: submitCompra(idProveedor, nroComprobante, items[idProducto, cant, precio])</text>
+  <text x="130" y="385" class="call-text">2: submitCompra(idProveedor, nroComprobante, items)</text>
 
   <line x1="325" y1="410" x2="635" y2="410" class="msg-call" />
   <polygon points="635,410 629,407 629,413" fill="#1e293b" />
@@ -238,7 +238,6 @@
   <polygon points="645,445 651,442 651,448" fill="#1e293b" />
   <text x="680" y="440" class="call-text">DB::beginTransaction() & validate()</text>
 
-  <!-- Crear Cabecera Compra -->
   <line x1="645" y1="470" x2="975" y2="470" class="msg-call" />
   <polygon points="975,470 969,467 969,473" fill="#1e293b" />
   <text x="690" y="465" class="call-text">2.2: create([nroComprobante, fecha, idProveedor, montoTotal: 0])</text>
@@ -246,7 +245,6 @@
   <line x1="975" y1="490" x2="645" y2="490" class="msg-ret" />
   <text x="730" y="485" class="ret-text">($compraId)</text>
 
-  <!-- Loop en Detalles e Incremento en Inventario -->
   <line x1="645" y1="520" x2="1235" y2="520" class="msg-call" />
   <polygon points="1235,520 1229,517 1229,523" fill="#1e293b" />
   <text x="690" y="515" class="call-text">2.3: foreach items: DetalleCompra::create([idCompra, idProducto, cant, pUnit])</text>
@@ -261,12 +259,10 @@
   <line x1="1435" y1="595" x2="645" y2="595" class="msg-ret" />
   <text x="1080" y="590" class="ret-text">(nuevoStockConfirmado)</text>
 
-  <!-- Actualizar Monto Total Cabecera -->
   <line x1="645" y1="625" x2="975" y2="625" class="msg-call" />
   <polygon points="975,625 969,622 969,628" fill="#1e293b" />
   <text x="690" y="620" class="call-text">2.5: Compra::where('idCompra', $id)->update(['montoTotal' => $sumTotal])</text>
 
-  <!-- Bitacora y Commit -->
   <line x1="645" y1="655" x2="1595" y2="655" class="msg-call" />
   <polygon points="1595,655 1589,652 1589,658" fill="#1e293b" />
   <text x="890" y="650" class="call-text">2.6: AuditLogger::log('CU25', 'REGISTRAR_COMPRA', detalle)</text>
@@ -274,7 +270,7 @@
   <line x1="645" y1="685" x2="675" y2="685" class="msg-call" />
   <line x1="675" y1="685" x2="675" y2="700" class="msg-call" />
   <line x1="675" y1="700" x2="645" y2="700" class="msg-call" />
-  <polygon points="645,700 651,697 651,703" fill="#1e293b" />
+  <polygon points="645,700 629,697 629,703" fill="#1e293b" />
   <text x="680" y="695" class="call-text">DB::commit()</text>
 
   <line x1="635" y1="725" x2="325" y2="725" class="msg-ret" />

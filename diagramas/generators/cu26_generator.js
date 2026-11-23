@@ -2,9 +2,15 @@ const { generateWatermarks, boundaryIcon, controlIcon, entityIcon, actorIcon } =
 
 // =========================================================================
 // CU26 - VISUALIZAR DASHBOARD ADMINISTRATIVO Y FINANCIERO (Yeremi Segobia - P7)
-// Controller: DashboardAdminFinancieroController (index, financiero, alertas)
-// Boundary: UI_DashboardAdminFinanciero
-// Entities: Pago, Mensualidad, Cliente, ServicioInternet, PlanInternet, Zona, Bitacora
+// Análisis de Clases:
+// Actor -> UI_DashboardAdminFinanciero -> DashboardAdminFinancieroController -> ServicioInternet
+// A partir de ServicioInternet:
+// ServicioInternet "0..*" -up- "1" Cliente
+// Cliente "0..*" -up- "1" Zona
+// ServicioInternet "0..*" -down- "1" PlanInternet
+// ServicioInternet "1" -right- "0..*" Mensualidad
+// Mensualidad "1" -right- "0..1" Pago
+// Pago "0..*" -down- "1" MetodoPago
 // =========================================================================
 
 function buildCU26Communication() {
@@ -22,7 +28,6 @@ function buildCU26Communication() {
       .flow-1 { fill: #0f172a; font-size: 10.5px; font-weight: bold; }
       .flow-2 { fill: #b91c1c; font-size: 10.5px; font-weight: bold; }
       .flow-3 { fill: #15803d; font-size: 10.5px; font-weight: bold; }
-      .sub-msg { font-size: 9.5px; font-weight: normal; fill: #475569; }
     </style>
   </defs>
 
@@ -46,7 +51,7 @@ function buildCU26Communication() {
   <line x1="780" y1="490" x2="970" y2="730" class="link-line" />
   <line x1="740" y1="440" x2="680" y2="330" class="link-line" />
 
-  <!-- INSTANCIAS ROBUSTEZ BCE -->
+  <!-- INSTANCIAS -->
   <g transform="translate(130, 460)">
     ${actorIcon(0, 0)}
     <text x="0" y="45" class="node-title">Administrador / Secretaría</text>
@@ -97,7 +102,7 @@ function buildCU26Communication() {
     <text x="0" y="40" class="node-title">Bitacora</text>
   </g>
 
-  <!-- MENSAJES Y LLAMADAS -->
+  <!-- MENSAJES -->
   <g transform="translate(150, 380)">
     <text x="0" y="0" class="flow-1">1: consultarDashboard(periodo) &rarr;</text>
     <text x="0" y="18" class="flow-2">2: filtrarFinanciero(periodo) &rarr;</text>
@@ -112,208 +117,234 @@ function buildCU26Communication() {
 
   <g transform="translate(500, 260)">
     <text x="0" y="0" class="flow-1">1.3: sum('montoTotal'), count(*) [recaudación] &rarr;</text>
-    <text x="0" y="16" class="flow-2">2.2: leftJoin('MetodoPago')->groupBy() [canales QR/Efectivo] &rarr;</text>
+    <text x="0" y="16" class="flow-2">2.2: leftJoin('MetodoPago')->groupBy() &rarr;</text>
   </g>
 
   <g transform="translate(860, 260)">
-    <text x="0" y="0" class="flow-1">1.4: where('estado','PENDIENTE')->sum('monto') [cartera vencida] &rarr;</text>
-    <text x="0" y="16" class="flow-2">2.3: selectRaw('sum(monto)')->groupBy('periodo') [evolución semestral] &rarr;</text>
-    <text x="0" y="32" class="flow-3">3.2: join('Cliente')->where('estado','PENDIENTE')->orderByDesc('mora') &rarr;</text>
+    <text x="0" y="0" class="flow-1">1.4: where('estado','PENDIENTE')->sum('monto') &rarr;</text>
+    <text x="0" y="16" class="flow-2">2.3: selectRaw('sum(monto)')->groupBy('periodo') &rarr;</text>
+    <text x="0" y="32" class="flow-3">3.2: join('Cliente')->where('estado','PENDIENTE') &rarr;</text>
   </g>
 
   <g transform="translate(800, 435)">
-    <text x="0" y="0" class="flow-1">1.5: where('estadoCliente','ACTIVO')->count() [clientes activos] &rarr;</text>
-    <text x="0" y="18" class="flow-3">3.3: findOrFail(idCliente) [contacto/deuda] &rarr;</text>
+    <text x="0" y="0" class="flow-1">1.5: where('estadoCliente','ACTIVO')->count() &rarr;</text>
   </g>
 
   <g transform="translate(410, 620)">
-    <text x="0" y="0" class="flow-1">1.6: leftJoin('EstadoServicio')->groupBy('estado') [servicios activos/cortes] &rarr;</text>
+    <text x="0" y="0" class="flow-1">1.6: leftJoin('EstadoServicio')->groupBy('estado') &rarr;</text>
   </g>
 
   <g transform="translate(775, 620)">
-    <text x="0" y="0" class="flow-1">1.7: withCount(['asignaciones' => whereNull('fechaFin')]) [abonados por plan] &rarr;</text>
+    <text x="0" y="0" class="flow-1">1.7: withCount(['asignaciones' => whereNull('fechaFin')]) &rarr;</text>
   </g>
 
   <g transform="translate(900, 645)">
-    <text x="0" y="0" class="flow-1">1.8: select('capacidadNodos')->withCount('servicios') [saturación red] &rarr;</text>
+    <text x="0" y="0" class="flow-1">1.8: select('capacidadNodos')->withCount('servicios') &rarr;</text>
   </g>
 
   <g transform="translate(550, 340)">
-    <text x="0" y="0" class="flow-1">1.9: log('CU26', 'CONSULTA_DASHBOARD', ip) &rarr;</text>
+    <text x="0" y="0" class="flow-1">1.9: log('CU26', 'CONSULTA_DASHBOARD') &rarr;</text>
   </g>
 
-  <!-- LEYENDA INFERIOR -->
   <g transform="translate(50, 890)">
     <rect x="0" y="0" width="1580" height="42" fill="#f8fafc" stroke="#cbd5e1" rx="4" />
     <text x="20" y="26" font-size="11" font-weight="bold" fill="#0f172a">Convención de Flujos:</text>
-    <text x="170" y="26" class="flow-1">&bull; Flujo 1: Carga general de métricas operativas y financieras (Tarjetas KPI)</text>
-    <text x="730" y="26" class="flow-2">&bull; Flujo 2: Consulta analítica financiera (Gráficos evolutivos y métodos)</text>
-    <text x="1230" y="26" class="flow-3">&bull; Flujo 3: Alertas tempranas de morosidad</text>
+    <text x="170" y="26" class="flow-1">&bull; Flujo 1: Métricas operativas y financieras</text>
+    <text x="650" y="26" class="flow-2">&bull; Flujo 2: Desglose financiero</text>
+    <text x="1050" y="26" class="flow-3">&bull; Flujo 3: Alertas de morosidad</text>
   </g>
 </svg>`;
 }
 
 function buildCU26ClassAnalysis() {
   const width = 1750;
-  const height = 980;
-  const tabW = 460;
+  const height = 750;
+  const tabW = 560;
 
   return `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: Arial, Helvetica, sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
   <defs>
     <style>
-      .tab-title { font-size: 10px; font-weight: bold; fill: #1e293b; }
-      .class-box { fill: #ffffea; stroke: #606060; stroke-width: 1; }
+      .tab-title { font-size: 11px; font-weight: bold; fill: #000000; }
+      .class-box { fill: #FFF2E6; stroke: #8A4B38; stroke-width: 1; rx: 6; ry: 6; }
       .class-title { font-size: 12px; font-weight: bold; fill: #000000; text-anchor: middle; }
-      .attr-text { font-size: 10.5px; fill: #000000; font-family: monospace, Arial; }
-      .method-text { font-size: 10.5px; fill: #000000; font-family: monospace, Arial; }
-      .assoc-text { font-size: 10.5px; fill: #334155; font-style: italic; }
+      .attr-text { font-size: 11px; fill: #000000; font-family: 'Segoe UI', Arial, sans-serif; }
+      .method-text { font-size: 11px; fill: #000000; font-family: 'Segoe UI', Arial, sans-serif; }
       .mult-text { font-size: 11px; fill: #000000; font-weight: bold; }
-      .ea-line { stroke: #505050; stroke-width: 1; fill: none; }
-      .divider { stroke: #707070; stroke-width: 0.8; }
+      .link-line { stroke: #000000; stroke-width: 1; fill: none; }
+      .divider { stroke: #8A4B38; stroke-width: 0.8; }
     </style>
   </defs>
 
-  <path d="M 20,45 L 20,24 L ${tabW},24 L ${tabW + 16},45 Z" fill="#ffffff" stroke="#606060" stroke-width="1" />
-  <text x="30" y="38" class="tab-title">class CU26 Visualizar Dashboard administrativo y financiero</text>
+  <path d="M 10,35 L 10,18 L ${tabW},18 L ${tabW + 14},35 Z" fill="#ffffff" stroke="#000000" stroke-width="1" />
+  <text x="18" y="30" class="tab-title">sd Diagrama de análisis de clases - CU26 Visualizar Dashboard administrativo y financiero</text>
 
-  <rect x="20" y="45" width="${width - 40}" height="${height - 65}" fill="#ffffff" stroke="#606060" stroke-width="1" />
+  <rect x="10" y="35" width="${width - 20}" height="${height - 45}" fill="#ffffff" stroke="#000000" stroke-width="1" />
 
-  <g opacity="0.45">
-    ${generateWatermarks(width, height)}
-  </g>
+  <!-- LÍNEAS DE ASOCIACIÓN -->
+  <!-- Actor a UI -->
+  <line x1="110" y1="360" x2="160" y2="360" class="link-line" />
 
-  <!-- ASOCIACIONES -->
-  <line x1="85" y1="280" x2="130" y2="280" class="ea-line" />
-  <line x1="390" y1="280" x2="470" y2="280" class="ea-line" />
-  <text x="410" y="272" class="assoc-text">invoca</text>
+  <!-- UI a Controller -->
+  <line x1="410" y1="360" x2="470" y2="360" class="link-line" />
 
-  <line x1="790" y1="280" x2="870" y2="280" class="ea-line" />
-  <text x="810" y="272" class="assoc-text">consulta</text>
+  <!-- Controller a Entidad Principal (SOLO A SERVICIOINTERNET!) -->
+  <line x1="770" y1="360" x2="830" y2="360" class="link-line" />
 
-  <line x1="990" y1="180" x2="990" y2="100" class="ea-line" />
-  <text x="1000" y="145" class="assoc-text">recaudación</text>
+  <!-- ServicioInternet a Cliente (Arriba) -->
+  <line x1="935" y1="260" x2="935" y2="170" class="link-line" />
+  <text x="945" y="245" class="mult-text">0..*</text>
+  <text x="945" y="185" class="mult-text">1</text>
 
-  <line x1="1130" y1="280" x2="1220" y2="280" class="ea-line" />
-  <text x="1150" y="272" class="assoc-text">monitorea mora</text>
+  <!-- Cliente a Zona (Arriba a la derecha) -->
+  <line x1="1040" y1="110" x2="1120" y2="110" class="link-line" />
+  <text x="1055" y="100" class="mult-text">0..*</text>
+  <text x="1100" y="100" class="mult-text">1</text>
 
-  <line x1="990" y1="390" x2="990" y2="470" class="ea-line" />
-  <text x="1000" y="430" class="assoc-text">red de clientes</text>
+  <!-- ServicioInternet a PlanInternet (Abajo) -->
+  <line x1="935" y1="460" x2="935" y2="550" class="link-line" />
+  <text x="945" y="480" class="mult-text">0..*</text>
+  <text x="945" y="535" class="mult-text">1</text>
 
-  <line x1="990" y1="670" x2="990" y2="730" class="ea-line" />
-  <text x="1000" y="705" class="assoc-text">distribución</text>
+  <!-- ServicioInternet a Mensualidad (Derecha) -->
+  <line x1="1040" y1="360" x2="1120" y2="360" class="link-line" />
+  <text x="1055" y="350" class="mult-text">1</text>
+  <text x="1100" y="350" class="mult-text">0..*</text>
 
-  <line x1="630" y1="390" x2="630" y2="560" class="ea-line" />
-  <text x="640" y="480" class="assoc-text">audita</text>
+  <!-- Mensualidad a Pago (Derecha) -->
+  <line x1="1330" y1="360" x2="1410" y2="360" class="link-line" />
+  <text x="1345" y="350" class="mult-text">1</text>
+  <text x="1390" y="350" class="mult-text">0..1</text>
 
-  <!-- CAJAS EA -->
-  <g transform="translate(60, 280)">
+  <!-- Pago a MetodoPago (Abajo) -->
+  <line x1="1515" y1="450" x2="1515" y2="550" class="link-line" />
+  <text x="1525" y="475" class="mult-text">0..*</text>
+  <text x="1525" y="535" class="mult-text">1</text>
+
+  <!-- 1. ACTOR -->
+  <g transform="translate(60, 360)">
     ${actorIcon(0, 0)}
     <text x="0" y="45" class="class-title">Administrador / Secretaría</text>
   </g>
 
-  <g transform="translate(130, 160)">
-    <rect x="0" y="0" width="260" height="230" class="class-box" />
-    <text x="130" y="20" class="class-title">UI_DashboardAdminFinanciero</text>
-    <line x1="0" y1="28" x2="260" y2="28" class="divider" />
-    <text x="10" y="48" class="method-text">+ consultarDashboard(periodo): void</text>
-    <text x="10" y="70" class="method-text">+ filtrarFinanciero(periodo): void</text>
-    <text x="10" y="92" class="method-text">+ consultarAlertasMorosidad(): void</text>
-    <text x="10" y="114" class="method-text">+ cambiarPeriodoFiltro(): void</text>
-    <text x="10" y="136" class="method-text">+ renderizarKPIs(): void</text>
-    <text x="10" y="158" class="method-text">+ renderizarGraficos(): void</text>
-    <text x="10" y="180" class="method-text">+ renderizarAlertasMora(): void</text>
-    <text x="10" y="202" class="method-text">+ exportarResumen(): void</text>
+  <!-- 2. BOUNDARY -->
+  <g transform="translate(160, 275)">
+    <rect x="0" y="0" width="250" height="170" class="class-box" />
+    <text x="125" y="20" class="class-title">UI_DashboardAdminFinanciero</text>
+    <line x1="0" y1="28" x2="250" y2="28" class="divider" />
+    <text x="10" y="48" class="method-text">+ consultarDashboard(): void</text>
+    <text x="10" y="70" class="method-text">+ filtrarFinanciero(): void</text>
+    <text x="10" y="92" class="method-text">+ consultarAlertas(): void</text>
+    <text x="10" y="114" class="method-text">+ renderizarKPIs(): void</text>
+    <line x1="0" y1="124" x2="250" y2="124" class="divider" />
+    <text x="10" y="146" class="method-text">+ exportarResumen(): void</text>
   </g>
 
-  <g transform="translate(470, 160)">
-    <rect x="0" y="0" width="320" height="230" class="class-box" />
-    <text x="160" y="20" class="class-title">DashboardAdminFinancieroController</text>
-    <line x1="0" y1="28" x2="320" y2="28" class="divider" />
-    <text x="10" y="48" class="method-text">+ index(Request $request): JsonResponse</text>
-    <text x="10" y="72" class="method-text">+ financiero(Request $request): JsonResponse</text>
-    <text x="10" y="96" class="method-text">+ alertas(): JsonResponse</text>
-    <text x="10" y="120" class="method-text">- calcularKPIsRecaudacion(): array</text>
-    <text x="10" y="144" class="method-text">- calcularCarteraVencida(): array</text>
-    <text x="10" y="168" class="method-text">- obtenerSaturacionNodos(): array</text>
-    <text x="10" y="192" class="method-text">- auditarConsulta(): void</text>
+  <!-- 3. CONTROL -->
+  <g transform="translate(470, 270)">
+    <rect x="0" y="0" width="300" height="180" class="class-box" />
+    <text x="150" y="20" class="class-title">DashboardAdminFinancieroController</text>
+    <line x1="0" y1="28" x2="300" y2="28" class="divider" />
+    <text x="10" y="50" class="method-text">+ index(): void</text>
+    <text x="10" y="74" class="method-text">+ financiero(): void</text>
+    <text x="10" y="98" class="method-text">+ alertas(): void</text>
+    <text x="10" y="122" class="method-text">+ metricasGenerales(): void</text>
+    <line x1="0" y1="132" x2="300" y2="132" class="divider" />
+    <text x="10" y="154" class="method-text">+ calcularKPIs(): void</text>
   </g>
 
-  <g transform="translate(870, 180)">
-    <rect x="0" y="0" width="260" height="210" class="class-box" />
-    <text x="130" y="20" class="class-title">DashboardMetricasService</text>
-    <line x1="0" y1="28" x2="260" y2="28" class="divider" />
-    <text x="10" y="48" class="method-text">+ obtenerMetricasGenerales(): array</text>
-    <text x="10" y="72" class="method-text">+ obtenerMetricasFinancieras(): array</text>
-    <text x="10" y="96" class="method-text">+ obtenerAlertasMorosidad(): array</text>
-    <text x="10" y="120" class="method-text">+ calcularTasaMorosidad(): float</text>
-    <text x="10" y="144" class="method-text">+ consolidarIngresosMetodo(): array</text>
+  <!-- 4. TABLA PRINCIPAL: ServicioInternet -->
+  <g transform="translate(830, 260)">
+    <rect x="0" y="0" width="210" height="200" class="class-box" />
+    <text x="105" y="20" class="class-title">ServicioInternet</text>
+    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idServicio: int</text>
+    <text x="10" y="64" class="attr-text">- codigoServicio: string</text>
+    <text x="10" y="82" class="attr-text">- idCliente: int</text>
+    <text x="10" y="100" class="attr-text">- idPlan: int</text>
+    <text x="10" y="118" class="attr-text">- idEstadoServicio: int</text>
+    <text x="10" y="136" class="attr-text">- fechaActivacion: date</text>
+    <line x1="0" y1="144" x2="210" y2="144" class="divider" />
+    <text x="10" y="164" class="method-text">+ count(): void</text>
+    <text x="10" y="184" class="method-text">+ groupBy(): void</text>
   </g>
 
-  <g transform="translate(870, 0)">
-    <rect x="0" y="0" width="240" height="100" class="class-box" />
-    <text x="120" y="18" class="class-title">Pago</text>
-    <line x1="0" y1="24" x2="240" y2="24" class="divider" />
-    <text x="10" y="40" class="attr-text">- idPago: int   - montoTotal: decimal</text>
-    <text x="10" y="56" class="attr-text">- fechaPago: date   - idMetodoPago: int</text>
-    <line x1="0" y1="64" x2="240" y2="64" class="divider" />
-    <text x="10" y="82" class="method-text">+ sum(): decimal   + count(): int</text>
+  <!-- 5. ENTIDAD: Cliente (Arriba) -->
+  <g transform="translate(830, 50)">
+    <rect x="0" y="0" width="210" height="120" class="class-box" />
+    <text x="105" y="20" class="class-title">Cliente</text>
+    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idCliente: int</text>
+    <text x="10" y="64" class="attr-text">- nombreCompleto: string</text>
+    <text x="10" y="82" class="attr-text">- idZona: int</text>
+    <line x1="0" y1="90" x2="210" y2="90" class="divider" />
+    <text x="10" y="108" class="method-text">+ find(): void</text>
   </g>
 
-  <g transform="translate(1220, 200)">
-    <rect x="0" y="0" width="260" height="170" class="class-box" />
-    <text x="130" y="18" class="class-title">Mensualidad</text>
-    <line x1="0" y1="24" x2="260" y2="24" class="divider" />
-    <text x="10" y="40" class="attr-text">- idMensualidad: int</text>
-    <text x="10" y="56" class="attr-text">- periodo: string   - monto: decimal</text>
-    <text x="10" y="72" class="attr-text">- estado: string   - fechaVencimiento: date</text>
-    <line x1="0" y1="80" x2="260" y2="80" class="divider" />
-    <text x="10" y="100" class="method-text">+ where(col, val): Builder</text>
-    <text x="10" y="120" class="method-text">+ sum(col): decimal</text>
+  <!-- 6. ENTIDAD: Zona (Arriba Derecha de Cliente) -->
+  <g transform="translate(1120, 50)">
+    <rect x="0" y="0" width="210" height="120" class="class-box" />
+    <text x="105" y="20" class="class-title">Zona</text>
+    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idZona: int</text>
+    <text x="10" y="64" class="attr-text">- nombreZona: string</text>
+    <text x="10" y="82" class="attr-text">- capacidadNodos: int</text>
+    <line x1="0" y1="90" x2="210" y2="90" class="divider" />
+    <text x="10" y="108" class="method-text">+ withCount(): void</text>
   </g>
 
-  <g transform="translate(870, 470)">
-    <rect x="0" y="0" width="260" height="200" class="class-box" />
-    <text x="130" y="18" class="class-title">Cliente</text>
-    <line x1="0" y1="24" x2="260" y2="24" class="divider" />
-    <text x="10" y="40" class="attr-text">- idCliente: int   - codigoCliente: string</text>
-    <text x="10" y="56" class="attr-text">- nombreCompleto: string</text>
-    <text x="10" y="72" class="attr-text">- estadoCliente: string</text>
-    <text x="10" y="88" class="attr-text">- idZona: int</text>
-    <line x1="0" y1="96" x2="260" y2="96" class="divider" />
-    <text x="10" y="116" class="method-text">+ count(): int   + find(id): Cliente</text>
-    <text x="10" y="136" class="method-text">+ servicios(): HasMany</text>
+  <!-- 7. ENTIDAD: PlanInternet (Abajo) -->
+  <g transform="translate(830, 550)">
+    <rect x="0" y="0" width="210" height="120" class="class-box" />
+    <text x="105" y="20" class="class-title">PlanInternet</text>
+    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idPlan: int</text>
+    <text x="10" y="64" class="attr-text">- nombrePlan: string</text>
+    <text x="10" y="82" class="attr-text">- precioMensual: decimal</text>
+    <line x1="0" y1="90" x2="210" y2="90" class="divider" />
+    <text x="10" y="108" class="method-text">+ all(): void</text>
   </g>
 
-  <g transform="translate(870, 730)">
-    <rect x="0" y="0" width="260" height="180" class="class-box" />
-    <text x="130" y="18" class="class-title">ServicioInternet</text>
-    <line x1="0" y1="24" x2="260" y2="24" class="divider" />
-    <text x="10" y="40" class="attr-text">- idServicio: int   - idCliente: int</text>
-    <text x="10" y="56" class="attr-text">- idPlan: int   - idEstadoServicio: int</text>
-    <line x1="0" y1="64" x2="260" y2="64" class="divider" />
-    <text x="10" y="84" class="method-text">+ groupBy(): Builder   + count(): int</text>
-    <text x="10" y="104" class="method-text">+ mensualidades(): HasMany</text>
+  <!-- 8. ENTIDAD: Mensualidad (Derecha de ServicioInternet) -->
+  <g transform="translate(1120, 275)">
+    <rect x="0" y="0" width="210" height="170" class="class-box" />
+    <text x="105" y="20" class="class-title">Mensualidad</text>
+    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idMensualidad: int</text>
+    <text x="10" y="64" class="attr-text">- periodo: string</text>
+    <text x="10" y="82" class="attr-text">- monto: decimal</text>
+    <text x="10" y="100" class="attr-text">- estado: string</text>
+    <text x="10" y="118" class="attr-text">- idServicio: int</text>
+    <line x1="0" y1="126" x2="210" y2="126" class="divider" />
+    <text x="10" y="146" class="method-text">+ where(): void</text>
+    <text x="10" y="162" class="method-text">+ sum(): void</text>
   </g>
 
-  <g transform="translate(1220, 730)">
-    <rect x="0" y="0" width="240" height="150" class="class-box" />
-    <text x="120" y="18" class="class-title">Zona</text>
-    <line x1="0" y1="24" x2="240" y2="24" class="divider" />
-    <text x="10" y="40" class="attr-text">- idZona: int   - nombreZona: string</text>
-    <text x="10" y="56" class="attr-text">- capacidadNodos: int</text>
-    <line x1="0" y1="64" x2="240" y2="64" class="divider" />
-    <text x="10" y="84" class="method-text">+ withCount('servicios'): Builder</text>
+  <!-- 9. ENTIDAD: Pago (Derecha de Mensualidad) -->
+  <g transform="translate(1410, 275)">
+    <rect x="0" y="0" width="210" height="175" class="class-box" />
+    <text x="105" y="20" class="class-title">Pago</text>
+    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idPago: int</text>
+    <text x="10" y="64" class="attr-text">- fechaPago: date</text>
+    <text x="10" y="82" class="attr-text">- montoTotal: decimal</text>
+    <text x="10" y="100" class="attr-text">- idMetodoPago: int</text>
+    <text x="10" y="118" class="attr-text">- idMensualidad: int</text>
+    <line x1="0" y1="126" x2="210" y2="126" class="divider" />
+    <text x="10" y="146" class="method-text">+ sum(): void</text>
+    <text x="10" y="164" class="method-text">+ count(): void</text>
   </g>
 
-  <g transform="translate(510, 560)">
-    <rect x="0" y="0" width="240" height="160" class="class-box" />
-    <text x="120" y="18" class="class-title">Bitacora</text>
-    <line x1="0" y1="24" x2="240" y2="24" class="divider" />
-    <text x="10" y="40" class="attr-text">- idBitacora: int   - casoUso: 'CU26'</text>
-    <text x="10" y="56" class="attr-text">- accion: string   - detalles: text</text>
-    <line x1="0" y1="64" x2="240" y2="64" class="divider" />
-    <text x="10" y="84" class="method-text">+ create(array $datos): Bitacora</text>
+  <!-- 10. ENTIDAD: MetodoPago (Abajo de Pago) -->
+  <g transform="translate(1410, 550)">
+    <rect x="0" y="0" width="210" height="120" class="class-box" />
+    <text x="105" y="20" class="class-title">MetodoPago</text>
+    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idMetodoPago: int</text>
+    <text x="10" y="64" class="attr-text">- nombreMetodo: string</text>
+    <text x="10" y="82" class="attr-text">- descripcion: string</text>
+    <line x1="0" y1="90" x2="210" y2="90" class="divider" />
+    <text x="10" y="108" class="method-text">+ find(): void</text>
   </g>
 </svg>`;
 }
@@ -391,7 +422,7 @@ function buildCU26Sequence() {
     <text x="0" y="36" class="life-title">Bitacora</text>
   </g>
 
-  <!-- BLOQUE 1: INDEX KPIS -->
+  <!-- BLOQUE 1 -->
   <rect x="35" y="150" width="${width - 70}" height="280" class="frame-box" />
   <path d="M 35,170 L 35,150 L 390,150 L 402,170 Z" class="frame-tab" />
   <text x="45" y="164" class="frame-title">alt Flujo 1: Carga general de métricas operativas y financieras</text>
@@ -419,7 +450,7 @@ function buildCU26Sequence() {
   <line x1="${xEnt - 5}" y1="270" x2="${xServ + 5}" y2="270" class="msg-ret" />
   <text x="1050" y="265" class="ret-text">($kpisRecaudacion, $carteraVencida)</text>
 
-  <line x1="${xServ + 5}" y1="295" x2="${xEnt - 5}" y2="295" class="msg-call" />
+  <line x1="${xServ - 5}" y1="295" x2="${xEnt - 5}" y2="295" class="msg-call" />
   <polygon points="${xEnt - 5},295 ${xEnt - 11},292 ${xEnt - 11},298" fill="#1e293b" />
   <text x="1020" y="290" class="call-text">1.4: Cliente::count(), ServicioInternet::groupBy('estado')->count()</text>
 
@@ -434,15 +465,15 @@ function buildCU26Sequence() {
   <text x="1020" y="360" class="call-text">1.5: AuditLogger::log('CU26', 'CONSULTA_DASHBOARD', ip)</text>
 
   <line x1="${xCtrl - 5}" y1="385" x2="${xUI + 5}" y2="385" class="msg-ret" />
-  <text x="390" y="380" class="ret-text">success({metricas}, 'Dashboard obtenido exitosamente')</text>
+  <text x="390" y="380" class="ret-text">success({metricas})</text>
 
   <line x1="${xUI - 5}" y1="405" x2="${xAdmin + 5}" y2="405" class="msg-ret" />
   <text x="130" y="400" class="ret-text">renderizarTarjetasKPIyGraficos()</text>
 
-  <!-- BLOQUE 2: ALERTAS DE MOROSIDAD -->
+  <!-- BLOQUE 2 -->
   <rect x="35" y="460" width="${width - 70}" height="240" class="frame-box" />
   <path d="M 35,480 L 35,460 L 330,460 L 342,480 Z" class="frame-tab" />
-  <text x="45" y="474" class="frame-title">alt Flujo 3: Alertas tempranas de morosidad</text>
+  <text x="45" y="474" class="frame-title">alt Flujo 2: Alertas tempranas de morosidad</text>
 
   <rect x="${xAdmin - 5}" y="485" width="10" height="195" class="act-bar" />
   <rect x="${xUI - 5}" y="485" width="10" height="190" class="act-bar" />
@@ -458,7 +489,7 @@ function buildCU26Sequence() {
 
   <line x1="${xCtrl + 5}" y1="535" x2="${xEnt - 5}" y2="535" class="msg-call" />
   <polygon points="${xEnt - 5},535 ${xEnt - 11},532 ${xEnt - 11},538" fill="#1e293b" />
-  <text x="730" y="530" class="call-text">2.2: Mensualidad::where('estado','VENCIDA')->with('servicio.cliente')->orderByDesc('mora')->get()</text>
+  <text x="730" y="530" class="call-text">2.2: Mensualidad::where('estado','VENCIDA')->with('servicio.cliente')->get()</text>
 
   <line x1="${xEnt - 5}" y1="565" x2="${xCtrl + 5}" y2="565" class="msg-ret" />
   <text x="890" y="560" class="ret-text">($morososCriticos)</text>
@@ -476,4 +507,3 @@ module.exports = {
   buildCU26ClassAnalysis,
   buildCU26Sequence,
 };
-

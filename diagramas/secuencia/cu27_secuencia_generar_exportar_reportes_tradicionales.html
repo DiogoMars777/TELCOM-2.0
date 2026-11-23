@@ -177,7 +177,7 @@
     <text x="0" y="36" class="life-title">Bitacora</text>
   </g>
 
-  <!-- BLOQUE 1: CATÁLOGO Y PARÁMETROS -->
+  <!-- BLOQUE 1 -->
   <rect x="35" y="150" width="1610" height="195" class="frame-box" />
   <path d="M 35,170 L 35,150 L 360,150 L 372,170 Z" class="frame-tab" />
   <text x="45" y="164" class="frame-title">alt Flujo 1: Consultar catálogo y parámetros de filtrado</text>
@@ -214,7 +214,7 @@
   <line x1="315" y1="305" x2="95" y2="305" class="msg-ret" />
   <text x="130" y="300" class="ret-text">renderizarFormularioFiltros()</text>
 
-  <!-- BLOQUE 2: GENERAR Y AUDITAR -->
+  <!-- BLOQUE 2 -->
   <rect x="35" y="360" width="1610" height="260" class="frame-box" />
   <path d="M 35,380 L 35,360 L 370,360 L 382,380 Z" class="frame-tab" />
   <text x="45" y="374" class="frame-title">alt Flujo 2: Generar consulta consolidada y auditoría</text>
@@ -246,7 +246,7 @@
   <text x="750" y="490" class="ret-text">($reporteConsolidado)</text>
 
   <line x1="645" y1="520" x2="1535" y2="520" class="msg-call" />
-  <polygon points="1535,520 1529,517 1529,523" fill="#1e293b" />
+  <polygon points="1535,520 1529,317 1529,523" fill="#1e293b" />
   <text x="1040" y="515" class="call-text">2.4: AuditLogger::log('CU27', 'GENERAR_REPORTE', detalle)</text>
 
   <line x1="635" y1="545" x2="325" y2="545" class="msg-ret" />
@@ -255,10 +255,10 @@
   <line x1="315" y1="570" x2="95" y2="570" class="msg-ret" />
   <text x="130" y="565" class="ret-text">mostrarTablaReporteConKPIs()</text>
 
-  <!-- BLOQUE 3: EXPORTACIÓN -->
+  <!-- BLOQUE 3 -->
   <rect x="35" y="640" width="1610" height="220" class="frame-box" />
   <path d="M 35,660 L 35,640 L 330,640 L 342,660 Z" class="frame-tab" />
-  <text x="45" y="654" class="frame-title">alt Flujo 3 y 4: Exportación a Excel y PDF oficial</text>
+  <text x="45" y="654" class="frame-title">alt Flujo 3: Exportar reporte a Excel</text>
 
   <rect x="85" y="665" width="10" height="175" class="act-bar" />
   <rect x="315" y="665" width="10" height="170" class="act-bar" />
@@ -266,21 +266,21 @@
 
   <line x1="95" y1="670" x2="315" y2="670" class="msg-call" />
   <polygon points="315,670 309,667 309,673" fill="#1e293b" />
-  <text x="130" y="665" class="call-text">3: exportarExcel(tipo, filtros) / exportarPdf()</text>
+  <text x="130" y="665" class="call-text">3: exportarExcel(tipo, filtros)</text>
 
   <line x1="325" y1="690" x2="635" y2="690" class="msg-call" />
   <polygon points="635,690 629,687 629,693" fill="#1e293b" />
-  <text x="410" y="685" class="call-text">3.1: exportarExcel(Request) / exportarPdf(Request)</text>
+  <text x="410" y="685" class="call-text">3.1: exportarExcel(Request)</text>
 
   <line x1="645" y1="715" x2="1535" y2="715" class="msg-call" />
   <polygon points="1535,715 1529,712 1529,718" fill="#1e293b" />
-  <text x="1040" y="710" class="call-text">3.2: AuditLogger::log('CU27', 'EXPORTAR_ARCHIVO', detalle)</text>
+  <text x="1040" y="710" class="call-text">3.2: AuditLogger::log('CU27', 'EXPORTAR_ARCHIVO')</text>
 
   <line x1="635" y1="745" x2="325" y2="745" class="msg-ret" />
-  <text x="410" y="740" class="ret-text">response()->streamDownload() / JsonResponse base64</text>
+  <text x="410" y="740" class="ret-text">response()->streamDownload()</text>
 
   <line x1="315" y1="770" x2="95" y2="770" class="msg-ret" />
-  <text x="130" y="765" class="ret-text">descargarArchivoBlobOImpresion()</text>
+  <text x="130" y="765" class="ret-text">descargarArchivoBlob()</text>
 </svg>
 </body>
 </html>

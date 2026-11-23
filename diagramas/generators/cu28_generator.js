@@ -119,131 +119,161 @@ function buildCU28Communication() {
 }
 
 function buildCU28ClassAnalysis() {
-  const width = 1680;
-  const height = 940;
-  const tabW = 440;
+  const width = 1750;
+  const height = 750;
+  const tabW = 540;
 
   return `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: Arial, Helvetica, sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#ffffff; font-family: 'Segoe UI', Arial, sans-serif;">
   <defs>
     <style>
-      .tab-title { font-size: 10px; font-weight: bold; fill: #1e293b; }
-      .class-box { fill: #ffffea; stroke: #606060; stroke-width: 1; }
+      .tab-title { font-size: 11px; font-weight: bold; fill: #000000; }
+      .class-box { fill: #FFF2E6; stroke: #8A4B38; stroke-width: 1; rx: 6; ry: 6; }
       .class-title { font-size: 12px; font-weight: bold; fill: #000000; text-anchor: middle; }
-      .attr-text { font-size: 10.5px; fill: #000000; font-family: monospace, Arial; }
-      .method-text { font-size: 10.5px; fill: #000000; font-family: monospace, Arial; }
-      .assoc-text { font-size: 10.5px; fill: #334155; font-style: italic; }
+      .attr-text { font-size: 11px; fill: #000000; font-family: 'Segoe UI', Arial, sans-serif; }
+      .method-text { font-size: 11px; fill: #000000; font-family: 'Segoe UI', Arial, sans-serif; }
       .mult-text { font-size: 11px; fill: #000000; font-weight: bold; }
-      .ea-line { stroke: #505050; stroke-width: 1; fill: none; }
-      .divider { stroke: #707070; stroke-width: 0.8; }
+      .link-line { stroke: #000000; stroke-width: 1; fill: none; }
+      .divider { stroke: #8A4B38; stroke-width: 0.8; }
     </style>
   </defs>
 
-  <path d="M 20,45 L 20,24 L ${tabW},24 L ${tabW + 16},45 Z" fill="#ffffff" stroke="#606060" stroke-width="1" />
-  <text x="30" y="38" class="tab-title">class CU28 Generar y restaurar copias de seguridad</text>
+  <path d="M 10,35 L 10,18 L ${tabW},18 L ${tabW + 14},35 Z" fill="#ffffff" stroke="#000000" stroke-width="1" />
+  <text x="18" y="30" class="tab-title">sd Diagrama de análisis de clases - CU28 Generar y restaurar copias de seguridad</text>
 
-  <rect x="20" y="45" width="${width - 40}" height="${height - 65}" fill="#ffffff" stroke="#606060" stroke-width="1" />
+  <rect x="10" y="35" width="${width - 20}" height="${height - 45}" fill="#ffffff" stroke="#000000" stroke-width="1" />
 
-  <g opacity="0.45">
-    ${generateWatermarks(width, height)}
-  </g>
+  <!-- LÍNEAS DE ASOCIACIÓN -->
+  <!-- Actor a UI -->
+  <line x1="110" y1="360" x2="160" y2="360" class="link-line" />
 
-  <!-- ASOCIACIONES -->
-  <line x1="85" y1="280" x2="130" y2="280" class="ea-line" />
-  <line x1="390" y1="280" x2="470" y2="280" class="ea-line" />
-  <text x="410" y="272" class="assoc-text">invoca</text>
+  <!-- UI a Controller -->
+  <line x1="380" y1="360" x2="440" y2="360" class="link-line" />
 
-  <line x1="780" y1="280" x2="860" y2="280" class="ea-line" />
-  <text x="800" y="272" class="assoc-text">administra</text>
-  <text x="790" y="295" class="mult-text">1</text>
-  <text x="840" y="295" class="mult-text">0..*</text>
+  <!-- Controller a Entidad Principal (SOLO A COPIASEGURIDAD!) -->
+  <line x1="720" y1="360" x2="790" y2="360" class="link-line" />
 
-  <line x1="1010" y1="180" x2="1010" y2="100" class="ea-line" />
-  <line x1="1010" y1="100" x2="1240" y2="100" class="ea-line" />
-  <text x="1080" y="92" class="assoc-text">generado por</text>
-  <text x="980" y="160" class="mult-text">0..*</text>
-  <text x="1220" y="92" class="mult-text">1</text>
+  <!-- CopiaSeguridad a Usuario (Arriba) -->
+  <line x1="905" y1="250" x2="905" y2="170" class="link-line" />
+  <text x="915" y="235" class="mult-text">0..*</text>
+  <text x="915" y="185" class="mult-text">1</text>
 
-  <line x1="620" y1="410" x2="620" y2="570" class="ea-line" />
-  <text x="630" y="490" class="assoc-text">registra auditoría</text>
-  <text x="630" y="435" class="mult-text">1</text>
-  <text x="630" y="555" class="mult-text">0..*</text>
+  <!-- Usuario a Rol (Derecha de Usuario) -->
+  <line x1="1020" y1="110" x2="1100" y2="110" class="link-line" />
+  <text x="1035" y="100" class="mult-text">0..*</text>
+  <text x="1080" y="100" class="mult-text">1</text>
 
-  <!-- CAJAS EA -->
-  <g transform="translate(60, 280)">
+  <!-- CopiaSeguridad a ConfiguracionBackup (Abajo) -->
+  <line x1="905" y1="470" x2="905" y2="550" class="link-line" />
+  <text x="915" y="485" class="mult-text">0..*</text>
+  <text x="915" y="535" class="mult-text">1</text>
+
+  <!-- CopiaSeguridad a RestauracionBackup (Derecha) -->
+  <line x1="1020" y1="360" x2="1100" y2="360" class="link-line" />
+  <text x="1035" y="350" class="mult-text">1</text>
+  <text x="1080" y="350" class="mult-text">0..*</text>
+
+  <!-- 1. ACTOR -->
+  <g transform="translate(60, 360)">
     ${actorIcon(0, 0)}
     <text x="0" y="45" class="class-title">Administrador del Sistema</text>
   </g>
 
-  <g transform="translate(130, 160)">
-    <rect x="0" y="0" width="260" height="230" class="class-box" />
-    <text x="130" y="20" class="class-title">UI_CopiasSeguridad</text>
-    <line x1="0" y1="28" x2="260" y2="28" class="divider" />
+  <!-- 2. BOUNDARY -->
+  <g transform="translate(160, 275)">
+    <rect x="0" y="0" width="220" height="170" class="class-box" />
+    <text x="110" y="20" class="class-title">UI_CopiasSeguridad</text>
+    <line x1="0" y1="28" x2="220" y2="28" class="divider" />
     <text x="10" y="48" class="method-text">+ listarCopiasSeguridad(): void</text>
-    <text x="10" y="70" class="method-text">+ abrirModalCrearBackup(): void</text>
-    <text x="10" y="92" class="method-text">+ submitGenerarBackup(tipo, desc): void</text>
-    <text x="10" y="114" class="method-text">+ descargarCopia(id): void</text>
-    <text x="10" y="136" class="method-text">+ confirmarRestauracion(id): void</text>
-    <text x="10" y="158" class="method-text">+ ejecutarRestauracion(id): void</text>
-    <text x="10" y="180" class="method-text">+ eliminarCopia(id): void</text>
-    <text x="10" y="202" class="method-text">+ mostrarProgresoTerminal(): void</text>
+    <text x="10" y="70" class="method-text">+ submitGenerarBackup(): void</text>
+    <text x="10" y="92" class="method-text">+ descargarCopia(id): void</text>
+    <text x="10" y="114" class="method-text">+ ejecutarRestauracion(id): void</text>
+    <line x1="0" y1="124" x2="220" y2="124" class="divider" />
+    <text x="10" y="146" class="method-text">+ eliminarCopia(id): void</text>
   </g>
 
-  <g transform="translate(470, 160)">
-    <rect x="0" y="0" width="310" height="250" class="class-box" />
-    <text x="155" y="20" class="class-title">CopiasSeguridadController</text>
-    <line x1="0" y1="28" x2="310" y2="28" class="divider" />
-    <text x="10" y="48" class="method-text">+ index(): JsonResponse</text>
-    <text x="10" y="70" class="method-text">+ store(Request $request): JsonResponse</text>
-    <text x="10" y="92" class="method-text">+ download(int $id): BinaryFileResponse</text>
-    <text x="10" y="114" class="method-text">+ restore(int $id): JsonResponse</text>
-    <text x="10" y="136" class="method-text">+ destroy(int $id): JsonResponse</text>
-    <text x="10" y="158" class="method-text">- resolverBinario(string $binario): ?string</text>
-    <text x="10" y="180" class="method-text">- obtenerCredencialesPg(): array</text>
-    <text x="10" y="202" class="method-text">- ejecutarComandoDump(): Process</text>
-    <text x="10" y="224" class="method-text">- auditarAccion(caso, accion, res): void</text>
-  </g>
-
-  <g transform="translate(860, 160)">
-    <rect x="0" y="0" width="280" height="260" class="class-box" />
-    <text x="140" y="20" class="class-title">CopiaSeguridad</text>
+  <!-- 3. CONTROL -->
+  <g transform="translate(440, 265)">
+    <rect x="0" y="0" width="280" height="190" class="class-box" />
+    <text x="140" y="20" class="class-title">CopiasSeguridadController</text>
     <line x1="0" y1="28" x2="280" y2="28" class="divider" />
+    <text x="10" y="48" class="method-text">+ index(): void</text>
+    <text x="10" y="70" class="method-text">+ store(): void</text>
+    <text x="10" y="92" class="method-text">+ download(): void</text>
+    <text x="10" y="114" class="method-text">+ restore(): void</text>
+    <line x1="0" y1="124" x2="280" y2="124" class="divider" />
+    <text x="10" y="146" class="method-text">+ destroy(): void</text>
+    <text x="10" y="168" class="method-text">- resolverBinario(): void</text>
+  </g>
+
+  <!-- 4. TABLA PRINCIPAL: CopiaSeguridad -->
+  <g transform="translate(790, 250)">
+    <rect x="0" y="0" width="230" height="220" class="class-box" />
+    <text x="115" y="20" class="class-title">CopiaSeguridad</text>
+    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
     <text x="10" y="46" class="attr-text">- idCopiaSeguridad: int</text>
     <text x="10" y="64" class="attr-text">- nombreArchivo: string</text>
     <text x="10" y="82" class="attr-text">- ruta: string</text>
     <text x="10" y="100" class="attr-text">- tamanoBytes: bigint</text>
-    <text x="10" y="118" class="attr-text">- tamanoLegible: string</text>
-    <text x="10" y="136" class="attr-text">- idUsuario: int</text>
-    <text x="10" y="154" class="attr-text">- descripcion: string</text>
-    <text x="10" y="172" class="attr-text">- tipo: string (MANUAL / PROGRAMADA)</text>
-    <text x="10" y="190" class="attr-text">- estado: string (EXITOSO / FALLIDO)</text>
-    <line x1="0" y1="198" x2="280" y2="198" class="divider" />
-    <text x="10" y="218" class="method-text">+ usuario(): BelongsTo</text>
-    <text x="10" y="238" class="method-text">+ existeFisicamente(): bool</text>
+    <text x="10" y="118" class="attr-text">- idUsuario: int</text>
+    <text x="10" y="136" class="attr-text">- descripcion: string</text>
+    <text x="10" y="154" class="attr-text">- tipo: string</text>
+    <text x="10" y="172" class="attr-text">- estado: string</text>
+    <line x1="0" y1="180" x2="230" y2="180" class="divider" />
+    <text x="10" y="200" class="method-text">+ create(): void</text>
+    <text x="10" y="214" class="method-text">+ findOrFail(): void</text>
   </g>
 
-  <g transform="translate(1240, 40)">
-    <rect x="0" y="0" width="230" height="130" class="class-box" />
-    <text x="115" y="18" class="class-title">Usuario</text>
-    <line x1="0" y1="24" x2="230" y2="24" class="divider" />
-    <text x="10" y="40" class="attr-text">- idUsuario: int</text>
-    <text x="10" y="56" class="attr-text">- nombreCompleto: string</text>
-    <text x="10" y="72" class="attr-text">- email: string</text>
-    <line x1="0" y1="80" x2="230" y2="80" class="divider" />
-    <text x="10" y="100" class="method-text">+ copiasSeguridad(): HasMany</text>
+  <!-- 5. ENTIDAD RELACIONADA (ARRIBA): Usuario -->
+  <g transform="translate(790, 50)">
+    <rect x="0" y="0" width="230" height="120" class="class-box" />
+    <text x="115" y="20" class="class-title">Usuario</text>
+    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idUsuario: int</text>
+    <text x="10" y="64" class="attr-text">- nombreCompleto: string</text>
+    <text x="10" y="82" class="attr-text">- idRol: int</text>
+    <line x1="0" y1="90" x2="230" y2="90" class="divider" />
+    <text x="10" y="108" class="method-text">+ find(): void</text>
   </g>
 
-  <g transform="translate(500, 570)">
-    <rect x="0" y="0" width="240" height="170" class="class-box" />
-    <text x="120" y="18" class="class-title">Bitacora</text>
-    <line x1="0" y1="24" x2="240" y2="24" class="divider" />
-    <text x="10" y="40" class="attr-text">- idBitacora: int</text>
-    <text x="10" y="56" class="attr-text">- casoUso: 'CU28'</text>
-    <text x="10" y="72" class="attr-text">- accion: string</text>
-    <text x="10" y="88" class="attr-text">- detalles: text</text>
-    <text x="10" y="104" class="attr-text">- idUsuario: int</text>
-    <line x1="0" y1="112" x2="240" y2="112" class="divider" />
-    <text x="10" y="132" class="method-text">+ create(datos): Bitacora</text>
+  <!-- 6. ENTIDAD RELACIONADA (DERECHA DE USUARIO): Rol -->
+  <g transform="translate(1100, 50)">
+    <rect x="0" y="0" width="210" height="120" class="class-box" />
+    <text x="105" y="20" class="class-title">Rol</text>
+    <line x1="0" y1="28" x2="210" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idRol: int</text>
+    <text x="10" y="64" class="attr-text">- nombreRol: string</text>
+    <text x="10" y="82" class="attr-text">- descripcion: string</text>
+    <line x1="0" y1="90" x2="210" y2="90" class="divider" />
+    <text x="10" y="108" class="method-text">+ find(): void</text>
+  </g>
+
+  <!-- 7. ENTIDAD RELACIONADA (ABAJO): ConfiguracionBackup -->
+  <g transform="translate(790, 550)">
+    <rect x="0" y="0" width="230" height="140" class="class-box" />
+    <text x="115" y="20" class="class-title">ConfiguracionBackup</text>
+    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idConfiguracion: int</text>
+    <text x="10" y="64" class="attr-text">- frecuencia: string</text>
+    <text x="10" y="82" class="attr-text">- retencionDias: int</text>
+    <text x="10" y="100" class="attr-text">- rutaDestino: string</text>
+    <line x1="0" y1="108" x2="230" y2="108" class="divider" />
+    <text x="10" y="128" class="method-text">+ first(): void</text>
+  </g>
+
+  <!-- 8. ENTIDAD RELACIONADA (DERECHA): RestauracionBackup -->
+  <g transform="translate(1100, 275)">
+    <rect x="0" y="0" width="230" height="170" class="class-box" />
+    <text x="115" y="20" class="class-title">RestauracionBackup</text>
+    <line x1="0" y1="28" x2="230" y2="28" class="divider" />
+    <text x="10" y="46" class="attr-text">- idRestauracion: int</text>
+    <text x="10" y="64" class="attr-text">- idCopiaSeguridad: int</text>
+    <text x="10" y="82" class="attr-text">- fechaRestauracion: timestamp</text>
+    <text x="10" y="100" class="attr-text">- estado: string</text>
+    <text x="10" y="118" class="attr-text">- logSalida: text</text>
+    <line x1="0" y1="126" x2="230" y2="126" class="divider" />
+    <text x="10" y="146" class="method-text">+ create(): void</text>
+    <text x="10" y="162" class="method-text">+ find(): void</text>
   </g>
 </svg>`;
 }
