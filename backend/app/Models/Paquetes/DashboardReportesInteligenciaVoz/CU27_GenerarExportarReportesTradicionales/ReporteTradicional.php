@@ -2,19 +2,24 @@
 
 namespace App\Models\Paquetes\DashboardReportesInteligenciaVoz\CU27_GenerarExportarReportesTradicionales;
 
-use App\Models\Paquetes\EquiposInventario\CU19_AsignarEquipoComodato\AsignacionEquipo;
-use App\Models\Paquetes\EquiposInventario\CU19_AsignarEquipoComodato\Equipo;
-use App\Models\Paquetes\FacturacionCobranza\CU09_GenerarMensualidades\Mensualidad;
-use App\Models\Paquetes\FacturacionCobranza\CU10_GestionarPagoMensualidad\MetodoPago;
-use App\Models\Paquetes\FacturacionCobranza\CU10_GestionarPagoMensualidad\Pago;
-use App\Models\Paquetes\GestionClientesZonas\CU04_ZonasCobertura\Zona;
-use App\Models\Paquetes\GestionClientesZonas\CU05_RegistrarCliente\Cliente;
-use App\Models\Paquetes\ServiciosPlanes\CU08_RegistrarActivarServicio\ServicioInternet;
+use App\Models\Paquetes\P5_EquiposProveedoresInventario\CU19_AsignarEquipoComodato\AsignacionEquipo;
+use App\Models\Paquetes\P5_EquiposProveedoresInventario\CU19_AsignarEquipoComodato\Equipo;
+use App\Models\Paquetes\P4_FacturacionCobranza\CU09_GenerarMensualidades\Mensualidad;
+use App\Models\Paquetes\P4_FacturacionCobranza\CU10_GestionarPagoMensualidad\MetodoPago;
+use App\Models\Paquetes\P4_FacturacionCobranza\CU10_GestionarPagoMensualidad\Pago;
+use App\Models\Paquetes\P2_GestionClientesZonas\CU04_ZonasCobertura\Zona;
+use App\Models\Paquetes\P2_GestionClientesZonas\CU05_RegistrarCliente\Cliente;
+use App\Models\Paquetes\P3_ServiciosPlanes\CU08_RegistrarActivarServicio\ServicioInternet;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ReporteTradicional
 {
+    private static function likeOp(): string
+    {
+        return DB::connection()->getDriverName() === 'pgsql' ? 'ilike' : 'like';
+    }
+
     public const TIPO_CLIENTES_ZONA = 'clientes_zona';
     public const TIPO_INGRESOS_PAGOS = 'ingresos_pagos';
     public const TIPO_MOROSIDAD_CORTES = 'morosidad_cortes';
@@ -119,11 +124,12 @@ class ReporteTradicional
         }
         if (! empty($filtros['buscar'])) {
             $term = '%' . trim($filtros['buscar']) . '%';
-            $query->where(function ($q) use ($term) {
-                $q->where('c.nombreCompleto', 'ilike', $term)
-                    ->orWhere('c.ci', 'ilike', $term)
-                    ->orWhere('c.codigoCliente', 'ilike', $term)
-                    ->orWhere('z.nombreZona', 'ilike', $term);
+            $like = self::likeOp();
+            $query->where(function ($q) use ($term, $like) {
+                $q->where('c.nombreCompleto', $like, $term)
+                    ->orWhere('c.ci', $like, $term)
+                    ->orWhere('c.codigoCliente', $like, $term)
+                    ->orWhere('z.nombreZona', $like, $term);
             });
         }
 
@@ -186,11 +192,12 @@ class ReporteTradicional
         }
         if (! empty($filtros['buscar'])) {
             $term = '%' . trim($filtros['buscar']) . '%';
-            $query->where(function ($q) use ($term) {
-                $q->where('p.numeroComprobante', 'ilike', $term)
-                    ->orWhere('c.nombreCompleto', 'ilike', $term)
-                    ->orWhere('c.codigoCliente', 'ilike', $term)
-                    ->orWhere('m.codigoFactura', 'ilike', $term);
+            $like = self::likeOp();
+            $query->where(function ($q) use ($term, $like) {
+                $q->where('p.numeroComprobante', $like, $term)
+                    ->orWhere('c.nombreCompleto', $like, $term)
+                    ->orWhere('c.codigoCliente', $like, $term)
+                    ->orWhere('m.codigoFactura', $like, $term);
             });
         }
 
@@ -270,11 +277,12 @@ class ReporteTradicional
         }
         if (! empty($filtros['buscar'])) {
             $term = '%' . trim($filtros['buscar']) . '%';
-            $query->where(function ($q) use ($term) {
-                $q->where('c.nombreCompleto', 'ilike', $term)
-                    ->orWhere('c.ci', 'ilike', $term)
-                    ->orWhere('s.codigoServicio', 'ilike', $term)
-                    ->orWhere('m.codigoFactura', 'ilike', $term);
+            $like = self::likeOp();
+            $query->where(function ($q) use ($term, $like) {
+                $q->where('c.nombreCompleto', $like, $term)
+                    ->orWhere('c.ci', $like, $term)
+                    ->orWhere('s.codigoServicio', $like, $term)
+                    ->orWhere('m.codigoFactura', $like, $term);
             });
         }
 
@@ -327,11 +335,12 @@ class ReporteTradicional
 
             if (! empty($filtros['buscar'])) {
                 $term = '%' . trim($filtros['buscar']) . '%';
-                $query->where(function ($q) use ($term) {
-                    $q->where('c.nombreCompleto', 'ilike', $term)
-                        ->orWhere('s.codigoServicio', 'ilike', $term)
-                        ->orWhere('t.nombreCompleto', 'ilike', $term)
-                        ->orWhere('i.estadoInstalacion', 'ilike', $term);
+                $like = self::likeOp();
+                $query->where(function ($q) use ($term, $like) {
+                    $q->where('c.nombreCompleto', $like, $term)
+                        ->orWhere('s.codigoServicio', $like, $term)
+                        ->orWhere('t.nombreCompleto', $like, $term)
+                        ->orWhere('i.estadoInstalacion', $like, $term);
                 });
             }
 
@@ -378,12 +387,13 @@ class ReporteTradicional
 
         if (! empty($filtros['buscar'])) {
             $term = '%' . trim($filtros['buscar']) . '%';
-            $query->where(function ($q) use ($term) {
-                $q->where('e.numeroSerie', 'ilike', $term)
-                    ->orWhere('e.mac', 'ilike', $term)
-                    ->orWhere('c.nombreCompleto', 'ilike', $term)
-                    ->orWhere('s.codigoServicio', 'ilike', $term)
-                    ->orWhere('pe.modelo', 'ilike', $term);
+            $like = self::likeOp();
+            $query->where(function ($q) use ($term, $like) {
+                $q->where('e.numeroSerie', $like, $term)
+                    ->orWhere('e.mac', $like, $term)
+                    ->orWhere('c.nombreCompleto', $like, $term)
+                    ->orWhere('s.codigoServicio', $like, $term)
+                    ->orWhere('pe.modelo', $like, $term);
             });
         }
 

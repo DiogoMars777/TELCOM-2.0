@@ -393,11 +393,9 @@ Route::prefix('cu27')->middleware(['auth:sanctum', 'permission:reportes.view'])-
     Route::get('/exportar-excel', [ReporteTradicionalController::class, 'exportarExcel']);
     Route::get('/exportar-pdf', [ReporteTradicionalController::class, 'exportarPdf']);
 });
-});
 
 /*
 |--------------------------------------------------------------------------
-<<<<<<< HEAD
 | CU25 - REGISTRAR COMPRA DE EQUIPO Y ACTUALIZAR STOCK
 |--------------------------------------------------------------------------
 | Permite registrar órdenes de compra a proveedores de hardware e insumos,

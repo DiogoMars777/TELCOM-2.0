@@ -6,7 +6,6 @@ import LoginView from './views/Paquetes/P1_SeguridadAdministracion/CU01_IniciarC
 import SesionView from './views/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/SesionView';
 import CambiarPasswordView from './views/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/CambiarPasswordView';
 
-<<<<<<< HEAD
 // Vistas de los Casos de Uso (módulos administrativos)
 import AuditoriaView from './views/Paquetes/P1_SeguridadAdministracion/CU02_BitacoraAuditoria/AuditoriaView';
 import UsuariosView from './views/Paquetes/P1_SeguridadAdministracion/CU03_UsuariosRolesPermisos/UsuariosView';

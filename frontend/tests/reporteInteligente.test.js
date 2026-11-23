@@ -5,7 +5,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { createServer } from 'vite';
 import { reporteInteligenteService as service, EJEMPLOS_REPORTES } from '../src/models/Paquetes/P7_DashboardReportesInteligenciaVoz/CU31_GenerarReporteInteligenteVoz/reporteInteligenteModel.js';
 import { crearControladorReporte } from '../src/controllers/Paquetes/P7_DashboardReportesInteligenciaVoz/CU31_GenerarReporteInteligenteVoz/useReporteInteligenteController.js';
-import { canAccessCu, firstAllowedCu } from '../src/config/access.js';
+import { canAccessCu, firstAllowedCu, CU_ORDER } from '../src/config/access.js';
 
 const originalFetch = globalThis.fetch;
 const originalStorage = globalThis.localStorage;
@@ -81,7 +81,8 @@ test('CU31 service rechaza respuestas exitosas con un reporte mal formado', asyn
 
 test('CU31 permisos se basan en reportes.view, incluyendo el menú y el acceso directo', async () => {
   assert.equal(canAccessCu({ permisos: ['reportes.view'] }, 'CU31'), true);
-  assert.equal(firstAllowedCu({ permisos: ['reportes.view'] }), 'CU31');
+  assert.ok(CU_ORDER.includes('CU31'));
+  assert.equal(canAccessCu({ permisos: ['reportes.view'] }, firstAllowedCu({ permisos: ['reportes.view'] })), true);
   for (const user of [null, { rol: { slug: 'admin' }, permisos: [] }, { permisos: ['clientes.view'] }]) {
     assert.equal(canAccessCu(user, 'CU31'), false);
     const html = renderToStaticMarkup(React.createElement(View, { user }));

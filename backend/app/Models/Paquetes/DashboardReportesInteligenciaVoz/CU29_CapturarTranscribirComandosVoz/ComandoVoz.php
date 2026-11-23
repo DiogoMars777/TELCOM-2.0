@@ -49,12 +49,13 @@ class ComandoVoz extends Model
         $parametros = [];
 
         // 1. Detectar Zona
+        $like = \Illuminate\Support\Facades\DB::connection()->getDriverName() === 'pgsql' ? 'ilike' : 'like';
         if (preg_match('/(zona norte|equipetrol|sirari|norte)/i', $limpio)) {
             $zona = \Illuminate\Support\Facades\DB::table('Zona')
-                ->where(function ($q) {
-                    $q->where('codigo', 'ilike', '%SCZ-NORTE%')
-                      ->orWhere('nombreZona', 'ilike', '%Equipetrol%')
-                      ->orWhere('codigo', 'ilike', '%NORTE%');
+                ->where(function ($q) use ($like) {
+                    $q->where('codigo', $like, '%SCZ-NORTE%')
+                      ->orWhere('nombreZona', $like, '%Equipetrol%')
+                      ->orWhere('codigo', $like, '%NORTE%');
                 })
                 ->orderBy('idZona', 'asc')
                 ->first();
@@ -62,15 +63,15 @@ class ComandoVoz extends Model
             $parametros['zona_id'] = $zona ? $zona->idZona : 3;
         } elseif (preg_match('/(zona este|villa 1ro de mayo|plan 3000|este)/i', $limpio)) {
             $zona = \Illuminate\Support\Facades\DB::table('Zona')
-                ->where('codigo', 'ilike', '%ESTE%')
-                ->orWhere('nombreZona', 'ilike', '%Este%')
+                ->where('codigo', $like, '%ESTE%')
+                ->orWhere('nombreZona', $like, '%Este%')
                 ->first();
             $parametros['zona_nombre'] = $zona ? $zona->nombreZona : 'Zona Este - Villa 1ro de Mayo / Plan 3000';
             $parametros['zona_id'] = $zona ? $zona->idZona : 4;
         } elseif (preg_match('/(zona sur|casco viejo|santos dumont|sur)/i', $limpio)) {
             $zona = \Illuminate\Support\Facades\DB::table('Zona')
-                ->where('codigo', 'ilike', '%SUR%')
-                ->orWhere('nombreZona', 'ilike', '%Sur%')
+                ->where('codigo', $like, '%SUR%')
+                ->orWhere('nombreZona', $like, '%Sur%')
                 ->first();
             $parametros['zona_nombre'] = $zona ? $zona->nombreZona : 'Zona Sur - Casco Viejo / Santos Dumont';
             $parametros['zona_id'] = $zona ? $zona->idZona : 5;
