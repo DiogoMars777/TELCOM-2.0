@@ -67,7 +67,63 @@ export const reporteTradicionalModel = {
       };
     }
     const res = await apiClient.get('/cu27/parametros');
-    return res?.data ?? { zonas: [], metodos: [], estadosCliente: [] };
+    return res?.data ?? { zonas: [], metodos: [], estadosCliente: [], columnas: {} };
+  },
+
+  /**
+   * Obtiene el diccionario de columnas exportables por reporte
+   */
+  async fetchColumnas() {
+    if (isDemoMode()) {
+      return {
+        clientes_zona: {
+          codigoCliente: 'Código Cliente',
+          ci: 'C.I.',
+          nombreCompleto: 'Nombre Completo',
+          telefonoPrincipal: 'Teléfono',
+          correo: 'Correo',
+          nombreZona: 'Zona',
+          barrioZona: 'Barrio',
+          estadoCliente: 'Estado',
+          totalServicios: 'Servicios Activos',
+        },
+        ingresos_pagos: {
+          numeroComprobante: 'N° Comprobante',
+          fechaHora: 'Fecha y Hora',
+          clienteNombre: 'Cliente',
+          codigoCliente: 'Código Abonado',
+          periodo: 'Período',
+          nombreMetodo: 'Método Pago',
+          montoTotal: 'Monto (Bs.)',
+          nombreCajero: 'Cajero',
+        },
+        morosidad_cortes: {
+          codigoFactura: 'Factura N°',
+          clienteNombre: 'Abonado',
+          clienteCi: 'C.I.',
+          codigoServicio: 'Código Servicio',
+          nombreZona: 'Zona',
+          nombrePlan: 'Plan',
+          periodo: 'Período',
+          fechaVencimiento: 'Vencimiento',
+          monto: 'Monto Mora (Bs.)',
+          estadoServicio: 'Estado Servicio',
+        },
+        equipos_instalaciones: {
+          codigo: 'Identificador / Serie',
+          cliente: 'Abonado',
+          servicio: 'Código Servicio',
+          detalle: 'Detalle / Modelo',
+          tipo: 'Tipo',
+          fecha: 'Fecha',
+          responsable: 'Técnico / Responsable',
+          estado: 'Estado',
+          costo: 'Costo (Bs.)',
+        },
+      };
+    }
+    const res = await apiClient.get('/cu27/columnas');
+    return res?.data ?? {};
   },
 
   /**
@@ -93,11 +149,37 @@ export const reporteTradicionalModel = {
   },
 
   /**
-   * Descarga el reporte en formato Excel (.csv compatible) (Paso 8 y 9 de CU27)
+   * Genera el análisis ejecutivo con Inteligencia Artificial (Gemini) y TTS
    */
-  async descargarExcel(filtros) {
+  async fetchAnalisisIa(filtros) {
+    if (isDemoMode()) {
+      return {
+        resumen_ejecutivo: 'La cartera comercial de TELCOM presenta estabilidad con un 90% de clientes activos.',
+        puntos_clave: [
+          'Mayor concentración de abonados en Zona Norte.',
+          'Recaudación fluida por canales QR y transferencias.',
+          'Índice de mora controlado bajo el 8%.',
+        ],
+        alerta_riesgo: 'Monitorear los 2 clientes en mora preventiva antes de fin de mes.',
+        recomendacion: 'Reactivar promociones de fibra óptica en nodos con baja densidad de ocupación.',
+        narrativa_tts: 'Señor Administrador, la cartera comercial presenta un 90% de clientes activos. Se recomienda revisar los clientes en mora preventiva.',
+      };
+    }
+    const res = await apiClient.post('/cu27/analisis-ia', filtros);
+    return res?.data ?? null;
+  },
+
+  /**
+   * Descarga el reporte en formato Excel (.csv compatible) con columnas dinámicas seleccionadas
+   */
+  async descargarExcel(filtros, columnas = []) {
+    const queryParams = { ...filtros };
+    if (Array.isArray(columnas) && columnas.length > 0) {
+      queryParams.columnas = columnas.join(',');
+    }
+
     const params = new URLSearchParams(
-      Object.entries(filtros).filter(([, v]) => v !== null && v !== undefined && v !== '')
+      Object.entries(queryParams).filter(([, v]) => v !== null && v !== undefined && v !== '')
     );
     const token = apiClient.getToken?.() || localStorage.getItem('telcom_token');
     const baseUrl = apiClient.getBaseUrl?.() || '/api';
@@ -129,7 +211,11 @@ export const reporteTradicionalModel = {
   /**
    * Obtiene la estructura oficial para impresión o exportación a PDF (Paso 8 y 9 de CU27)
    */
-  async obtenerPdf(filtros) {
+  async obtenerPdf(filtros, columnas = []) {
+    const payload = { ...filtros };
+    if (Array.isArray(columnas) && columnas.length > 0) {
+      payload.columnas = columnas.join(',');
+    }
     if (isDemoMode()) {
       return {
         titulo: 'Reporte Demo TELCOM',
@@ -137,7 +223,7 @@ export const reporteTradicionalModel = {
         fechaGeneracion: new Date().toLocaleDateString('es-BO'),
       };
     }
-    const res = await apiClient.get('/cu27/exportar-pdf', filtros);
+    const res = await apiClient.get('/cu27/exportar-pdf', payload);
     return res?.data ?? null;
   },
 };

@@ -130,3 +130,334 @@
     justify-content: center;
   }
 }
+
+/* ============================================================
+ * Automatización de Copias de Seguridad (CU28) - Responsive Senior Design
+ * ============================================================ */
+
+.cu28-auto-card {
+  background: var(--bg-card, #1e293b);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  border-radius: var(--radius-lg, 12px);
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: border-color 0.2s ease;
+}
+
+.cu28-auto-card:hover {
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.cu28-auto-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+  cursor: pointer;
+  user-select: none;
+}
+
+.cu28-auto-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cu28-auto-icon-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+.cu28-auto-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
+}
+
+.cu28-auto-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+  margin: 0;
+}
+
+.cu28-auto-subtitle {
+  font-size: 0.825rem;
+  color: var(--text-secondary, #94a3b8);
+  margin: 0;
+}
+
+.cu28-auto-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Métricas de programación */
+.cu28-auto-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.cu28-metric-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.07));
+  border-radius: var(--radius-md, 8px);
+  padding: 0.875rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.cu28-metric-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary, #94a3b8);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cu28-metric-value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cu28-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-ok {
+  background: #22c55e;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+}
+
+.dot-error {
+  background: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+}
+
+/* Grilla de Controles */
+.cu28-auto-controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.05));
+  border-radius: var(--radius-md, 8px);
+  padding: 1.25rem;
+}
+
+.cu28-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cu28-control-full {
+  grid-column: 1 / -1;
+}
+
+.cu28-control-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary, #f8fafc);
+}
+
+/* Switch Activo / Inactivo */
+.cu28-switch-wrap {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
+}
+
+.cu28-switch-btn {
+  flex: 1;
+  padding: 0.55rem 0.85rem;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.cu28-switch-btn.active {
+  background: #22c55e;
+  color: #fff;
+}
+
+.cu28-switch-btn.inactive {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+/* Pills de Frecuencia */
+.cu28-pills-wrap {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cu28-pill-btn {
+  padding: 0.5rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary, #94a3b8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cu28-pill-btn:hover:not(:disabled) {
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+.cu28-pill-btn.active {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+.cu28-pill-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Pills de Días de la Semana */
+.cu28-days-wrap {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cu28-day-pill {
+  width: 44px;
+  height: 38px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary, #94a3b8);
+  font-weight: 600;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cu28-day-pill:hover:not(:disabled) {
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+.cu28-day-pill.selected {
+  background: #38bdf8;
+  border-color: #38bdf8;
+  color: #0f172a;
+}
+
+/* Input con Icono */
+.cu28-input-icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cu28-input-icon {
+  position: absolute;
+  left: 0.85rem;
+  color: var(--text-secondary, #94a3b8);
+  pointer-events: none;
+}
+
+.cu28-input-time {
+  padding-left: 2.4rem !important;
+}
+
+.cu28-help-text {
+  font-size: 0.725rem;
+  color: var(--text-secondary, #94a3b8);
+  line-height: 1.3;
+}
+
+/* Acciones */
+.cu28-auto-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+}
+
+/* Responsividad Móvil y Tablet */
+@media (max-width: 640px) {
+  .cu28-auto-header {
+    padding: 1rem;
+  }
+
+  .cu28-auto-body {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .cu28-auto-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .cu28-auto-controls-grid {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .cu28-auto-actions {
+    flex-direction: column;
+  }
+
+  .cu28-auto-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cu28-pills-wrap {
+    flex-direction: column;
+  }
+
+  .cu28-pill-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

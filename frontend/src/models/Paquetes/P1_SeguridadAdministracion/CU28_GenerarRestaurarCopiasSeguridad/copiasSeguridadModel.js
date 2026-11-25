@@ -211,4 +211,65 @@ export const copiasSeguridadModel = {
     const res = await apiClient.delete(`/cu28/backups/${id}`);
     return res?.data;
   },
+
+  /**
+   * Obtener parámetros de respaldo automático / programado (CU28).
+   */
+  async obtenerConfiguracion() {
+    if (isDemoMode()) {
+      return {
+        activo: true,
+        frecuencia: 'DIARIO',
+        hora_ejecucion: '02:00',
+        dias_semana: '["1","2","3","4","5","6","0"]',
+        dias_semana_array: ['1', '2', '3', '4', '5', '6', '0'],
+        dia_mes: 1,
+        retencion_copias: 7,
+        ultimo_backup_at: '2026-11-24 02:00:00',
+        proximo_backup_at: '2026-11-25 02:00:00',
+        ultimo_estado: 'EXITOSO',
+        ultimo_mensaje: 'Copia automática generada exitosamente (4.88 MB).',
+      };
+    }
+
+    const res = await apiClient.get('/cu28/configuracion');
+    return res?.data?.configuracion;
+  },
+
+  /**
+   * Actualizar configuración de copias de seguridad automáticas (CU28).
+   */
+  async guardarConfiguracion(config) {
+    if (isDemoMode()) {
+      return { ...config, ultimo_estado: 'EXITOSO' };
+    }
+
+    const res = await apiClient.put('/cu28/configuracion', config);
+    return res?.data?.configuracion;
+  },
+
+  /**
+   * Disparar ejecución inmediata del respaldo programado (CU28).
+   */
+  async ejecutarProgramadoAhora() {
+    if (isDemoMode()) {
+      const nuevo = {
+        id: Date.now(),
+        nombre_archivo: `backup_auto_${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}.sql`,
+        tamano_bytes: 5120000,
+        tamano_legible: '4.88 MB',
+        fecha_hora: new Date().toISOString().slice(0, 19).replace('T', ' '),
+        descripcion: 'Respaldo automático forzado manualmente (DIARIO)',
+        tipo: 'AUTOMATICA',
+        estado: 'COMPLETADO',
+        usuario: { id: 1, name: 'Admin Telecom', email: 'admin@telcom.com' },
+        existe_archivo: true,
+      };
+      mockBackups.unshift(nuevo);
+      return { backup: nuevo };
+    }
+
+    const res = await apiClient.post('/cu28/configuracion/ejecutar-ahora');
+    return res?.data;
+  },
 };

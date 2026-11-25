@@ -9,11 +9,29 @@ export function useCopiasSeguridadController() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
+  // Estados de automatización programada (CU28)
+  const [configuracion, setConfiguracion] = useState(null);
+  const [loadingConfig, setLoadingConfig] = useState(false);
+  const [guardandoConfig, setGuardandoConfig] = useState(false);
+  const [ejecutandoProgramado, setEjecutandoProgramado] = useState(false);
+
   // Estados de modales
   const [showModalGenerar, setShowModalGenerar] = useState(false);
   const [showModalUpload, setShowModalUpload] = useState(false);
   const [backupParaRestaurar, setBackupParaRestaurar] = useState(null);
   const [backupParaEliminar, setBackupParaEliminar] = useState(null);
+
+  const cargarConfiguracion = useCallback(async () => {
+    setLoadingConfig(true);
+    try {
+      const data = await copiasSeguridadModel.obtenerConfiguracion();
+      setConfiguracion(data);
+    } catch {
+      // Ignorar fallo no crítico al cargar configuración inicial
+    } finally {
+      setLoadingConfig(false);
+    }
+  }, []);
 
   const cargarBackups = useCallback(async () => {
     setLoading(true);
@@ -31,7 +49,8 @@ export function useCopiasSeguridadController() {
 
   useEffect(() => {
     cargarBackups();
-  }, [cargarBackups]);
+    cargarConfiguracion();
+  }, [cargarBackups, cargarConfiguracion]);
 
   const limpiarMensajes = () => {
     setError(null);
@@ -134,12 +153,59 @@ export function useCopiasSeguridadController() {
     }
   };
 
+  /**
+   * Guardar la configuración de automatización de copias
+   */
+  const handleGuardarConfiguracion = async (nuevaConfig) => {
+    setGuardandoConfig(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      const guardada = await copiasSeguridadModel.guardarConfiguracion(nuevaConfig);
+      setConfiguracion(guardada);
+      setSuccess('Programación de copias de seguridad actualizada exitosamente.');
+      return true;
+    } catch (err) {
+      setError(describeApiError(err));
+      return false;
+    } finally {
+      setGuardandoConfig(false);
+    }
+  };
+
+  /**
+   * Ejecutar la copia programada inmediatamente (prueba bajo demanda)
+   */
+  const handleEjecutarProgramado = async () => {
+    setEjecutandoProgramado(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      const res = await copiasSeguridadModel.ejecutarProgramadoAhora();
+      if (res?.configuracion) {
+        setConfiguracion(res.configuracion);
+      }
+      setSuccess('Respaldo automático ejecutado exitosamente.');
+      await cargarBackups();
+      return true;
+    } catch (err) {
+      setError(describeApiError(err));
+      return false;
+    } finally {
+      setEjecutandoProgramado(false);
+    }
+  };
+
   return {
     backups,
     loading,
     submitting,
     error,
     success,
+    configuracion,
+    loadingConfig,
+    guardandoConfig,
+    ejecutandoProgramado,
     showModalGenerar,
     setShowModalGenerar,
     showModalUpload,
@@ -149,6 +215,9 @@ export function useCopiasSeguridadController() {
     backupParaEliminar,
     setBackupParaEliminar,
     cargarBackups,
+    cargarConfiguracion,
+    handleGuardarConfiguracion,
+    handleEjecutarProgramado,
     handleGenerar,
     handleDescargar,
     handleRestaurar,

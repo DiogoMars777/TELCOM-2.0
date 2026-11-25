@@ -137,6 +137,9 @@ Route::prefix('cu28')->middleware(['auth:sanctum', 'permission:backups.manage'])
     Route::post('/backups/{id}/restore', [CopiasSeguridadController::class, 'restore'])->whereNumber('id');
     Route::post('/backups/restore-upload', [CopiasSeguridadController::class, 'restoreUpload']);
     Route::delete('/backups/{id}', [CopiasSeguridadController::class, 'destroy'])->whereNumber('id');
+    Route::get('/configuracion', [CopiasSeguridadController::class, 'obtenerConfiguracion']);
+    Route::put('/configuracion', [CopiasSeguridadController::class, 'guardarConfiguracion']);
+    Route::post('/configuracion/ejecutar-ahora', [CopiasSeguridadController::class, 'ejecutarBackupProgramado']);
 });
 
 // CU04: Gestionar zonas de cobertura (solo administrador)
@@ -389,9 +392,11 @@ Route::prefix('cu20')->middleware('auth:sanctum')->group(function () {
 Route::prefix('cu27')->middleware(['auth:sanctum', 'permission:reportes.view'])->group(function () {
     Route::get('/catalogo', [ReporteTradicionalController::class, 'catalogo']);
     Route::get('/parametros', [ReporteTradicionalController::class, 'parametros']);
+    Route::get('/columnas', [ReporteTradicionalController::class, 'columnas']);
     Route::get('/generar', [ReporteTradicionalController::class, 'generar']);
     Route::get('/exportar-excel', [ReporteTradicionalController::class, 'exportarExcel']);
     Route::get('/exportar-pdf', [ReporteTradicionalController::class, 'exportarPdf']);
+    Route::post('/analisis-ia', [ReporteTradicionalController::class, 'analisisIa']);
 });
 
 /*

@@ -106,4 +106,43 @@ class Cu27ReportesTradicionalesTest extends TestCase
         $res->assertStatus(200);
         $this->assertStringContainsString('text/csv', $res->headers->get('content-type'));
     }
+
+    public function test_consultar_columnas_exportables(): void
+    {
+        $admin = $this->usuarioConRol('admin');
+
+        $res = $this->withHeaders($this->bearer($admin))
+            ->getJson('/api/cu27/columnas')
+            ->assertStatus(200);
+
+        $this->assertNotNull($res->json('data.clientes_zona'));
+        $this->assertNotNull($res->json('data.ingresos_pagos'));
+    }
+
+    public function test_exportar_excel_con_columnas_dinamicas(): void
+    {
+        $admin = $this->usuarioConRol('admin');
+
+        $res = $this->withHeaders($this->bearer($admin))
+            ->get('/api/cu27/exportar-excel?tipo_reporte=clientes_zona&columnas=codigoCliente,nombreCompleto');
+
+        $res->assertStatus(200);
+        $this->assertStringContainsString('text/csv', $res->headers->get('content-type'));
+    }
+
+    public function test_analisis_ejecutivo_ia(): void
+    {
+        $admin = $this->usuarioConRol('admin');
+
+        $res = $this->withHeaders($this->bearer($admin))
+            ->postJson('/api/cu27/analisis-ia', [
+                'tipo_reporte' => 'clientes_zona',
+            ])
+            ->assertStatus(200);
+
+        $this->assertTrue($res->json('success'));
+        $this->assertNotNull($res->json('data.resumen_ejecutivo'));
+        $this->assertNotEmpty($res->json('data.puntos_clave'));
+        $this->assertNotNull($res->json('data.narrativa_tts'));
+    }
 }

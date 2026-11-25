@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Paquetes\P1_SeguridadAdministracion\CU28_GenerarRestaurarCopiasSeguridad;
 
 use App\Http\Controllers\Controller;
+use App\Models\Paquetes\P1_SeguridadAdministracion\CU28_GenerarRestaurarCopiasSeguridad\ConfiguracionBackup;
 use App\Models\Paquetes\P1_SeguridadAdministracion\CU28_GenerarRestaurarCopiasSeguridad\CopiaSeguridad;
 use App\Support\AuditLogger;
 use App\Traits\ApiResponse;
@@ -146,6 +147,167 @@ class CopiasSeguridadController extends Controller
             ['backups' => $formateados],
             'Historial de copias de seguridad consultado correctamente.'
         );
+    }
+
+    /**
+     * GET /api/cu28/configuracion
+     * Consultar los parámetros de automatización y programación de backups.
+     */
+    public function obtenerConfiguracion(): JsonResponse
+    {
+        $config = ConfiguracionBackup::obtenerConfiguracion();
+
+        return $this->success([
+            'configuracion' => $config,
+        ], 'Configuración de respaldos programados obtenida.');
+    }
+
+    /**
+     * PUT /api/cu28/configuracion
+     * Actualizar la programación de copias de seguridad automáticas (Diario, Semanal, Mensual).
+     */
+    public function guardarConfiguracion(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'activo'           => 'required|boolean',
+            'frecuencia'       => 'required|string|in:DIARIO,SEMANAL,MENSUAL',
+            'hora_ejecucion'   => ['required', 'string', 'regex:/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/'],
+            'dias_semana'      => 'nullable|array',
+            'dia_mes'          => 'nullable|integer|between:1,31',
+            'retencion_copias' => 'required|integer|between:1,100',
+        ], [
+            'frecuencia.in'           => 'La frecuencia debe ser DIARIO, SEMANAL o MENSUAL.',
+            'hora_ejecucion.regex'    => 'La hora de ejecución debe tener formato válido HH:mm (24 horas).',
+            'retencion_copias.between'=> 'La cantidad de copias a retener debe estar entre 1 y 100.',
+        ]);
+
+        $config = ConfiguracionBackup::obtenerConfiguracion();
+        $datosAnteriores = $config->toArray();
+
+        $config->activo = (bool) $validated['activo'];
+        $config->frecuencia = strtoupper($validated['frecuencia']);
+        $config->hora_ejecucion = $validated['hora_ejecucion'];
+        $config->retencion_copias = (int) $validated['retencion_copias'];
+
+        if (isset($validated['dias_semana'])) {
+            $config->dias_semana = $validated['dias_semana'];
+        }
+
+        if (isset($validated['dia_mes'])) {
+            $config->dia_mes = (int) $validated['dia_mes'];
+        }
+
+        $config->save();
+        $proximo = $config->recalcularProximoBackup();
+
+        AuditLogger::log(
+            'CU28',
+            'CONFIGURAR_BACKUP_AUTOMATICO',
+            "Se actualizó la configuración de copias automáticas a frecuencia {$config->frecuencia} a las {$config->hora_ejecucion}",
+            $datosAnteriores,
+            $config->toArray()
+        );
+
+        return $this->success([
+            'configuracion' => $config->fresh(),
+            'proximo_backup' => $config->proximo_backup_at,
+        ], 'Configuración de respaldos automáticos actualizada exitosamente.');
+    }
+
+    /**
+     * POST /api/cu28/configuracion/ejecutar-ahora
+     * Disparar manualmente una copia automática programada.
+     */
+    public function ejecutarBackupProgramado(): JsonResponse
+    {
+        $config = ConfiguracionBackup::obtenerConfiguracion();
+
+        try {
+            $backup = $this->ejecutarCopiaAutomatica("Respaldo automático forzado manualmente ({$config->frecuencia})");
+            $this->limpiarCopiasAutomaticasAntiguas($config->retencion_copias);
+
+            $ahora = now()->timezone('America/La_Paz');
+            $config->update([
+                'ultimoBackupAt' => $ahora,
+                'ultimoEstado'   => 'EXITOSO',
+                'ultimoMensaje'  => "Copia '{$backup->nombre_archivo}' generada exitosamente ({$backup->tamano_legible}).",
+            ]);
+            $config->recalcularProximoBackup();
+
+            return $this->success([
+                'backup'        => $backup,
+                'configuracion' => $config->fresh(),
+            ], 'Copia de seguridad programada ejecutada exitosamente.');
+        } catch (Throwable $e) {
+            $config->update([
+                'ultimoEstado'  => 'FALLIDO',
+                'ultimoMensaje' => 'Error: ' . $e->getMessage(),
+            ]);
+
+            return $this->error('No se pudo ejecutar el respaldo programado: ' . $e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Generar copia automática y registrar en la base de datos.
+     */
+    public function ejecutarCopiaAutomatica(?string $descripcion = null): CopiaSeguridad
+    {
+        $dirBackups = $this->obtenerDirectorioBackups();
+        $timestamp = now()->timezone('America/La_Paz')->format('Y-m-d_His');
+        $nombreArchivo = "backup_auto_{$timestamp}.sql";
+        $rutaCompleta = "{$dirBackups}" . DIRECTORY_SEPARATOR . "{$nombreArchivo}";
+        $rutaRelativa = "backups/{$nombreArchivo}";
+
+        $this->generarDumpSql($rutaCompleta);
+
+        $tamanoBytes = file_exists($rutaCompleta) ? (int) filesize($rutaCompleta) : 0;
+        $tamanoLegible = CopiaSeguridad::formatearBytes($tamanoBytes);
+
+        $backup = CopiaSeguridad::create([
+            'nombreArchivo' => $nombreArchivo,
+            'ruta'          => $rutaRelativa,
+            'tamanoBytes'   => $tamanoBytes,
+            'tamanoLegible' => $tamanoLegible,
+            'idUsuario'     => auth()->id(),
+            'descripcion'   => $descripcion ?? 'Copia de seguridad automática programada del sistema.',
+            'tipo'          => 'AUTOMATICA',
+            'estado'        => 'COMPLETADO',
+            'fechaHora'     => now()->timezone('America/La_Paz'),
+        ]);
+
+        AuditLogger::log(
+            'CU28',
+            'BACKUP_AUTOMATICO_GENERADO',
+            "Se generó la copia automática '{$nombreArchivo}' ({$tamanoLegible})",
+            null,
+            $backup->toArray()
+        );
+
+        return $backup;
+    }
+
+    /**
+     * Eliminar copias automáticas que excedan la retención configurada.
+     */
+    public function limpiarCopiasAutomaticasAntiguas(int $maxRetencion): void
+    {
+        if ($maxRetencion <= 0) return;
+
+        $automaticas = CopiaSeguridad::where('tipo', 'AUTOMATICA')
+            ->orderBy('fechaHora', 'desc')
+            ->get();
+
+        if ($automaticas->count() > $maxRetencion) {
+            $sobrantes = $automaticas->slice($maxRetencion);
+            foreach ($sobrantes as $copia) {
+                $ruta = $copia->rutaCompleta();
+                if (file_exists($ruta)) {
+                    @unlink($ruta);
+                }
+                $copia->delete();
+            }
+        }
     }
 
     /**

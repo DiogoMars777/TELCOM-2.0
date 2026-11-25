@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCopiasSeguridadController } from '../../../../controllers/Paquetes/P1_SeguridadAdministracion/CU28_GenerarRestaurarCopiasSeguridad/useCopiasSeguridadController';
 import {
   Database,
@@ -13,8 +13,27 @@ import {
   AlertCircle,
   X,
   ShieldAlert,
+  Calendar,
+  Clock,
+  Play,
+  Save,
+  Settings,
+  Check,
+  Layers,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import './CopiasSeguridadView.css';
+
+const DIAS_SEMANA_OPCIONES = [
+  { val: '1', label: 'Lun' },
+  { val: '2', label: 'Mar' },
+  { val: '3', label: 'Mié' },
+  { val: '4', label: 'Jue' },
+  { val: '5', label: 'Vie' },
+  { val: '6', label: 'Sáb' },
+  { val: '0', label: 'Dom' },
+];
 
 export default function CopiasSeguridadView() {
   const {
@@ -23,6 +42,10 @@ export default function CopiasSeguridadView() {
     submitting,
     error,
     success,
+    configuracion,
+    loadingConfig,
+    guardandoConfig,
+    ejecutandoProgramado,
     showModalGenerar,
     setShowModalGenerar,
     showModalUpload,
@@ -32,6 +55,8 @@ export default function CopiasSeguridadView() {
     backupParaEliminar,
     setBackupParaEliminar,
     cargarBackups,
+    handleGuardarConfiguracion,
+    handleEjecutarProgramado,
     handleGenerar,
     handleDescargar,
     handleRestaurar,
@@ -44,6 +69,49 @@ export default function CopiasSeguridadView() {
   const [descGenerar, setDescGenerar] = useState('');
   const [fileUpload, setFileUpload] = useState(null);
   const [descUpload, setDescUpload] = useState('');
+
+  // Estados locales para la tarjeta de automatización
+  const [mostrarConfigurador, setMostrarConfigurador] = useState(true);
+  const [activoAuto, setActivoAuto] = useState(true);
+  const [frecuenciaAuto, setFrecuenciaAuto] = useState('DIARIO');
+  const [horaAuto, setHoraAuto] = useState('02:00');
+  const [diasSemanaAuto, setDiasSemanaAuto] = useState(['1', '2', '3', '4', '5', '6', '0']);
+  const [diaMesAuto, setDiaMesAuto] = useState(1);
+  const [retencionAuto, setRetencionAuto] = useState(7);
+
+  // Cargar datos de configuración cuando estén disponibles
+  useEffect(() => {
+    if (configuracion) {
+      setActivoAuto(Boolean(configuracion.activo));
+      setFrecuenciaAuto(configuracion.frecuencia || 'DIARIO');
+      setHoraAuto(configuracion.hora_ejecucion || '02:00');
+      setDiasSemanaAuto(Array.isArray(configuracion.dias_semana_array) ? configuracion.dias_semana_array : ['1']);
+      setDiaMesAuto(Number(configuracion.dia_mes) || 1);
+      setRetencionAuto(Number(configuracion.retencion_copias) || 7);
+    }
+  }, [configuracion]);
+
+  const toggleDiaSemana = (val) => {
+    setDiasSemanaAuto((prev) => {
+      if (prev.includes(val)) {
+        if (prev.length === 1) return prev; // Mantener al menos un día seleccionado
+        return prev.filter((d) => d !== val);
+      }
+      return [...prev, val];
+    });
+  };
+
+  const guardarProgramacion = async (e) => {
+    e.preventDefault();
+    await handleGuardarConfiguracion({
+      activo: activoAuto,
+      frecuencia: frecuenciaAuto,
+      hora_ejecucion: horaAuto,
+      dias_semana: diasSemanaAuto,
+      dia_mes: diaMesAuto,
+      retencion_copias: retencionAuto,
+    });
+  };
 
   const submitGenerar = async (e) => {
     e.preventDefault();
@@ -155,6 +223,221 @@ export default function CopiasSeguridadView() {
           </button>
         </div>
       )}
+
+      {/* Sección Senior: Automatización de Copias de Seguridad (Programadas) */}
+      <section className="cu28-auto-card" aria-label="Programación de Copias de Seguridad">
+        <header className="cu28-auto-header" onClick={() => setMostrarConfigurador((prev) => !prev)}>
+          <div className="cu28-auto-title-wrap">
+            <div className="cu28-auto-icon-badge">
+              <Calendar size={20} />
+            </div>
+            <div>
+              <div className="cu28-auto-title-row">
+                <h3 className="cu28-auto-title">Automatización y Programación de Respaldos</h3>
+                <span className={`badge ${activoAuto ? 'badge-estado-completado' : 'badge-tipo-manual'}`}>
+                  {activoAuto ? 'Automatización Activa' : 'Automatización Pausada'}
+                </span>
+                <span className="badge badge-tipo-automatica">
+                  Frecuencia: {frecuenciaAuto}
+                </span>
+              </div>
+              <p className="cu28-auto-subtitle">
+                Configure la ejecución periódica (diaria, semanal o mensual) con política de retención automática.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            className="btn btn-sm btn-ghost cu28-auto-toggle-btn"
+            aria-label={mostrarConfigurador ? 'Ocultar panel' : 'Mostrar panel'}
+          >
+            {mostrarConfigurador ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+          </button>
+        </header>
+
+        {mostrarConfigurador && (
+          <form className="cu28-auto-body" onSubmit={guardarProgramacion}>
+            {/* Métricas rápidas de programación */}
+            <div className="cu28-auto-metrics">
+              <div className="cu28-metric-card">
+                <span className="cu28-metric-label"><Clock size={14} /> Próxima Ejecución</span>
+                <span className="cu28-metric-value">
+                  {configuracion?.proximo_backup_at || (activoAuto ? `Programada a las ${horaAuto}` : 'Pausada')}
+                </span>
+              </div>
+              <div className="cu28-metric-card">
+                <span className="cu28-metric-label"><Calendar size={14} /> Último Respaldo Auto</span>
+                <span className="cu28-metric-value">
+                  {configuracion?.ultimo_backup_at || 'Sin ejecuciones previas'}
+                </span>
+              </div>
+              <div className="cu28-metric-card">
+                <span className="cu28-metric-label"><Layers size={14} /> Retención de Copias</span>
+                <span className="cu28-metric-value">{retencionAuto} copias máximas</span>
+              </div>
+              <div className="cu28-metric-card">
+                <span className="cu28-metric-label"><ShieldAlert size={14} /> Estado Servicio</span>
+                <span className="cu28-metric-value">
+                  <span className={`cu28-status-dot ${configuracion?.ultimo_estado === 'FALLIDO' ? 'dot-error' : 'dot-ok'}`} />
+                  {configuracion?.ultimo_estado || 'OPERATIVO'}
+                </span>
+              </div>
+            </div>
+
+            {/* Controles de Configuración */}
+            <div className="cu28-auto-controls-grid">
+              {/* Interruptor Activar / Desactivar */}
+              <div className="cu28-control-group">
+                <label className="cu28-control-label">Estado de la Automatización</label>
+                <div className="cu28-switch-wrap">
+                  <button
+                    type="button"
+                    className={`cu28-switch-btn ${activoAuto ? 'active' : ''}`}
+                    onClick={() => setActivoAuto(true)}
+                  >
+                    <Check size={14} /> Activado
+                  </button>
+                  <button
+                    type="button"
+                    className={`cu28-switch-btn ${!activoAuto ? 'inactive' : ''}`}
+                    onClick={() => setActivoAuto(false)}
+                  >
+                    <X size={14} /> Desactivado
+                  </button>
+                </div>
+              </div>
+
+              {/* Selector de Frecuencia */}
+              <div className="cu28-control-group">
+                <label className="cu28-control-label">Frecuencia de Respaldo</label>
+                <div className="cu28-pills-wrap">
+                  {['DIARIO', 'SEMANAL', 'MENSUAL'].map((frec) => (
+                    <button
+                      key={frec}
+                      type="button"
+                      className={`cu28-pill-btn ${frecuenciaAuto === frec ? 'active' : ''}`}
+                      onClick={() => setFrecuenciaAuto(frec)}
+                      disabled={!activoAuto}
+                    >
+                      {frec === 'DIARIO' && 'Diario (Todos los días)'}
+                      {frec === 'SEMANAL' && 'Semanal (Días fijos)'}
+                      {frec === 'MENSUAL' && 'Mensual (Día del mes)'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Hora de Ejecución */}
+              <div className="cu28-control-group">
+                <label className="cu28-control-label" htmlFor="cu28-hora">
+                  Hora de Ejecución (24h)
+                </label>
+                <div className="cu28-input-icon-wrap">
+                  <Clock size={16} className="cu28-input-icon" />
+                  <input
+                    id="cu28-hora"
+                    type="time"
+                    className="form-control cu28-input-time"
+                    value={horaAuto}
+                    onChange={(e) => setHoraAuto(e.target.value)}
+                    disabled={!activoAuto}
+                    required
+                  />
+                </div>
+                <small className="cu28-help-text">Hora local recomendada de baja concurrencia (ej. 02:00).</small>
+              </div>
+
+              {/* Política de Retención */}
+              <div className="cu28-control-group">
+                <label className="cu28-control-label" htmlFor="cu28-retencion">
+                  Copias a Retener (Rotación)
+                </label>
+                <div className="cu28-input-icon-wrap">
+                  <input
+                    id="cu28-retencion"
+                    type="number"
+                    min="1"
+                    max="50"
+                    className="form-control"
+                    value={retencionAuto}
+                    onChange={(e) => setRetencionAuto(Number(e.target.value))}
+                    disabled={!activoAuto}
+                    required
+                  />
+                </div>
+                <small className="cu28-help-text">Las copias automáticas más antiguas se purgan automáticamente.</small>
+              </div>
+
+              {/* Parámetros Específicos: Días de la semana si es SEMANAL */}
+              {frecuenciaAuto === 'SEMANAL' && (
+                <div className="cu28-control-group cu28-control-full">
+                  <label className="cu28-control-label">Días de la semana a ejecutar</label>
+                  <div className="cu28-days-wrap">
+                    {DIAS_SEMANA_OPCIONES.map((dia) => {
+                      const sel = diasSemanaAuto.includes(dia.val);
+                      return (
+                        <button
+                          key={dia.val}
+                          type="button"
+                          className={`cu28-day-pill ${sel ? 'selected' : ''}`}
+                          onClick={() => toggleDiaSemana(dia.val)}
+                          disabled={!activoAuto}
+                        >
+                          {dia.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Parámetros Específicos: Día del mes si es MENSUAL */}
+              {frecuenciaAuto === 'MENSUAL' && (
+                <div className="cu28-control-group">
+                  <label className="cu28-control-label" htmlFor="cu28-diames">
+                    Día del mes a ejecutar (1 al 28)
+                  </label>
+                  <input
+                    id="cu28-diames"
+                    type="number"
+                    min="1"
+                    max="28"
+                    className="form-control"
+                    value={diaMesAuto}
+                    onChange={(e) => setDiaMesAuto(Number(e.target.value))}
+                    disabled={!activoAuto}
+                    required
+                  />
+                  <small className="cu28-help-text">Recomendado del 1 al 28 para compatibilidad con todos los meses.</small>
+                </div>
+              )}
+            </div>
+
+            {/* Acciones de Configuración */}
+            <div className="cu28-auto-actions">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={handleEjecutarProgramado}
+                disabled={ejecutandoProgramado || guardandoConfig || loading}
+                title="Prueba inmediata del comando de respaldo automático"
+              >
+                <Play size={15} className={ejecutandoProgramado ? 'spin' : ''} />
+                {ejecutandoProgramado ? 'Ejecutando respaldo…' : 'Ejecutar Ahora (Prueba)'}
+              </button>
+
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={guardandoConfig || ejecutandoProgramado || loadingConfig}
+              >
+                <Save size={15} className={guardandoConfig ? 'spin' : ''} />
+                {guardandoConfig ? 'Guardando programación…' : 'Guardar Configuración'}
+              </button>
+            </div>
+          </form>
+        )}
+      </section>
 
       {/* Vista Escritorio (> 640px): Tabla responsiva con users-table-wrap */}
       <div className="table-responsive users-table-wrap">
