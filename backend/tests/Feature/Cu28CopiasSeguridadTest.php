@@ -113,3 +113,4 @@ class Cu28CopiasSeguridadTest extends TestCase
             ->assertStatus(422);
     }
 }
+

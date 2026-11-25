@@ -439,19 +439,19 @@ export default function CopiasSeguridadView() {
         )}
       </section>
 
-      {/* Vista Escritorio (> 640px): Tabla responsiva con users-table-wrap */}
-      <div className="table-responsive users-table-wrap">
-        <table className="data-table users-table">
+      {/* Vista Escritorio (> 640px): Tabla responsiva con cu28-table-wrap */}
+      <div className="table-responsive cu28-table-wrap">
+        <table className="cu28-table">
           <thead>
             <tr>
-              <th>Archivo / Identificador</th>
-              <th>Fecha y Hora</th>
-              <th>Tamaño</th>
-              <th>Tipo</th>
-              <th style={{ whiteSpace: 'nowrap' }}>Estado</th>
-              <th>Generado Por</th>
-              <th>Observación</th>
-              <th style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>Acciones</th>
+              <th style={{ width: '280px', minWidth: '280px' }}>Archivo / Identificador</th>
+              <th style={{ width: '160px', minWidth: '160px' }}>Fecha y Hora</th>
+              <th style={{ width: '100px', minWidth: '100px' }}>Tamaño</th>
+              <th style={{ width: '110px', minWidth: '110px' }}>Tipo</th>
+              <th style={{ width: '120px', minWidth: '120px', whiteSpace: 'nowrap' }}>Estado</th>
+              <th style={{ width: '180px', minWidth: '180px' }}>Generado Por</th>
+              <th style={{ minWidth: '200px' }}>Observación</th>
+              <th style={{ width: '130px', minWidth: '130px', textAlign: 'right', whiteSpace: 'nowrap' }}>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -474,17 +474,23 @@ export default function CopiasSeguridadView() {
                 <tr key={b.id}>
                   <td>
                     <div className="backup-file-cell">
-                      <span className="backup-file-name">{b.nombre_archivo}</span>
+                      <span className="backup-file-name" title={b.nombre_archivo}>
+                        {b.nombre_archivo}
+                      </span>
                       {!b.existe_archivo && (
-                        <span style={{ fontSize: '0.7rem', color: 'var(--danger)' }}>
-                          (Archivo físico no encontrado)
+                        <span className="backup-file-missing-badge">
+                          <AlertTriangle size={12} /> Archivo físico no encontrado
                         </span>
                       )}
                     </div>
                   </td>
-                  <td>{b.fecha_hora || '-'}</td>
                   <td>
-                    <strong>{b.tamano_legible || '0 B'}</strong>
+                    <div className="backup-date-cell">
+                      <span>{b.fecha_hora || '-'}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <strong className="backup-size-badge">{b.tamano_legible || '0 B'}</strong>
                   </td>
                   <td>
                     <span className={`badge ${getBadgeTipoClass(b.tipo)}`}>
@@ -511,28 +517,28 @@ export default function CopiasSeguridadView() {
                     <div className="backup-actions">
                       <button
                         type="button"
-                        className="btn btn-sm btn-secondary"
+                        className="btn-backup-action btn-backup-download"
                         onClick={() => handleDescargar(b)}
                         disabled={submitting || !b.existe_archivo}
-                        title="Descargar archivo .sql"
+                        title={b.existe_archivo ? "Descargar archivo .sql" : "Archivo no disponible en disco"}
                       >
-                        <Download size={14} />
+                        <Download size={15} />
                       </button>
                       <button
                         type="button"
-                        className="btn btn-sm btn-secondary"
+                        className="btn-backup-action btn-backup-restore"
                         onClick={() => {
                           limpiarMensajes();
                           setBackupParaRestaurar(b);
                         }}
                         disabled={submitting || !b.existe_archivo}
-                        title="Restaurar base de datos a este punto"
+                        title={b.existe_archivo ? "Restaurar base de datos a este punto" : "Archivo no disponible para restauración"}
                       >
-                        <RotateCcw size={14} />
+                        <RotateCcw size={15} />
                       </button>
                       <button
                         type="button"
-                        className="btn btn-sm btn-danger"
+                        className="btn-backup-action btn-backup-delete"
                         onClick={() => {
                           limpiarMensajes();
                           setBackupParaEliminar(b);
@@ -540,7 +546,7 @@ export default function CopiasSeguridadView() {
                         disabled={submitting}
                         title="Eliminar copia de seguridad"
                       >
-                        <Trash2 size={14} />
+                        <Trash2 size={15} />
                       </button>
                     </div>
                   </td>
@@ -553,7 +559,7 @@ export default function CopiasSeguridadView() {
 
       {/* Vista Móvil (<= 640px): Estado de carga / lista vacía */}
       {(loading || backups.length === 0) && (
-        <div className="users-mobile-status" role="status">
+        <div className="cu28-mobile-status" role="status">
           {loading ? (
             <>
               <RefreshCw size={16} className="spin" /> Cargando copias de seguridad…
@@ -564,38 +570,38 @@ export default function CopiasSeguridadView() {
         </div>
       )}
 
-      {/* Vista Móvil (<= 640px): Tarjetas responsivas con users-cards */}
-      <div className="users-cards">
+      {/* Vista Móvil (<= 640px): Tarjetas responsivas con cu28-cards */}
+      <div className="cu28-cards">
         {backups.map((b) => (
-          <article className="user-card" key={b.id}>
-            <div className="user-card-head">
-              <span className="user-card-id">{b.nombre_archivo}</span>
+          <article className="cu28-card" key={b.id}>
+            <div className="cu28-card-head">
+              <span className="cu28-card-id">{b.nombre_archivo}</span>
               <span className={`badge ${getBadgeEstadoClass(b.estado)}`}>
                 {b.estado || 'COMPLETADO'}
               </span>
             </div>
 
-            <div className="user-card-fields">
-              <div className="user-card-field">
-                <span className="user-card-label">Fecha y Hora</span>
-                <span className="user-card-value">{b.fecha_hora || '-'}</span>
+            <div className="cu28-card-fields">
+              <div className="cu28-card-field">
+                <span className="cu28-card-label">Fecha y Hora</span>
+                <span className="cu28-card-value">{b.fecha_hora || '-'}</span>
               </div>
 
-              <div className="user-card-field">
-                <span className="user-card-label">Tamaño</span>
-                <span className="user-card-value">
+              <div className="cu28-card-field">
+                <span className="cu28-card-label">Tamaño</span>
+                <span className="cu28-card-value">
                   <strong>{b.tamano_legible || '0 B'}</strong>
                   {!b.existe_archivo && (
-                    <span style={{ fontSize: '0.72rem', color: 'var(--danger)', display: 'block' }}>
-                      (Archivo físico no encontrado)
+                    <span className="backup-file-missing-badge" style={{ marginTop: '0.2rem' }}>
+                      <AlertTriangle size={12} /> Archivo físico no encontrado
                     </span>
                   )}
                 </span>
               </div>
 
-              <div className="user-card-field">
-                <span className="user-card-label">Generado Por</span>
-                <span className="user-card-value">
+              <div className="cu28-card-field">
+                <span className="cu28-card-label">Generado Por</span>
+                <span className="cu28-card-value">
                   <strong>{b.usuario?.name || 'Sistema'}</strong>
                   {b.usuario?.email && (
                     <small style={{ color: 'var(--text-secondary)', display: 'block' }}>
@@ -605,9 +611,9 @@ export default function CopiasSeguridadView() {
                 </span>
               </div>
 
-              <div className="user-card-field">
-                <span className="user-card-label">Tipo</span>
-                <span className="user-card-value">
+              <div className="cu28-card-field">
+                <span className="cu28-card-label">Tipo</span>
+                <span className="cu28-card-value">
                   <span className={`badge ${getBadgeTipoClass(b.tipo)}`}>
                     {b.tipo || 'MANUAL'}
                   </span>
@@ -615,14 +621,14 @@ export default function CopiasSeguridadView() {
               </div>
 
               {b.descripcion && (
-                <div className="user-card-field">
-                  <span className="user-card-label">Descripción / Observación</span>
-                  <span className="user-card-value">{b.descripcion}</span>
+                <div className="cu28-card-field">
+                  <span className="cu28-card-label">Descripción / Observación</span>
+                  <span className="cu28-card-value">{b.descripcion}</span>
                 </div>
               )}
             </div>
 
-            <div className="user-card-actions">
+            <div className="cu28-card-actions">
               <button
                 type="button"
                 className="btn btn-secondary"

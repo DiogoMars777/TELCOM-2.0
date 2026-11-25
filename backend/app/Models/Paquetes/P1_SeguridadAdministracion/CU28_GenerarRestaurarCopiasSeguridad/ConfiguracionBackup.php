@@ -231,3 +231,4 @@ class ConfiguracionBackup extends Model
         return $proximo;
     }
 }
+
