@@ -418,7 +418,7 @@ class NlpIntencionService
             return null;
         }
 
-        $modelo = trim((string) config('services.gemini.model', env('GEMINI_MODEL', 'gemini-1.5-flash')));
+        $modelo = trim((string) config('services.gemini.model', env('GEMINI_MODEL') ?: 'gemini-3.5-flash-lite'));
         $catalogo = array_keys(self::CATALOGO_INTENCIONES);
         $promptSistema = "Eres el asistente inteligente de NLP de TELCOM 2.0 (Telecomunicaciones).
 Tu labor es clasificar la intención del usuario y devolver estrictamente un JSON con las claves:

@@ -16,6 +16,7 @@ class Cu30ProcesarIntencionVozTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        config(['services.gemini.key' => '']);
         $this->seed(DatabaseSeeder::class);
     }
 
