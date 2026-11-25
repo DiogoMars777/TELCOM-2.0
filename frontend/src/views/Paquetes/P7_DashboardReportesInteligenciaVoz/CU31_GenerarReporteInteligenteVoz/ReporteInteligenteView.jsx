@@ -3,7 +3,8 @@ import {
   FileBarChart, RefreshCw, Mic, MicOff, Volume2, Square, Download, Printer,
   SlidersHorizontal, BarChart2, Sparkles, Check, Brain, Send, History,
   Clock, Database, Tag, ArrowRight, ThumbsUp, ThumbsDown, LayoutGrid, FileText,
-  AlertCircle, CheckCircle2, HelpCircle, RotateCcw,
+  AlertCircle, CheckCircle2, HelpCircle, RotateCcw, Trash2, ArrowUp, ArrowDown,
+  Layers, PlusCircle,
 } from 'lucide-react';
 import { canAccessCu } from '../../../../config/access.js';
 import { useReporteInteligenteController } from '../../../../controllers/Paquetes/P7_DashboardReportesInteligenciaVoz/CU31_GenerarReporteInteligenteVoz/useReporteInteligenteController.js';
@@ -25,6 +26,18 @@ function normalizarTexto(txt) {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .trim();
+}
+
+function crearBloque(datos, secuencia) {
+  return {
+    uid: `${datos.reporte.tipo}-${secuencia}-${datos.reporte.generado_en || 'local'}`,
+    datos,
+    columnasVisibles: datos.reporte.columnas.map((c) => c.clave),
+    mostrarSelectorCols: false,
+    vistaResultado: 'combinada',
+    comandoColumna: '',
+    feedbackCopiloto: null,
+  };
 }
 
 export default function ReporteInteligenteView({
@@ -70,7 +83,6 @@ export default function ReporteInteligenteView({
     };
   }, [permitido]);
 
-  // Registrar transcripción de voz en bitácora CU29 cuando el usuario dicta desde micrófono
   const registrarDictadoVoz = useCallback(async (textoDictado, duracionSeg = 0) => {
     if (!textoDictado?.trim()) return;
     try {
@@ -89,7 +101,6 @@ export default function ReporteInteligenteView({
     return <div className="alert alert-danger" role="alert">No tienes autorización para generar reportes.</div>;
   }
 
-  // En SSR (pruebas unitarias con Node sin window), evitamos renderizar widgets dependientes de red secundaria
   const enNavegador = typeof window !== 'undefined';
 
   return (
@@ -98,13 +109,13 @@ export default function ReporteInteligenteView({
       <header className="cu31-unified-header">
         <div className="cu31-header-main">
           <span className="cu31-senior-badge">
-            <Sparkles size={14} /> Centro de Inteligencia Artificial y Voz
+            <Sparkles size={14} /> Centro de Inteligencia Artificial Gemini y Voz
           </span>
           <h2>
             <FileBarChart size={26} aria-hidden="true" /> Reporte Inteligente
           </h2>
           <p className="subtitle">
-            Genera reportes dinámicos con IA, filtra y exporta columnas por voz o escritura, consulta al asistente operativo (NLP) y audita tu historial dictado.
+            Consulta en lenguaje natural con IA, arma tu reporte por bloques acumulables, quita o elige columnas y exporta todo en Excel o PDF.
           </p>
         </div>
 
@@ -141,7 +152,6 @@ export default function ReporteInteligenteView({
         </nav>
       </header>
 
-      {/* TAB 1: Reporte Dinámico Inteligente (CU31 + Control Dinámico de Voz y Columnas) */}
       {tabActiva === 'reportes' && (
         <ReporteInteligenteContenido
           {...controlador}
@@ -149,7 +159,6 @@ export default function ReporteInteligenteView({
         />
       )}
 
-      {/* TAB 2: Asistente Operativo NLP y Navegación Inteligente (CU30) */}
       {tabActiva === 'asistente' && puedeAsistente && (
         <AsistenteOperativoPanel
           ctrl={asistenteCtrl}
@@ -160,7 +169,6 @@ export default function ReporteInteligenteView({
         />
       )}
 
-      {/* TAB 3: Historial Unificado y Auditoría de Comandos de Voz (CU29 + CU30) */}
       {tabActiva === 'historial' && (
         <HistorialVozPanel
           historialVoz={historialVoz}
@@ -183,7 +191,7 @@ export default function ReporteInteligenteView({
 }
 
 /**
- * Contenido principal de generación dinámica de reportes (exportado para pruebas unitarias SSR).
+ * Contenido principal con Constructor de Bloques Acumulables para Exportación (exportado para tests SSR).
  */
 export function ReporteInteligenteContenido({
   comando,
@@ -194,56 +202,36 @@ export function ReporteInteligenteContenido({
   datos,
   onVozDictado = null,
 }) {
-  const reporte = datos?.reporte;
-  const filtros = Object.entries(datos?.interpretacion?.filtros || {});
+  // Constructor de bloques acumulables: ajusta estado cuando llega una nueva consulta exitosa
+  const [bloques, setBloques] = useState(() => (datos?.reporte ? [crearBloque(datos, 1)] : []));
+  const [prevDatos, setPrevDatos] = useState(datos);
+  const [secuenciaBloque, setSecuenciaBloque] = useState(() => (datos?.reporte ? 2 : 1));
+  const [modoAcumulativo, setModoAcumulativo] = useState(true);
 
-  // Estados de micrófono, TTS, copilot de columnas, vista y exportación PDF
+  if (datos !== prevDatos) {
+    setPrevDatos(datos);
+    if (datos?.reporte) {
+      const nuevo = crearBloque(datos, secuenciaBloque);
+      setSecuenciaBloque((s) => s + 1);
+      setBloques((prev) => (modoAcumulativo ? [...prev, nuevo] : [nuevo]));
+    } else if (!modoAcumulativo) {
+      setBloques([]);
+    }
+  }
+
+  // Estados de micrófono principal, TTS y modal PDF unificado
   const [escuchandoVoz, setEscuchandoVoz] = useState(false);
   const [segundosGrabando, setSegundosGrabando] = useState(0);
   const [avisoVoz, setAvisoVoz] = useState(null);
-  const [reproduciendoAudio, setReproduciendoAudio] = useState(false);
-
-  const [seleccionCols, setSeleccionCols] = useState({ reporteRef: null, claves: [] });
-  const [mostrarSelectorCols, setMostrarSelectorCols] = useState(true);
-  const [vistaResultado, setVistaResultado] = useState('combinada'); // 'combinada' | 'graficos' | 'tabla'
-  const [vistaImpresion, setVistaImpresion] = useState(null);
-
-  // Copiloto de columnas/exportación dentro del resultado generado
-  const [comandoColumna, setComandoColumna] = useState('');
-  const [escuchandoColumna, setEscuchandoColumna] = useState(false);
-  const [feedbackCopiloto, setFeedbackCopiloto] = useState(null);
+  const [audioBloqueUid, setAudioBloqueUid] = useState(null);
+  const [copilotoMicUid, setCopilotoMicUid] = useState(null);
+  const [pdfConfig, setPdfConfig] = useState(null); // { bloques: [...], fecha, hora }
 
   const recognitionRef = useRef(null);
   const colRecognitionRef = useRef(null);
   const timerRef = useRef(null);
   const startTimeRef = useRef(0);
 
-  // Columnas visibles derivadas del reporte actual sin requerir setState en useEffect
-  const columnasVisibles = (
-    reporte && seleccionCols.reporteRef === reporte
-      ? seleccionCols.claves
-      : (reporte?.columnas?.map((c) => c.clave) || [])
-  );
-
-  const setColumnasVisibles = (updater) => {
-    setSeleccionCols((prev) => {
-      const base = prev.reporteRef === reporte
-        ? prev.claves
-        : (reporte?.columnas?.map((c) => c.clave) || []);
-      const next = typeof updater === 'function' ? updater(base) : updater;
-      return { reporteRef: reporte, claves: next };
-    });
-  };
-
-  const abrirVistaImpresion = () => {
-    const ahora = new Date();
-    setVistaImpresion({
-      fecha: ahora.toLocaleDateString('es-BO'),
-      hora: ahora.toLocaleTimeString('es-BO'),
-    });
-  };
-
-  // Limpiar temporizador al desmontar
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
@@ -256,7 +244,27 @@ export function ReporteInteligenteContenido({
     };
   }, []);
 
-  // Reconocimiento de voz principal (Solicitud de reporte)
+  const actualizarBloque = (uid, updater) => {
+    setBloques((prev) => prev.map((b) => (b.uid === uid ? (typeof updater === 'function' ? updater(b) : { ...b, ...updater }) : b)));
+  };
+
+  const eliminarBloque = (uid) => {
+    setBloques((prev) => prev.filter((b) => b.uid !== uid));
+    if (audioBloqueUid === uid) detenerAudio();
+  };
+
+  const moverBloque = (index, direccion) => {
+    setBloques((prev) => {
+      const destino = index + direccion;
+      if (destino < 0 || destino >= prev.length) return prev;
+      const copia = [...prev];
+      const [item] = copia.splice(index, 1);
+      copia.splice(destino, 0, item);
+      return copia;
+    });
+  };
+
+  // Reconocimiento de voz principal
   const toggleMicPrincipal = () => {
     if (typeof window === 'undefined') return;
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -329,16 +337,16 @@ export function ReporteInteligenteContenido({
     }
   };
 
-  // Síntesis de voz (TTS)
-  const reproducirResumenVoz = (texto) => {
+  // Síntesis de voz (TTS) por bloque
+  const reproducirResumenVoz = (uid, texto) => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(texto);
     utterance.lang = 'es-BO';
     utterance.rate = 1.0;
-    utterance.onstart = () => setReproduciendoAudio(true);
-    utterance.onend = () => setReproduciendoAudio(false);
-    utterance.onerror = () => setReproduciendoAudio(false);
+    utterance.onstart = () => setAudioBloqueUid(uid);
+    utterance.onend = () => setAudioBloqueUid(null);
+    utterance.onerror = () => setAudioBloqueUid(null);
     window.speechSynthesis.speak(utterance);
   };
 
@@ -346,88 +354,104 @@ export function ReporteInteligenteContenido({
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
     }
-    setReproduciendoAudio(false);
+    setAudioBloqueUid(null);
   };
 
-  // Toggle manual de columna
-  const toggleColumna = (clave) => {
-    setColumnasVisibles((prev) => {
-      if (prev.includes(clave)) {
-        if (prev.length === 1) return prev;
-        return prev.filter((k) => k !== clave);
-      }
-      return [...prev, clave];
-    });
-  };
-
-  const aplicarPresetColumnas = (preset) => {
-    if (!reporte?.columnas) return;
-    if (preset === 'todas') {
-      setColumnasVisibles(reporte.columnas.map((c) => c.clave));
-      return;
-    }
-    if (preset === 'numericas') {
-      const nums = reporte.columnas.filter((c) => c.formato === 'entero' || c.formato === 'moneda').map((c) => c.clave);
-      const primera = reporte.columnas[0]?.clave;
-      const combinadas = primera && !nums.includes(primera) ? [primera, ...nums] : nums;
-      if (combinadas.length > 0) setColumnasVisibles(combinadas);
-      return;
-    }
-    if (preset === 'texto') {
-      const txts = reporte.columnas.filter((c) => c.formato !== 'entero' && c.formato !== 'moneda').map((c) => c.clave);
-      if (txts.length > 0) setColumnasVisibles(txts);
-    }
-  };
-
-  // Exportar Excel (.csv BOM UTF-8) únicamente con las columnas seleccionadas
-  const descargarCsv = (colsPersonalizadas = null) => {
-    if (typeof window === 'undefined' || !reporte || !reporte.filas || reporte.filas.length === 0) return;
-    const visibles = colsPersonalizadas || columnasVisibles;
-    const colsExportar = reporte.columnas.filter((c) => visibles.includes(c.clave));
-    if (colsExportar.length === 0) return;
-
-    const lineas = [];
-    lineas.push('\uFEFF');
-    lineas.push(`"TELCOM 2.0 - REPORTE INTELIGENTE: ${reporte.titulo}"\n`);
+  // Exportación a Excel (.csv BOM UTF-8) de uno o varios bloques
+  const exportarBloquesExcel = (listaBloques, nombreArchivo = null) => {
+    if (typeof window === 'undefined' || !listaBloques?.length) return;
+    const lineas = ['\uFEFF'];
+    lineas.push(`"TELCOM 2.0 - REPORTE INTELIGENTE COMPUESTO (${listaBloques.length} BLOQUE(S))"\n`);
     lineas.push(`"Fecha de emisión: ${new Date().toLocaleString('es-BO')}"\n\n`);
-    lineas.push(colsExportar.map((c) => `"${c.etiqueta}"`).join(';') + '\n');
 
-    reporte.filas.forEach((fila) => {
-      const valores = colsExportar.map((c) => {
-        const val = fila[c.clave];
-        return `"${val !== null && val !== undefined ? String(val).replace(/"/g, '""') : '-'}"`;
+    listaBloques.forEach((bloque, idx) => {
+      const rep = bloque.datos.reporte;
+      const cols = rep.columnas.filter((c) => bloque.columnasVisibles.includes(c.clave));
+      if (!cols.length) return;
+
+      lineas.push(`"=== BLOQUE #${idx + 1}: ${rep.titulo} ==="\n`);
+      lineas.push(`"Resumen: ${String(rep.resumen || '').replace(/"/g, '""')}"\n`);
+      if (rep.totales?.length) {
+        const totTxt = rep.totales.map((t) => `${t.etiqueta}: ${formatear(t.valor, t.formato)}`).join(' | ');
+        lineas.push(`"Totales: ${totTxt.replace(/"/g, '""')}"\n`);
+      }
+
+      lineas.push(cols.map((c) => `"${c.etiqueta}"`).join(';') + '\n');
+      rep.filas.forEach((fila) => {
+        const vals = cols.map((c) => {
+          const v = fila[c.clave];
+          return `"${v !== null && v !== undefined ? String(v).replace(/"/g, '""') : '-'}"`;
+        });
+        lineas.push(vals.join(';') + '\n');
       });
-      lineas.push(valores.join(';') + '\n');
+      lineas.push('\n');
     });
 
     const blob = new Blob(lineas, { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `TELCOM_Inteligente_${reporte.tipo}_${Date.now()}.csv`;
+    a.download = nombreArchivo || `TELCOM_Reporte_Inteligente_${Date.now()}.csv`;
     document.body.appendChild(a);
     a.click();
     URL.revokeObjectURL(url);
     a.remove();
   };
 
-  // Procesador inteligente de comandos de voz/texto para seleccionar columnas y exportar dinámicamente
-  const procesarComandoDinamicoExport = (rawCmd) => {
-    if (!reporte?.columnas) return;
+  const abrirPdfBloques = (listaBloques) => {
+    const ahora = new Date();
+    setPdfConfig({
+      bloques: listaBloques,
+      fecha: ahora.toLocaleDateString('es-BO'),
+      hora: ahora.toLocaleTimeString('es-BO'),
+    });
+  };
+
+  // Toggle manual y presets de columnas dentro de un bloque
+  const toggleColumnaBloque = (bloque, clave) => {
+    const prev = bloque.columnasVisibles;
+    let next;
+    if (prev.includes(clave)) {
+      if (prev.length === 1) return;
+      next = prev.filter((k) => k !== clave);
+    } else {
+      next = [...prev, clave];
+    }
+    actualizarBloque(bloque.uid, { columnasVisibles: next });
+  };
+
+  const aplicarPresetBloque = (bloque, preset) => {
+    const cols = bloque.datos.reporte.columnas;
+    if (preset === 'todas') {
+      actualizarBloque(bloque.uid, { columnasVisibles: cols.map((c) => c.clave) });
+      return;
+    }
+    if (preset === 'numericas') {
+      const nums = cols.filter((c) => c.formato === 'entero' || c.formato === 'moneda').map((c) => c.clave);
+      const primera = cols[0]?.clave;
+      const comb = primera && !nums.includes(primera) ? [primera, ...nums] : nums;
+      if (comb.length > 0) actualizarBloque(bloque.uid, { columnasVisibles: comb });
+      return;
+    }
+    if (preset === 'texto') {
+      const txts = cols.filter((c) => c.formato !== 'entero' && c.formato !== 'moneda').map((c) => c.clave);
+      if (txts.length > 0) actualizarBloque(bloque.uid, { columnasVisibles: txts });
+    }
+  };
+
+  // Copiloto por voz o texto para columnas y exportación de un bloque específico
+  const procesarComandoBloque = (bloque, rawCmd) => {
     const cmd = normalizarTexto(rawCmd);
     if (!cmd) return;
 
-    const todasLasCols = reporte.columnas;
-    let nuevasVisibles = [...columnasVisibles];
+    const todasLasCols = bloque.datos.reporte.columnas;
+    let nuevasVisibles = [...bloque.columnasVisibles];
     let mensaje = '';
 
-    // 1. Detección de "todas las columnas"
     if (cmd.includes('todas las columnas') || cmd === 'todas' || cmd.includes('mostrar todo')) {
       nuevasVisibles = todasLasCols.map((c) => c.clave);
-      setColumnasVisibles(nuevasVisibles);
-      mensaje = 'Mostrando todas las columnas del reporte.';
+      mensaje = 'Mostrando todas las columnas de este bloque.';
     } else {
-      // Buscar columnas coincidentes por etiqueta o clave (matching flexible por palabras)
       const coincidentes = todasLasCols.filter((col) => {
         const claveNorm = normalizarTexto(col.clave.replace(/_/g, ' '));
         const etiqNorm = normalizarTexto(col.etiqueta);
@@ -437,55 +461,51 @@ export function ReporteInteligenteContenido({
 
       if (cmd.includes('ocultar') || cmd.includes('quitar') || cmd.includes('sin ') || cmd.includes('excluir')) {
         if (coincidentes.length > 0) {
-          const filtradas = columnasVisibles.filter((k) => !coincidentes.includes(k));
+          const filtradas = bloque.columnasVisibles.filter((k) => !coincidentes.includes(k));
           if (filtradas.length > 0) {
             nuevasVisibles = filtradas;
-            setColumnasVisibles(nuevasVisibles);
-            mensaje = `Columnas actualizadas: ocultando ${coincidentes.length} campo(s).`;
+            mensaje = `Columnas ocultadas (${coincidentes.length}).`;
           } else {
-            mensaje = 'Debe quedar al menos una columna visible en el reporte.';
+            mensaje = 'Debe quedar al menos una columna visible.';
           }
-        }
-      } else if (cmd.includes('solo') || cmd.includes('mostrar') || cmd.includes('incluir') || cmd.includes('elegir')) {
-        if (coincidentes.length > 0) {
-          nuevasVisibles = coincidentes;
-          setColumnasVisibles(nuevasVisibles);
-          mensaje = `Mostrando ${coincidentes.length} columna(s) seleccionadas.`;
         }
       } else if (coincidentes.length > 0) {
         nuevasVisibles = coincidentes;
-        setColumnasVisibles(nuevasVisibles);
-        mensaje = `Mostrando ${coincidentes.length} columna(s) detectadas.`;
+        mensaje = `Mostrando ${coincidentes.length} columna(s) especificadas.`;
       }
     }
 
-    // 2. Detección de acción de exportación directa
+    const bloqueActualizado = { ...bloque, columnasVisibles: nuevasVisibles };
+
     if (cmd.includes('excel') || cmd.includes('csv')) {
-      descargarCsv(nuevasVisibles);
-      mensaje = `${mensaje ? `${mensaje} ` : ''}Archivo Excel exportado con ${nuevasVisibles.length} columna(s).`;
+      exportarBloquesExcel([bloqueActualizado]);
+      mensaje = `${mensaje ? `${mensaje} ` : ''}Excel exportado para este bloque.`;
     } else if (cmd.includes('pdf') || cmd.includes('imprimir')) {
-      abrirVistaImpresion();
-      mensaje = `${mensaje ? `${mensaje} ` : ''}Vista previa PDF preparada con ${nuevasVisibles.length} columna(s).`;
+      abrirPdfBloques([bloqueActualizado]);
+      mensaje = `${mensaje ? `${mensaje} ` : ''}Vista previa PDF abierta.`;
     }
 
     if (!mensaje) {
-      mensaje = 'No se detectaron nombres de columnas o formato (Excel/PDF) coincidentes. Prueba por ejemplo: "solo zona y clientes" o "exportar pdf".';
+      mensaje = 'Indica columnas del bloque (ej. "solo cliente y plan", "ocultar ci") o "exportar pdf/excel".';
     }
-    setFeedbackCopiloto(mensaje);
+
+    actualizarBloque(bloque.uid, {
+      columnasVisibles: nuevasVisibles,
+      feedbackCopiloto: mensaje,
+    });
   };
 
-  // Micrófono secundario para el copiloto de columnas/exportación
-  const toggleMicCopiloto = () => {
+  const toggleMicCopiloto = (bloque) => {
     if (typeof window === 'undefined') return;
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      setFeedbackCopiloto('Tu navegador no soporta micrófono; escribe el comando en el campo de texto.');
+      actualizarBloque(bloque.uid, { feedbackCopiloto: 'Tu navegador no soporta micrófono; escribe el comando en el campo.' });
       return;
     }
 
-    if (escuchandoColumna && colRecognitionRef.current) {
+    if (copilotoMicUid === bloque.uid && colRecognitionRef.current) {
       try { colRecognitionRef.current.stop(); } catch {}
-      setEscuchandoColumna(false);
+      setCopilotoMicUid(null);
       return;
     }
 
@@ -495,31 +515,28 @@ export function ReporteInteligenteContenido({
       rec.continuous = false;
       rec.interimResults = false;
 
-      rec.onstart = () => setEscuchandoColumna(true);
+      rec.onstart = () => setCopilotoMicUid(bloque.uid);
       rec.onresult = (event) => {
         const text = event.results[0][0].transcript;
-        setComandoColumna(text);
-        procesarComandoDinamicoExport(text);
+        actualizarBloque(bloque.uid, { comandoColumna: text });
+        procesarComandoBloque(bloque, text);
         if (onVozDictado) onVozDictado(text, 0);
-        setEscuchandoColumna(false);
+        setCopilotoMicUid(null);
       };
-      rec.onerror = () => setEscuchandoColumna(false);
-      rec.onend = () => setEscuchandoColumna(false);
+      rec.onerror = () => setCopilotoMicUid(null);
+      rec.onend = () => setCopilotoMicUid(null);
 
       colRecognitionRef.current = rec;
       rec.start();
     } catch {
-      setEscuchandoColumna(false);
+      setCopilotoMicUid(null);
     }
   };
 
-  // Gráfica de barras comparativa dinámica
-  const renderGraficaSvg = () => {
+  const renderGraficaBloque = (reporte) => {
     if (!reporte?.filas || reporte.filas.length === 0) return null;
-
     const colNum = reporte.columnas.find((c) => c.formato === 'entero' || c.formato === 'moneda');
     const colEtiqueta = reporte.columnas.find((c) => c.formato !== 'entero' && c.formato !== 'moneda') || reporte.columnas[0];
-
     if (!colNum || !colEtiqueta) return null;
 
     const datosGraf = reporte.filas.slice(0, 10);
@@ -549,24 +566,31 @@ export function ReporteInteligenteContenido({
     );
   };
 
-  const columnasFiltradas = reporte?.columnas?.filter((c) => (
-    columnasVisibles.length > 0 ? columnasVisibles.includes(c.clave) : true
-  )) || [];
-
   return (
     <>
       <form className="cu31-solicitud" aria-busy={loading} onSubmit={(event) => { event.preventDefault(); void generar(); }}>
         <div className="cu31-label-row">
           <label htmlFor="cu31-comando">Solicitud o comando transcrito</label>
-          <button
-            type="button"
-            className={`btn-mic-cu31 ${escuchandoVoz ? 'listening' : ''}`}
-            onClick={toggleMicPrincipal}
-            title={escuchandoVoz ? 'Detener micrófono' : 'Dictar consulta por voz'}
-          >
-            {escuchandoVoz ? <MicOff size={17} /> : <Mic size={17} />}
-            <span>{escuchandoVoz ? `Escuchando… (${segundosGrabando}s)` : 'Dictar por Voz'}</span>
-          </button>
+          <div className="cu31-top-controls">
+            <label className="cu31-accumulate-toggle" title="Si está activo, cada nueva consulta se agrega como un bloque nuevo para armar tu exportación compuesta">
+              <input
+                type="checkbox"
+                checked={modoAcumulativo}
+                onChange={(e) => setModoAcumulativo(e.target.checked)}
+              />
+              <span>Acumular en bloques ({bloques.length})</span>
+            </label>
+
+            <button
+              type="button"
+              className={`btn-mic-cu31 ${escuchandoVoz ? 'listening' : ''}`}
+              onClick={toggleMicPrincipal}
+              title={escuchandoVoz ? 'Detener micrófono' : 'Dictar consulta por voz'}
+            >
+              {escuchandoVoz ? <MicOff size={17} /> : <Mic size={17} />}
+              <span>{escuchandoVoz ? `Escuchando… (${segundosGrabando}s)` : 'Dictar por Voz'}</span>
+            </button>
+          </div>
         </div>
 
         <textarea
@@ -579,7 +603,7 @@ export function ReporteInteligenteContenido({
           onChange={(event) => setComando(event.target.value)}
           disabled={loading}
           aria-describedby="cu31-ayuda"
-          placeholder={escuchandoVoz ? 'Escuchando tu dictado de voz en tiempo real…' : 'Por ejemplo: Muéstrame los ingresos de este mes, o Clientes activos por zona.'}
+          placeholder={escuchandoVoz ? 'Escuchando tu dictado de voz en tiempo real…' : 'Ej: Clientes de la Villa Primero de Mayo y sus planes, Ingresos de este mes, Clientes en mora...'}
         />
 
         {avisoVoz && (
@@ -590,20 +614,22 @@ export function ReporteInteligenteContenido({
         )}
 
         <div className="cu31-acciones">
-          <p id="cu31-ayuda">Dicta por micrófono o escribe con tus propias palabras. La IA interpretará tu reporte dinámico.</p>
+          <p id="cu31-ayuda">
+            {modoAcumulativo
+              ? 'Cada consulta con Gemini AI se agregará como un bloque independiente para que quites o combines lo que quieras exportar.'
+              : 'Cada consulta reemplazará el bloque actual.'}
+          </p>
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
             {comando && !loading && (
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() => setComando('')}
-              >
+              <button type="button" className="btn btn-secondary" onClick={() => setComando('')}>
                 <RotateCcw size={15} /> Limpiar
               </button>
             )}
             <button className="btn btn-primary" type="submit" disabled={loading || !comando.trim()}>
-              {loading ? <RefreshCw size={17} className="spin" aria-hidden="true" /> : <Sparkles size={17} aria-hidden="true" />}
-              {loading ? 'Generando reporte…' : 'Generar reporte con IA'}
+              {loading ? <RefreshCw size={17} className="spin" aria-hidden="true" /> : <PlusCircle size={17} aria-hidden="true" />}
+              {loading
+                ? 'Generando reporte…'
+                : (modoAcumulativo && bloques.length > 0 ? 'Agregar Bloque con IA' : 'Generar reporte con IA')}
             </button>
           </div>
         </div>
@@ -626,232 +652,326 @@ export function ReporteInteligenteContenido({
         </div>
       </details>
 
-      {loading && <p className="cu31-estado" role="status">Procesando solicitud con IA y consultando la base de datos de TELCOM…</p>}
+      {loading && <p className="cu31-estado" role="status">Interpretando solicitud con Gemini AI y consultando TELCOM…</p>}
       {error && <div className="alert alert-danger" role="alert">{error}</div>}
 
-      {reporte && (
-        <section className="cu31-resultado" aria-labelledby="cu31-titulo" aria-live="polite">
-          <div className="cu31-interpretacion">
-            <strong>Solicitud interpretada:</strong> {reporte.titulo}
-            <span>Tipo: <code>{datos.interpretacion.tipo}</code></span>
-            <span>{datos.interpretacion.origen === 'estructurada' ? 'Intención recibida' : 'Interpretada con Gemini'}</span>
-            <dl>
-              {filtros.length ? filtros.map(([clave, valor]) => (
-                <div key={clave}><dt>{clave.replaceAll('_', ' ')}</dt><dd>{String(valor)}</dd></div>
-              )) : <div><dt>Filtros</dt><dd>Sin filtros adicionales</dd></div>}
-            </dl>
+      {/* Barra Global del Lienzo de Bloques Exportables */}
+      {bloques.length > 0 && (
+        <div className="cu31-composer-bar">
+          <div className="cu31-composer-info">
+            <Layers size={20} className="cu31-composer-icon" />
+            <div>
+              <strong>Lienzo de Exportación Compuesto ({bloques.length} {bloques.length === 1 ? 'bloque' : 'bloques'})</strong>
+              <span>Sigue consultando para aumentar más bloques, o quita columnas/bloques antes de exportar.</span>
+            </div>
           </div>
 
-          <div className="cu31-title-row">
-            <h3 id="cu31-titulo">{reporte.titulo}</h3>
-            <div className="cu31-header-actions">
-              {reproduciendoAudio ? (
-                <button type="button" className="btn btn-sm btn-danger" onClick={detenerAudio}>
-                  <Square size={14} /> Detener Audio
+          <div className="cu31-composer-actions">
+            <button
+              type="button"
+              className="btn btn-sm btn-success"
+              onClick={() => exportarBloquesExcel(bloques)}
+            >
+              <Download size={15} /> Exportar Todo Excel ({bloques.length})
+            </button>
+            <button
+              type="button"
+              className="btn btn-sm btn-primary"
+              onClick={() => abrirPdfBloques(bloques)}
+            >
+              <Printer size={15} /> Exportar Todo PDF ({bloques.length})
+            </button>
+            <button
+              type="button"
+              className="btn btn-sm btn-danger"
+              onClick={() => setBloques([])}
+              title="Vaciar todos los bloques del lienzo"
+            >
+              <Trash2 size={15} /> Vaciar Lienzo
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Renderizado de Cada Bloque del Reporte */}
+      {bloques.map((bloque, idx) => {
+        const rep = bloque.datos.reporte;
+        const interp = bloque.datos.interpretacion;
+        const filtros = Object.entries(interp?.filtros || {});
+        const colsActivas = rep.columnas.filter((c) => (
+          bloque.columnasVisibles.length > 0 ? bloque.columnasVisibles.includes(c.clave) : true
+        ));
+        const reproduciendoEste = audioBloqueUid === bloque.uid;
+        const escuchandoEsteMic = copilotoMicUid === bloque.uid;
+
+        return (
+          <section
+            key={bloque.uid}
+            className="cu31-resultado cu31-block-card"
+            aria-labelledby={`cu31-titulo-${idx}`}
+            aria-live="polite"
+          >
+            {/* Cabecera del Bloque con Orden y Eliminación */}
+            <div className="cu31-block-topbar">
+              <div className="cu31-block-badge-group">
+                <span className="cu31-block-num">Bloque #{idx + 1}</span>
+                <span className="cu31-block-origin">
+                  {interp.origen === 'estructurada' ? 'Intención recibida' : 'Interpretada con Gemini'}
+                </span>
+              </div>
+
+              <div className="cu31-block-controls">
+                <button
+                  type="button"
+                  className="btn-icon-cu31"
+                  onClick={() => moverBloque(idx, -1)}
+                  disabled={idx === 0}
+                  title="Subir bloque"
+                >
+                  <ArrowUp size={14} />
                 </button>
-              ) : (
+                <button
+                  type="button"
+                  className="btn-icon-cu31"
+                  onClick={() => moverBloque(idx, 1)}
+                  disabled={idx === bloques.length - 1}
+                  title="Bajar bloque"
+                >
+                  <ArrowDown size={14} />
+                </button>
+                <button
+                  type="button"
+                  className="btn-icon-cu31 danger"
+                  onClick={() => eliminarBloque(bloque.uid)}
+                  title="Quitar este bloque del reporte"
+                >
+                  <Trash2 size={14} /> Quitar bloque
+                </button>
+              </div>
+            </div>
+
+            <div className="cu31-interpretacion">
+              <strong>Solicitud interpretada:</strong> {rep.titulo}
+              <span>Tipo: <code>{interp.tipo}</code></span>
+              <span>{interp.origen === 'estructurada' ? 'Intención recibida' : 'Interpretada con Gemini'}</span>
+              <dl>
+                {filtros.length ? filtros.map(([clave, valor]) => (
+                  <div key={clave}><dt>{clave.replaceAll('_', ' ')}</dt><dd>{String(valor)}</dd></div>
+                )) : <div><dt>Filtros</dt><dd>Sin filtros adicionales</dd></div>}
+              </dl>
+            </div>
+
+            <div className="cu31-title-row">
+              <h3 id={`cu31-titulo-${idx}`}>{rep.titulo}</h3>
+              <div className="cu31-header-actions">
+                {reproduciendoEste ? (
+                  <button type="button" className="btn btn-sm btn-danger" onClick={detenerAudio}>
+                    <Square size={14} /> Detener Audio
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-success"
+                    onClick={() => reproducirResumenVoz(bloque.uid, rep.resumen)}
+                  >
+                    <Volume2 size={14} /> Escuchar Síntesis
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  className="btn btn-sm btn-secondary"
+                  onClick={() => actualizarBloque(bloque.uid, { mostrarSelectorCols: !bloque.mostrarSelectorCols })}
+                >
+                  <SlidersHorizontal size={14} /> Columnas ({colsActivas.length}/{rep.columnas.length})
+                </button>
+
                 <button
                   type="button"
                   className="btn btn-sm btn-success"
-                  onClick={() => reproducirResumenVoz(reporte.resumen)}
+                  onClick={() => exportarBloquesExcel([bloque])}
+                  disabled={!rep.filas || rep.filas.length === 0}
+                  title="Exportar solo este bloque a Excel"
                 >
-                  <Volume2 size={14} /> Escuchar Síntesis
+                  <Download size={14} /> Excel
                 </button>
-              )}
 
-              <button
-                type="button"
-                className="btn btn-sm btn-secondary"
-                onClick={() => setMostrarSelectorCols((p) => !p)}
-              >
-                <SlidersHorizontal size={14} /> Columnas ({columnasFiltradas.length}/{reporte.columnas.length})
-              </button>
-
-              <button
-                type="button"
-                className="btn btn-sm btn-success"
-                onClick={() => descargarCsv()}
-                disabled={!reporte.filas || reporte.filas.length === 0}
-                title="Exportar a Excel las columnas seleccionadas"
-              >
-                <Download size={14} /> Exportar Excel ({columnasFiltradas.length})
-              </button>
-
-              <button
-                type="button"
-                className="btn btn-sm btn-primary"
-                onClick={abrirVistaImpresion}
-                disabled={!reporte.filas || reporte.filas.length === 0}
-                title="Previsualizar y exportar a PDF las columnas seleccionadas"
-              >
-                <Printer size={14} /> Exportar PDF ({columnasFiltradas.length})
-              </button>
-            </div>
-          </div>
-
-          <p className="cu31-resumen">{reporte.resumen}</p>
-
-          {/* Copiloto Dinámico + Selector de Columnas por Voz, Texto y Clics */}
-          {mostrarSelectorCols && (
-            <div className="cu31-cols-selector">
-              <div className="cu31-copilot-bar">
-                <div className="cu31-copilot-input-group">
-                  <button
-                    type="button"
-                    className={`btn-mic-cu31-sm ${escuchandoColumna ? 'listening' : ''}`}
-                    onClick={toggleMicCopiloto}
-                    title="Dictar qué columnas mostrar o exportar"
-                  >
-                    {escuchandoColumna ? <MicOff size={15} /> : <Mic size={15} />}
-                  </button>
-                  <input
-                    type="text"
-                    value={comandoColumna}
-                    onChange={(e) => setComandoColumna(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        procesarComandoDinamicoExport(comandoColumna);
-                      }
-                    }}
-                    placeholder="Comando de exportación o columnas: ej. 'solo zona y monto', 'ocultar fecha', 'exportar excel', 'exportar pdf'..."
-                  />
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-primary"
-                    onClick={() => procesarComandoDinamicoExport(comandoColumna)}
-                  >
-                    Aplicar
-                  </button>
-                </div>
-
-                <div className="cu31-presets">
-                  <button type="button" className="cu31-preset-btn" onClick={() => aplicarPresetColumnas('todas')}>Todas</button>
-                  <button type="button" className="cu31-preset-btn" onClick={() => aplicarPresetColumnas('numericas')}>Solo Numéricas</button>
-                  <button type="button" className="cu31-preset-btn" onClick={() => aplicarPresetColumnas('texto')}>Solo Texto</button>
-                </div>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-primary"
+                  onClick={() => abrirPdfBloques([bloque])}
+                  disabled={!rep.filas || rep.filas.length === 0}
+                  title="Exportar solo este bloque a PDF"
+                >
+                  <Printer size={14} /> PDF
+                </button>
               </div>
+            </div>
 
-              {feedbackCopiloto && (
-                <div className="cu31-copilot-feedback">
-                  <CheckCircle2 size={14} />
-                  <span>{feedbackCopiloto}</span>
-                </div>
-              )}
+            <p className="cu31-resumen">{rep.resumen}</p>
 
-              <div className="cu31-cols-pills">
-                {reporte.columnas.map((col) => {
-                  const activa = columnasVisibles.includes(col.clave);
-                  return (
+            {/* Selector de Columnas por Voz, Texto y Clics */}
+            {bloque.mostrarSelectorCols && (
+              <div className="cu31-cols-selector">
+                <div className="cu31-copilot-bar">
+                  <div className="cu31-copilot-input-group">
                     <button
-                      key={col.clave}
                       type="button"
-                      className={`cu31-col-pill ${activa ? 'active' : ''}`}
-                      onClick={() => toggleColumna(col.clave)}
+                      className={`btn-mic-cu31-sm ${escuchandoEsteMic ? 'listening' : ''}`}
+                      onClick={() => toggleMicCopiloto(bloque)}
+                      title="Dictar qué columnas mostrar o quitar"
                     >
-                      {activa && <Check size={12} />}
-                      {col.etiqueta}
+                      {escuchandoEsteMic ? <MicOff size={15} /> : <Mic size={15} />}
                     </button>
-                  );
-                })}
+                    <input
+                      type="text"
+                      value={bloque.comandoColumna}
+                      onChange={(e) => actualizarBloque(bloque.uid, { comandoColumna: e.target.value })}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          procesarComandoBloque(bloque, bloque.comandoColumna);
+                        }
+                      }}
+                      placeholder="Ej: 'solo cliente y plan', 'ocultar ci', 'todas', 'exportar pdf'..."
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-primary"
+                      onClick={() => procesarComandoBloque(bloque, bloque.comandoColumna)}
+                    >
+                      Aplicar
+                    </button>
+                  </div>
+
+                  <div className="cu31-presets">
+                    <button type="button" className="cu31-preset-btn" onClick={() => aplicarPresetBloque(bloque, 'todas')}>Todas</button>
+                    <button type="button" className="cu31-preset-btn" onClick={() => aplicarPresetBloque(bloque, 'numericas')}>Solo Numéricas</button>
+                    <button type="button" className="cu31-preset-btn" onClick={() => aplicarPresetBloque(bloque, 'texto')}>Solo Texto</button>
+                  </div>
+                </div>
+
+                {bloque.feedbackCopiloto && (
+                  <div className="cu31-copilot-feedback">
+                    <CheckCircle2 size={14} />
+                    <span>{bloque.feedbackCopiloto}</span>
+                  </div>
+                )}
+
+                <div className="cu31-cols-pills">
+                  {rep.columnas.map((col) => {
+                    const activa = bloque.columnasVisibles.includes(col.clave);
+                    return (
+                      <button
+                        key={col.clave}
+                        type="button"
+                        className={`cu31-col-pill ${activa ? 'active' : ''}`}
+                        onClick={() => toggleColumnaBloque(bloque, col.clave)}
+                      >
+                        {activa && <Check size={12} />}
+                        {col.etiqueta}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Totales KPI */}
+            <div className="cu31-totales">
+              {rep.totales.map((total) => (
+                <div key={total.clave}>
+                  <span>{total.etiqueta}</span>
+                  <strong>{formatear(total.valor, total.formato)}</strong>
+                </div>
+              ))}
+            </div>
+
+            {/* Toggle de Visualización por Bloque */}
+            <div className="cu31-view-bar">
+              <span>Visualización del bloque:</span>
+              <div className="cu31-view-pills">
+                <button
+                  type="button"
+                  className={bloque.vistaResultado === 'combinada' ? 'active' : ''}
+                  onClick={() => actualizarBloque(bloque.uid, { vistaResultado: 'combinada' })}
+                >
+                  <LayoutGrid size={14} /> Combinada
+                </button>
+                <button
+                  type="button"
+                  className={bloque.vistaResultado === 'graficos' ? 'active' : ''}
+                  onClick={() => actualizarBloque(bloque.uid, { vistaResultado: 'graficos' })}
+                >
+                  <BarChart2 size={14} /> Solo Gráficos
+                </button>
+                <button
+                  type="button"
+                  className={bloque.vistaResultado === 'tabla' ? 'active' : ''}
+                  onClick={() => actualizarBloque(bloque.uid, { vistaResultado: 'tabla' })}
+                >
+                  <FileText size={14} /> Solo Tabla
+                </button>
               </div>
             </div>
-          )}
 
-          {/* Totales KPI */}
-          <div className="cu31-totales">
-            {reporte.totales.map((total) => (
-              <div key={total.clave}>
-                <span>{total.etiqueta}</span>
-                <strong>{formatear(total.valor, total.formato)}</strong>
-              </div>
-            ))}
-          </div>
+            {(bloque.vistaResultado === 'combinada' || bloque.vistaResultado === 'graficos') && renderGraficaBloque(rep)}
 
-          {/* Toggle de Vista */}
-          <div className="cu31-view-bar">
-            <span>Visualización:</span>
-            <div className="cu31-view-pills">
-              <button
-                type="button"
-                className={vistaResultado === 'combinada' ? 'active' : ''}
-                onClick={() => setVistaResultado('combinada')}
-              >
-                <LayoutGrid size={14} /> Combinada
-              </button>
-              <button
-                type="button"
-                className={vistaResultado === 'graficos' ? 'active' : ''}
-                onClick={() => setVistaResultado('graficos')}
-              >
-                <BarChart2 size={14} /> Solo Gráficos
-              </button>
-              <button
-                type="button"
-                className={vistaResultado === 'tabla' ? 'active' : ''}
-                onClick={() => setVistaResultado('tabla')}
-              >
-                <FileText size={14} /> Solo Tabla
-              </button>
-            </div>
-          </div>
+            {rep.truncado && (
+              <p className="alert alert-warning" role="status">
+                Se muestran las primeras {rep.limite_filas} filas. Los totales incluyen todos los resultados.
+              </p>
+            )}
 
-          {(vistaResultado === 'combinada' || vistaResultado === 'graficos') && renderGraficaSvg()}
-
-          {reporte.truncado && (
-            <p className="alert alert-warning" role="status">
-              Se muestran las primeras {reporte.limite_filas} filas. Los totales incluyen todos los resultados.
-            </p>
-          )}
-
-          {(vistaResultado === 'combinada' || vistaResultado === 'tabla') && (
-            <div className="cu31-tabla">
-              <table>
-                <caption>{reporte.titulo}</caption>
-                <thead>
-                  <tr>
-                    {columnasFiltradas.map((columna) => (
-                      <th scope="col" key={columna.clave}>{columna.etiqueta}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {reporte.filas.length ? reporte.filas.map((fila, indice) => (
-                    <tr key={indice}>
-                      {columnasFiltradas.map((columna) => (
-                        <td key={columna.clave}>
-                          {formatear(fila[columna.clave], columna.formato)}
-                        </td>
+            {(bloque.vistaResultado === 'combinada' || bloque.vistaResultado === 'tabla') && (
+              <div className="cu31-tabla">
+                <table>
+                  <caption>{rep.titulo}</caption>
+                  <thead>
+                    <tr>
+                      {colsActivas.map((columna) => (
+                        <th scope="col" key={columna.clave}>{columna.etiqueta}</th>
                       ))}
                     </tr>
-                  )) : (
-                    <tr>
-                      <td colSpan={Math.max(1, columnasFiltradas.length)}>No hay resultados para los filtros aplicados.</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          )}
+                  </thead>
+                  <tbody>
+                    {rep.filas.length ? rep.filas.map((fila, indice) => (
+                      <tr key={indice}>
+                        {colsActivas.map((columna) => (
+                          <td key={columna.clave}>
+                            {formatear(fila[columna.clave], columna.formato)}
+                          </td>
+                        ))}
+                      </tr>
+                    )) : (
+                      <tr>
+                        <td colSpan={Math.max(1, colsActivas.length)}>No hay resultados para los filtros aplicados.</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
 
-          <p className="cu31-pie">
-            Datos del sistema al generar la consulta
-            {reporte.generado_en ? ` · ${new Date(reporte.generado_en).toLocaleString('es-BO', { timeZone: 'America/La_Paz' })}` : ''}
-          </p>
-        </section>
-      )}
+            <p className="cu31-pie">
+              Datos del sistema al generar la consulta
+              {rep.generado_en ? ` · ${new Date(rep.generado_en).toLocaleString('es-BO', { timeZone: 'America/La_Paz' })}` : ''}
+            </p>
+          </section>
+        );
+      })}
 
-      {/* Modal de Impresión / PDF Dinámico */}
-      {vistaImpresion && reporte && (
+      {/* Modal PDF Compuesto (1 o N Bloques) */}
+      {pdfConfig && pdfConfig.bloques?.length > 0 && (
         <div className="cu31-modal-overlay" role="dialog" aria-modal="true">
           <div className="cu31-modal-paper">
             <div className="cu31-modal-toolbar no-print">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Printer size={18} />
-                <strong>Exportación Dinámica PDF ({columnasFiltradas.length} columnas activas)</strong>
+                <strong>Exportación Oficial PDF ({pdfConfig.bloques.length} {pdfConfig.bloques.length === 1 ? 'bloque' : 'bloques'})</strong>
               </div>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <button type="button" className="btn btn-sm btn-secondary" onClick={() => setVistaImpresion(null)}>
+                <button type="button" className="btn btn-sm btn-secondary" onClick={() => setPdfConfig(null)}>
                   Cerrar
                 </button>
                 <button
@@ -869,40 +989,58 @@ export function ReporteInteligenteContenido({
                 <div>
                   <h2>TELCOM TELECOMUNICACIONES</h2>
                   <p>NIT: 1029384756 — Santa Cruz de la Sierra, Bolivia</p>
-                  <p>REPORTE INTELIGENTE PERSONALIZADO</p>
+                  <p>INFORME INTELIGENTE PERSONALIZADO</p>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <p><strong>Emisión:</strong> {vistaImpresion.fecha}</p>
-                  <p><strong>Hora:</strong> {vistaImpresion.hora}</p>
+                  <p><strong>Emisión:</strong> {pdfConfig.fecha}</p>
+                  <p><strong>Hora:</strong> {pdfConfig.hora}</p>
+                  <p><strong>Bloques:</strong> {pdfConfig.bloques.length}</p>
                 </div>
               </div>
 
-              <div className="cu31-print-title">
-                <h3>{reporte.titulo}</h3>
-                <p>{reporte.resumen}</p>
-              </div>
+              {pdfConfig.bloques.map((bloque, idx) => {
+                const rep = bloque.datos.reporte;
+                const cols = rep.columnas.filter((c) => bloque.columnasVisibles.includes(c.clave));
+                return (
+                  <div key={bloque.uid} className="cu31-print-block">
+                    <div className="cu31-print-title">
+                      <h3>{idx + 1}. {rep.titulo}</h3>
+                      <p>{rep.resumen}</p>
+                      {rep.totales?.length > 0 && (
+                        <p className="cu31-print-kpis">
+                          {rep.totales.map((t) => `${t.etiqueta}: ${formatear(t.valor, t.formato)}`).join(' · ')}
+                        </p>
+                      )}
+                    </div>
 
-              <table className="cu31-print-table">
-                <thead>
-                  <tr>
-                    {columnasFiltradas.map((c) => (
-                      <th key={c.clave}>{c.etiqueta}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {reporte.filas.map((fila, idx) => (
-                    <tr key={idx}>
-                      {columnasFiltradas.map((c) => (
-                        <td key={c.clave}>{formatear(fila[c.clave], c.formato)}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                    <table className="cu31-print-table">
+                      <thead>
+                        <tr>
+                          {cols.map((c) => (
+                            <th key={c.clave}>{c.etiqueta}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {rep.filas.length ? rep.filas.map((fila, fIdx) => (
+                          <tr key={fIdx}>
+                            {cols.map((c) => (
+                              <td key={c.clave}>{formatear(fila[c.clave], c.formato)}</td>
+                            ))}
+                          </tr>
+                        )) : (
+                          <tr>
+                            <td colSpan={Math.max(1, cols.length)}>Sin resultados.</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                );
+              })}
 
               <div className="cu31-print-footer">
-                <span>Generado por TELCOM 2.0 — Reporte Inteligente IA</span>
+                <span>Generado por TELCOM 2.0 — Reporte Inteligente IA Gemini</span>
                 <span className="cu31-print-sign">Firma Responsable</span>
               </div>
             </div>
@@ -1099,7 +1237,6 @@ function AsistenteOperativoPanel({ ctrl, onUsarEnReporte }) {
         </div>
       )}
 
-      {/* Catálogo de capacidades NLP */}
       {catalogo.length > 0 && (
         <div className="cu31-catalog-panel">
           <div className="cu31-catalog-head">

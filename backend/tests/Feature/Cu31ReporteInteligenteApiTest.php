@@ -170,6 +170,37 @@ class Cu31ReporteInteligenteApiTest extends TestCase
             ->assertOk()->assertJsonPath('data.reporte.totales.0.valor', 1)->assertJsonPath('data.reporte.filas.0.razon_social', 'Proveedor C');
     }
 
+    public function test_reporte_detallado_clientes_con_planes_y_filtro_por_zona_nombre(): void
+    {
+        $this->autenticar();
+        $this->fixtures();
+        $villa = DB::table('Zona')->insertGetId(['nombreZona' => 'Villa Primero de Mayo', 'barrio' => '1ro de Mayo'], 'idZona');
+        $clienteVilla = DB::table('Cliente')->insertGetId([
+            'codigoCliente' => 'CLI-VILLA', 'nombreCompleto' => 'Ana Villa', 'estadoCliente' => 'ACTIVO', 'idZona' => $villa,
+        ], 'idCliente');
+        $estadoActivo = DB::table('EstadoServicio')->where('nombreEstado', 'ACTIVO')->value('idEstadoServicio');
+        $serv = DB::table('ServicioInternet')->insertGetId([
+            'idCliente' => $clienteVilla, 'idZona' => $villa, 'idEstadoServicio' => $estadoActivo, 'codigoServicio' => 'SRV-VILLA-1',
+        ], 'idServicio');
+        $plan = DB::table('PlanInternet')->insertGetId([
+            'nombrePlan' => 'Fibra Hogar 100', 'velocidadMbps' => 100, 'precioMensual' => '180.00', 'activo' => true,
+        ], 'idPlan');
+        DB::table('AsignacionPlan')->insert([
+            'idServicio' => $serv, 'idPlan' => $plan, 'precioAplicado' => '180.00', 'fechaInicio' => '2026-11-01',
+        ]);
+
+        $this->generar('clientes_detalle_planes', ['zona_nombre' => 'Villa Primero de Mayo'])
+            ->assertOk()
+            ->assertJsonPath('data.reporte.totales.0.valor', 1)
+            ->assertJsonPath('data.reporte.filas.0.cliente', 'Ana Villa')
+            ->assertJsonPath('data.reporte.filas.0.plan', 'Fibra Hogar 100')
+            ->assertJsonPath('data.reporte.filas.0.zona', 'Villa Primero de Mayo');
+
+        $this->generar('planes_internet')->assertOk()->assertJsonPath('data.reporte.totales.0.valor', 1);
+        $this->generar('zonas_cobertura', ['zona_nombre' => 'Villa'])->assertOk()->assertJsonPath('data.reporte.totales.0.valor', 1);
+        $this->generar('cortes_y_mora')->assertOk()->assertJsonPath('data.reporte.totales.0.valor', 2);
+    }
+
     public function test_ingresos_suma_pagos_una_vez_e_incluye_el_ultimo_dia(): void
     {
         $this->autenticar();

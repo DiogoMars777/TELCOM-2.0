@@ -1065,6 +1065,163 @@
   color: #fff;
 }
 
+/* ============================================================
+ * Constructor Multi-Bloque Acumulable (Lienzo de Exportación)
+ * ============================================================ */
+.cu31-top-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.cu31-accumulate-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  padding: 0.38rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cu31-accumulate-toggle input {
+  accent-color: #38bdf8;
+  cursor: pointer;
+}
+
+.cu31-composer-bar {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.14), rgba(99, 102, 241, 0.14));
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.cu31-composer-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cu31-composer-icon {
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+.cu31-composer-info strong {
+  display: block;
+  font-size: 0.96rem;
+  color: #f8fafc;
+}
+
+.cu31-composer-info span {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.cu31-composer-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cu31-block-card {
+  position: relative;
+  border-color: rgba(56, 189, 248, 0.22);
+}
+
+.cu31-block-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.9rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.cu31-block-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cu31-block-num {
+  background: rgba(56, 189, 248, 0.18);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+}
+
+.cu31-block-origin {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+}
+
+.cu31-block-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.btn-icon-cu31 {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.32rem 0.6rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-icon-cu31:hover:not(:disabled) {
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.btn-icon-cu31.danger {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.btn-icon-cu31.danger:hover:not(:disabled) {
+  background: #ef4444;
+  color: #fff;
+}
+
+.cu31-print-block {
+  margin-bottom: 1.5rem;
+}
+
+.cu31-print-kpis {
+  margin-top: 0.35rem !important;
+  font-weight: 700;
+  color: #0284c7 !important;
+  font-size: 0.8rem !important;
+}
+
 /* Responsivo completo */
 @media (max-width: 768px) {
   .cu31-unified-header,

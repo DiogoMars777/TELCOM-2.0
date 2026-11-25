@@ -430,7 +430,7 @@ Ejemplo: {\"intencion\":\"CONSULTAR_CLIENTES\",\"confianza\":0.95,\"entidades\":
 
         try {
             $response = Http::acceptJson()
-                ->timeout(6)
+                ->timeout(max(5, min(30, (int) config('services.gemini.timeout', 15))))
                 ->withHeaders(['x-goog-api-key' => $apiKey])
                 ->post("https://generativelanguage.googleapis.com/v1beta/models/{$modelo}:generateContent", [
                     'systemInstruction' => ['parts' => [['text' => $promptSistema]]],
@@ -442,8 +442,14 @@ Ejemplo: {\"intencion\":\"CONSULTAR_CLIENTES\",\"confianza\":0.95,\"entidades\":
                 ]);
 
             if ($response->successful()) {
-                $rawJson = $response->json('candidates.0.content.parts.0.text');
-                if ($rawJson) {
+                $partes = $response->json('candidates.0.content.parts') ?? [];
+                $rawJson = '';
+                foreach ($partes as $parte) {
+                    if (is_array($parte) && ! ($parte['thought'] ?? false) && is_string($parte['text'] ?? null)) {
+                        $rawJson .= $parte['text'];
+                    }
+                }
+                if ($rawJson !== '') {
                     $decoded = json_decode($rawJson, true);
                     if (is_array($decoded) && isset($decoded['intencion'])) {
                         return $decoded;
@@ -451,7 +457,7 @@ Ejemplo: {\"intencion\":\"CONSULTAR_CLIENTES\",\"confianza\":0.95,\"entidades\":
                 }
             }
         } catch (Throwable) {
-            // Regresa null para usar el motor local
+            // Regresa null si no hay clave configurada (ej. entorno de pruebas)
         }
 
         return null;

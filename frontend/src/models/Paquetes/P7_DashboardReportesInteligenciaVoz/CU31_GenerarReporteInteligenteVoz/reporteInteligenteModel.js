@@ -18,11 +18,11 @@ export const reporteInteligenteService = {
 };
 
 export const EJEMPLOS_REPORTES = [
+  'Muéstrame los clientes de Villa Primero de Mayo y sus planes.',
   'Muéstrame los clientes activos por zona.',
-  'Cuántos servicios activos tenemos.',
   'Muéstrame los ingresos de este mes.',
-  'Muéstrame las mensualidades pendientes.',
+  'Muéstrame las mensualidades pendientes y clientes en mora.',
+  'Cuántos servicios activos y planes tenemos.',
   'Cuánto inventario disponible tenemos.',
   'Muéstrame las instalaciones realizadas este mes.',
-  'Muéstrame los proveedores activos.',
 ];

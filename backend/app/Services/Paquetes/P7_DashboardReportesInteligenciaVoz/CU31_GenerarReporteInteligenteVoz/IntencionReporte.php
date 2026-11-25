@@ -13,13 +13,27 @@ class IntencionReporte
     public const CATALOGO = [
         'clientes_por_zona' => [
             'titulo' => 'Clientes por zona',
-            'filtros' => ['estado', 'zona_id'],
+            'filtros' => ['estado', 'zona_id', 'zona_nombre'],
+            'estados' => ['ACTIVO', 'INACTIVO'],
+        ],
+        'clientes_detalle_planes' => [
+            'titulo' => 'Clientes, zonas y planes contratados',
+            'filtros' => ['estado', 'zona_id', 'zona_nombre', 'plan_nombre', 'texto'],
             'estados' => ['ACTIVO', 'INACTIVO'],
         ],
         'servicios_por_estado' => [
             'titulo' => 'Servicios por estado',
-            'filtros' => ['estado', 'zona_id'],
+            'filtros' => ['estado', 'zona_id', 'zona_nombre'],
             'estados' => ['ACTIVO', 'PENDIENTE_INSTALACION', 'SUSPENDIDO', 'CORTADO'],
+        ],
+        'planes_internet' => [
+            'titulo' => 'Planes de internet y abonados',
+            'filtros' => ['estado', 'plan_nombre', 'texto'],
+            'estados' => ['ACTIVO', 'INACTIVO'],
+        ],
+        'zonas_cobertura' => [
+            'titulo' => 'Zonas y barrios de cobertura',
+            'filtros' => ['zona_nombre', 'texto'],
         ],
         'ingresos_por_periodo' => [
             'titulo' => 'Ingresos por período',
@@ -27,12 +41,17 @@ class IntencionReporte
         ],
         'mensualidades_por_estado' => [
             'titulo' => 'Mensualidades por estado',
-            'filtros' => ['estado', 'periodo'],
+            'filtros' => ['estado', 'periodo', 'zona_nombre'],
             'estados' => ['PENDIENTE', 'PAGADO'],
+        ],
+        'cortes_y_mora' => [
+            'titulo' => 'Morosidad y servicios en riesgo/corte',
+            'filtros' => ['estado', 'zona_id', 'zona_nombre', 'texto'],
+            'estados' => ['PENDIENTE', 'CORTADO', 'SUSPENDIDO'],
         ],
         'inventario_disponible' => [
             'titulo' => 'Inventario disponible',
-            'filtros' => ['producto_id'],
+            'filtros' => ['producto_id', 'texto'],
         ],
         'instalaciones_por_estado_o_periodo' => [
             'titulo' => 'Instalaciones por estado o período',
@@ -41,7 +60,7 @@ class IntencionReporte
         ],
         'proveedores_por_estado' => [
             'titulo' => 'Proveedores por estado',
-            'filtros' => ['estado'],
+            'filtros' => ['estado', 'texto'],
             'estados' => ['ACTIVO', 'INACTIVO'],
         ],
     ];
@@ -72,6 +91,7 @@ class IntencionReporte
                 'estado' => ['sometimes', 'required', 'string', Rule::in($definicion['estados'])],
                 'zona_id' => ['sometimes', 'required', 'integer', 'min:1', 'exists:Zona,idZona'],
                 'producto_id' => ['sometimes', 'required', 'integer', 'min:1', 'exists:ProductoEquipo,idProducto'],
+                'zona_nombre', 'plan_nombre', 'texto' => ['sometimes', 'required', 'string', 'min:1', 'max:120'],
                 'periodo' => ['sometimes', 'required', 'string', 'regex:/^(?:(?:19|20|21)\d{2}-(?:0[1-9]|1[0-2])|este_mes|mes_anterior'.($tipo === 'mensualidades_por_estado' ? '' : '|este_anio').')$/'],
                 'fecha_desde', 'fecha_hasta' => ['sometimes', 'required', 'string', 'date_format:Y-m-d', 'regex:/^(?:19|20|21)\d{2}-/'],
                 'fecha_campo' => ['sometimes', 'required', Rule::in(['realizada', 'programada'])],
@@ -84,6 +104,7 @@ class IntencionReporte
             'string' => 'El filtro indicado debe ser texto.',
             'integer' => 'El identificador del filtro debe ser un número entero.',
             'min' => 'El identificador del filtro debe ser positivo.',
+            'max' => 'El término del filtro es demasiado largo.',
             'exists' => 'El identificador del filtro no existe en el sistema.',
             'date_format' => 'La fecha debe ser válida y usar el formato YYYY-MM-DD.',
             'regex' => 'Usa un período YYYY-MM, este_mes, mes_anterior o este_anio cuando corresponda.',
@@ -92,6 +113,11 @@ class IntencionReporte
         foreach (['zona_id', 'producto_id'] as $id) {
             if (isset($filtros[$id])) {
                 $filtros[$id] = (int) $filtros[$id];
+            }
+        }
+        foreach (['zona_nombre', 'plan_nombre', 'texto'] as $campoTexto) {
+            if (isset($filtros[$campoTexto])) {
+                $filtros[$campoTexto] = trim((string) $filtros[$campoTexto]);
             }
         }
         if ($tipo === 'mensualidades_por_estado' && isset($filtros['periodo'])) {
