@@ -29,11 +29,9 @@ import ProveedoresView from './views/Paquetes/P5_EquiposProveedoresInventario/CU
 import SolicitudInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/CU21_RegistrarSolicitudInstalacion/SolicitudInstalacionView';
 import ProgramarInstalacionView from './views/Paquetes/P6_InstalacionesTecnicas/CU22_ProgramarInstalacion/InstalacionesView';
 import InstalacionesView from './views/Paquetes/P6_InstalacionesTecnicas/CU23_RegistrarInstalacion/InstalacionesView';
-import IntencionVozView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU30_ProcesarIntencionVozIA/IntencionVozView';
 import DashboardAdminFinancieroView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU26_VisualizarDashboardAdminFinanciero/DashboardAdminFinancieroView';
 import CopiasSeguridadView from './views/Paquetes/P1_SeguridadAdministracion/CU28_GenerarRestaurarCopiasSeguridad/CopiasSeguridadView';
 import ReporteTradicionalView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU27_GenerarExportarReportesTradicionales/ReporteTradicionalView';
-import ComandoVozView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU29_CapturarTranscribirComandosVoz/ComandoVozView';
 import ReporteInteligenteView from './views/Paquetes/P7_DashboardReportesInteligenciaVoz/CU31_GenerarReporteInteligenteVoz/ReporteInteligenteView';
 
 // Iconos de cada módulo del panel
@@ -42,7 +40,7 @@ import {
   Wifi, Calendar,
   CreditCard, Clock, AlertTriangle, Scissors, RefreshCw, Lock,
   Router, ArrowRightLeft, Package, Wrench, HardDrive, ClipboardList, ShoppingCart,
-  Sparkles, Brain, LayoutDashboard, Database, BarChart3, Mic, FileBarChart,
+  Sparkles, LayoutDashboard, Database, BarChart3,
 } from 'lucide-react';
 
 import { authService } from './models/Paquetes/P1_SeguridadAdministracion/CU01_IniciarCerrarSesion/authModel';
@@ -129,7 +127,6 @@ export default function App() {
   const [booting, setBooting] = useState(true);
   const [activeCU, setActiveCU] = useState('CU06');
   const [corteServicioSelected, setCorteServicioSelected] = useState(null);
-  const [reporteVoiceFilter, setReporteVoiceFilter] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isAuthenticated = Boolean(currentUser);
@@ -269,9 +266,7 @@ export default function App() {
       items: [
         { id: 'CU26', label: 'Dashboard General / Financiero', icon: LayoutDashboard },
         { id: 'CU27', label: 'Reportes Tradicionales', icon: BarChart3 },
-        { id: 'CU29', label: 'Comandos de Voz', icon: Mic },
-        { id: 'CU30', label: 'Asistente de Voz con IA (NLP)', icon: Sparkles },
-        { id: 'CU31', label: 'Reporte Inteligente con Voz', icon: FileBarChart },
+        { id: 'CU31', label: 'Reporte Inteligente', icon: Sparkles },
       ],
     },
     {
@@ -361,25 +356,31 @@ export default function App() {
       case 'CU26':
         return <DashboardAdminFinancieroView user={currentUser} onNavigate={(cu) => setActiveCU(cu)} />;
       case 'CU27':
-        return (
-          <ReporteTradicionalView
-            initialTipo={reporteVoiceFilter?.tipo || 'clientes_zona'}
-            initialFilters={reporteVoiceFilter?.filtros || {}}
-          />
-        );
+        return <ReporteTradicionalView />;
       case 'CU29':
         return (
-          <ComandoVozView
-            onIrAReporteTradicional={(tipo, params) => {
-              setReporteVoiceFilter({ tipo, filtros: params });
-              setActiveCU('CU27');
-            }}
+          <ReporteInteligenteView
+            user={currentUser}
+            onNavigate={(targetCu) => setActiveCU(targetCu)}
+            initialTab="historial"
           />
         );
       case 'CU30':
-        return <IntencionVozView onNavigate={(targetCu) => setActiveCU(targetCu)} />;
+        return (
+          <ReporteInteligenteView
+            user={currentUser}
+            onNavigate={(targetCu) => setActiveCU(targetCu)}
+            initialTab="asistente"
+          />
+        );
       case 'CU31':
-        return <ReporteInteligenteView user={currentUser} />;
+        return (
+          <ReporteInteligenteView
+            user={currentUser}
+            onNavigate={(targetCu) => setActiveCU(targetCu)}
+            initialTab="reportes"
+          />
+        );
       default:
         return <ClientesView user={currentUser} />;
     }
