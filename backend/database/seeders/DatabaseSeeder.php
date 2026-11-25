@@ -584,38 +584,56 @@ class DatabaseSeeder extends Seeder
         ];
 
         // =========================================================================
-        // 7. 3 ZONAS DE INTERNET EN SANTA CRUZ DE LA SIERRA (CU04)
+        // 7. 4 ZONAS DE INTERNET EN SANTA CRUZ DE LA SIERRA (CU04)
         // =========================================================================
         $areaNorte = json_encode([
             'type' => 'Polygon',
             'coordinates' => [[
-                [-63.1950, -17.7550],
-                [-63.1780, -17.7550],
-                [-63.1780, -17.7700],
-                [-63.1950, -17.7700],
-                [-63.1950, -17.7550],
+                [-63.1965, -17.7520],
+                [-63.1840, -17.7490],
+                [-63.1755, -17.7565],
+                [-63.1780, -17.7685],
+                [-63.1895, -17.7720],
+                [-63.1975, -17.7630],
+                [-63.1965, -17.7520],
             ]],
         ]);
 
         $areaEste = json_encode([
             'type' => 'Polygon',
             'coordinates' => [[
-                [-63.1450, -17.7850],
-                [-63.1250, -17.7850],
-                [-63.1250, -17.8050],
-                [-63.1450, -17.8050],
-                [-63.1450, -17.7850],
+                [-63.1460, -17.7830],
+                [-63.1310, -17.7810],
+                [-63.1225, -17.7915],
+                [-63.1260, -17.8045],
+                [-63.1395, -17.8070],
+                [-63.1475, -17.7950],
+                [-63.1460, -17.7830],
             ]],
         ]);
 
         $areaSur = json_encode([
             'type' => 'Polygon',
             'coordinates' => [[
-                [-63.1900, -17.7850],
-                [-63.1700, -17.7850],
-                [-63.1700, -17.8100],
-                [-63.1900, -17.8100],
-                [-63.1900, -17.7850],
+                [-63.1910, -17.7845],
+                [-63.1765, -17.7825],
+                [-63.1685, -17.7930],
+                [-63.1715, -17.8090],
+                [-63.1845, -17.8115],
+                [-63.1930, -17.7985],
+                [-63.1910, -17.7845],
+            ]],
+        ]);
+
+        $areaTroncal = json_encode([
+            'type' => 'Polygon',
+            'coordinates' => [[
+                [-63.2080, -17.7420],
+                [-63.1960, -17.7395],
+                [-63.1885, -17.7465],
+                [-63.1920, -17.7560],
+                [-63.2045, -17.7540],
+                [-63.2080, -17.7420],
             ]],
         ]);
 
@@ -628,7 +646,7 @@ class DatabaseSeeder extends Seeder
             'tecnologia'      => 'FTTH GPON',
             'capacidadNodos'  => 500,
             'estado'          => true,
-            'estadoCobertura' => 'DISPONIBLE',
+            'estadoCobertura' => 'Disponible',
             'descripcion'     => 'Troncal de fibra óptica de alta densidad. Cobertura desde 2do anillo hasta 4to anillo entre Av. San Martín y Av. Busch.',
             'areaMapa'        => $areaNorte,
         ], 'idZona');
@@ -642,7 +660,7 @@ class DatabaseSeeder extends Seeder
             'tecnologia'      => 'FTTH GPON',
             'capacidadNodos'  => 800,
             'estado'          => true,
-            'estadoCobertura' => 'DISPONIBLE',
+            'estadoCobertura' => 'Disponible',
             'descripcion'     => 'Anillo metropolitano este de alta capacidad. Cobertura residencial masiva.',
             'areaMapa'        => $areaEste,
         ], 'idZona');
@@ -656,7 +674,7 @@ class DatabaseSeeder extends Seeder
             'tecnologia'      => 'FTTH GPON',
             'capacidadNodos'  => 600,
             'estado'          => true,
-            'estadoCobertura' => 'DISPONIBLE',
+            'estadoCobertura' => 'Disponible',
             'descripcion'     => 'Cobertura comercial y residencial central desde el 1er anillo hasta el 4to anillo Santos Dumont.',
             'areaMapa'        => $areaSur,
         ], 'idZona');
@@ -671,9 +689,9 @@ class DatabaseSeeder extends Seeder
             'tecnologia'      => 'FTTH GPON',
             'capacidadNodos'  => 500,
             'estado'          => true,
-            'estadoCobertura' => 'DISPONIBLE',
+            'estadoCobertura' => 'Disponible',
             'descripcion'     => 'Troncal de fibra óptica de enlace interurbano.',
-            'areaMapa'        => $areaNorte,
+            'areaMapa'        => $areaTroncal,
         ]);
 
         $zonas = [$idZonaNorte, $idZonaEste, $idZonaSur];

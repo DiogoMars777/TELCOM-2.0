@@ -415,7 +415,7 @@ export default function ServicioInternetView({ user }) {
                   </select>
                   {zonas.length === 0 && (
                     <small style={{ color: '#f59e0b', display: 'block', marginTop: '0.35rem' }}>
-                      No hay zonas cargadas. Puedes crearlas en <strong>Infraestructura ➔ Zonas de Cobertura (CU04)</strong> o ejecutar el seeder.
+                      No hay zonas cargadas. Puedes crearlas en <strong>Infraestructura ➔ Zonas de Cobertura</strong> o ejecutar el seeder.
                     </small>
                   )}
                 </div>

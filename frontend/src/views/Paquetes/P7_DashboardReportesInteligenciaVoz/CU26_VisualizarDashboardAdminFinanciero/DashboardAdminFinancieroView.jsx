@@ -499,7 +499,7 @@ export default function DashboardAdminFinancieroView({ user, onNavigate }) {
           <div className="cu26-panel-title">
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <ShieldAlert size={18} style={{ color: '#ef4444' }} />
-              <span>Cuentas con Cartera Vencida y Alerta de Corte (CU12 / CU13)</span>
+              <span>Cuentas con Cartera Vencida y Alerta de Corte</span>
             </div>
             <span className="cu26-badge cu26-badge-critica">
               {alertas.length} Cuentas Críticas
@@ -606,7 +606,7 @@ export default function DashboardAdminFinancieroView({ user, onNavigate }) {
 
       {/* Pie de página con marca de tiempo */}
       <footer style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.76rem', color: 'var(--text-secondary)', padding: '0.5rem 0' }}>
-        <span>TELCOM ISP Cloud 2.0 &bull; Caso de Uso CU26</span>
+        <span>TELCOM ISP Cloud 2.0 &bull; Panel Ejecutivo y Financiero</span>
         <span>Última sincronización: {lastUpdated ? lastUpdated.toLocaleTimeString() : 'N/A'}</span>
       </footer>
     </div>

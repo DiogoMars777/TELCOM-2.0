@@ -69,7 +69,7 @@ export default function EquiposView() {
             </div>
             <div>
               <h1 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#f8fafc', margin: 0 }}>
-                Catálogo de Equipos e Inventario (CU18)
+                Catálogo de Equipos e Inventario
               </h1>
               <p style={{ color: '#94a3b8', fontSize: '0.875rem', margin: 0 }}>
                 Gestión de hardware de telecomunicaciones, stock central y seriales físicos de ONTs y routers.

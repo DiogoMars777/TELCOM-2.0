@@ -840,9 +840,9 @@
   }
 }
 
-/* Reglas de Impresión (@media print) */
+/* Reglas de Impresión (@media print — solo si el recibo está abierto) */
 @media print {
-  body * {
+  body:has(.cu10-recibo-card) * {
     visibility: hidden;
   }
 

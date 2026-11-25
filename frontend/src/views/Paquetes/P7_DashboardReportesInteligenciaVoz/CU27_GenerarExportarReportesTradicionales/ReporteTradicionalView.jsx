@@ -46,7 +46,7 @@ export default function ReporteTradicionalView({ initialTipo = 'clientes_zona', 
         <div className="cu27-header-top">
           <div>
             <span className="cu27-badge">
-              <FileText size={14} /> Módulo Oficial CU27
+              <FileText size={14} /> Reportes Oficiales del Sistema
             </span>
             <h1 className="cu27-title">Generar y Exportar Reportes Tradicionales</h1>
             <p className="cu27-subtitle">

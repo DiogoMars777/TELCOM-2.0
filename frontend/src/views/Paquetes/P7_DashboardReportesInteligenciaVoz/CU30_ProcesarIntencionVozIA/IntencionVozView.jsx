@@ -57,7 +57,7 @@ export default function IntencionVozView({ onNavigate }) {
         <div>
           <h2>Asistente de Voz con IA y Procesamiento de Intenciones (NLP)</h2>
           <p className="subtitle">
-            Comprensión de lenguaje natural para operaciones de telecomunicaciones (CU30)
+            Comprensión de lenguaje natural para operaciones de telecomunicaciones
           </p>
         </div>
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>

@@ -1521,3 +1521,89 @@ body,
   -ms-overflow-style: none;  /* IE y Edge */
   scrollbar-width: none;     /* Firefox */
 }
+
+/* =====================================================================
+   Estilos Globales de Impresión (@media print)
+   Permite imprimir correctamente cualquier vista del sistema sin
+   quedar en blanco ni arrastrar el menú lateral o el fondo oscuro.
+   ===================================================================== */
+@media print {
+  @page {
+    size: auto;
+    margin: 12mm;
+  }
+
+  html,
+  body,
+  #root,
+  .app-shell,
+  .main-content,
+  .content-body,
+  .view-panel {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  /* Ocultar navegación lateral, barra superior y elementos no imprimibles */
+  .sidebar,
+  .topbar,
+  .mobile-menu-btn,
+  .sidebar-backdrop,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Ajustar tarjetas y tablas para papel claro */
+  .view-header h2,
+  h1, h2, h3, h4,
+  strong {
+    color: #0f172a !important;
+  }
+
+  .subtitle,
+  p,
+  small,
+  .text-muted {
+    color: #475569 !important;
+  }
+
+  .card-item,
+  .cu25-stat-card,
+  .cu28-view .table-responsive,
+  .table-responsive,
+  .cu25-table-wrapper,
+  .cu04-overview-map-card {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+
+  table,
+  .data-table,
+  .cu25-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    color: #0f172a !important;
+  }
+
+  table th,
+  table td {
+    color: #0f172a !important;
+    border-bottom: 1px solid #cbd5e1 !important;
+    background: transparent !important;
+  }
+
+  table th {
+    background: #f1f5f9 !important;
+    font-weight: 700 !important;
+  }
+}

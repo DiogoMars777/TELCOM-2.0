@@ -17,18 +17,31 @@ const emptyZona = {
   area_mapa: null,
 };
 
+/** Normaliza estados antiguos en mayúsculas al catálogo canónico del backend. */
+function normalizarEstadoCobertura(estado) {
+  if (!estado || typeof estado !== 'string') return '';
+  const mapa = {
+    DISPONIBLE: 'Disponible',
+    PARCIAL: 'Parcial',
+    SATURADA: 'Saturada',
+    'EN EXPANSIÓN': 'En expansión',
+    'EN EXPANSION': 'En expansión',
+  };
+  return mapa[estado.trim().toUpperCase()] || estado;
+}
+
 /** Convierte una zona del backend al formulario del modal. */
 function zonaAFormulario(z) {
   return {
     codigo: z.codigo ?? '',
     nombre: z.nombre ?? '',
-    ciudad: z.ciudad ?? 'La Paz',
+    ciudad: z.ciudad ?? 'Santa Cruz de la Sierra',
     barrio: z.barrio ?? '',
     sector: z.sector ?? '',
     tecnologia: z.tecnologia ?? 'FTTH GPON',
     // Los registros antiguos pueden no tener estado: se deja vacío para que
     // el usuario lo complete; no se inventa un valor.
-    estado_cobertura: z.estado_cobertura ?? '',
+    estado_cobertura: normalizarEstadoCobertura(z.estado_cobertura),
     capacidad_nodos: z.capacidad_nodos ?? 100,
     area_mapa: z.area_mapa ?? null,
   };

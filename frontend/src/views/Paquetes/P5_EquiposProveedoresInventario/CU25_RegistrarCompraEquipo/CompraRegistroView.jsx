@@ -60,7 +60,7 @@ export default function CompraRegistroView({ user }) {
       {/* 1. Header del Caso de Uso */}
       <div className="view-header">
         <div>
-          <h2>CU25: Registrar Compra de Equipos e Ingreso a Stock</h2>
+          <h2>Registrar Compra de Equipos e Ingreso a Stock</h2>
           <p className="subtitle">
             Gestión de abastecimiento con importadores y actualización atómica del inventario físico
           </p>

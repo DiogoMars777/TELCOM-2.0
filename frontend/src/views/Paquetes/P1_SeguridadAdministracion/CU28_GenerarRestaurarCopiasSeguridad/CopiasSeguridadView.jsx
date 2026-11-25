@@ -91,7 +91,7 @@ export default function CopiasSeguridadView() {
       <div className="view-header">
         <div>
           <h2>Copias de Seguridad (Backup / Restore)</h2>
-          <p className="subtitle">Gestión, respaldo y restauración de datos del sistema (CU28)</p>
+          <p className="subtitle">Gestión, respaldo y restauración de datos del sistema</p>
         </div>
         <div className="cu28-actions-header">
           <button

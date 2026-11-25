@@ -39,15 +39,15 @@
 
 .backup-file-name {
   font-family: monospace;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   color: var(--text-primary);
-  word-break: break-all;
+  white-space: nowrap;
 }
 
 .backup-desc {
   font-size: 0.78rem;
   color: var(--text-secondary);
-  max-width: 320px;
+  max-width: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -69,7 +69,7 @@ export default function InstalacionesView() {
             </div>
             <div>
               <h1 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#f8fafc', margin: 0 }}>
-                Órdenes de Instalación Técnica (CU23)
+                Órdenes de Instalación Técnica
               </h1>
               <p style={{ color: '#94a3b8', fontSize: '0.875rem', margin: 0 }}>
                 Programación de órdenes domiciliarias, asignación de cuadrillas y certificación de servicio.

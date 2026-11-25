@@ -44,7 +44,7 @@ export default function RegistrarSolicitudModal({
               <FileText size={20} />
             </div>
             <div>
-              <h3 className="modal-title">Registrar Solicitud de Instalación (CU21)</h3>
+              <h3 className="modal-title">Registrar Solicitud de Instalación</h3>
               <p className="modal-subtitle">
                 Alta formal de orden de servicio de fibra óptica y asignación geográfica
               </p>

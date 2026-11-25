@@ -176,7 +176,7 @@ export default function SolicitudInstalacionView({ user }) {
 
         <div className="card-kpi" style={{ background: '#EFF6FF', padding: '1rem', borderRadius: '8px', border: '1px solid #BFDBFE' }}>
           <div style={{ fontSize: '0.8rem', color: '#1E40AF', fontWeight: 600, textTransform: 'uppercase' }}>
-            Programadas (CU22)
+            Programadas
           </div>
           <div style={{ fontSize: '1.6rem', fontWeight: 700, color: '#2563EB', marginTop: '0.25rem' }}>
             {programadasCount}

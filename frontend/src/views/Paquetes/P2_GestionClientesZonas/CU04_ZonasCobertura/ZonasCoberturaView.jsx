@@ -1,13 +1,14 @@
 import React from 'react';
 import { useZonaCoberturaController } from '../../../../controllers/Paquetes/P2_GestionClientesZonas/CU04_ZonasCobertura/useZonaCoberturaController';
 import { hasPermission } from '../../../../config/access.js';
-import { ESTADOS_COBERTURA, areaToSvgPoints, contarVertices } from '../../../../models/Paquetes/P2_GestionClientesZonas/CU04_ZonasCobertura/geoArea.js';
+import { ESTADOS_COBERTURA, areaToSvgPointList, centroideDeArea, contarVertices } from '../../../../models/Paquetes/P2_GestionClientesZonas/CU04_ZonasCobertura/geoArea.js';
 import { MapPin, Plus, Radio, Cpu, AlertCircle, RefreshCw, Pencil, Shapes } from 'lucide-react';
 import './ZonasCoberturaView.css';
 
 // El mapa (Leaflet + Geoman) se carga solo cuando se abre el modal, para no
 // aumentar el peso inicial de la aplicación.
 const MapaArea = React.lazy(() => import('./MapaArea.jsx'));
+const MapaCoberturaGeneral = React.lazy(() => import('./MapaCoberturaGeneral.jsx'));
 
 // Clase de badge según el estado de cobertura (colores TELCOM).
 const BADGE_ESTADO = {
@@ -17,21 +18,115 @@ const BADGE_ESTADO = {
   'En expansión': 'badge-primary',
 };
 
-/** Vista previa del área dibujada (SVG, sin cargar mapas ni teselas). */
-function AreaPreview({ area }) {
-  const puntos = areaToSvgPoints(area, 200, 110, 8);
-  if (!puntos) return null;
+const COLOR_ESTADO = {
+  'Disponible': '#22c55e',
+  'Parcial': '#f59e0b',
+  'Saturada': '#ef4444',
+  'En expansión': '#38bdf8',
+};
 
-  return (
-    <svg
-      className="cu04-area-preview"
-      viewBox="0 0 200 110"
-      role="img"
-      aria-label="Vista previa del área de cobertura"
-    >
-      <polygon points={puntos} />
-    </svg>
+/** Vista previa cartográfica del área dibujada (SVG sin teselas externas). */
+function AreaPreview({ id, area, estado, onClick }) {
+  const pointList = areaToSvgPointList(area, 240, 120, 20);
+  if (!pointList.length) return null;
+
+  const puntos = pointList.map((p) => `${p.x},${p.y}`).join(' ');
+  const verticesUnicos = pointList.slice(0, -1);
+  const centroSvg = verticesUnicos.length
+    ? {
+        x: verticesUnicos.reduce((acc, p) => acc + p.x, 0) / verticesUnicos.length,
+        y: verticesUnicos.reduce((acc, p) => acc + p.y, 0) / verticesUnicos.length,
+      }
+    : { x: 120, y: 60 };
+
+  const color = COLOR_ESTADO[estado] || '#38bdf8';
+  const centroide = centroideDeArea(area);
+  const patternId = `cu04-grid-${id}`;
+  const gradId = `cu04-grad-${id}`;
+
+  const contenido = (
+    <>
+      <svg
+        className="cu04-area-preview"
+        viewBox="0 0 240 120"
+        role="img"
+        aria-label="Vista previa del área de cobertura"
+      >
+        <defs>
+          <pattern id={patternId} width="16" height="16" patternUnits="userSpaceOnUse">
+            <path
+              d="M 16 0 L 0 0 0 16"
+              fill="none"
+              stroke="rgba(148, 163, 184, 0.12)"
+              strokeWidth="0.7"
+            />
+          </pattern>
+          <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={color} stopOpacity="0.34" />
+            <stop offset="100%" stopColor={color} stopOpacity="0.12" />
+          </linearGradient>
+        </defs>
+
+        <rect width="240" height="120" fill={`url(#${patternId})`} />
+        <line x1="0" y1="60" x2="240" y2="60" stroke="rgba(148, 163, 184, 0.14)" strokeWidth="0.8" strokeDasharray="3 3" />
+        <line x1="120" y1="0" x2="120" y2="120" stroke="rgba(148, 163, 184, 0.14)" strokeWidth="0.8" strokeDasharray="3 3" />
+
+        <polygon
+          points={puntos}
+          fill={`url(#${gradId})`}
+          stroke={color}
+          strokeWidth="2"
+          strokeLinejoin="round"
+        />
+
+        {verticesUnicos.map((p, idx) => (
+          <circle
+            key={idx}
+            cx={p.x}
+            cy={p.y}
+            r="2.8"
+            fill="#0f172a"
+            stroke={color}
+            strokeWidth="1.6"
+          />
+        ))}
+
+        <circle cx={centroSvg.x} cy={centroSvg.y} r="7" fill={color} fillOpacity="0.18" />
+        <circle cx={centroSvg.x} cy={centroSvg.y} r="3" fill={color} />
+      </svg>
+
+      <span className="cu04-area-badge-top">
+        {verticesUnicos.length} vértices
+      </span>
+
+      {centroide && (
+        <span className="cu04-area-coords">
+          {centroide.lat.toFixed(4)}, {centroide.lng.toFixed(4)}
+        </span>
+      )}
+
+      {onClick && (
+        <span className="cu04-area-edit-hint">
+          <Pencil size={11} /> Ver en mapa
+        </span>
+      )}
+    </>
   );
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        className="cu04-area-preview-wrap is-interactive"
+        onClick={onClick}
+        title="Abrir mapa para ver o editar el polígono"
+      >
+        {contenido}
+      </button>
+    );
+  }
+
+  return <div className="cu04-area-preview-wrap">{contenido}</div>;
 }
 
 export default function ZonasCoberturaView({ user }) {
@@ -89,6 +184,12 @@ export default function ZonasCoberturaView({ user }) {
         <p className="text-muted" style={{ padding: '0.5rem 0' }}>Sin registros</p>
       )}
 
+      {!loading && zonas.length > 0 && (
+        <React.Suspense fallback={<p className="text-muted">Cargando mapa general de cobertura…</p>}>
+          <MapaCoberturaGeneral zonas={zonas} onSelectZona={puedeGestionar ? openEdit : undefined} />
+        </React.Suspense>
+      )}
+
       <div className="grid-cards">
         {zonas.map((z) => (
           <div key={z.id} className="card-item">
@@ -117,7 +218,14 @@ export default function ZonasCoberturaView({ user }) {
             {z.barrio && <p className="cu04-barrio">Barrio: <strong>{z.barrio}</strong></p>}
             {z.sector && <p className="cu04-barrio">Sector: <strong>{z.sector}</strong></p>}
 
-            {z.area_mapa && <AreaPreview area={z.area_mapa} />}
+            {z.area_mapa && (
+              <AreaPreview
+                id={z.id}
+                area={z.area_mapa}
+                estado={z.estado_cobertura}
+                onClick={puedeGestionar ? () => openEdit(z) : undefined}
+              />
+            )}
 
             <div className="tech-info">
               <div><Radio size={14} /> Tecnología: <strong>{z.tecnologia}</strong></div>

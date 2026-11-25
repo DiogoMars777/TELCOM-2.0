@@ -1,4 +1,4 @@
-/* Estilos CU27: Generar y exportar reportes tradicionales */
+/* Estilos CU27: Generar y exportar reportes tradicionales (Tema Oscuro TELCOM ISP) */
 
 .cu27-container {
   display: flex;
@@ -8,15 +8,15 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 0.5rem;
-  color: var(--text-color, #1e293b);
+  color: var(--text-primary, #e2e8f0);
 }
 
 .cu27-header {
-  background: var(--card-bg, #ffffff);
-  border: 1px solid var(--border-color, #e2e8f0);
+  background: var(--bg-card, #1e293b);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .cu27-header-top {
@@ -34,23 +34,24 @@
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  padding: 0.25rem 0.65rem;
+  padding: 0.25rem 0.7rem;
   border-radius: 9999px;
-  background: #e0e7ff;
-  color: #4338ca;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
 }
 
 .cu27-title {
-  margin: 0.5rem 0 0.25rem 0;
-  font-size: 1.6rem;
+  margin: 0.6rem 0 0.25rem 0;
+  font-size: 1.55rem;
   font-weight: 800;
-  color: var(--title-color, #0f172a);
+  color: #f8fafc;
 }
 
 .cu27-subtitle {
   margin: 0;
-  color: var(--text-muted, #64748b);
-  font-size: 0.95rem;
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.92rem;
 }
 
 /* Catálogo de tipos de reporte */
@@ -66,23 +67,24 @@
   gap: 1rem;
   padding: 1.25rem;
   border-radius: 12px;
-  background: var(--card-bg, #ffffff);
-  border: 2px solid var(--border-color, #e2e8f0);
+  background: var(--bg-card, #1e293b);
+  border: 2px solid var(--border-color, rgba(255, 255, 255, 0.08));
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
+  color: #e2e8f0;
 }
 
 .cu27-catalog-card:hover {
-  border-color: #6366f1;
+  border-color: rgba(56, 189, 248, 0.5);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.15);
 }
 
 .cu27-catalog-card.active {
-  border-color: #4f46e5;
-  background: #f8faff;
-  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.15);
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.2);
 }
 
 .cu27-card-icon {
@@ -92,13 +94,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #eef2ff;
-  color: #4f46e5;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
   flex-shrink: 0;
 }
 
 .cu27-catalog-card.active .cu27-card-icon {
-  background: #4f46e5;
+  background: #0284c7;
   color: #ffffff;
 }
 
@@ -106,20 +108,20 @@
   margin: 0 0 0.25rem 0;
   font-size: 1rem;
   font-weight: 700;
-  color: var(--title-color, #0f172a);
+  color: #f8fafc;
 }
 
 .cu27-card-content p {
   margin: 0;
   font-size: 0.825rem;
-  color: var(--text-muted, #64748b);
+  color: var(--text-secondary, #94a3b8);
   line-height: 1.35;
 }
 
 /* Filtros */
 .cu27-filters-box {
-  background: var(--card-bg, #ffffff);
-  border: 1px solid var(--border-color, #e2e8f0);
+  background: var(--bg-card, #1e293b);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
   border-radius: 12px;
   padding: 1.5rem;
   display: flex;
@@ -137,6 +139,7 @@
   margin: 0;
   font-size: 1.05rem;
   font-weight: 700;
+  color: #f8fafc;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -157,23 +160,23 @@
 .cu27-form-group label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-color, #334155);
+  color: var(--text-secondary, #94a3b8);
 }
 
 .cu27-input, .cu27-select {
   padding: 0.65rem 0.85rem;
   border-radius: 8px;
-  border: 1px solid var(--border-color, #cbd5e1);
-  background: var(--input-bg, #ffffff);
-  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(15, 23, 42, 0.75);
+  color: #f8fafc;
   font-size: 0.9rem;
   outline: none;
   transition: border-color 0.2s;
 }
 
 .cu27-input:focus, .cu27-select:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
 }
 
 .cu27-filters-actions {
@@ -191,20 +194,20 @@
 }
 
 .cu27-kpi-card {
-  background: var(--card-bg, #ffffff);
-  border: 1px solid var(--border-color, #e2e8f0);
+  background: var(--bg-card, #1e293b);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
   border-radius: 12px;
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .cu27-kpi-label {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--text-muted, #64748b);
+  color: var(--text-secondary, #94a3b8);
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
@@ -212,21 +215,21 @@
 .cu27-kpi-value {
   font-size: 1.7rem;
   font-weight: 800;
-  color: #1e1b4b;
+  color: #f8fafc;
 }
 
 .cu27-kpi-value.highlight {
-  color: #059669;
+  color: #4ade80;
 }
 
 .cu27-kpi-value.danger {
-  color: #dc2626;
+  color: #f87171;
 }
 
 /* Tabla de resultados */
 .cu27-results-box {
-  background: var(--card-bg, #ffffff);
-  border: 1px solid var(--border-color, #e2e8f0);
+  background: var(--bg-card, #1e293b);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
   border-radius: 12px;
   padding: 1.5rem;
   display: flex;
@@ -241,7 +244,7 @@
   flex-wrap: wrap;
   gap: 1rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border-color, #f1f5f9);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .cu27-export-buttons {
@@ -449,7 +452,7 @@
 }
 
 @media print {
-  body * {
+  body:has(.cu27-print-sheet) * {
     visibility: hidden;
   }
   .cu27-print-sheet, .cu27-print-sheet * {

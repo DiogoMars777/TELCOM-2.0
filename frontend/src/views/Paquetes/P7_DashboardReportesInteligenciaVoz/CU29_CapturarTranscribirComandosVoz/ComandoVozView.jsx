@@ -47,7 +47,7 @@ export default function ComandoVozView({ onIrAReporteTradicional = null }) {
       {/* Encabezado */}
       <header className="cu29-header">
         <span className="cu29-badge">
-          <Mic size={14} /> Módulo Oficial CU29
+          <Mic size={14} /> Control Operativo por Voz
         </span>
         <h1 className="cu29-title">Capturar y Transcribir Comandos de Voz</h1>
         <p className="cu29-subtitle">
@@ -176,7 +176,7 @@ export default function ComandoVozView({ onIrAReporteTradicional = null }) {
                       }
                     }}
                   >
-                    <FileText size={16} /> Ver reporte en "Reportes tradicionales (CU27)"
+                    <FileText size={16} /> Ver reporte en "Reportes tradicionales"
                     <ArrowRight size={16} />
                   </button>
                 </div>

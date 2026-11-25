@@ -631,7 +631,7 @@ export default function ClientesView({ user }) {
                     Registrar Nuevo Cliente
                   </h3>
                   <p className="clientes-modal-subtitle">
-                    Ingreso de abonado al sistema de telecomunicaciones (CU05)
+                    Ingreso de abonado al sistema de telecomunicaciones
                   </p>
                 </div>
               </div>
@@ -984,7 +984,7 @@ export default function ClientesView({ user }) {
                     Confirmar Baja Lógica
                   </h3>
                   <p className="clientes-modal-subtitle">
-                    Inactivación segura con resguardo contable y legal (CU07)
+                    Inactivación segura con resguardo contable y legal
                   </p>
                 </div>
               </div>

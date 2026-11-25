@@ -380,9 +380,9 @@
   color: #475569;
 }
 
-/* Reglas de impresión */
+/* Reglas de impresión (solo aplica si el ticket de corte está abierto) */
 @media print {
-  body * {
+  body:has(.comprobante-ticket) * {
     visibility: hidden;
   }
   .comprobante-ticket,

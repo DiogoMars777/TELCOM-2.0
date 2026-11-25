@@ -102,13 +102,12 @@ export function boundsDeArea(area) {
 }
 
 /**
- * Convierte el polígono en una cadena de puntos SVG ("x,y x,y ...") encajada
- * dentro del rectángulo `width` x `height`, conservando la proporción.
- * Devuelve '' si el área no es válida.
+ * Convierte el polígono en una lista de puntos `{ x, y }` encajada dentro del
+ * rectángulo `width` x `height`, conservando la proporción.
  */
-export function areaToSvgPoints(area, width = 100, height = 60, padding = 6) {
+export function areaToSvgPointList(area, width = 100, height = 60, padding = 6) {
   const b = boundsDeArea(area);
-  if (!b) return '';
+  if (!b) return [];
 
   const ancho = b.maxLng - b.minLng;
   const alto = b.maxLat - b.minLat;
@@ -125,12 +124,30 @@ export function areaToSvgPoints(area, width = 100, height = 60, padding = 6) {
   const offsetX = (width - dibW) / 2;
   const offsetY = (height - dibH) / 2;
 
-  return area.coordinates[0]
-    .map(([lng, lat]) => {
-      const x = offsetX + (lng - b.minLng) * escala;
-      // La latitud crece hacia el norte; en SVG la Y crece hacia abajo.
-      const y = offsetY + (b.maxLat - lat) * escala;
-      return `${x.toFixed(1)},${y.toFixed(1)}`;
-    })
-    .join(' ');
+  return area.coordinates[0].map(([lng, lat]) => ({
+    x: Number((offsetX + (lng - b.minLng) * escala).toFixed(1)),
+    // La latitud crece hacia el norte; en SVG la Y crece hacia abajo.
+    y: Number((offsetY + (b.maxLat - lat) * escala).toFixed(1)),
+  }));
+}
+
+/**
+ * Convierte el polígono en una cadena de puntos SVG ("x,y x,y ...") encajada
+ * dentro del rectángulo `width` x `height`, conservando la proporción.
+ * Devuelve '' si el área no es válida.
+ */
+export function areaToSvgPoints(area, width = 100, height = 60, padding = 6) {
+  const pts = areaToSvgPointList(area, width, height, padding);
+  if (!pts.length) return '';
+  return pts.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+}
+
+/** Devuelve el centro aproximado `{ lat, lng }` del área o `null`. */
+export function centroideDeArea(area) {
+  const b = boundsDeArea(area);
+  if (!b) return null;
+  return {
+    lat: (b.minLat + b.maxLat) / 2,
+    lng: (b.minLng + b.maxLng) / 2,
+  };
 }
